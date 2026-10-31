@@ -13,7 +13,6 @@ import "@babylonjs/core/Culling/ray";
 import type { Ray } from "@babylonjs/core/Culling/ray";
 import { ParticleSystem } from "@babylonjs/core/Particles/particleSystem";
 import { Scene } from "@babylonjs/core/scene";
-import { PointerEventTypes } from "@babylonjs/core/Events/pointerEvents";
 import type { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import type { Placement, ShopState, UpgradeId } from "../game/types";
 import { C } from "./palette";
@@ -63,6 +62,7 @@ export class Diorama {
   private keys: Partial<Record<UpgradeId, string>> = {};
   private edit = false;
   private selected: UpgradeId | null = null;
+  private pointer = { x: 0, y: 0 };
   private drag: {
     kind: "camera" | "item";
     pointerId: number;
@@ -142,15 +142,15 @@ export class Diorama {
       this.spawnCustomer(true);
     }
 
-    this.scene.onPointerObservable.add((info) => {
-      const event = info.event as PointerEvent;
-      this.onPointer(info.type, event);
-    });
+    canvas.addEventListener("pointerdown", this.onDragStart);
+    window.addEventListener("pointermove", this.onDragMove, { capture: true, passive: false });
+    window.addEventListener("pointerup", this.onDragEnd, true);
+    window.addEventListener("pointercancel", this.onDragCancel, true);
+    window.addEventListener("blur", this.cancelDrag);
+    document.addEventListener("visibilitychange", this.onVisibilityChange);
     this.engine.runRenderLoop(() => this.tick());
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(canvas);
-    canvas.addEventListener("pointercancel", this.cancelDrag);
-    canvas.addEventListener("lostpointercapture", this.cancelDrag);
     window.addEventListener("resize", this.onWinResize);
     requestAnimationFrame(() => this.resize());
   }
@@ -243,8 +243,12 @@ export class Diorama {
     this.disposed = true;
     this.resizeObs.disconnect();
     const canvas = this.engine.getRenderingCanvas();
-    canvas?.removeEventListener("pointercancel", this.cancelDrag);
-    canvas?.removeEventListener("lostpointercapture", this.cancelDrag);
+    canvas?.removeEventListener("pointerdown", this.onDragStart);
+    window.removeEventListener("pointermove", this.onDragMove, true);
+    window.removeEventListener("pointerup", this.onDragEnd, true);
+    window.removeEventListener("pointercancel", this.onDragCancel, true);
+    window.removeEventListener("blur", this.cancelDrag);
+    document.removeEventListener("visibilitychange", this.onVisibilityChange);
     window.removeEventListener("resize", this.onWinResize);
     this.engine.stopRenderLoop();
     this.scene.dispose();
@@ -385,13 +389,37 @@ export class Diorama {
     this.scene.render();
   }
 
-  private onPointer(type: number, event: PointerEvent): void {
-    if (type === PointerEventTypes.POINTERDOWN) this.pointerDown(event);
-    if (type === PointerEventTypes.POINTERMOVE) this.pointerMove(event);
-    if (type === PointerEventTypes.POINTERUP || type === PointerEventTypes.POINTERPICK) {
-      if (type === PointerEventTypes.POINTERUP) this.pointerUp(event);
-    }
+  private updatePointer(event: PointerEvent): void {
+    const rect = this.engine.getRenderingCanvas()!.getBoundingClientRect();
+    this.pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
   }
+
+  private readonly onDragStart = (event: PointerEvent): void => {
+    this.updatePointer(event);
+    this.pointerDown(event);
+    if (this.drag) event.preventDefault();
+  };
+
+  private readonly onDragMove = (event: PointerEvent): void => {
+    if (!this.drag || this.drag.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    this.updatePointer(event);
+    this.pointerMove(event);
+  };
+
+  private readonly onDragEnd = (event: PointerEvent): void => {
+    if (!this.drag || this.drag.pointerId !== event.pointerId) return;
+    this.updatePointer(event);
+    this.pointerUp(event);
+  };
+
+  private readonly onDragCancel = (event: PointerEvent): void => {
+    if (this.drag?.pointerId === event.pointerId) this.cancelDrag();
+  };
+
+  private readonly onVisibilityChange = (): void => {
+    if (document.hidden) this.cancelDrag();
+  };
 
   private readonly cancelDrag = (): void => {
     const id = this.drag?.id;
@@ -425,8 +453,8 @@ export class Diorama {
 
   private pointerDown(event: PointerEvent): void {
     if (this.drag || event.button !== 0) return;
-    this.engine.getRenderingCanvas()?.setPointerCapture(event.pointerId);
-    const pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY, (mesh) => Boolean(mesh.isEnabled() && mesh.isVisible));
+    try { this.engine.getRenderingCanvas()?.setPointerCapture(event.pointerId); } catch { /* Window listeners keep the active drag alive. */ }
+    const pick = this.scene.pick(this.pointer.x, this.pointer.y, (mesh) => Boolean(mesh.isEnabled() && mesh.isVisible));
     let id = (pick?.hit && pick.pickedMesh?.metadata?.upgradeId) as UpgradeId | undefined;
     // Preserve direct hits on other furniture; the rug is a surface under it.
     if (this.edit && (!id || id === "rug" || !UPGRADE_BY_ID[id]?.movable) && this.nearLamp(event)) id = "lamp";
@@ -543,7 +571,7 @@ export class Diorama {
   }
 
   private pickSurface(id: UpgradeId): Vector3 | null {
-    const ray = this.scene.createPickingRay(this.scene.pointerX, this.scene.pointerY, null, this.camera) as Ray;
+    const ray = this.scene.createPickingRay(this.pointer.x, this.pointer.y, null, this.camera) as Ray;
     const def = UPGRADE_BY_ID[id];
     if (def.surface === "wall") {
       const backDist = ray.intersectsPlane(Plane.FromPositionAndNormal(new Vector3(0, 0, 0), Vector3.Forward()));
