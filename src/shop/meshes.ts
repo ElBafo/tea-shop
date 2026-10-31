@@ -125,49 +125,54 @@ function teapot(scene: Scene, parent: TransformNode, mats: { body: StandardMater
 }
 
 export function createShopVisuals(scene: Scene): ShopVisuals {
-  const wood = woodTexture(scene, C.wood, C.woodDeep, "floor-wood");
+  const wood = woodTexture(scene, "#d7b48a", "#9a7048", "floor-wood");
   wood.uScale = 6;
   wood.vScale = 6;
-  const shabbyPlaster = plasterTexture(scene, C.plaster, "shabby-wall");
+  const shabbyPlaster = plasterTexture(scene, "#e4d4c0", "shabby-wall");
   shabbyPlaster.uScale = 2;
   shabbyPlaster.vScale = 1.2;
 
-  const floorMat = paint(scene, "floor", C.wood, { tex: wood });
-  const wallMat = paint(scene, "wall-shabby", C.plaster, { tex: shabbyPlaster });
+  const floorMat = paint(scene, "floor", "#d7b48a", { tex: wood });
+  const wallMat = paint(scene, "wall-shabby", "#e4d4c0", { tex: shabbyPlaster });
   const trimMat = paint(scene, "trim", C.woodDeep);
-  const glassMat = paint(scene, "glass", C.dirtyGlass, { spec: 0.4, alpha: 0.38 });
-  const stainMat = paint(scene, "stain", C.stain);
+  const glassMat = paint(scene, "glass", "#9eb6c4", { spec: 0.45, alpha: 0.32 });
+  const stainMat = paint(scene, "stain", "#b79a80");
+  const skyMat = paint(scene, "sky", "#f7e6c4", { emit: "#f3d7a0" });
+  const frameMat = paint(scene, "frame", "#fff6ee");
 
   const room = new TransformNode("room", scene);
   const floor = box(scene, "floor", 6.2, 0.1, 6.2, room, floorMat, 3, -0.05, 3);
   floor.metadata = { ground: true };
   const backWall = box(scene, "back-wall", 6.2, 3.25, 0.12, room, wallMat, 3, 1.62, -0.06);
   const leftWall = box(scene, "left-wall", 0.12, 3.25, 6.2, room, wallMat, -0.06, 1.62, 3);
-  box(scene, "base-back", 6.2, 0.16, 0.08, room, trimMat, 3, 0.08, 0.05);
-  box(scene, "base-left", 0.08, 0.16, 6.2, room, trimMat, 0.05, 0.08, 3);
-  box(scene, "cornice-back", 6.2, 0.1, 0.08, room, trimMat, 3, 3.18, 0.05);
-  box(scene, "cornice-left", 0.08, 0.1, 6.2, room, trimMat, 0.05, 3.18, 3);
+  box(scene, "base-back", 6.2, 0.2, 0.1, room, trimMat, 3, 0.1, 0.06);
+  box(scene, "base-left", 0.1, 0.2, 6.2, room, trimMat, 0.06, 0.1, 3);
+  box(scene, "cornice-back", 6.2, 0.12, 0.1, room, trimMat, 3, 3.2, 0.06);
+  box(scene, "cornice-left", 0.1, 0.12, 6.2, room, trimMat, 0.06, 3.2, 3);
 
-  const frameMat = paint(scene, "frame", C.woodDeep);
-  box(scene, "win-sill", 1.7, 0.08, 0.28, room, frameMat, 5, 1.12, 0.12);
-  box(scene, "win-top", 1.7, 0.08, 0.1, room, frameMat, 5, 2.58, 0.02);
-  box(scene, "win-l", 0.08, 1.5, 0.1, room, frameMat, 4.2, 1.85, 0.02);
-  box(scene, "win-r", 0.08, 1.5, 0.1, room, frameMat, 5.8, 1.85, 0.02);
-  const glass = box(scene, "win-glass", 1.5, 1.36, 0.04, room, glassMat, 5, 1.85, 0.01);
+  box(scene, "sky", 1.72, 1.55, 0.04, room, skyMat, 4.85, 1.92, -0.14);
+  box(scene, "win-sill", 1.9, 0.1, 0.36, room, frameMat, 4.85, 1.1, 0.16);
+  box(scene, "win-top", 1.9, 0.1, 0.12, room, frameMat, 4.85, 2.72, 0.04);
+  box(scene, "win-l", 0.12, 1.62, 0.12, room, frameMat, 3.96, 1.91, 0.04);
+  box(scene, "win-r", 0.12, 1.62, 0.12, room, frameMat, 5.74, 1.91, 0.04);
+  box(scene, "win-bar-h", 1.66, 0.06, 0.06, room, frameMat, 4.85, 1.91, 0.05);
+  box(scene, "win-bar-v", 0.06, 1.5, 0.06, room, frameMat, 4.85, 1.91, 0.05);
+  const glass = box(scene, "win-glass", 1.66, 1.5, 0.03, room, glassMat, 4.85, 1.91, 0.02);
 
   const stain = new TransformNode("stains", scene);
   stain.parent = room;
-  box(scene, "stain-a", 0.7, 0.9, 0.02, stain, stainMat, 1.4, 2.1, 0.01);
-  box(scene, "stain-b", 0.45, 0.55, 0.02, stain, stainMat, 0.01, 1.7, 2.4);
-  box(scene, "ghost-sign", 1.4, 0.45, 0.02, stain, stainMat, 4.1, 2.5, 0.01);
+  box(scene, "stain-a", 0.95, 1.15, 0.03, stain, stainMat, 1.55, 2.05, 0.02);
+  box(scene, "stain-b", 0.55, 0.7, 0.03, stain, stainMat, 0.02, 1.85, 2.55);
+  box(scene, "ghost-sign", 1.6, 0.55, 0.03, stain, paint(scene, "ghost", "#c4aa90"), 2.35, 2.55, 0.02);
+  box(scene, "crack", 0.04, 1.3, 0.03, stain, paint(scene, "crack", "#a88870"), 0.7, 1.7, 0.02);
 
   const curtains = new TransformNode("curtains", scene);
   curtains.parent = room;
   curtains.setEnabled(false);
   const curtainMat = paint(scene, "curtain", C.blush);
-  box(scene, "curtain-l", 0.28, 1.55, 0.06, curtains, curtainMat, 4.22, 1.85, 0.1);
-  box(scene, "curtain-r", 0.28, 1.55, 0.06, curtains, curtainMat, 5.78, 1.85, 0.1);
-  box(scene, "curtain-rod", 1.8, 0.05, 0.05, curtains, paint(scene, "rod", C.woodDeep), 5, 2.66, 0.1);
+  box(scene, "curtain-l", 0.36, 1.7, 0.08, curtains, curtainMat, 3.98, 1.9, 0.14);
+  box(scene, "curtain-r", 0.36, 1.7, 0.08, curtains, curtainMat, 5.72, 1.9, 0.14);
+  box(scene, "curtain-rod", 2.05, 0.06, 0.06, curtains, paint(scene, "rod", C.woodDeep), 4.85, 2.8, 0.14);
 
   return { floor, backWall, leftWall, glass, curtains, stain, items: {} };
 }
@@ -203,8 +208,8 @@ export function buildItem(scene: Scene, id: UpgradeId, shop: ShopState): Transfo
 function buildCounter(scene: Scene, shop: ShopState, style: number): TransformNode {
   const root = new TransformNode("counter", scene);
   const owned = shop.owned.includes("counter");
-  const bodyHex = owned ? [C.wood, C.ceramic, C.blush][style] ?? C.wood : C.dust;
-  const topHex = owned ? [C.woodDeep, C.marble, C.foam][style] ?? C.woodDeep : C.dustTop;
+  const bodyHex = owned ? [C.wood, C.ceramic, C.blush][style] ?? C.wood : "#9a8470";
+  const topHex = owned ? [C.woodDeep, C.marble, C.foam][style] ?? C.woodDeep : "#7a6554";
   const body = paint(scene, "counter-body", bodyHex);
   const top = paint(
     scene,
@@ -212,12 +217,14 @@ function buildCounter(scene: Scene, shop: ShopState, style: number): TransformNo
     topHex,
     style === 1 && owned ? { tex: marbleTexture(scene), spec: 0.38 } : { spec: owned ? 0.2 : 0.06 },
   );
-  box(scene, "counter-box", 3, 1.02, 0.92, root, body, 0, 0.51, 0);
-  box(scene, "counter-top", 3.08, 0.08, 1, root, top, 0, 1.06, 0);
+  box(scene, "counter-box", 3.05, 1.08, 1.05, root, body, 0, 0.54, 0.04);
+  box(scene, "counter-top", 3.16, 0.1, 1.14, root, top, 0, 1.12, 0.04);
+  box(scene, "counter-kick", 3.05, 0.12, 0.08, root, paint(scene, "kick", C.woodDeep), 0, 0.06, 0.54);
   if (!owned) {
     const stain = paint(scene, "counter-stain", "#5c4a3c");
-    box(scene, "dust-a", 0.7, 0.03, 0.3, root, stain, -0.7, 1.11, 0.1);
-    box(scene, "dust-b", 0.4, 0.03, 0.22, root, stain, 0.85, 1.11, -0.15);
+    box(scene, "dust-a", 0.85, 0.04, 0.36, root, stain, -0.7, 1.18, 0.12);
+    box(scene, "dust-b", 0.5, 0.04, 0.26, root, stain, 0.9, 1.18, -0.12);
+    box(scene, "rag", 0.34, 0.05, 0.22, root, paint(scene, "rag", "#c4b49a"), 0.2, 1.18, 0.22);
   } else {
     teapot(
       scene,
@@ -227,12 +234,12 @@ function buildCounter(scene: Scene, shop: ShopState, style: number): TransformNo
         lid: paint(scene, "tea-lid", C.woodDeep),
       },
       -1.05,
-      1.1,
-      0.05,
+      1.16,
+      0.08,
     );
     const cup = paint(scene, "counter-cup", C.foam);
-    cyl(scene, "cup", 0.1, 0.07, root, cup, 0.9, 1.16, 0.12);
-    box(scene, "saucer", 0.2, 0.02, 0.2, root, paint(scene, "saucer", C.ceramic), 0.9, 1.11, 0.12);
+    cyl(scene, "cup", 0.12, 0.08, root, cup, 0.95, 1.24, 0.16);
+    box(scene, "saucer", 0.24, 0.03, 0.24, root, paint(scene, "saucer", C.ceramic), 0.95, 1.18, 0.16);
   }
   placeFloorItem(root, "counter", shop);
   tag(root, "counter");
@@ -243,9 +250,9 @@ function buildSign(scene: Scene, shop: ShopState, style: number): TransformNode 
   const root = new TransformNode("sign", scene);
   const board = paint(scene, "sign-board", C.wood, { tex: signTexture(scene, style) });
   const hardware = paint(scene, "sign-hw", C.woodDeep);
-  box(scene, "sign-board", 1.7, 0.55, 0.08, root, board, 0, 0, 0);
-  cyl(scene, "sign-hook-l", 0.12, 0.025, root, hardware, -0.55, 0.34, 0);
-  cyl(scene, "sign-hook-r", 0.12, 0.025, root, hardware, 0.55, 0.34, 0);
+  box(scene, "sign-board", 1.95, 0.72, 0.1, root, board, 0, 0, 0);
+  cyl(scene, "sign-hook-l", 0.16, 0.03, root, hardware, -0.62, 0.44, 0);
+  cyl(scene, "sign-hook-r", 0.16, 0.03, root, hardware, 0.62, 0.44, 0);
   placeWallItem(root, "sign", shop);
   tag(root, "sign");
   return root;
@@ -255,16 +262,16 @@ function buildShelves(scene: Scene, shop: ShopState, style: number): TransformNo
   const root = new TransformNode("shelves", scene);
   const woodHex = [C.wood, C.foam, C.woodDeep][style] ?? C.wood;
   const board = paint(scene, "shelf-board", woodHex);
-  box(scene, "shelf-top", 2.7, 0.08, 0.34, root, board, 0, 0.28, 0.12);
-  box(scene, "shelf-bot", 2.7, 0.08, 0.34, root, board, 0, -0.22, 0.12);
-  box(scene, "shelf-l", 0.08, 0.7, 0.34, root, board, -1.31, 0.03, 0.12);
-  box(scene, "shelf-r", 0.08, 0.7, 0.34, root, board, 1.31, 0.03, 0.12);
+  box(scene, "shelf-top", 2.85, 0.1, 0.42, root, board, 0, 0.34, 0.16);
+  box(scene, "shelf-bot", 2.85, 0.1, 0.42, root, board, 0, -0.28, 0.16);
+  box(scene, "shelf-l", 0.1, 0.86, 0.42, root, board, -1.38, 0.03, 0.16);
+  box(scene, "shelf-r", 0.1, 0.86, 0.42, root, board, 1.38, 0.03, 0.16);
   const tins = [C.blush, C.gold, C.leaf, "#8ea0b5", "#e0a06e", "#c9b4dc"];
   tins.forEach((hex, i) => {
-    const shelf = i < 3 ? 0.38 : -0.12;
-    const x = -0.8 + (i % 3) * 0.8;
-    cyl(scene, `tin-${i}`, 0.22, 0.12, root, paint(scene, `tin-${i}`, hex), x, shelf, 0.12, 8);
-    cyl(scene, `tin-lid-${i}`, 0.04, 0.13, root, paint(scene, `tin-lid-${i}`, C.foam), x, shelf + 0.12, 0.12, 8);
+    const shelf = i < 3 ? 0.5 : -0.12;
+    const x = -0.85 + (i % 3) * 0.85;
+    cyl(scene, `tin-${i}`, 0.28, 0.16, root, paint(scene, `tin-${i}`, hex), x, shelf, 0.16, 8);
+    cyl(scene, `tin-lid-${i}`, 0.05, 0.17, root, paint(scene, `tin-lid-${i}`, C.foam), x, shelf + 0.16, 0.16, 8);
   });
   const place = placeOf(shop, "shelves");
   root.position.set(1.45, 1.85, 0.16);
@@ -280,32 +287,32 @@ function buildPlant(scene: Scene, shop: ShopState, style: number): TransformNode
   const root = new TransformNode("plant", scene);
   const potHex = [C.pot, C.potSage, C.potBlush][style] ?? C.pot;
   const pot = paint(scene, "pot", potHex);
-  cyl(scene, "pot", 0.22, 0.16, root, pot, 0, 0.13, 0, 8);
-  cyl(scene, "soil", 0.04, 0.13, root, paint(scene, "soil", C.soil), 0, 0.24, 0, 8);
+  cyl(scene, "pot", 0.3, 0.22, root, pot, 0, 0.16, 0, 8);
+  cyl(scene, "soil", 0.05, 0.18, root, paint(scene, "soil", C.soil), 0, 0.31, 0, 8);
   const leaf = paint(scene, "leaf", C.leaf);
   const deep = paint(scene, "leaf-deep", C.leafDeep);
   if (style === 1) {
-    sphere(scene, "suc-c", 0.1, root, leaf, 0, 0.36, 0);
+    sphere(scene, "suc-c", 0.14, root, leaf, 0, 0.48, 0);
     for (let i = 0; i < 6; i += 1) {
       const a = (i / 6) * Math.PI * 2;
-      sphere(scene, `suc-${i}`, 0.07, root, deep, Math.cos(a) * 0.1, 0.32, Math.sin(a) * 0.1);
+      sphere(scene, `suc-${i}`, 0.1, root, deep, Math.cos(a) * 0.14, 0.42, Math.sin(a) * 0.14);
     }
   } else if (style === 2) {
     for (let i = 0; i < 5; i += 1) {
       const a = (i / 5) * Math.PI * 2;
-      const frond = box(scene, `leaf-${i}`, 0.08, 0.28, 0.03, root, i % 2 ? leaf : deep, Math.cos(a) * 0.06, 0.4, Math.sin(a) * 0.06);
+      const frond = box(scene, `leaf-${i}`, 0.12, 0.4, 0.05, root, i % 2 ? leaf : deep, Math.cos(a) * 0.08, 0.52, Math.sin(a) * 0.08);
       frond.rotation.z = Math.cos(a) * 0.4;
       frond.rotation.x = Math.sin(a) * 0.35;
     }
     const bloom = paint(scene, "bloom", C.bloom);
-    for (let i = 0; i < 4; i += 1) {
-      const a = (i / 4) * Math.PI * 2;
-      sphere(scene, `bloom-${i}`, 0.045, root, bloom, Math.cos(a) * 0.07, 0.52, Math.sin(a) * 0.07);
+    for (let i = 0; i < 5; i += 1) {
+      const a = (i / 5) * Math.PI * 2;
+      sphere(scene, `bloom-${i}`, 0.07, root, bloom, Math.cos(a) * 0.1, 0.7, Math.sin(a) * 0.1);
     }
   } else {
     for (let i = 0; i < 7; i += 1) {
       const a = (i / 7) * Math.PI * 2;
-      const frond = box(scene, `fern-${i}`, 0.07, 0.36, 0.02, root, i % 2 ? leaf : deep, Math.cos(a) * 0.05, 0.42, Math.sin(a) * 0.05);
+      const frond = box(scene, `fern-${i}`, 0.1, 0.5, 0.04, root, i % 2 ? leaf : deep, Math.cos(a) * 0.07, 0.56, Math.sin(a) * 0.07);
       frond.rotation.z = Math.cos(a) * 0.55;
       frond.rotation.x = Math.sin(a) * 0.45;
     }
@@ -321,7 +328,7 @@ function buildRug(scene: Scene, shop: ShopState, style: number): TransformNode {
   const root = new TransformNode("rug", scene);
   const tex = rugTexture(scene, style);
   const mat = paint(scene, "rug", C.blush, { tex, spec: 0.05 });
-  box(scene, "rug", 2.85, 0.04, 1.85, root, mat, 0, 0.03, 0);
+  box(scene, "rug", 2.9, 0.05, 1.9, root, mat, 0, 0.04, 0);
   placeFloorItem(root, "rug", shop);
   tag(root, "rug");
   return root;
@@ -333,20 +340,20 @@ function buildLamp(scene: Scene, shop: ShopState, style: number): TransformNode 
   const shadeHex = [C.paper, C.gold, C.foam][style] ?? C.paper;
   const shade = paint(scene, "lamp-shade", shadeHex, { emit: C.gold });
   const glow = paint(scene, "lamp-bulb", C.gold, { emit: C.gold });
-  cyl(scene, "lamp-base", 0.06, 0.16, root, metal, 0, 0.04, 0, 8);
-  cyl(scene, "lamp-pole", 0.85, 0.03, root, metal, 0, 0.48, 0, 8);
+  cyl(scene, "lamp-base", 0.08, 0.2, root, metal, 0, 0.05, 0, 8);
+  cyl(scene, "lamp-pole", 1.05, 0.04, root, metal, 0, 0.58, 0, 8);
   if (style === 0) {
-    box(scene, "lantern", 0.32, 0.32, 0.32, root, shade, 0, 1.08, 0);
+    box(scene, "lantern", 0.42, 0.42, 0.42, root, shade, 0, 1.28, 0);
   } else if (style === 1) {
-    const cone = MeshBuilder.CreateCylinder("shade", { height: 0.28, diameterTop: 0.14, diameterBottom: 0.42, tessellation: 10 }, scene);
+    const cone = MeshBuilder.CreateCylinder("shade", { height: 0.34, diameterTop: 0.16, diameterBottom: 0.52, tessellation: 10 }, scene);
     cone.parent = root;
-    cone.position.set(0, 1.08, 0);
+    cone.position.set(0, 1.28, 0);
     cone.material = shade;
   } else {
-    sphere(scene, "ceramic-base", 0.16, root, paint(scene, "cer-base", C.ceramic), 0, 0.16, 0);
-    cyl(scene, "shade", 0.26, 0.2, root, shade, 0, 1.06, 0, 10);
+    sphere(scene, "ceramic-base", 0.2, root, paint(scene, "cer-base", C.ceramic), 0, 0.2, 0);
+    cyl(scene, "shade", 0.32, 0.26, root, shade, 0, 1.26, 0, 10);
   }
-  const bulb = sphere(scene, "lamp-bulb", 0.05, root, glow, 0, 0.96, 0);
+  const bulb = sphere(scene, "lamp-bulb", 0.07, root, glow, 0, 1.12, 0);
   bulb.metadata = { role: "bulb" };
   placeFloorItem(root, "lamp", shop);
   tag(root, "lamp");

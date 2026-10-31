@@ -4,6 +4,7 @@ export const UPGRADES: UpgradeDef[] = [
   {
     id: "counter",
     title: "Fix the counter",
+    moveName: "counter",
     blurb: "Sand the dusty top and give the shop a proper place to pour.",
     cost: 2,
     movable: false,
@@ -20,6 +21,7 @@ export const UPGRADES: UpgradeDef[] = [
   {
     id: "sign",
     title: "Hang a shop sign",
+    moveName: "shop sign",
     blurb: "A little sign so guests can find the tea.",
     cost: 2,
     movable: true,
@@ -36,6 +38,7 @@ export const UPGRADES: UpgradeDef[] = [
   {
     id: "paint",
     title: "Paint the walls",
+    moveName: "walls",
     blurb: "Cover the bare plaster with a warm wash of colour.",
     cost: 3,
     movable: false,
@@ -52,6 +55,7 @@ export const UPGRADES: UpgradeDef[] = [
   {
     id: "shelves",
     title: "Put up tea shelves",
+    moveName: "shelves",
     blurb: "Rows of tins for the blends you have already sorted.",
     cost: 3,
     movable: false,
@@ -68,6 +72,7 @@ export const UPGRADES: UpgradeDef[] = [
   {
     id: "plant",
     title: "A window plant",
+    moveName: "window plant",
     blurb: "Something living in the light by the window.",
     cost: 3,
     movable: true,
@@ -84,6 +89,7 @@ export const UPGRADES: UpgradeDef[] = [
   {
     id: "rug",
     title: "Lay a rug",
+    moveName: "rug",
     blurb: "A soft path across the boards.",
     cost: 4,
     movable: true,
@@ -100,6 +106,7 @@ export const UPGRADES: UpgradeDef[] = [
   {
     id: "lamp",
     title: "Light a lamp",
+    moveName: "lamp",
     blurb: "A warm pool of light for late shelves.",
     cost: 4,
     movable: true,
@@ -116,6 +123,7 @@ export const UPGRADES: UpgradeDef[] = [
   {
     id: "table",
     title: "A table and chairs",
+    moveName: "table",
     blurb: "A place for a guest to sit with a cup.",
     cost: 5,
     movable: true,

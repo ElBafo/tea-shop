@@ -63,6 +63,7 @@ export interface UpgradeVariant {
 export interface UpgradeDef {
   id: UpgradeId;
   title: string;
+  moveName: string;
   blurb: string;
   cost: number;
   movable: boolean;

@@ -120,10 +120,13 @@ export function signTexture(scene: Scene, variant: number): DynamicTexture {
       }
     }
     ctx.fillStyle = inks[variant] ?? C.foam;
-    ctx.font = "bold 92px Georgia, serif";
+    ctx.font = "bold 108px Georgia, Palatino, serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("TEA", size / 2, size / 2 + 4);
+    ctx.strokeStyle = "rgba(90, 64, 54, 0.35)";
+    ctx.lineWidth = 8;
+    ctx.strokeText("TEA", size / 2, size / 2 + 6);
+    ctx.fillText("TEA", size / 2, size / 2 + 6);
   });
 }
 

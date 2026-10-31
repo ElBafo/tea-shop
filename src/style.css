@@ -684,6 +684,8 @@ h1,
 
 .shop-room {
   min-height: 0;
+  letter-spacing: 0.03em;
+  word-spacing: 0.1em;
 }
 
 .shop-stage {
@@ -725,7 +727,7 @@ h1,
 .shop-stars {
   margin: 0;
   padding: 8px 12px;
-  border-radius: 999px;
+  border-radius: 18px;
   background: rgba(255, 248, 241, 0.88);
   box-shadow: var(--shadow);
   font-weight: 800;

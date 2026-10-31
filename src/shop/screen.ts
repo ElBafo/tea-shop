@@ -101,7 +101,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     const starLine = root.querySelector("#shop-stars");
     if (starLine) {
       const noun = spendable === 1 ? "star" : "stars";
-      starLine.innerHTML = `<span class="star-glyph">${STAR}</span> ${spendable} ${noun} to spend<span class="star-sub"> · ${stars} collected</span>`;
+      starLine.innerHTML = `<span class="star-glyph">${STAR}</span> ${spendable} ${noun} to spend<br><span class="star-sub">${stars} collected</span>`;
     }
 
     const toggle = root.querySelector("#edit-toggle");
@@ -272,7 +272,7 @@ function movablePick(shop: ShopState, preferred: UpgradeId | null): UpgradeId | 
 
 function hintText(shop: ShopState, edit: boolean, selected: UpgradeId | null, spendable: number): string {
   if (edit && selected) {
-    return `Drag the ${UPGRADE_BY_ID[selected].title.toLowerCase()} with one finger. It snaps so pieces do not overlap.`;
+    return `Drag the ${UPGRADE_BY_ID[selected].moveName} with one finger. It snaps so pieces do not overlap.`;
   }
   if (edit) {
     return "Tap a plant, rug, lamp, table, or sign, then drag it. Use Done when you are finished.";

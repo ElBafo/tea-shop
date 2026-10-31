@@ -99,14 +99,14 @@ export class Diorama {
     this.fitOrtho();
 
     this.hemi = new HemisphericLight("hemi", new Vector3(0.25, 1, 0.35), this.scene);
-    this.hemi.intensity = 0.62;
-    this.hemi.diffuse = new Color3(1, 0.92, 0.84);
-    this.hemi.groundColor = new Color3(0.46, 0.36, 0.3);
+    this.hemi.intensity = 0.95;
+    this.hemi.diffuse = new Color3(1, 0.94, 0.88);
+    this.hemi.groundColor = new Color3(0.62, 0.5, 0.42);
 
-    this.sun = new DirectionalLight("sun", new Vector3(-0.35, -0.8, 0.42), this.scene);
-    this.sun.position = new Vector3(7.5, 8.5, -1.5);
-    this.sun.intensity = 0.58;
-    this.sun.diffuse = new Color3(1, 0.9, 0.74);
+    this.sun = new DirectionalLight("sun", new Vector3(-0.28, -0.72, 0.5), this.scene);
+    this.sun.position = new Vector3(8.2, 7.4, -1.2);
+    this.sun.intensity = 0.92;
+    this.sun.diffuse = new Color3(1, 0.93, 0.78);
 
     this.lampLight = new PointLight("lamp-light", new Vector3(0.4, 1.4, 5.2), this.scene);
     this.lampLight.intensity = 0;
@@ -219,7 +219,7 @@ export class Diorama {
 
   private fitOrtho(): void {
     const aspect = this.engine.getRenderWidth() / Math.max(1, this.engine.getRenderHeight());
-    const halfW = this.edit ? 3.7 : 4.85;
+    const halfW = this.edit ? 3.45 : 4.05;
     this.camera.orthoLeft = -halfW;
     this.camera.orthoRight = halfW;
     this.camera.orthoTop = halfW / aspect;
@@ -343,8 +343,8 @@ export class Diorama {
 
     const wantWarm = this.shop.finaleSeen || Boolean(this.walk) || this.shop.owned.length >= 8 ? 1 : this.shop.owned.includes("lamp") ? 0.35 : 0;
     this.warm += (wantWarm - this.warm) * Math.min(1, dt * 1.4);
-    this.hemi.intensity = 0.58 + this.warm * 0.42;
-    this.sun.intensity = 0.52 + this.warm * 0.38;
+    this.hemi.intensity = 0.92 + this.warm * 0.28;
+    this.sun.intensity = 0.88 + this.warm * 0.28;
     this.hemi.diffuse = Color3.Lerp(new Color3(1, 0.9, 0.82), new Color3(1, 0.86, 0.7), this.warm);
     this.updateLamp();
     this.scene.render();
