@@ -21,6 +21,7 @@ import {
   loadProgress,
   recordWin,
   setMuted,
+  spendableStars,
 } from "../game/storage";
 import { mountShop, type ShopScreen } from "../shop/screen";
 import type { Board, LevelDef, Progress } from "../game/types";
@@ -37,6 +38,7 @@ interface PlayState {
   busy: boolean;
   won: boolean;
   hint: boolean;
+  earnedStars: number;
 }
 
 const STAR = "✦";
@@ -99,6 +101,19 @@ export function mountApp(root: HTMLElement): void {
   };
 
   const bind = (node: HTMLElement) => {
+    const dialog = node.querySelector<HTMLElement>(".result-overlay");
+    if (dialog) {
+      node.querySelectorAll<HTMLElement>(".play > :not(.result-overlay)").forEach(element => { element.inert = true; });
+      dialog.querySelector<HTMLButtonElement>("[data-next]")?.focus();
+      dialog.addEventListener("keydown", event => {
+        if (event.key !== "Tab") return;
+        const buttons = [...dialog.querySelectorAll<HTMLButtonElement>("button:not(:disabled)")];
+        const next = (buttons.indexOf(document.activeElement as HTMLButtonElement) + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length;
+        event.preventDefault();
+        buttons[next]?.focus();
+      });
+    }
+
     node.querySelectorAll<HTMLElement>("[data-go]").forEach((el) => {
       el.addEventListener("click", () => {
         playClick(progress.muted);
@@ -139,11 +154,11 @@ export function mountApp(root: HTMLElement): void {
       render();
     });
 
-    node.querySelector("#restart")?.addEventListener("click", () => {
+    node.querySelectorAll("#restart, [data-replay]").forEach(button => button.addEventListener("click", () => {
       if (!play || play.busy) return;
       playClick(progress.muted);
       startLevel(play.level);
-    });
+    }));
 
     node.querySelectorAll<HTMLButtonElement>("[data-jar]").forEach((el) => {
       el.addEventListener("click", () => {
@@ -179,6 +194,7 @@ export function mountApp(root: HTMLElement): void {
       busy: false,
       won: false,
       hint: level.id === 1,
+      earnedStars: 0,
     };
     render();
   };
@@ -237,16 +253,18 @@ export function mountApp(root: HTMLElement): void {
 
     render();
 
+    const activePlay = play;
     window.setTimeout(() => {
-      if (!play) return;
+      if (play !== activePlay) return;
       if (destNowComplete) playComplete(progress.muted);
       if (isWon(play.board)) {
         play.won = true;
         const stars = starsForMoves(play.moves, play.level.par);
+        play.earnedStars = Math.max(0, stars - progress.bestStars[play.level.id - 1]);
         progress = recordWin(progress, play.level.id - 1, stars, play.moves);
         playWin(progress.muted);
         window.setTimeout(() => {
-          if (!play) return;
+          if (play !== activePlay) return;
           play.busy = false;
           render();
         }, 420);
@@ -271,26 +289,27 @@ export function mountApp(root: HTMLElement): void {
 }
 
 function levelsMarkup(progress: Progress): string {
+  const nextIndex = progress.bestStars.findIndex(stars => stars === 0);
+  const practiceIndex = progress.bestStars.findIndex(stars => stars < 3);
+  const recommended = LEVELS[nextIndex >= 0 ? nextIndex : practiceIndex >= 0 ? practiceIndex : 0];
+  const completed = progress.bestStars.filter(stars => stars > 0).length;
   const buttons = LEVELS.map((level, index) => {
     const open = isLevelOpen(progress, index);
     const stars = progress.bestStars[index];
-    const starLine = open
-      ? `<span class="mini-stars">${starText(stars)}</span>`
-      : `<span class="mini-stars locked-note">Finish the last shelf first</span>`;
-    return `
-      <button class="level-btn ${open ? "" : "is-locked"}" data-level="${level.id}" ${open ? "" : "disabled"}>
-        <span class="level-num">${level.id}</span>
-        <span class="level-name">${level.name}</span>
-        ${starLine}
-      </button>`;
+    return `<button class="level-btn ${open ? "" : "is-locked"} ${level === recommended ? "is-current" : ""}" data-level="${level.id}" ${open ? "" : "disabled"} aria-label="Puzzle ${level.id}: ${level.name}, ${open ? `${stars} of 3 stars` : "locked"}">
+      <span class="level-num">${level.id}</span>
+      <span class="level-name">${level.name}</span>
+      <span class="mini-stars" aria-hidden="true">${open ? starText(stars) : "Locked"}</span>
+    </button>`;
   }).join("");
-
-  return `
-    <div class="frame levels">
-      ${topBar("Choose a shelf", progress, true, "shop")}
-      <p class="lede tight">Twenty quiet puzzles. Stars come from tidy, gentle play — not from speed. Spend them to fix up the tea shop.</p>
-      <div class="level-grid">${buttons}</div>
-    </div>`;
+  return `<div class="frame levels">
+    ${topBar("Puzzles", progress, "shop", true)}
+    <button class="continue-card" data-level="${recommended.id}" type="button">
+      <span><strong>${nextIndex >= 0 ? completed ? "Continue" : "Start playing" : "Play again"}</strong><small>${recommended.id} · ${recommended.name}</small></span><span aria-hidden="true">→</span>
+    </button>
+    <p class="collection-summary">All puzzles <span>${completed} / ${LEVELS.length} completed</span></p>
+    <div class="level-grid">${buttons}</div>
+  </div>`;
 }
 
 function playMarkup(
@@ -343,20 +362,20 @@ function playMarkup(
     .join("");
 
   const hint = play.hint
-    ? `<p class="hint">Tap a jar to lift matching treats, then tap another jar with room.</p>`
-    : `<p class="hint quiet">${level.blurb}</p>`;
+    ? `<p class="hint">Tap two jars to move matching treats.</p>`
+    : "";
 
   const overlay = won ? winOverlay(play, progress) : "";
 
   return `
     <div class="frame play">
-      ${topBar(level.name, progress, true, "levels")}
+      ${topBar(level.name, progress, "levels")}
       <div class="play-meta">
         <p class="moves">${moves} ${moves === 1 ? "move" : "moves"}</p>
-        <p class="par">Par ${level.par}</p>
+        <p class="par" aria-label="Three stars in ${level.par} moves or fewer">3 ${STAR} ≤ ${level.par} moves</p>
       </div>
       ${hint}
-      <div class="shelves" data-count="${board.tubes.length}">
+      <div class="shelves" data-count="${board.tubes.length}" data-capacity="${board.capacity}">
         <div class="shelf-row">${jars}</div>
         <div class="plank" aria-hidden="true"></div>
       </div>
@@ -368,40 +387,33 @@ function playMarkup(
     </div>`;
 }
 
-function topBar(
-  title: string,
-  progress: Progress,
-  back: boolean,
-  dest: "shop" | "levels" = "shop",
-): string {
-  const backBtn = back
-    ? `<button class="icon-btn" data-go="${dest}" type="button">Back</button>`
-    : `<span class="icon-btn ghost" aria-hidden="true"></span>`;
-  return `
-    <header class="topbar">
-      ${backBtn}
-      <h2>${title}</h2>
-      <button id="mute" class="icon-btn" type="button" aria-label="${progress.muted ? "Turn sound on" : "Turn sound off"}">${progress.muted ? "Sound off" : "Sound on"}</button>
-    </header>`;
+function topBar(title: string, progress: Progress, dest: "shop" | "levels", balance = false): string {
+  return `<header class="topbar screen-toolbar">
+    <button class="icon-btn" data-go="${dest}" type="button">← ${dest === "shop" ? "Shop" : "Puzzles"}</button>
+    <h2>${title}</h2>
+    ${balance ? `<span class="balance-pill" aria-label="${spendableStars(progress)} stars available">${STAR} ${spendableStars(progress)}</span>` : ""}
+    <button id="mute" class="icon-btn" type="button" aria-label="${progress.muted ? "Turn sound on" : "Turn sound off"}">${progress.muted ? "Sound off" : "Sound on"}</button>
+  </header>`;
 }
 
 function winOverlay(play: PlayState, progress: Progress): string {
   const stars = starsForMoves(play.moves, play.level.par);
   const best = progress.bestMoves[play.level.id - 1];
   const next = LEVELS[play.level.id];
-  return `
-    <div class="overlay" role="dialog" aria-label="Shelf is tidy">
-      <div class="modal">
-        <p class="kicker">All tidy</p>
-        <h3>${play.level.name}</h3>
-        <p class="big-stars">${starText(stars)}</p>
-        <p class="lede tight">${play.moves} ${play.moves === 1 ? "move" : "moves"} · par ${play.level.par}${best ? ` · best ${best}` : ""}</p>
-        <div class="modal-actions">
-          <button data-next type="button">${next ? "Next shelf" : "See all shelves"}</button>
-          <button data-go="levels" type="button" class="ghost-btn">Level list</button>
-        </div>
+  return `<div class="overlay result-overlay" role="dialog" aria-modal="true" aria-labelledby="result-title">
+    <div class="modal result-card">
+      <p class="kicker">Puzzle ${play.level.id} complete</p>
+      <h3 id="result-title">All tidy</h3>
+      <p class="big-stars" aria-label="${stars} of 3 stars">${starText(stars)}</p>
+      <p class="result-reward">${play.earnedStars ? `+${play.earnedStars} ${STAR} for your shop` : "Best stars already collected"}</p>
+      <p class="result-stats">${play.moves} moves · Best ${best}</p>
+      <div class="modal-actions">
+        <button class="primary-action" data-next type="button">${next ? "Next puzzle →" : "All puzzles"}</button>
+        <button data-go="shop" type="button">Decorate shop <span aria-label="${spendableStars(progress)} stars available">${STAR} ${spendableStars(progress)}</span></button>
+        <button data-replay type="button" class="ghost-btn">Play again</button>
       </div>
-    </div>`;
+    </div>
+  </div>`;
 }
 
 function starText(count: number): string {

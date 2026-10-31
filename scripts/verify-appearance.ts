@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {loadNight, saveNight} from '../src/game/appearance';
+const values = new Map<string,string>();
+Object.assign(globalThis,{localStorage:{getItem:(key:string)=>values.get(key)??null,setItem:(key:string,value:string)=>values.set(key,value)}});
+assert.equal(loadNight('theme'),false);
+saveNight('theme',true);
+assert.equal(loadNight('theme'),true);
+assert.equal(loadNight('preview-theme'),false);
+saveNight('theme',false);
+assert.equal(loadNight('theme'),false);
+values.set('theme','invalid');
+assert.equal(loadNight('theme'),false);
+Object.assign(globalThis,{localStorage:{getItem(){throw Error('blocked');},setItem(){throw Error('blocked');}}});
+assert.equal(loadNight('theme'),false);
+assert.doesNotThrow(()=>saveNight('theme',true));
+console.log('Appearance persistence, isolation, and unavailable-storage checks passed.');

@@ -1,3 +1,4 @@
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Camera } from "@babylonjs/core/Cameras/camera";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
@@ -6,13 +7,12 @@ import { DirectionalLight } from "@babylonjs/core/Lights/directionalLight";
 import { PointLight } from "@babylonjs/core/Lights/pointLight";
 import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
 import { Color3, Color4 } from "@babylonjs/core/Maths/math.color";
-import { Vector3 } from "@babylonjs/core/Maths/math.vector";
+import { Matrix, Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { Plane } from "@babylonjs/core/Maths/math.plane";
 import "@babylonjs/core/Culling/ray";
 import type { Ray } from "@babylonjs/core/Culling/ray";
 import { ParticleSystem } from "@babylonjs/core/Particles/particleSystem";
 import { Scene } from "@babylonjs/core/scene";
-import { PointerEventTypes } from "@babylonjs/core/Events/pointerEvents";
 import type { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import type { Placement, ShopState, UpgradeId } from "../game/types";
 import { C } from "./palette";
@@ -28,8 +28,8 @@ import {
   setItemTint,
   type ShopVisuals,
 } from "./meshes";
-import { canPlace, snapFloor, snapWall } from "./grid";
-import { UPGRADE_BY_ID, placeOf } from "./upgrades";
+import { canPlace, floorCenter, snapFloor, snapWall } from "./grid";
+import { UPGRADE_BY_ID, placeOf, shopComplete } from "./upgrades";
 
 export interface DioramaHooks {
   onSelect(id: UpgradeId | null): void;
@@ -62,6 +62,7 @@ export class Diorama {
   private keys: Partial<Record<UpgradeId, string>> = {};
   private edit = false;
   private selected: UpgradeId | null = null;
+  private pointer = { x: 0, y: 0 };
   private drag: {
     kind: "camera" | "item";
     pointerId: number;
@@ -70,11 +71,14 @@ export class Diorama {
     id?: UpgradeId;
     start?: Placement;
     moved?: boolean;
+    offset?: Vector3;
   } | null = null;
   private tweens: Tween[] = [];
   private customer: TransformNode | null = null;
   private walk: { from: Vector3; to: Vector3; t: number } | null = null;
   private warm = 0;
+  private night = false;
+  private readonly windowLight: PointLight;
   private disposed = false;
   private readonly resizeObs: ResizeObserver;
 
@@ -114,6 +118,10 @@ export class Diorama {
     this.lampLight.intensity = 0;
     this.lampLight.diffuse = new Color3(1, 0.8, 0.55);
     this.lampLight.range = 7;
+    this.windowLight = new PointLight("window-light", new Vector3(4.85, 2, 0.65), this.scene);
+    this.windowLight.diffuse = Color3.FromHexString("#ffce8c");
+    this.windowLight.range = 5;
+    this.windowLight.intensity = 0;
 
     this.shadows = new ShadowGenerator(512, this.sun);
     this.shadows.usePercentageCloserFiltering = true;
@@ -134,20 +142,39 @@ export class Diorama {
       this.spawnCustomer(true);
     }
 
-    this.scene.onPointerObservable.add((info) => {
-      const event = info.event as PointerEvent;
-      this.onPointer(info.type, event);
-    });
+    canvas.addEventListener("pointerdown", this.onDragStart);
+    window.addEventListener("pointermove", this.onDragMove, { capture: true, passive: false });
+    window.addEventListener("pointerup", this.onDragEnd, true);
+    window.addEventListener("pointercancel", this.onDragCancel, true);
+    window.addEventListener("blur", this.cancelDrag);
+    document.addEventListener("visibilitychange", this.onVisibilityChange);
     this.engine.runRenderLoop(() => this.tick());
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(canvas);
-    canvas.addEventListener("pointercancel", this.cancelDrag);
-    canvas.addEventListener("lostpointercapture", this.cancelDrag);
     window.addEventListener("resize", this.onWinResize);
     requestAnimationFrame(() => this.resize());
   }
 
   private readonly onWinResize = () => this.resize();
+
+  setNight(night: boolean): void {
+    this.night = night;
+    this.scene.clearColor = Color4.FromColor3(Color3.FromHexString(night ? "#192333" : C.cream), 1);
+    this.scene.ambientColor = night ? new Color3(0.28, 0.33, 0.45) : new Color3(0.55, 0.48, 0.42);
+    const sky = this.scene.getMeshByName("sky")?.material;
+    if (sky instanceof StandardMaterial) {
+      sky.emissiveColor = Color3.FromHexString("#ffd397").scale(night ? 0.8 : 0.22);
+    }
+    for (const mesh of this.visuals.items.lamp?.getChildMeshes() ?? []) {
+      const material = mesh.material;
+      if (material instanceof StandardMaterial && material.name === "lamp-shade") {
+        material.emissiveColor = Color3.FromHexString(C.gold).scale(night ? 0.65 : 0.22);
+      }
+    }
+    this.windowLight.intensity = night ? 0.85 : 0;
+    this.sun.diffuse = Color3.FromHexString(night ? "#9aafe0" : "#ffedc7");
+    this.updateLamp();
+  }
 
   setEditMode(on: boolean): void {
     this.edit = on;
@@ -164,6 +191,24 @@ export class Diorama {
     this.hooks.onSelect(id);
   }
 
+  captureImage(): string {
+    const canvas = this.engine.getRenderingCanvas();
+    if (!canvas || this.disposed) throw new Error("The room is not ready");
+    const width = this.engine.getRenderWidth();
+    const height = this.engine.getRenderHeight();
+    try {
+      this.engine.setSize(1200, Math.round(1200 * height / Math.max(1, width)));
+      this.fitOrtho();
+      this.scene.render();
+      // Read synchronously before WebGL clears its drawing buffer.
+      return canvas.toDataURL("image/png");
+    } finally {
+      this.engine.setSize(width, height);
+      this.fitOrtho();
+      this.scene.render();
+    }
+  }
+
   selectedId(): UpgradeId | null {
     return this.selected;
   }
@@ -171,9 +216,9 @@ export class Diorama {
   sync(shop: ShopState, opts: { animate?: UpgradeId; quiet?: boolean } = {}): void {
     this.shop = shop;
     applyRoomStyle(this.visuals, shop, this.scene);
-    const unique: UpgradeId[] = ["counter"];
+    const unique: UpgradeId[] = [];
     for (const id of shop.owned) {
-      if (id !== "paint" && id !== "counter") unique.push(id);
+      if (id !== "paint") unique.push(id);
     }
 
     for (const id of Object.keys(this.visuals.items) as UpgradeId[]) {
@@ -195,7 +240,8 @@ export class Diorama {
       if (opts.animate === id) this.popIn(root, id);
     }
 
-    this.updateLamp();
+    this.positionShopkeeper();
+    this.setNight(this.night);
     this.updateRing();
     if (shop.owned.includes("lamp")) this.warm = Math.max(this.warm, 0.25);
     if (opts.animate === "paint") this.sparkleAt(new Vector3(2.8, 1.7, 1.1));
@@ -216,8 +262,12 @@ export class Diorama {
     this.disposed = true;
     this.resizeObs.disconnect();
     const canvas = this.engine.getRenderingCanvas();
-    canvas?.removeEventListener("pointercancel", this.cancelDrag);
-    canvas?.removeEventListener("lostpointercapture", this.cancelDrag);
+    canvas?.removeEventListener("pointerdown", this.onDragStart);
+    window.removeEventListener("pointermove", this.onDragMove, true);
+    window.removeEventListener("pointerup", this.onDragEnd, true);
+    window.removeEventListener("pointercancel", this.onDragCancel, true);
+    window.removeEventListener("blur", this.cancelDrag);
+    document.removeEventListener("visibilitychange", this.onVisibilityChange);
     window.removeEventListener("resize", this.onWinResize);
     this.engine.stopRenderLoop();
     this.scene.dispose();
@@ -227,7 +277,7 @@ export class Diorama {
   private fitOrtho(): void {
     const aspect = this.engine.getRenderWidth() / Math.max(1, this.engine.getRenderHeight());
     // Fit both axes: a wide, short canvas must not crop the roof or floor.
-    const halfW = Math.max(4.65, 3.8 * aspect);
+    const halfW = Math.max(4.65, 4.3 * aspect);
     this.camera.orthoLeft = -halfW;
     this.camera.orthoRight = halfW;
     this.camera.orthoTop = halfW / aspect;
@@ -287,7 +337,7 @@ export class Diorama {
     const bulb = lamp.getChildMeshes().find((mesh) => mesh.name === "lamp-bulb");
     const pos = bulb ? bulb.getAbsolutePosition() : lamp.position.clone();
     this.lampLight.position.copyFrom(pos);
-    this.lampLight.intensity = 0.55 + this.warm * 0.25;
+    this.lampLight.intensity = (this.night ? 1.15 : 0.55) + this.warm * 0.25;
   }
 
   private updateRing(): void {
@@ -304,20 +354,21 @@ export class Diorama {
     this.ring.scaling.setAll(def.size.w > 1 || def.size.d > 1 ? 1.45 : 0.85);
   }
 
-  private spawnCustomer(settled: boolean): void {
+  private spawnCustomer(_settled: boolean): void {
     if (this.customer) this.customer.dispose();
     this.customer = buildCustomer(this.scene);
     this.castShadows(this.customer);
-    const start = new Vector3(5.4, 0, 5.6);
-    const end = new Vector3(3.2, 0, 2.5);
-    if (settled) {
-      this.customer.position.copyFrom(end);
-      this.customer.rotation.y = Math.PI;
-      this.walk = null;
-      return;
-    }
-    this.customer.position.copyFrom(start);
-    this.walk = { from: start, to: end, t: 0 };
+    this.walk = null;
+    this.positionShopkeeper();
+  }
+
+  private positionShopkeeper(place = placeOf(this.shop, "counter")): void {
+    if (!this.customer) return;
+    this.customer.setEnabled(this.shop.owned.includes("counter"));
+    const center = floorCenter(UPGRADE_BY_ID.counter.size, place);
+    const angle = place.rot * Math.PI / 2;
+    this.customer.position.set(center.x - Math.sin(angle), 0, center.z - Math.cos(angle));
+    this.customer.rotation.y = angle;
   }
 
   private tick(): void {
@@ -349,22 +400,46 @@ export class Diorama {
       }
     }
 
-    const wantWarm = this.shop.finaleSeen || Boolean(this.walk) || this.shop.owned.length >= 8 ? 1 : this.shop.owned.includes("lamp") ? 0.35 : 0;
+    const wantWarm = this.shop.finaleSeen || Boolean(this.walk) || shopComplete(this.shop) ? 1 : this.shop.owned.includes("lamp") ? 0.35 : 0;
     this.warm += (wantWarm - this.warm) * Math.min(1, dt * 1.4);
-    this.hemi.intensity = 0.72 + this.warm * 0.38;
-    this.sun.intensity = 0.78 + this.warm * 0.38;
-    this.hemi.diffuse = Color3.Lerp(new Color3(1, 0.9, 0.82), new Color3(1, 0.86, 0.7), this.warm);
+    this.hemi.intensity = this.night ? 0.52 : 0.72 + this.warm * 0.38;
+    this.sun.intensity = this.night ? 0.22 : 0.78 + this.warm * 0.38;
+    this.hemi.diffuse = this.night ? new Color3(0.72, 0.79, 1) : Color3.Lerp(new Color3(1, 0.9, 0.82), new Color3(1, 0.86, 0.7), this.warm);
     this.updateLamp();
     this.scene.render();
   }
 
-  private onPointer(type: number, event: PointerEvent): void {
-    if (type === PointerEventTypes.POINTERDOWN) this.pointerDown(event);
-    if (type === PointerEventTypes.POINTERMOVE) this.pointerMove(event);
-    if (type === PointerEventTypes.POINTERUP || type === PointerEventTypes.POINTERPICK) {
-      if (type === PointerEventTypes.POINTERUP) this.pointerUp(event);
-    }
+  private updatePointer(event: PointerEvent): void {
+    const rect = this.engine.getRenderingCanvas()!.getBoundingClientRect();
+    this.pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
   }
+
+  private readonly onDragStart = (event: PointerEvent): void => {
+    this.updatePointer(event);
+    this.pointerDown(event);
+    if (this.drag) event.preventDefault();
+  };
+
+  private readonly onDragMove = (event: PointerEvent): void => {
+    if (!this.drag || this.drag.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    this.updatePointer(event);
+    this.pointerMove(event);
+  };
+
+  private readonly onDragEnd = (event: PointerEvent): void => {
+    if (!this.drag || this.drag.pointerId !== event.pointerId) return;
+    this.updatePointer(event);
+    this.pointerUp(event);
+  };
+
+  private readonly onDragCancel = (event: PointerEvent): void => {
+    if (this.drag?.pointerId === event.pointerId) this.cancelDrag();
+  };
+
+  private readonly onVisibilityChange = (): void => {
+    if (document.hidden) this.cancelDrag();
+  };
 
   private readonly cancelDrag = (): void => {
     const id = this.drag?.id;
@@ -375,13 +450,38 @@ export class Diorama {
     }
   };
 
+  // A 44 CSS-pixel-wide capsule follows the lamp from base to shade.
+  // Lighting and device pixel ratio must not change its touch target.
+  private nearLamp(event: PointerEvent): boolean {
+    const lamp = this.visuals.items.lamp;
+    const canvas = this.engine.getRenderingCanvas();
+    if (!lamp || !canvas || !this.shop.owned.includes("lamp")) return false;
+    const rect = canvas.getBoundingClientRect();
+    const width = this.engine.getRenderWidth();
+    const height = this.engine.getRenderHeight();
+    const viewport = this.camera.viewport.toGlobal(width, height);
+    const project = (y: number) => {
+      const world = lamp.position.add(new Vector3(0, y, 0));
+      const p = Vector3.Project(world, Matrix.Identity(), this.scene.getTransformMatrix(), viewport);
+      return { x: rect.left + p.x * rect.width / width, y: rect.top + p.y * rect.height / height };
+    };
+    const a = project(0.05), b = project(1.45);
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const t = Math.max(0, Math.min(1, ((event.clientX - a.x) * dx + (event.clientY - a.y) * dy) / Math.max(1, dx * dx + dy * dy)));
+    return Math.hypot(event.clientX - a.x - t * dx, event.clientY - a.y - t * dy) <= 22;
+  }
+
   private pointerDown(event: PointerEvent): void {
     if (this.drag || event.button !== 0) return;
-    this.engine.getRenderingCanvas()?.setPointerCapture(event.pointerId);
-    const pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY, (mesh) => Boolean(mesh.isEnabled() && mesh.isVisible));
-    const id = (pick?.hit && pick.pickedMesh?.metadata?.upgradeId) as UpgradeId | undefined;
+    try { this.engine.getRenderingCanvas()?.setPointerCapture(event.pointerId); } catch { /* Window listeners keep the active drag alive. */ }
+    const pick = this.scene.pick(this.pointer.x, this.pointer.y, (mesh) => Boolean(mesh.isEnabled() && mesh.isVisible));
+    let id = (pick?.hit && pick.pickedMesh?.metadata?.upgradeId) as UpgradeId | undefined;
+    // Preserve direct hits on other furniture; the rug is a surface under it.
+    if (this.edit && (!id || id === "rug" || !UPGRADE_BY_ID[id]?.movable) && this.nearLamp(event)) id = "lamp";
     if (this.edit && id && UPGRADE_BY_ID[id]?.movable && this.shop.owned.includes(id)) {
       this.select(id);
+      const point = UPGRADE_BY_ID[id].surface === "floor" ? this.pickSurface(id) : null;
+      const item = this.visuals.items[id];
       this.drag = {
         kind: "item",
         pointerId: event.pointerId,
@@ -389,6 +489,7 @@ export class Diorama {
         lastY: event.clientY,
         id,
         start: { ...placeOf(this.shop, id) },
+        offset: point && item ? item.position.subtract(point) : undefined,
       };
       return;
     }
@@ -423,6 +524,7 @@ export class Diorama {
     if (!id) return;
     const point = this.pickSurface(id);
     if (!point) return;
+    if (this.drag.offset) point.addInPlace(this.drag.offset);
     const def = UPGRADE_BY_ID[id];
     const current = placeOf(this.shop, id);
     const next =
@@ -449,6 +551,7 @@ export class Diorama {
     if (!root) return;
     setItemTint(root, null);
     const point = this.pickSurface(id);
+    if (point && drag.offset) point.addInPlace(drag.offset);
     const def = UPGRADE_BY_ID[id];
     const current = placeOf(this.shop, id);
     const next = point
@@ -472,10 +575,10 @@ export class Diorama {
     if (def.surface === "wall") {
       const along = place.x + def.size.w / 2;
       if (place.wall === "left") {
-        root.position.set(0.08, 2.48, along);
+        root.position.set(0.08, id === "shelves" ? 1.85 : 2.48, along);
         root.rotation.y = Math.PI / 2;
       } else {
-        root.position.set(along, 2.48, 0.08);
+        root.position.set(along, id === "shelves" ? 1.85 : 2.48, 0.08);
         root.rotation.y = 0;
       }
       return;
@@ -485,10 +588,11 @@ export class Diorama {
       : { w: def.size.d, d: def.size.w };
     root.position.set(place.x + w / 2, id === "plant" && place.z === 0 && place.x >= 4 ? 1.16 : 0, place.z + d / 2);
     root.rotation.y = place.rot * (Math.PI / 2);
+    if (id === "counter") this.positionShopkeeper(place);
   }
 
   private pickSurface(id: UpgradeId): Vector3 | null {
-    const ray = this.scene.createPickingRay(this.scene.pointerX, this.scene.pointerY, null, this.camera) as Ray;
+    const ray = this.scene.createPickingRay(this.pointer.x, this.pointer.y, null, this.camera) as Ray;
     const def = UPGRADE_BY_ID[id];
     if (def.surface === "wall") {
       const backDist = ray.intersectsPlane(Plane.FromPositionAndNormal(new Vector3(0, 0, 0), Vector3.Forward()));

@@ -3,17 +3,13 @@ import { UPGRADE_BY_ID, placeOf } from "./upgrades";
 
 export const ROOM = 6;
 
-// Reserve the counter footprint and its rear working aisle.
-export const COUNTER_CELLS: ReadonlyArray<{ x: number; z: number }> = [
-  { x: 1, z: 0 },
-  { x: 2, z: 0 },
-  { x: 3, z: 0 },
-  { x: 1, z: 1 },
-  { x: 2, z: 1 },
-  { x: 3, z: 1 },
-];
-
-export const SHELF_WALL_SLOTS = [0, 1, 2];
+// Include a one-cell working aisle behind the counter in its placement footprint.
+export function counterCells(place: Placement): { x: number; z: number }[] {
+  const cells = floorCells(UPGRADE_BY_ID.counter.size, place);
+  const dx = [0, -1, 0, 1][place.rot % 4];
+  const dz = [-1, 0, 1, 0][place.rot % 4];
+  return [...cells, ...cells.map(cell => ({ x: cell.x + dx, z: cell.z + dz }))];
+}
 
 export function rotatedSize(
   size: { w: number; d: number },
@@ -40,10 +36,6 @@ export function inRoom(cell: { x: number; z: number }): boolean {
   return cell.x >= 0 && cell.z >= 0 && cell.x < ROOM && cell.z < ROOM;
 }
 
-export function isCounterCell(cell: { x: number; z: number }): boolean {
-  return COUNTER_CELLS.some((reserved) => reserved.x === cell.x && reserved.z === cell.z);
-}
-
 export function cellsOverlap(
   a: { x: number; z: number }[],
   b: { x: number; z: number }[],
@@ -63,9 +55,8 @@ export function canPlace(
   const def = UPGRADE_BY_ID[id];
   if (def.surface === "fixed") return true;
   if (def.surface === "wall") return canPlaceWall(id, place, shop);
-  const cells = floorCells(def.size, place);
+  const cells = id === "counter" ? counterCells(place) : floorCells(def.size, place);
   if (cells.length === 0 || cells.some((cell) => !inRoom(cell))) return false;
-  if (def.layer === "furn" && cells.some((cell) => isCounterCell(cell))) return false;
 
   for (const otherId of shop.owned) {
     if (otherId === id) continue;
@@ -73,7 +64,7 @@ export function canPlace(
     if (other.surface !== "floor") continue;
     if (def.layer === "rug" && other.layer === "furn") continue;
     if (def.layer === "furn" && other.layer === "rug") continue;
-    const otherCells = floorCells(other.size, placeOf(shop, otherId));
+    const otherCells = otherId === "counter" ? counterCells(placeOf(shop, otherId)) : floorCells(other.size, placeOf(shop, otherId));
     if (cellsOverlap(cells, otherCells)) return false;
   }
   return true;
@@ -89,9 +80,7 @@ export function canPlaceWall(
   const slots = wallSlots(place, def.size.w);
   if (slots.some((slot) => slot < 0 || slot + 1 > ROOM)) return false;
 
-  if (id === "sign" && shop.owned.includes("shelves") && wall === "back") {
-    if (slots.some((slot) => SHELF_WALL_SLOTS.includes(slot))) return false;
-  }
+  if (wall === "back" && slots.some((slot) => slot >= 3)) return false;
 
   for (const otherId of shop.owned) {
     if (otherId === id) continue;
@@ -171,6 +160,14 @@ export function findOpenPlacement(id: UpgradeId, shop: ShopState): Placement | n
 
 export function nextRotation(id: UpgradeId, shop: ShopState): Placement | null {
   const current = placeOf(shop, id);
+  if (UPGRADE_BY_ID[id].surface === "wall") {
+    const wall = current.wall === "left" ? "back" : "left";
+    for (const x of [current.x, ...Array.from({length: ROOM}, (_, i) => i)]) {
+      const place: Placement = {x, z: 0, rot: wall === "left" ? 1 : 0, wall};
+      if (canPlace(id, place, shop)) return place;
+    }
+    return null;
+  }
   for (let step = 1; step <= 4; step += 1) {
     const place: Placement = { ...current, rot: (current.rot + step) % 4 };
     if (canPlace(id, place, shop)) return place;

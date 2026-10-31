@@ -3,12 +3,12 @@ import type { Placement, ShopState, UpgradeDef, UpgradeId } from "../game/types"
 export const UPGRADES: UpgradeDef[] = [
   {
     id: "counter",
-    title: "Fix the counter",
+    title: "Choose a counter",
     moveName: "counter",
-    blurb: "Sand the dusty top and give the shop a proper place to pour.",
+    blurb: "A place to serve tea. Choose your counter style.",
     cost: 2,
-    movable: false,
-    surface: "fixed",
+    movable: true,
+    surface: "floor",
     layer: "furn",
     size: { w: 3, d: 1 },
     defaultPlace: { x: 1, z: 1, rot: 0 },
@@ -58,8 +58,8 @@ export const UPGRADES: UpgradeDef[] = [
     moveName: "shelves",
     blurb: "Rows of tins for the blends you have already sorted.",
     cost: 3,
-    movable: false,
-    surface: "fixed",
+    movable: true,
+    surface: "wall",
     layer: "wall",
     size: { w: 3, d: 1 },
     defaultPlace: { x: 0, z: 0, rot: 0, wall: "back" },
@@ -137,6 +137,39 @@ export const UPGRADES: UpgradeDef[] = [
       { name: "Painted", blurb: "Mint table, blush chairs." },
     ],
   },
+  {
+    id: "art", title: "A framed print", moveName: "framed print",
+    blurb: "A little personality for the wall.", cost: 8, optional: true,
+    movable: true, surface: "wall", layer: "wall", size: { w: 1, d: 1 },
+    defaultPlace: { x: 4, z: 0, rot: 1, wall: "left" },
+    variants: [
+      { name: "Botanical", blurb: "A leafy study on cream paper." },
+      { name: "Mountains", blurb: "Blue peaks under a peach sun." },
+      { name: "Tea time", blurb: "A cheerful cup on a rose background." },
+    ],
+  },
+  {
+    id: "clock", title: "A wall clock", moveName: "wall clock",
+    blurb: "A decorative clock for slow afternoons.", cost: 10, optional: true,
+    movable: true, surface: "wall", layer: "wall", size: { w: 1, d: 1 },
+    defaultPlace: { x: 0, z: 0, rot: 1, wall: "left" },
+    variants: [
+      { name: "Oak", blurb: "Honey wood and a cream dial." },
+      { name: "Sage", blurb: "A green frame with gold hands." },
+      { name: "Rose", blurb: "A blush frame and a simple white dial." },
+    ],
+  },
+  {
+    id: "basket", title: "A cozy basket", moveName: "basket",
+    blurb: "Small comforts for a quiet corner.", cost: 12, optional: true,
+    movable: true, surface: "floor", layer: "furn", size: { w: 1, d: 1 },
+    defaultPlace: { x: 5, z: 5, rot: 0 },
+    variants: [
+      { name: "Blankets", blurb: "Folded sage and rose blankets." },
+      { name: "Yarn", blurb: "Soft balls of yarn in a woven basket." },
+      { name: "Reading", blurb: "A few books for an unhurried visit." },
+    ],
+  },
 ];
 
 export const UPGRADE_BY_ID: Record<UpgradeId, UpgradeDef> = Object.fromEntries(
@@ -165,12 +198,11 @@ export function styleOf(shop: ShopState, id: UpgradeId): number {
 }
 
 export function placeOf(shop: ShopState, id: UpgradeId): Placement {
-  if (id === "counter") return UPGRADE_BY_ID.counter.defaultPlace;
   return shop.place[id] ?? UPGRADE_BY_ID[id].defaultPlace;
 }
 
 export function shopComplete(shop: ShopState): boolean {
-  return UPGRADES.every((upgrade) => shop.owned.includes(upgrade.id));
+  return UPGRADES.filter((upgrade) => !upgrade.optional).every((upgrade) => shop.owned.includes(upgrade.id));
 }
 
 export function spentStars(shop: ShopState): number {

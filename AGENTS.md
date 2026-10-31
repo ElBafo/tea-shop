@@ -10,3 +10,5 @@ Read `README.md`, `docs/PRODUCT.md`, and `docs/ARCHITECTURE.md` before substanti
 - If sandbox restrictions block the `tsx` CLI IPC socket, run the same verifier with `node --import tsx scripts/verify-levels.ts`.
 - Keep documentation honest about implemented behavior versus planned work.
 - Future implementation should be presented in a reviewable PR with screenshots where relevant. Merge or publish when explicitly authorized by the user; session instructions take precedence.
+
+- Record every agreed product decision in `docs/ROADMAP.md` during the same work session. Distinguish current behavior, agreed plans, and unresolved choices; update superseded statements.

@@ -1,18 +1,7 @@
 import { isShowroom, showroomProgress } from "./preview";
 import { sanitizeShop } from "../shop/grid";
-import { bakeryUnlocked, emptyShop, spentStars } from "../shop/upgrades";
+import { bakeryUnlocked, emptyShop, spentStars, UPGRADE_IDS } from "../shop/upgrades";
 import { LEVEL_COUNT, STORAGE_KEY, type Placement, type Progress, type ShopState, type UpgradeId, type WallFace } from "./types";
-
-const UPGRADE_IDS: UpgradeId[] = [
-  "counter",
-  "sign",
-  "paint",
-  "shelves",
-  "plant",
-  "rug",
-  "lamp",
-  "table",
-];
 
 function emptyProgress(): Progress {
   return {
