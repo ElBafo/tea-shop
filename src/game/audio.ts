@@ -83,6 +83,26 @@ export function playWin(muted: boolean): void {
   });
 }
 
+export function playChime(muted: boolean): void {
+  if (muted || !unlocked) return;
+  const ctx = getContext();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  tone(ctx, 784, now, 0.14, "sine", 0.045);
+  tone(ctx, 988, now + 0.07, 0.16, "triangle", 0.038);
+  tone(ctx, 1175, now + 0.14, 0.22, "sine", 0.032);
+}
+
+export function playFinale(muted: boolean): void {
+  if (muted || !unlocked) return;
+  const ctx = getContext();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  [523, 659, 784, 988, 1175].forEach((freq, i) => {
+    tone(ctx, freq, now + i * 0.11, 0.24, "sine", 0.038);
+  });
+}
+
 declare global {
   interface Window {
     webkitAudioContext?: typeof AudioContext;

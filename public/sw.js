@@ -1,4 +1,4 @@
-const CACHE = "tea-shop-v1";
+const CACHE = "tea-shop-v2";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

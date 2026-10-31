@@ -21,8 +21,8 @@ import {
   loadProgress,
   recordWin,
   setMuted,
-  totalStars,
 } from "../game/storage";
+import { mountShop, type ShopScreen } from "../shop/screen";
 import type { Board, LevelDef, Progress } from "../game/types";
 import { treatMarkup } from "./items";
 
@@ -47,6 +47,7 @@ export function mountApp(root: HTMLElement): void {
   let play: PlayState | null = null;
   let pendingComplete: number[] = [];
   let landed: { jar: number; count: number } | null = null;
+  let shop: ShopScreen | null = null;
 
   const unlockOnce = () => {
     void unlockAudio();
@@ -55,13 +56,44 @@ export function mountApp(root: HTMLElement): void {
 
   const render = () => {
     if (screen === "shop") {
-      root.innerHTML = shopMarkup(progress);
-    } else if (screen === "levels") {
+      if (shop) {
+        shop.refresh();
+        return;
+      }
+      root.innerHTML = "";
+      shop = mountShop(root, {
+        get progress() {
+          return progress;
+        },
+        save(next) {
+          progress = next;
+        },
+        goLevels() {
+          playClick(progress.muted);
+          leaveShop();
+          screen = "levels";
+          play = null;
+          render();
+        },
+        toggleMute() {
+          progress = setMuted(progress, !progress.muted);
+          if (!progress.muted) playClick(false);
+        },
+      });
+      return;
+    }
+    leaveShop();
+    if (screen === "levels") {
       root.innerHTML = levelsMarkup(progress);
     } else if (play) {
       root.innerHTML = playMarkup(play, progress, pendingComplete, landed);
     }
     bind(root);
+  };
+
+  const leaveShop = () => {
+    shop?.dispose();
+    shop = null;
   };
 
   const bind = (node: HTMLElement) => {
@@ -236,38 +268,6 @@ export function mountApp(root: HTMLElement): void {
   render();
 }
 
-function shopMarkup(progress: Progress): string {
-  const stars = totalStars(progress);
-  return `
-    <div class="frame shop">
-      ${topBar("Tea Shop", progress, false)}
-      <section class="hero">
-        ${teapotSvg()}
-        <p class="kicker">A cozy little sort</p>
-        <h1>Tea Shop</h1>
-        <p class="lede">Line up the tins, cups, and treats. There is no clock and no wrong ending — only a tidier shelf.</p>
-        <p class="star-total"><span class="star-glyph">${STAR}</span> ${stars} ${stars === 1 ? "star" : "stars"} collected</p>
-      </section>
-      <div class="cards">
-        <button class="shop-card open" data-go="levels">
-          <span class="card-art tea-art" aria-hidden="true"></span>
-          <span class="card-copy">
-            <strong>Tea Shop</strong>
-            <em>Open the jars and play</em>
-          </span>
-        </button>
-        <button class="shop-card locked" type="button" disabled>
-          <span class="card-art bake-art" aria-hidden="true"></span>
-          <span class="card-copy">
-            <strong>Bakery</strong>
-            <em>Coming soon — a second shop to dress up</em>
-          </span>
-          <span class="lock-pill">Locked</span>
-        </button>
-      </div>
-    </div>`;
-}
-
 function levelsMarkup(progress: Progress): string {
   const buttons = LEVELS.map((level, index) => {
     const open = isLevelOpen(progress, index);
@@ -286,7 +286,7 @@ function levelsMarkup(progress: Progress): string {
   return `
     <div class="frame levels">
       ${topBar("Choose a shelf", progress, true, "shop")}
-      <p class="lede tight">Ten quiet puzzles. Stars come from tidy, gentle play — not from speed.</p>
+      <p class="lede tight">Twenty quiet puzzles. Stars come from tidy, gentle play — not from speed. Spend them to fix up the tea shop.</p>
       <div class="level-grid">${buttons}</div>
     </div>`;
 }
@@ -333,7 +333,7 @@ function playMarkup(
           <span class="jar-neck"></span>
           <span class="jar-glass">
             ${lid}
-            <span class="stack">${slots.join("")}</span>
+            <span class="stack" style="--slots:${board.capacity}">${slots.join("")}</span>
           </span>
           ${puff}
         </button>`;
@@ -414,16 +414,3 @@ function sparkles(): string {
   );
 }
 
-function teapotSvg(): string {
-  return `
-    <svg class="teapot" viewBox="0 0 180 140" aria-hidden="true">
-      <path d="M38 78c0-22 18-40 52-40s52 18 52 40v18c0 14-18 26-52 26S38 110 38 96Z" fill="#f3d2c5"/>
-      <path d="M38 86c8 10 28 16 52 16s44-6 52-16" fill="none" stroke="#e4b8a8" stroke-width="4"/>
-      <path d="M28 80c-16 4-24 16-16 26 8 10 22 6 28-2" fill="#e8c4b6"/>
-      <path d="M142 78c18 2 28 16 18 28-8 10-22 6-28-4" fill="#e8c4b6"/>
-      <rect x="74" y="28" width="32" height="14" rx="7" fill="#d9a898"/>
-      <ellipse cx="90" cy="30" rx="10" ry="6" fill="#f7e6dc"/>
-      <path d="M70 22c4-10 12-16 20-16" fill="none" stroke="#d8c4b8" stroke-width="3" stroke-linecap="round"/>
-      <path d="M92 18c6-10 16-14 24-10" fill="none" stroke="#e4d0c6" stroke-width="3" stroke-linecap="round"/>
-    </svg>`;
-}

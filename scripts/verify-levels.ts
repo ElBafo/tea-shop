@@ -86,4 +86,4 @@ if (failed > 0) {
   process.exit(1);
 }
 
-console.log("\nAll 10 levels are solvable.");
+console.log("\nAll 20 levels are solvable.");
