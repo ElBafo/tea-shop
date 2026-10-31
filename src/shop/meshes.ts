@@ -292,12 +292,8 @@ function buildShelves(scene: Scene, shop: ShopState, style: number): TransformNo
     cyl(scene, `tin-${i}`, 0.28, 0.16, root, paint(scene, `tin-${i}`, hex), x, shelf, 0.16, 8);
     cyl(scene, `tin-lid-${i}`, 0.05, 0.17, root, paint(scene, `tin-lid-${i}`, C.foam), x, shelf + 0.16, 0.16, 8);
   });
-  const place = placeOf(shop, "shelves");
-  root.position.set(1.45, 1.85, 0.16);
-  if (place.wall === "left") {
-    root.position.set(0.16, 1.85, 1.45);
-    root.rotation.y = Math.PI / 2;
-  }
+  placeWallItem(root, "shelves", shop);
+  root.position.y = 1.85;
   tag(root, "shelves");
   return root;
 }
@@ -442,7 +438,7 @@ function chair(scene: Scene, parent: TransformNode, seat: StandardMaterial, fram
 }
 
 export function buildCustomer(scene: Scene): TransformNode {
-  const root = new TransformNode("customer", scene);
+  const root = new TransformNode("shopkeeper", scene);
   const coat = paint(scene, "coat", C.coat);
   const skin = paint(scene, "skin", C.skin);
   const hair = paint(scene, "hair", C.hair);
@@ -451,6 +447,11 @@ export function buildCustomer(scene: Scene): TransformNode {
   sphere(scene, "hair", 0.165, root, hair, 0, 1.16, -0.02);
   cyl(scene, "arm-l", 0.34, 0.05, root, coat, -0.22, 0.66, 0.04, 6);
   cyl(scene, "arm-r", 0.34, 0.05, root, coat, 0.22, 0.66, 0.04, 6);
+  box(scene, "apron", 0.25, 0.4, 0.04, root, paint(scene, "apron", C.foam), 0, 0.65, 0.17);
+  const eyes = paint(scene, "eyes", C.hair);
+  sphere(scene, "eye-l", 0.018, root, eyes, -0.055, 1.09, 0.165);
+  sphere(scene, "eye-r", 0.018, root, eyes, 0.055, 1.09, 0.165);
+  root.scaling.setAll(1.22);
   return root;
 }
 

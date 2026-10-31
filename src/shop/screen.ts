@@ -57,8 +57,12 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
       <button id="upgrade-notice" class="upgrade-notice hidden" type="button"></button>
       <div class="shop-dock">
         <section id="decorate-panel" class="hidden" aria-label="Decorations">
-        <div class="upgrade-rail" id="upgrade-rail"></div>
         <div class="upgrade-detail" id="upgrade-detail"></div>
+        <div class="catalog-tabs" role="group" aria-label="Decoration collection">
+          <button data-filter="all" type="button">All decorations</button>
+          <button data-filter="owned" type="button">My decorations</button>
+        </div>
+        <div class="upgrade-rail" id="upgrade-rail"></div>
         </section>
         <div class="shop-actions">
           <button class="shop-card open" id="play-tea" type="button">
@@ -93,11 +97,13 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   let selected: UpgradeId | null = null;
   let finaleOpen = false;
   let bakeryNote = false;
+  let filter: "all" | "owned" = "all";
+  let draft: {id: UpgradeId; style: number; fits: boolean} | null = null;
 
   const diorama = new Diorama(canvas, host.progress.shop, {
     onSelect: (id) => {
       selected = id;
-      if (id) focus = id;
+      if (id) { clearPreview(); focus = id; }
       paintChrome();
     },
     onMove: (id, place) => {
@@ -148,21 +154,24 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     root.querySelector(".shop-room")?.classList.toggle("decorating", edit);
 
     const hint = root.querySelector("#shop-hint");
-    if (hint) hint.textContent = hintText(edit, selected);
+    if (hint) hint.textContent = draft ? "Preview · No stars spent" : hintText(edit, selected);
 
     const rail = root.querySelector("#upgrade-rail");
-    if (rail) rail.innerHTML = UPGRADES.map((upgrade) => {
+    root.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(button => {
+      button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
+    });
+    if (rail) rail.innerHTML = UPGRADES.filter(item => filter === "all" || isOwned(progress.shop, item.id)).map((upgrade) => {
       const owned = isOwned(progress.shop, upgrade.id);
       const active = focus === upgrade.id;
       return `
-        <button class="upgrade-chip ${owned ? "owned" : ""} ${active ? "active" : ""}" data-upgrade="${upgrade.id}" type="button">
-          <strong>${upgrade.title}</strong>
+        <button aria-pressed="${active}" class="upgrade-chip ${owned ? "owned" : ""} ${active ? "active" : ""}" data-upgrade="${upgrade.id}" type="button">
+          <span class="deco-icon" aria-hidden="true">${DECOR_ICONS[upgrade.id]}</span><strong>${upgrade.moveName}</strong>
           <span>${owned ? "Owned" : `${upgrade.cost} ${STAR}`}</span>
         </button>`;
     }).join("");
 
     const detail = root.querySelector("#upgrade-detail");
-    if (detail) detail.innerHTML = selected ? editDetail(progress.shop, selected) : taskDetail(progress, focus);
+    if (detail) detail.innerHTML = filter === "owned" && progress.shop.owned.length === 0 ? `<p class="detail-note">Your decorations will appear here after you buy them. Browse All decorations to try a style.</p>` : selected ? editDetail(progress.shop, selected) : taskDetail(progress, focus, draft);
 
     const bakery = root.querySelector<HTMLButtonElement>("#bakery");
     const bakeryCopy = root.querySelector("#bakery-copy");
@@ -235,6 +244,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     });
     root.querySelector("#edit-toggle")?.addEventListener("click", () => {
       playClick(host.progress.muted);
+      clearPreview();
       edit = !edit;
       selected = null;
       focus = UPGRADES.find((item) => !isOwned(host.progress.shop, item.id) && item.cost <= spendableStars(host.progress))?.id ?? "counter";
@@ -257,16 +267,33 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
       const button = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-upgrade]");
       if (!button) return;
       playClick(host.progress.muted);
+      clearPreview();
       focus = button.dataset.upgrade as UpgradeId;
       selected = isOwned(host.progress.shop, focus) ? focus : null;
       diorama.select(selected);
+      if (!selected) preview(focus, 0);
       paintChrome();
     });
+    root.querySelectorAll("[data-filter]").forEach(button => button.addEventListener("click", () => {
+      filter = (button as HTMLElement).dataset.filter as "all" | "owned";
+      clearPreview();
+      if (filter === "owned") {
+        focus = host.progress.shop.owned[0] ?? null;
+        selected = focus;
+        diorama.select(selected);
+      }
+      paintChrome();
+    }));
     root.querySelector("#upgrade-detail")?.addEventListener("click", (event) => {
       const target = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-act]");
       if (!target) return;
       const act = target.dataset.act;
-      if (act === "buy") {
+      if (act === "preview") {
+        preview(target.dataset.id as UpgradeId, Number(target.dataset.style));
+      } else if (act === "cancel-preview") {
+        clearPreview();
+        paintChrome();
+      } else if (act === "buy") {
         const id = target.dataset.id as UpgradeId;
         const variant = Number(target.dataset.style ?? "0");
         buy(id, variant);
@@ -288,6 +315,28 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     });
   };
 
+  const clearPreview = () => {
+    if (!draft) return;
+    draft = null;
+    diorama.sync(host.progress.shop);
+    diorama.setEditMode(edit);
+  };
+
+  const preview = (id: UpgradeId, variant: number) => {
+    const shop = clone(host.progress.shop);
+    if (isOwned(shop, id)) return;
+    const place = findOpenPlacement(id, shop);
+    draft = {id, style: variant, fits: Boolean(place)};
+    if (place) {
+      shop.owned.push(id);
+      shop.style[id] = variant;
+      shop.place[id] = place;
+    }
+    diorama.setEditMode(false);
+    diorama.sync(shop);
+    paintChrome();
+  };
+
   const commit = (shop: ShopState, opts: { animate?: UpgradeId } = {}) => {
     host.save(saveShop(host.progress, shop));
     diorama.sync(host.progress.shop, opts);
@@ -299,13 +348,18 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     const def = UPGRADE_BY_ID[id];
     if (isOwned(progress.shop, id) || spendableStars(progress) < def.cost) return;
     const shop = clone(progress.shop);
+    const place = findOpenPlacement(id, shop);
+    if (!place) return;
+    clearPreview();
     shop.owned.push(id);
     shop.style[id] = variant;
-    const place = findOpenPlacement(id, shop);
-    if (place) shop.place[id] = place;
+    shop.place[id] = place;
+    selected = id;
+    focus = id;
     const finished = shopComplete(shop) && !shop.finaleSeen;
     if (finished) shop.finaleSeen = true;
     commit(shop, { animate: id });
+    diorama.select(id);
     if (finished) {
       finaleOpen = true;
       diorama.playFinale();
@@ -359,34 +413,27 @@ function hintText(edit: boolean, selected: UpgradeId | null): string {
   return "Choose a decoration or tap a piece in the room";
 }
 
-function taskDetail(progress: Progress, focus: UpgradeId | null): string {
+const DECOR_ICONS: Record<UpgradeId, string> = {
+  counter: "▰", sign: "TEA", paint: "◩", shelves: "▤", plant: "✿", rug: "▱",
+  lamp: "☀", table: "☕", art: "▧", clock: "◷", basket: "▥",
+};
+
+function taskDetail(progress: Progress, focus: UpgradeId | null, draft: {id: UpgradeId; style: number; fits: boolean} | null): string {
   const id = focus ?? "counter";
   const def = UPGRADE_BY_ID[id];
-  const owned = isOwned(progress.shop, id);
-  const current = styleOf(progress.shop, id);
-  const canBuy = !owned && spendableStars(progress) >= def.cost;
-  const styles = def.variants
-    .map((variant, index) => {
-      const active = owned && current === index;
-      const act = owned ? "style" : "buy";
-      const disabled = !owned && !canBuy ? "disabled" : "";
-      return `<button class="style-chip ${active ? "active" : ""}" data-act="${act}" data-id="${id}" data-style="${index}" type="button" ${disabled}>${variant.name}</button>`;
-    })
-    .join("");
-  const action = owned
-    ? `<p class="detail-note">${def.variants[current]?.blurb ?? def.blurb} You can change the style whenever you like, for free.</p>`
-    : `<p class="detail-note">${def.blurb} ${canBuy ? `Spend ${def.cost} ${def.cost === 1 ? "star" : "stars"} and pick a style.` : `This needs ${def.cost} stars.`}</p>`;
-  return `
-    <div class="detail-copy">
-      <strong>${def.title}</strong>
-      ${action}
-    </div>
-    <div class="style-row">${styles}</div>`;
+  if (isOwned(progress.shop, id)) return editDetail(progress.shop, id);
+  const chosen = draft?.id === id ? draft.style : null;
+  const affordable = spendableStars(progress) >= def.cost;
+  const fits = draft?.id === id && draft.fits;
+  return `<div class="detail-copy"><strong>${def.moveName[0].toUpperCase() + def.moveName.slice(1)}</strong>
+    <p class="detail-note">${chosen === null ? "Choose a style to preview in your shop." : def.variants[chosen].blurb}</p></div>
+    <div class="style-row">${def.variants.map((variant, index) => `<button class="style-chip ${chosen === index ? "active" : ""}" aria-pressed="${chosen === index}" data-act="preview" data-id="${id}" data-style="${index}" type="button">${variant.name}</button>`).join("")}</div>
+    ${chosen === null ? "" : `<div class="purchase-row"><button class="buy-decoration" data-act="buy" data-id="${id}" data-style="${chosen}" type="button" ${!affordable || !fits ? "disabled" : ""}>Buy ${def.variants[chosen].name} · ${def.cost} ✦</button><button class="style-chip" data-act="cancel-preview" type="button">Cancel</button></div><p class="detail-note" role="status">${!fits ? "Make room by moving your decorations first." : !affordable ? `${def.cost - spendableStars(progress)} more stars needed · Preview is free` : "Preview only · Styles are free to change once owned"}</p>`}`;
 }
 
 function editDetail(shop: ShopState, selected: UpgradeId | null): string {
   if (!selected) {
-    return `<div class="detail-copy"><strong>Move things around</strong><p class="detail-note">Tap a movable piece in the room. Fixed walls and the counter stay put.</p></div>`;
+    return `<div class="detail-copy"><strong>Move things around</strong><p class="detail-note">Tap a movable piece in the room. The wall colour stays put.</p></div>`;
   }
   const def = UPGRADE_BY_ID[selected];
   const current = styleOf(shop, selected);
@@ -397,7 +444,7 @@ function editDetail(shop: ShopState, selected: UpgradeId | null): string {
     )
     .join("");
   const rotate = def.movable
-    ? `<button class="style-chip" data-act="rotate" type="button">Rotate</button>`
+    ? `<button class="style-chip" data-act="rotate" type="button">${def.surface === "wall" ? "Other wall" : "Rotate"}</button>`
     : "";
   return `
     <div class="detail-copy">
@@ -412,7 +459,7 @@ function finaleModal(): string {
     <div class="modal">
       <p class="kicker">All tidy</p>
       <h3>The tea shop is open</h3>
-      <p class="lede tight">The lamps warm up, a guest finds the counter, and the bakery door is unlocked.</p>
+      <p class="lede tight">The lamps warm up, the shopkeeper is ready to serve, and the bakery door is unlocked.</p>
       <div class="modal-actions">
         <button data-dismiss type="button">Lovely</button>
       </div>

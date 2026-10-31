@@ -7,8 +7,8 @@ export const UPGRADES: UpgradeDef[] = [
     moveName: "counter",
     blurb: "A place to serve tea. Choose your counter style.",
     cost: 2,
-    movable: false,
-    surface: "fixed",
+    movable: true,
+    surface: "floor",
     layer: "furn",
     size: { w: 3, d: 1 },
     defaultPlace: { x: 1, z: 1, rot: 0 },
@@ -58,8 +58,8 @@ export const UPGRADES: UpgradeDef[] = [
     moveName: "shelves",
     blurb: "Rows of tins for the blends you have already sorted.",
     cost: 3,
-    movable: false,
-    surface: "fixed",
+    movable: true,
+    surface: "wall",
     layer: "wall",
     size: { w: 3, d: 1 },
     defaultPlace: { x: 0, z: 0, rot: 0, wall: "back" },
@@ -198,7 +198,6 @@ export function styleOf(shop: ShopState, id: UpgradeId): number {
 }
 
 export function placeOf(shop: ShopState, id: UpgradeId): Placement {
-  if (id === "counter") return UPGRADE_BY_ID.counter.defaultPlace;
   return shop.place[id] ?? UPGRADE_BY_ID[id].defaultPlace;
 }
 

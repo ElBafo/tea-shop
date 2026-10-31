@@ -986,3 +986,25 @@ body:has(.shop-room.is-night) {
 .showcasing > .upgrade-notice { display: none; }
 .showcasing .shop-stage { margin: auto 0; box-shadow: none; }
 .showcasing .showcase-tools { margin-top: auto; }
+
+/* Decoration browsing: explicit style preview followed by a separate purchase. */
+.decorating .shop-stage { position: sticky; top: 0; z-index: 2; flex-shrink: 0; }
+.decorating .upgrade-rail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
+.decorating .upgrade-chip { min-width: 0; max-width: none; min-height: 94px; align-items: center; text-align: center; padding: 8px 4px; box-shadow: none; border: 1px solid #dccaba; }
+.decorating .upgrade-chip.active { border: 2px solid #b68727; }
+.deco-icon { font-size: 1.5rem !important; line-height: 1.2; color: #876344; }
+.catalog-tabs { display: flex; gap: 6px; margin: 12px 0 8px; }
+.catalog-tabs button { flex: 1; min-height: 44px; padding: 6px; font-size: .85rem; background: transparent; box-shadow: none; border-bottom: 2px solid transparent; border-radius: 0; }
+.catalog-tabs button[aria-pressed="true"] { border-color: #b68727; }
+.purchase-row { display: flex; gap: 8px; }
+.buy-decoration { flex: 1; min-height: 46px; padding: 8px 12px; background: #dce7ce; font-weight: 800; }
+.buy-decoration:disabled { opacity: .55; }
+.is-night .buy-decoration { background: #52664c; color: #fff4e6; }
+.is-night .catalog-tabs button { color: #fff4e6; }
+.is-night .decorating .upgrade-chip { border-color: #647080; }
+.decorating .shop-stage { min-height: 0; }
+.decorating .shop-stage canvas { height: min(34dvh, 320px); aspect-ratio: auto; }
+.buy-decoration { border-radius: 14px; }
+@media (max-height: 500px) {
+  .decorating .shop-stage { position: relative; }
+}

@@ -153,3 +153,13 @@ A Showcase view hides the shop UI while retaining camera movement and the select
 - Consider player-controlled zoom in and out, including phone-friendly pinch zoom, to inspect details and view the whole room.
 
 These are exploration ideas, not committed implementation or release scope. Evaluate room sizes, camera limits, touch interaction with furniture dragging, and phone performance before scheduling.
+
+## Decoration selection and shopkeeper — phone review follow-up
+
+Owner feedback: the figure should serve from behind the counter, counters and shelves should be movable, and players must choose and see their desired decoration/style before paying.
+
+Implemented for preview review: the shopkeeper stands behind the counter, faces its serving side, and follows counter moves/rotation. Counter placement reserves a one-cell rear working aisle and keeps it inside the room. Shelves can be dragged along either wall and switched with Other wall; window and occupied wall slots remain protected.
+
+The decoration picker uses a grid with All decorations / My decorations filters, named style choices, and a live room preview. Browsing or cancelling a preview spends no stars and does not save temporary ownership or styles. A separate Buy button shows the chosen style and star cost. Unaffordable styles remain previewable with the shortfall shown. Leaving Edit discards an unpurchased preview. Owned styles remain free to change. Purchases require a valid placement; if no space is available, the player must rearrange existing items first.
+
+Validation: placement/aisle and shelf collision checks, catalogue economy checks, all levels, and production build. Browser checks cover phone and desktop views, free previews, cancellation, explicit purchases, insufficient funds, counter/shelf touch movement, shopkeeper position, and reload persistence. Physical Safari review remains pending. This replaces the earlier fixed-counter and fixed-shelf behavior; larger inventories and multiple copies are still future work.

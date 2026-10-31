@@ -28,7 +28,7 @@ import {
   setItemTint,
   type ShopVisuals,
 } from "./meshes";
-import { canPlace, snapFloor, snapWall } from "./grid";
+import { canPlace, floorCenter, snapFloor, snapWall } from "./grid";
 import { UPGRADE_BY_ID, placeOf, shopComplete } from "./upgrades";
 
 export interface DioramaHooks {
@@ -240,6 +240,7 @@ export class Diorama {
       if (opts.animate === id) this.popIn(root, id);
     }
 
+    this.positionShopkeeper();
     this.setNight(this.night);
     this.updateRing();
     if (shop.owned.includes("lamp")) this.warm = Math.max(this.warm, 0.25);
@@ -276,7 +277,7 @@ export class Diorama {
   private fitOrtho(): void {
     const aspect = this.engine.getRenderWidth() / Math.max(1, this.engine.getRenderHeight());
     // Fit both axes: a wide, short canvas must not crop the roof or floor.
-    const halfW = Math.max(4.65, 3.8 * aspect);
+    const halfW = Math.max(4.65, 4.3 * aspect);
     this.camera.orthoLeft = -halfW;
     this.camera.orthoRight = halfW;
     this.camera.orthoTop = halfW / aspect;
@@ -353,20 +354,21 @@ export class Diorama {
     this.ring.scaling.setAll(def.size.w > 1 || def.size.d > 1 ? 1.45 : 0.85);
   }
 
-  private spawnCustomer(settled: boolean): void {
+  private spawnCustomer(_settled: boolean): void {
     if (this.customer) this.customer.dispose();
     this.customer = buildCustomer(this.scene);
     this.castShadows(this.customer);
-    const start = new Vector3(5.4, 0, 5.6);
-    const end = new Vector3(3.2, 0, 2.5);
-    if (settled) {
-      this.customer.position.copyFrom(end);
-      this.customer.rotation.y = Math.PI;
-      this.walk = null;
-      return;
-    }
-    this.customer.position.copyFrom(start);
-    this.walk = { from: start, to: end, t: 0 };
+    this.walk = null;
+    this.positionShopkeeper();
+  }
+
+  private positionShopkeeper(place = placeOf(this.shop, "counter")): void {
+    if (!this.customer) return;
+    this.customer.setEnabled(this.shop.owned.includes("counter"));
+    const center = floorCenter(UPGRADE_BY_ID.counter.size, place);
+    const angle = place.rot * Math.PI / 2;
+    this.customer.position.set(center.x - Math.sin(angle), 0, center.z - Math.cos(angle));
+    this.customer.rotation.y = angle;
   }
 
   private tick(): void {
@@ -573,10 +575,10 @@ export class Diorama {
     if (def.surface === "wall") {
       const along = place.x + def.size.w / 2;
       if (place.wall === "left") {
-        root.position.set(0.08, 2.48, along);
+        root.position.set(0.08, id === "shelves" ? 1.85 : 2.48, along);
         root.rotation.y = Math.PI / 2;
       } else {
-        root.position.set(along, 2.48, 0.08);
+        root.position.set(along, id === "shelves" ? 1.85 : 2.48, 0.08);
         root.rotation.y = 0;
       }
       return;
@@ -586,6 +588,7 @@ export class Diorama {
       : { w: def.size.d, d: def.size.w };
     root.position.set(place.x + w / 2, id === "plant" && place.z === 0 && place.x >= 4 ? 1.16 : 0, place.z + d / 2);
     root.rotation.y = place.rot * (Math.PI / 2);
+    if (id === "counter") this.positionShopkeeper(place);
   }
 
   private pickSurface(id: UpgradeId): Vector3 | null {

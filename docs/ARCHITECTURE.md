@@ -28,9 +28,9 @@ Tea Shop is a static, client-side TypeScript application built with Vite. Babylo
 
 Puzzle interaction validates a pour, snapshots the board for undo, applies the move, then renders feedback. On a win, scoring updates the level's best stars and best move count and saves progress. The next level opens after completing its predecessor.
 
-The app passes a host interface to the shop screen. Purchases, styles, and accepted moves update `ShopState`, persist it through the storage layer, and synchronize the diorama. The diorama reports selection and placement through callbacks rather than writing storage itself. Visual keys allow unchanged shop items to be retained during synchronization.
+The app passes a host interface to the shop screen. Purchases, styles, and accepted moves update `ShopState`, persist it through the storage layer, and synchronize the diorama. The diorama reports selection and placement through callbacks rather than writing storage itself. Unowned style previews use a temporary shop clone; only the explicit Buy action persists ownership and spends stars. Cancelling or leaving Edit restores the saved scene. Visual keys allow unchanged shop items to be retained during synchronization.
 
-The room uses a 6×6 floor grid with reserved counter cells and wall slots. Footprints account for rotation. Furniture cannot collide with other furniture, while rugs may sit below furniture. Placement validation is independent of Babylon rendering.
+The room uses a 6×6 floor grid. The movable counter reserves its footprint and a rear working aisle; movable shelves share wall slots with the other wall decorations. Footprints account for rotation. Furniture cannot collide with other furniture, while rugs may sit below furniture. Placement validation is independent of Babylon rendering.
 
 ## Persistence and lifecycle
 
