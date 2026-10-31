@@ -145,3 +145,11 @@ Phone feedback reported the lamp stopping after roughly one cell, rather than sn
 ## Showcase image sharing
 
 A Showcase view hides the shop UI while retaining camera movement and the selected day/night lighting. Share image opens native file sharing when supported; Save image and unsupported-share fallback download a PNG. Export renders the current room at 1200 pixels wide without UI overlays, then restores the live canvas size. Export does not change scores, ownership, placements, or theme preference. The native Safari share sheet still requires phone review; browser tests cover image dimensions/content, share invocation, download fallback, cancellation, and save isolation. Public galleries and accounts remain separate roadmap work.
+
+
+## Backlog for consideration — larger shops and zoom
+
+- Consider progressively larger shop spaces as players advance to later shops, allowing more room for decorations and distinct layouts.
+- Consider player-controlled zoom in and out, including phone-friendly pinch zoom, to inspect details and view the whole room.
+
+These are exploration ideas, not committed implementation or release scope. Evaluate room sizes, camera limits, touch interaction with furniture dragging, and phone performance before scheduling.
