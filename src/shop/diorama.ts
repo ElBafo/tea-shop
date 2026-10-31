@@ -86,7 +86,7 @@ export class Diorama {
     this.scene.clearColor = Color4.FromColor3(Color3.FromHexString(C.cream), 1);
     this.scene.ambientColor = new Color3(0.55, 0.48, 0.42);
 
-    this.camera = new ArcRotateCamera("iso", Math.PI / 4, 0.98, 24, new Vector3(3.05, 0.85, 3.05), this.scene);
+    this.camera = new ArcRotateCamera("iso", Math.PI / 4, 0.98, 24, new Vector3(3, 1.25, 3), this.scene);
     this.camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
     this.camera.lowerAlphaLimit = Math.PI / 4 - 0.48;
     this.camera.upperAlphaLimit = Math.PI / 4 + 0.48;
@@ -219,7 +219,8 @@ export class Diorama {
 
   private fitOrtho(): void {
     const aspect = this.engine.getRenderWidth() / Math.max(1, this.engine.getRenderHeight());
-    const halfW = this.edit ? 3.45 : 4.05;
+    // Fit both axes: a wide, short canvas must not crop the roof or floor.
+    const halfW = Math.max(4.65, 3.8 * aspect);
     this.camera.orthoLeft = -halfW;
     this.camera.orthoRight = halfW;
     this.camera.orthoTop = halfW / aspect;
@@ -343,8 +344,8 @@ export class Diorama {
 
     const wantWarm = this.shop.finaleSeen || Boolean(this.walk) || this.shop.owned.length >= 8 ? 1 : this.shop.owned.includes("lamp") ? 0.35 : 0;
     this.warm += (wantWarm - this.warm) * Math.min(1, dt * 1.4);
-    this.hemi.intensity = 0.92 + this.warm * 0.28;
-    this.sun.intensity = 0.88 + this.warm * 0.28;
+    this.hemi.intensity = 0.72 + this.warm * 0.38;
+    this.sun.intensity = 0.78 + this.warm * 0.38;
     this.hemi.diffuse = Color3.Lerp(new Color3(1, 0.9, 0.82), new Color3(1, 0.86, 0.7), this.warm);
     this.updateLamp();
     this.scene.render();
