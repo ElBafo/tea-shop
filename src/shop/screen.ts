@@ -96,7 +96,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     const spendable = spendableStars(progress);
     const stars = totalStars(progress);
     const mute = root.querySelector("#mute");
-    if (mute) mute.textContent = progress.muted ? "Quiet" : "Sound";
+    if (mute) mute.textContent = progress.muted ? "Sound off" : "Sound on";
 
     const starLine = root.querySelector("#shop-stars");
     if (starLine) {

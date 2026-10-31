@@ -49,10 +49,12 @@ export function mountApp(root: HTMLElement): void {
   let landed: { jar: number; count: number } | null = null;
   let shop: ShopScreen | null = null;
 
-  const unlockOnce = () => {
+  const unlockOnGesture = () => {
     void unlockAudio();
   };
-  root.addEventListener("pointerdown", unlockOnce, { once: true });
+  root.addEventListener("pointerup", unlockOnGesture, { capture: true });
+  root.addEventListener("click", unlockOnGesture, { capture: true });
+  root.addEventListener("keydown", unlockOnGesture, { capture: true });
 
   const render = () => {
     if (screen === "shop") {
@@ -379,7 +381,7 @@ function topBar(
     <header class="topbar">
       ${backBtn}
       <h2>${title}</h2>
-      <button id="mute" class="icon-btn" type="button" aria-label="${progress.muted ? "Turn sound on" : "Turn sound off"}">${progress.muted ? "Quiet" : "Sound"}</button>
+      <button id="mute" class="icon-btn" type="button" aria-label="${progress.muted ? "Turn sound on" : "Turn sound off"}">${progress.muted ? "Sound off" : "Sound on"}</button>
     </header>`;
 }
 
