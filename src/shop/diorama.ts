@@ -8,6 +8,7 @@ import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator"
 import { Color3, Color4 } from "@babylonjs/core/Maths/math.color";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { Plane } from "@babylonjs/core/Maths/math.plane";
+import "@babylonjs/core/Culling/ray";
 import type { Ray } from "@babylonjs/core/Culling/ray";
 import { ParticleSystem } from "@babylonjs/core/Particles/particleSystem";
 import { Scene } from "@babylonjs/core/scene";
@@ -68,6 +69,7 @@ export class Diorama {
     lastY: number;
     id?: UpgradeId;
     start?: Placement;
+    moved?: boolean;
   } | null = null;
   private tweens: Tween[] = [];
   private customer: TransformNode | null = null;
@@ -139,6 +141,8 @@ export class Diorama {
     this.engine.runRenderLoop(() => this.tick());
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(canvas);
+    canvas.addEventListener("pointercancel", this.cancelDrag);
+    canvas.addEventListener("lostpointercapture", this.cancelDrag);
     window.addEventListener("resize", this.onWinResize);
     requestAnimationFrame(() => this.resize());
   }
@@ -211,6 +215,9 @@ export class Diorama {
     if (this.disposed) return;
     this.disposed = true;
     this.resizeObs.disconnect();
+    const canvas = this.engine.getRenderingCanvas();
+    canvas?.removeEventListener("pointercancel", this.cancelDrag);
+    canvas?.removeEventListener("lostpointercapture", this.cancelDrag);
     window.removeEventListener("resize", this.onWinResize);
     this.engine.stopRenderLoop();
     this.scene.dispose();
@@ -302,7 +309,7 @@ export class Diorama {
     this.customer = buildCustomer(this.scene);
     this.castShadows(this.customer);
     const start = new Vector3(5.4, 0, 5.6);
-    const end = new Vector3(3.2, 0, 1.7);
+    const end = new Vector3(3.2, 0, 2.5);
     if (settled) {
       this.customer.position.copyFrom(end);
       this.customer.rotation.y = Math.PI;
@@ -359,8 +366,18 @@ export class Diorama {
     }
   }
 
+  private readonly cancelDrag = (): void => {
+    const id = this.drag?.id;
+    this.drag = null;
+    if (id) {
+      this.keys[id] = "";
+      this.sync(this.shop);
+    }
+  };
+
   private pointerDown(event: PointerEvent): void {
-    if (this.drag) return;
+    if (this.drag || event.button !== 0) return;
+    this.engine.getRenderingCanvas()?.setPointerCapture(event.pointerId);
     const pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY, (mesh) => Boolean(mesh.isEnabled() && mesh.isVisible));
     const id = (pick?.hit && pick.pickedMesh?.metadata?.upgradeId) as UpgradeId | undefined;
     if (this.edit && id && UPGRADE_BY_ID[id]?.movable && this.shop.owned.includes(id)) {
@@ -394,12 +411,14 @@ export class Diorama {
     if (this.drag.kind === "camera") {
       const dx = event.clientX - this.drag.lastX;
       const dy = event.clientY - this.drag.lastY;
-      this.camera.alpha -= dx * 0.005;
-      this.camera.beta -= dy * 0.004;
+      this.camera.alpha = Math.max(this.camera.lowerAlphaLimit!, Math.min(this.camera.upperAlphaLimit!, this.camera.alpha - dx * 0.005));
+      this.camera.beta = Math.max(this.camera.lowerBetaLimit!, Math.min(this.camera.upperBetaLimit!, this.camera.beta - dy * 0.004));
       this.drag.lastX = event.clientX;
       this.drag.lastY = event.clientY;
       return;
     }
+    if (!this.drag.moved && Math.hypot(event.clientX - this.drag.lastX, event.clientY - this.drag.lastY) < 8) return;
+    this.drag.moved = true;
     const id = this.drag.id;
     if (!id) return;
     const point = this.pickSurface(id);
@@ -424,7 +443,7 @@ export class Diorama {
     if (!this.drag || event.pointerId !== this.drag.pointerId) return;
     const drag = this.drag;
     this.drag = null;
-    if (drag.kind !== "item" || !drag.id || !drag.start) return;
+    if (drag.kind !== "item" || !drag.id || !drag.start || !drag.moved) return;
     const id = drag.id;
     const root = this.visuals.items[id];
     if (!root) return;
@@ -441,7 +460,7 @@ export class Diorama {
     if (canPlace(id, next, this.shop)) {
       const moved = next.x !== drag.start.x || next.z !== drag.start.z || next.wall !== drag.start.wall;
       this.hooks.onMove(id, next);
-      if (moved) this.sparkle(root);
+      if (moved && this.visuals.items[id]) this.sparkle(this.visuals.items[id]!);
     } else {
       this.keys[id] = "";
       this.sync(this.shop);

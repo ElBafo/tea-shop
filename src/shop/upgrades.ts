@@ -11,7 +11,7 @@ export const UPGRADES: UpgradeDef[] = [
     surface: "fixed",
     layer: "furn",
     size: { w: 3, d: 1 },
-    defaultPlace: { x: 1, z: 0, rot: 0 },
+    defaultPlace: { x: 1, z: 1, rot: 0 },
     variants: [
       { name: "Wood", blurb: "Warm oak with a worn teapot already waiting." },
       { name: "Marble", blurb: "A cream slab with soft grey veins." },
@@ -28,7 +28,7 @@ export const UPGRADES: UpgradeDef[] = [
     surface: "wall",
     layer: "wall",
     size: { w: 2, d: 1 },
-    defaultPlace: { x: 3, z: 0, rot: 0, wall: "back" },
+    defaultPlace: { x: 2, z: 0, rot: 1, wall: "left" },
     variants: [
       { name: "Carved wood", blurb: "Dark timber with letters cut in." },
       { name: "Painted", blurb: "A blush board and cream letters." },
@@ -165,6 +165,7 @@ export function styleOf(shop: ShopState, id: UpgradeId): number {
 }
 
 export function placeOf(shop: ShopState, id: UpgradeId): Placement {
+  if (id === "counter") return UPGRADE_BY_ID.counter.defaultPlace;
   return shop.place[id] ?? UPGRADE_BY_ID[id].defaultPlace;
 }
 

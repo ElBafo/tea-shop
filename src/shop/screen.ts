@@ -1,5 +1,6 @@
+import { isPreview, isShowroom } from "../game/preview";
 import { playChime, playClick, playFinale } from "../game/audio";
-import { isBakeryOpen, saveShop, spendableStars, totalStars } from "../game/storage";
+import { isBakeryOpen, saveShop, spendableStars } from "../game/storage";
 import type { Progress, ShopState, UpgradeId } from "../game/types";
 import { Diorama } from "./diorama";
 import { findOpenPlacement, nextRotation } from "./grid";
@@ -33,6 +34,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
         <h2>Tea Shop</h2>
         <button id="mute" class="icon-btn" type="button">Sound</button>
       </header>
+      ${isPreview ? `<aside class="preview-bar"><span>${isShowroom ? "Showroom · changes are temporary" : "Work in progress"}</span><a href="${import.meta.env.BASE_URL}${isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
       <div class="shop-stage">
         <canvas id="shop-canvas" aria-label="The tea shop room"></canvas>
         <div class="shop-overlay">
@@ -41,15 +43,18 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
         </div>
         <p class="shop-hint" id="shop-hint"></p>
       </div>
+      <button id="upgrade-notice" class="upgrade-notice hidden" type="button"></button>
       <div class="shop-dock">
+        <section id="decorate-panel" class="hidden" aria-label="Decorations">
         <div class="upgrade-rail" id="upgrade-rail"></div>
         <div class="upgrade-detail" id="upgrade-detail"></div>
+        </section>
         <div class="shop-actions">
           <button class="shop-card open" id="play-tea" type="button">
             <span class="card-art tea-art" aria-hidden="true"></span>
             <span class="card-copy">
-              <strong>Tea Shop</strong>
-              <em>Open the jars and play</em>
+              <strong>Play puzzles</strong>
+              <em>Earn stars for your shop</em>
             </span>
           </button>
           <button class="shop-card" id="bakery" type="button">
@@ -94,21 +99,28 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   const paintChrome = () => {
     const progress = host.progress;
     const spendable = spendableStars(progress);
-    const stars = totalStars(progress);
+    const available = UPGRADES.filter((item) => !isOwned(progress.shop, item.id) && item.cost <= spendable).length;
     const mute = root.querySelector("#mute");
     if (mute) mute.textContent = progress.muted ? "Sound off" : "Sound on";
 
     const starLine = root.querySelector("#shop-stars");
     if (starLine) {
-      const noun = spendable === 1 ? "star" : "stars";
-      starLine.innerHTML = `<span class="star-glyph">${STAR}</span> ${spendable} ${noun} to spend<br><span class="star-sub">${stars} collected</span>`;
+      starLine.innerHTML = `<span class="star-glyph" aria-hidden="true">${STAR}</span> ${spendable}`;
+      starLine.setAttribute("aria-label", `${spendable} stars available`);
     }
 
     const toggle = root.querySelector("#edit-toggle");
     if (toggle) toggle.textContent = edit ? "Done" : "Edit";
+    root.querySelector("h2")!.textContent = edit ? "Decorate" : "Tea Shop";
+    root.querySelector("#decorate-panel")?.classList.toggle("hidden", !edit);
+    root.querySelector(".shop-actions")?.classList.toggle("hidden", edit);
+    const notice = root.querySelector("#upgrade-notice");
+    notice?.classList.toggle("hidden", edit || available === 0);
+    if (notice) notice.textContent = `${available} ${available === 1 ? "upgrade" : "upgrades"} ready · Decorate`;
+    root.querySelector(".shop-room")?.classList.toggle("decorating", edit);
 
     const hint = root.querySelector("#shop-hint");
-    if (hint) hint.textContent = hintText(progress.shop, edit, selected, spendable);
+    if (hint) hint.textContent = hintText(edit, selected);
 
     const rail = root.querySelector("#upgrade-rail");
     if (rail) rail.innerHTML = UPGRADES.map((upgrade) => {
@@ -122,7 +134,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     }).join("");
 
     const detail = root.querySelector("#upgrade-detail");
-    if (detail) detail.innerHTML = edit ? editDetail(progress.shop, selected) : taskDetail(progress, focus);
+    if (detail) detail.innerHTML = selected ? editDetail(progress.shop, selected) : taskDetail(progress, focus);
 
     const bakery = root.querySelector<HTMLButtonElement>("#bakery");
     const bakeryCopy = root.querySelector("#bakery-copy");
@@ -133,7 +145,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     bakery?.classList.toggle("open", open);
     if (bakeryCopy) {
       bakeryCopy.textContent = open
-        ? "A second shop to dress up"
+        ? "Coming soon"
         : "Finish the tea shop to unlock";
     }
     if (bakeryLock) bakeryLock.classList.toggle("hidden", open);
@@ -154,11 +166,15 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     root.querySelector("#edit-toggle")?.addEventListener("click", () => {
       playClick(host.progress.muted);
       edit = !edit;
-      selected = edit ? movablePick(host.progress.shop, selected ?? focus) : null;
+      selected = null;
+      focus = UPGRADES.find((item) => !isOwned(host.progress.shop, item.id) && item.cost <= spendableStars(host.progress))?.id ?? "counter";
       diorama.setEditMode(edit);
       if (selected) diorama.select(selected);
       else diorama.select(null);
       paintChrome();
+    });
+    root.querySelector("#upgrade-notice")?.addEventListener("click", () => {
+      root.querySelector<HTMLButtonElement>("#edit-toggle")?.click();
     });
     root.querySelector("#play-tea")?.addEventListener("click", () => host.goLevels());
     root.querySelector("#bakery")?.addEventListener("click", () => {
@@ -172,6 +188,8 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
       if (!button) return;
       playClick(host.progress.muted);
       focus = button.dataset.upgrade as UpgradeId;
+      selected = isOwned(host.progress.shop, focus) ? focus : null;
+      diorama.select(selected);
       paintChrome();
     });
     root.querySelector("#upgrade-detail")?.addEventListener("click", (event) => {
@@ -265,28 +283,10 @@ function clone(shop: ShopState): ShopState {
   };
 }
 
-function movablePick(shop: ShopState, preferred: UpgradeId | null): UpgradeId | null {
-  if (preferred && isOwned(shop, preferred) && UPGRADE_BY_ID[preferred].movable) return preferred;
-  return shop.owned.find((id) => UPGRADE_BY_ID[id].movable) ?? null;
-}
-
-function hintText(shop: ShopState, edit: boolean, selected: UpgradeId | null, spendable: number): string {
-  if (edit && selected) {
-    return `Drag the ${UPGRADE_BY_ID[selected].moveName} with one finger. It snaps so pieces do not overlap.`;
-  }
-  if (edit) {
-    return "Tap a plant, rug, lamp, table, or sign, then drag it. Use Done when you are finished.";
-  }
-  if (shopComplete(shop)) {
-    return "The tea shop is finished. Drag the room with one finger to look around, or tap Edit to rearrange.";
-  }
-  if (spendable === 0 && shop.owned.length === 0) {
-    return "Spend stars from the shelves to fix up this little room.";
-  }
-  if (spendable === 0) {
-    return "Earn more stars on the shelves, then come back to decorate.";
-  }
-  return "Choose a task below, pick a style, and spend stars to make the room nicer.";
+function hintText(edit: boolean, selected: UpgradeId | null): string {
+  if (!edit) return "Drag to look around";
+  if (selected && UPGRADE_BY_ID[selected].movable) return "Drag to move · Rotate or restyle below";
+  return "Choose a decoration or tap a piece in the room";
 }
 
 function taskDetail(progress: Progress, focus: UpgradeId | null): string {

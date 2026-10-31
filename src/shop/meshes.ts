@@ -259,9 +259,14 @@ function buildCounter(scene: Scene, shop: ShopState, style: number): TransformNo
 
 function buildSign(scene: Scene, shop: ShopState, style: number): TransformNode {
   const root = new TransformNode("sign", scene);
-  const board = paint(scene, "sign-board", C.foam, { tex: signTexture(scene, style) });
+  const board = paint(scene, "sign-board", C.woodDeep);
   const hardware = paint(scene, "sign-hw", C.woodDeep);
   box(scene, "sign-board", 1.95, 0.86, 0.1, root, board, 0, 0, 0);
+  const face = MeshBuilder.CreatePlane("sign-lettering", { width: 1.85, height: 0.76 }, scene);
+  face.parent = root;
+  face.position.z = 0.056;
+  face.rotation.y = Math.PI;
+  face.material = paint(scene, "sign-lettering", "#ffffff", { tex: signTexture(scene, style) });
   cyl(scene, "sign-hook-l", 0.16, 0.03, root, hardware, -0.62, 0.44, 0);
   cyl(scene, "sign-hook-r", 0.16, 0.03, root, hardware, 0.62, 0.44, 0);
   placeWallItem(root, "sign", shop);
@@ -328,6 +333,7 @@ function buildPlant(scene: Scene, shop: ShopState, style: number): TransformNode
       frond.rotation.x = Math.sin(a) * 0.45;
     }
   }
+  root.scaling.setAll(1.25);
   const place = placeOf(shop, "plant");
   const onSill = place.z === 0 && place.x >= 4;
   placeFloorItem(root, "plant", shop, onSill ? 1.16 : 0);
@@ -340,6 +346,12 @@ function buildRug(scene: Scene, shop: ShopState, style: number): TransformNode {
   const tex = rugTexture(scene, style);
   const mat = paint(scene, "rug", C.blush, { tex, spec: 0.05 });
   box(scene, "rug", 2.9, 0.05, 1.9, root, mat, 0, 0.04, 0);
+  const fringe = paint(scene, "rug-fringe", C.foam);
+  for (let i = 0; i < 14; i++) {
+    for (const z of [-0.99, 0.99]) {
+      box(scene, "fringe", 0.045, 0.025, 0.13, root, fringe, -1.3 + i * 0.2, 0.04, z);
+    }
+  }
   placeFloorItem(root, "rug", shop);
   tag(root, "rug");
   return root;
@@ -467,11 +479,14 @@ export function itemKey(id: UpgradeId, shop: ShopState): string {
   return `${id}:${styleOf(shop, id)}:${place.x}:${place.z}:${place.rot}:${place.wall ?? ""}`;
 }
 
+const originalEmission = new WeakMap<StandardMaterial, Color3>();
+
 export function setItemTint(root: TransformNode, hex: string | null): void {
   root.getChildMeshes().forEach((mesh) => {
     const material = mesh.material;
     if (!(material instanceof StandardMaterial)) return;
-    material.emissiveColor = hex ? Color3.FromHexString(hex).scale(0.28) : Color3.Black();
+    if (!originalEmission.has(material)) originalEmission.set(material, material.emissiveColor.clone());
+    material.emissiveColor = hex ? Color3.FromHexString(hex).scale(0.28) : originalEmission.get(material)!.clone();
   });
 }
 

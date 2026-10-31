@@ -3,10 +3,14 @@ import { UPGRADE_BY_ID, placeOf } from "./upgrades";
 
 export const ROOM = 6;
 
+// Reserve the counter footprint and its rear working aisle.
 export const COUNTER_CELLS: ReadonlyArray<{ x: number; z: number }> = [
   { x: 1, z: 0 },
   { x: 2, z: 0 },
   { x: 3, z: 0 },
+  { x: 1, z: 1 },
+  { x: 2, z: 1 },
+  { x: 3, z: 1 },
 ];
 
 export const SHELF_WALL_SLOTS = [0, 1, 2];
