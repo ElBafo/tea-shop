@@ -1,5 +1,7 @@
 # Tea Shop roadmap
 
+Record every agreed product decision here in the same work session. Clearly distinguish implemented behavior, agreed plans, and open decisions.
+
 This is the working delivery order, not a calendar promise. Priorities can change after phone reviews. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
 ## Current baseline
@@ -84,6 +86,18 @@ Start with one playable slice: enter Bakery, complete a puzzle, earn a reward, b
 
 Done when the Bakery unlock opens a playable experience with its own coherent progression and persistence. Exact content scope is not committed yet.
 
+## Player progress and cloud saves — agreed direction
+
+Current behavior: progress is stored in browser localStorage on each device. Preview and release progress are separate, and showroom changes are temporary. There are no accounts or cloud saves yet; clearing browser data can remove progress.
+
+For public release, support immediate guest play with an optional account to back up and synchronize progress across devices. Retain local saves for offline play and synchronize account progress to a database. Preserve existing guest progress when a player signs in.
+
+Before implementation, choose authentication and hosting, define guest-to-account migration, and settle conflict handling for offline play and multiple devices. Scores, star spending, ownership, and placements must remain consistent during synchronization. Exact providers, schemas, and delivery timing are not yet decided.
+
+If public showcases or competitive rewards are introduced, add server-side validation of star earning and purchases as appropriate. Public profiles, social features, and competitive play remain separate decisions.
+
+Acceptance: a guest can play immediately; signing in preserves their progress; the same account can recover its shop on another device; offline changes synchronize without duplicating rewards or losing purchases.
+
 ## Ongoing delivery workflow
 
 1. Make a bounded change on the preview branch.
@@ -95,7 +109,7 @@ Done when the Bakery unlock opens a playable experience with its own coherent pr
 
 Preview saves are separate from release saves. Hosting configuration may change as needed to maintain the authorized preview workflow. Keep the preview branch available while deployment depends on it.
 
-No accounts, backend, monetization, or multiplayer are currently planned. Revisit only when a concrete product need emerges.
+Optional accounts and a cloud-save backend are planned as described above. Monetization and multiplayer are not currently planned.
 
 
 ## Latest preview update
