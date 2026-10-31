@@ -7,7 +7,7 @@ import { DirectionalLight } from "@babylonjs/core/Lights/directionalLight";
 import { PointLight } from "@babylonjs/core/Lights/pointLight";
 import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
 import { Color3, Color4 } from "@babylonjs/core/Maths/math.color";
-import { Vector3 } from "@babylonjs/core/Maths/math.vector";
+import { Matrix, Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { Plane } from "@babylonjs/core/Maths/math.plane";
 import "@babylonjs/core/Culling/ray";
 import type { Ray } from "@babylonjs/core/Culling/ray";
@@ -71,6 +71,7 @@ export class Diorama {
     id?: UpgradeId;
     start?: Placement;
     moved?: boolean;
+    offset?: Vector3;
   } | null = null;
   private tweens: Tween[] = [];
   private customer: TransformNode | null = null;
@@ -401,13 +402,38 @@ export class Diorama {
     }
   };
 
+  // A 44 CSS-pixel-wide capsule follows the lamp from base to shade.
+  // Lighting and device pixel ratio must not change its touch target.
+  private nearLamp(event: PointerEvent): boolean {
+    const lamp = this.visuals.items.lamp;
+    const canvas = this.engine.getRenderingCanvas();
+    if (!lamp || !canvas || !this.shop.owned.includes("lamp")) return false;
+    const rect = canvas.getBoundingClientRect();
+    const width = this.engine.getRenderWidth();
+    const height = this.engine.getRenderHeight();
+    const viewport = this.camera.viewport.toGlobal(width, height);
+    const project = (y: number) => {
+      const world = lamp.position.add(new Vector3(0, y, 0));
+      const p = Vector3.Project(world, Matrix.Identity(), this.scene.getTransformMatrix(), viewport);
+      return { x: rect.left + p.x * rect.width / width, y: rect.top + p.y * rect.height / height };
+    };
+    const a = project(0.05), b = project(1.45);
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const t = Math.max(0, Math.min(1, ((event.clientX - a.x) * dx + (event.clientY - a.y) * dy) / Math.max(1, dx * dx + dy * dy)));
+    return Math.hypot(event.clientX - a.x - t * dx, event.clientY - a.y - t * dy) <= 22;
+  }
+
   private pointerDown(event: PointerEvent): void {
     if (this.drag || event.button !== 0) return;
     this.engine.getRenderingCanvas()?.setPointerCapture(event.pointerId);
     const pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY, (mesh) => Boolean(mesh.isEnabled() && mesh.isVisible));
-    const id = (pick?.hit && pick.pickedMesh?.metadata?.upgradeId) as UpgradeId | undefined;
+    let id = (pick?.hit && pick.pickedMesh?.metadata?.upgradeId) as UpgradeId | undefined;
+    // Preserve direct hits on other furniture; the rug is a surface under it.
+    if (this.edit && (!id || id === "rug" || !UPGRADE_BY_ID[id]?.movable) && this.nearLamp(event)) id = "lamp";
     if (this.edit && id && UPGRADE_BY_ID[id]?.movable && this.shop.owned.includes(id)) {
       this.select(id);
+      const point = UPGRADE_BY_ID[id].surface === "floor" ? this.pickSurface(id) : null;
+      const item = this.visuals.items[id];
       this.drag = {
         kind: "item",
         pointerId: event.pointerId,
@@ -415,6 +441,7 @@ export class Diorama {
         lastY: event.clientY,
         id,
         start: { ...placeOf(this.shop, id) },
+        offset: point && item ? item.position.subtract(point) : undefined,
       };
       return;
     }
@@ -449,6 +476,7 @@ export class Diorama {
     if (!id) return;
     const point = this.pickSurface(id);
     if (!point) return;
+    if (this.drag.offset) point.addInPlace(this.drag.offset);
     const def = UPGRADE_BY_ID[id];
     const current = placeOf(this.shop, id);
     const next =
@@ -475,6 +503,7 @@ export class Diorama {
     if (!root) return;
     setItemTint(root, null);
     const point = this.pickSurface(id);
+    if (point && drag.offset) point.addInPlace(drag.offset);
     const def = UPGRADE_BY_ID[id];
     const current = placeOf(this.shop, id);
     const next = point
