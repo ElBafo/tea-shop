@@ -54,6 +54,8 @@ jobs:
           import json
           entry = Path("src/main.ts")
           entry.write_text(entry.read_text().split('if ("serviceWorker" in navigator)')[0])
+          types = Path("src/game/types.ts")
+          types.write_text(types.read_text().replace("tea-shop-progress-v1", "tea-shop-preview-progress-v1"))
           manifest = Path("public/manifest.webmanifest")
           data = json.loads(manifest.read_text().replace("/tea-shop/", "/tea-shop/preview/"))
           data["name"] = "Tea Shop Preview"
