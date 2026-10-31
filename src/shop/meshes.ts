@@ -9,6 +9,7 @@ import type { Scene } from "@babylonjs/core/scene";
 import type { ShopState, UpgradeId } from "../game/types";
 import { C } from "./palette";
 import {
+  decorTexture,
   marbleTexture,
   plasterTexture,
   rugTexture,
@@ -203,6 +204,8 @@ export function buildItem(scene: Scene, id: UpgradeId, shop: ShopState): Transfo
   if (id === "rug") return buildRug(scene, shop, style);
   if (id === "lamp") return buildLamp(scene, shop, style);
   if (id === "table") return buildTable(scene, shop, style);
+  if (id === "art" || id === "clock") return buildWallDecor(scene, shop, id, style);
+  if (id === "basket") return buildBasket(scene, shop, style);
   return new TransformNode("empty", scene);
 }
 
@@ -476,7 +479,7 @@ export function collectMeshes(root: TransformNode): AbstractMesh[] {
 
 export function itemKey(id: UpgradeId, shop: ShopState): string {
   const place = placeOf(shop, id);
-  return `${id}:${styleOf(shop, id)}:${place.x}:${place.z}:${place.rot}:${place.wall ?? ""}`;
+  return `${id}:${shop.owned.includes(id)}:${styleOf(shop, id)}:${place.x}:${place.z}:${place.rot}:${place.wall ?? ""}`;
 }
 
 const originalEmission = new WeakMap<StandardMaterial, Color3>();
@@ -500,4 +503,53 @@ export function selectionRing(scene: Scene): Mesh {
   ring.isPickable = false;
   ring.setEnabled(false);
   return ring;
+}
+
+function buildWallDecor(scene: Scene, shop: ShopState, id: "art" | "clock", style: number): TransformNode {
+  const root = new TransformNode(id, scene);
+  const frame = paint(scene, `${id}-frame`, id === "art" ? C.woodDeep : [C.wood, C.leaf, C.blush][style]);
+  if (id === "art") box(scene, "print-frame", 0.8, 0.9, 0.1, root, frame);
+  else {
+    const rim = cyl(scene, "clock-rim", 0.1, 0.4, root, frame);
+    rim.rotation.x = Math.PI / 2;
+  }
+  const face = MeshBuilder.CreatePlane(`${id}-face`, {width: id === "art" ? 0.7 : 0.72, height: id === "art" ? 0.8 : 0.72}, scene);
+  face.parent = root;
+  face.position.z = 0.056;
+  face.rotation.y = Math.PI;
+  const tex = decorTexture(scene, id, style);
+  tex.hasAlpha = id === "clock";
+  face.material = paint(scene, `${id}-face`, "#ffffff", {tex});
+  placeWallItem(root, id, shop);
+  tag(root, id);
+  return root;
+}
+
+function buildBasket(scene: Scene, shop: ShopState, style: number): TransformNode {
+  const root = new TransformNode("basket", scene);
+  const wicker = paint(scene, "basket-wicker", C.wood);
+  cyl(scene, "basket-body", 0.32, 0.34, root, wicker, 0, 0.18, 0, 16);
+  const edge = paint(scene, "basket-weave", C.woodDeep);
+  for (let i = 0; i < 5; i++) {
+    const ring = MeshBuilder.CreateTorus("basket-weave", {diameter: 0.67, thickness: 0.025, tessellation: 16}, scene);
+    ring.parent = root; ring.position.y = 0.06 + i * 0.07; ring.material = edge;
+  }
+  const sage = paint(scene, "basket-sage", C.mint);
+  const rose = paint(scene, "basket-rose", C.blush);
+  if (style === 0) {
+    box(scene, "blanket", 0.48, 0.12, 0.4, root, sage, 0, 0.38, 0);
+    box(scene, "blanket-fold", 0.4, 0.1, 0.35, root, rose, 0.04, 0.49, 0);
+  } else if (style === 1) {
+    sphere(scene, "yarn", 0.16, root, sage, -0.12, 0.38, 0.02);
+    sphere(scene, "yarn", 0.15, root, rose, 0.13, 0.4, -0.03);
+    sphere(scene, "yarn", 0.12, root, paint(scene, "yarn-cream", C.foam), 0, 0.53, 0.02);
+  } else {
+    for (let i = 0; i < 3; i++) {
+      const book = box(scene, "book", 0.12, 0.48, 0.35, root, i % 2 ? rose : sage, -0.16 + i * 0.16, 0.4, 0);
+      book.rotation.z = (i - 1) * 0.12;
+    }
+  }
+  placeFloorItem(root, "basket", shop);
+  tag(root, "basket");
+  return root;
 }

@@ -30,7 +30,7 @@ import {
   type ShopVisuals,
 } from "./meshes";
 import { canPlace, snapFloor, snapWall } from "./grid";
-import { UPGRADE_BY_ID, placeOf } from "./upgrades";
+import { UPGRADE_BY_ID, placeOf, shopComplete } from "./upgrades";
 
 export interface DioramaHooks {
   onSelect(id: UpgradeId | null): void;
@@ -197,9 +197,9 @@ export class Diorama {
   sync(shop: ShopState, opts: { animate?: UpgradeId; quiet?: boolean } = {}): void {
     this.shop = shop;
     applyRoomStyle(this.visuals, shop, this.scene);
-    const unique: UpgradeId[] = ["counter"];
+    const unique: UpgradeId[] = [];
     for (const id of shop.owned) {
-      if (id !== "paint" && id !== "counter") unique.push(id);
+      if (id !== "paint") unique.push(id);
     }
 
     for (const id of Object.keys(this.visuals.items) as UpgradeId[]) {
@@ -375,7 +375,7 @@ export class Diorama {
       }
     }
 
-    const wantWarm = this.shop.finaleSeen || Boolean(this.walk) || this.shop.owned.length >= 8 ? 1 : this.shop.owned.includes("lamp") ? 0.35 : 0;
+    const wantWarm = this.shop.finaleSeen || Boolean(this.walk) || shopComplete(this.shop) ? 1 : this.shop.owned.includes("lamp") ? 0.35 : 0;
     this.warm += (wantWarm - this.warm) * Math.min(1, dt * 1.4);
     this.hemi.intensity = this.night ? 0.52 : 0.72 + this.warm * 0.38;
     this.sun.intensity = this.night ? 0.22 : 0.78 + this.warm * 0.38;

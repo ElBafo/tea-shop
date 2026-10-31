@@ -147,3 +147,36 @@ export function sparkTexture(scene: Scene): DynamicTexture {
     ctx.fill();
   });
 }
+
+export function decorTexture(scene: Scene, kind: "art" | "clock", style: number): DynamicTexture {
+  return canvasTex(scene, `${kind}-${style}`, 256, (ctx, size) => {
+    if (kind === "clock") {
+      ctx.clearRect(0, 0, size, size);
+      ctx.fillStyle = style === 1 ? "#e9e8cd" : "#fff8f1";
+      ctx.beginPath(); ctx.arc(128,128,126,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle = "#5a4036"; ctx.lineWidth = 5;
+      for (let i=0;i<12;i++) {
+        const a=i*Math.PI/6;
+        ctx.beginPath();ctx.moveTo(128+Math.sin(a)*100,128-Math.cos(a)*100);ctx.lineTo(128+Math.sin(a)*111,128-Math.cos(a)*111);ctx.stroke();
+      }
+      ctx.lineWidth=8;ctx.lineCap="round";
+      ctx.beginPath();ctx.moveTo(89,105);ctx.lineTo(128,128);ctx.lineTo(177,80);ctx.stroke();
+      return;
+    }
+    ctx.fillStyle=style===2?"#e8b5b5":"#fff3dd";ctx.fillRect(0,0,size,size);
+    if (style===0) {
+      ctx.strokeStyle="#52765a";ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(128,225);ctx.lineTo(128,40);ctx.stroke();
+      ctx.fillStyle="#799768";
+      for(let i=0;i<6;i++){ctx.beginPath();ctx.ellipse(i%2?152:104,65+i*25,30,12,i%2?-0.5:0.5,0,Math.PI*2);ctx.fill();}
+    } else if(style===1) {
+      ctx.fillStyle="#e9a17b";ctx.beginPath();ctx.arc(177,66,28,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle="#a1b8bd";ctx.beginPath();ctx.moveTo(0,226);ctx.lineTo(90,70);ctx.lineTo(210,226);ctx.fill();
+      ctx.fillStyle="#536f84";ctx.beginPath();ctx.moveTo(90,226);ctx.lineTo(182,118);ctx.lineTo(256,226);ctx.fill();
+    } else {
+      ctx.strokeStyle="#fff8f1";ctx.lineWidth=12;ctx.beginPath();ctx.arc(177,132,25,0,Math.PI*2);ctx.stroke();
+      ctx.fillStyle="#fff8f1";ctx.fillRect(65,99,112,66);ctx.beginPath();ctx.ellipse(121,165,56,23,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle="#98684b";ctx.beginPath();ctx.ellipse(121,100,49,10,0,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle="#fff8f1";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(105,78);ctx.quadraticCurveTo(85,60,108,40);ctx.stroke();
+    }
+  });
+}

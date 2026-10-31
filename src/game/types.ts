@@ -42,7 +42,10 @@ export type UpgradeId =
   | "plant"
   | "rug"
   | "lamp"
-  | "table";
+  | "table"
+  | "art"
+  | "clock"
+  | "basket";
 
 export type ShopSurface = "floor" | "wall" | "fixed";
 export type ShopLayer = "rug" | "furn" | "wall" | "fixed";
@@ -66,6 +69,7 @@ export interface UpgradeDef {
   moveName: string;
   blurb: string;
   cost: number;
+  optional?: boolean;
   movable: boolean;
   surface: ShopSurface;
   layer: ShopLayer;

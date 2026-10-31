@@ -89,7 +89,8 @@ export function canPlaceWall(
   const slots = wallSlots(place, def.size.w);
   if (slots.some((slot) => slot < 0 || slot + 1 > ROOM)) return false;
 
-  if (id === "sign" && shop.owned.includes("shelves") && wall === "back") {
+  if (wall === "back" && slots.some((slot) => slot >= 3)) return false;
+  if (shop.owned.includes("shelves") && wall === "back") {
     if (slots.some((slot) => SHELF_WALL_SLOTS.includes(slot))) return false;
   }
 
