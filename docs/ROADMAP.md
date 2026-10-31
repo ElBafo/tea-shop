@@ -163,3 +163,19 @@ Implemented for preview review: the shopkeeper stands behind the counter, faces 
 The decoration picker uses a grid with All decorations / My decorations filters, named style choices, and a live room preview. Browsing or cancelling a preview spends no stars and does not save temporary ownership or styles. A separate Buy button shows the chosen style and star cost. Unaffordable styles remain previewable with the shortfall shown. Leaving Edit discards an unpurchased preview. Owned styles remain free to change. Purchases require a valid placement; if no space is available, the player must rearrange existing items first.
 
 Validation: placement/aisle and shelf collision checks, catalogue economy checks, all levels, and production build. Browser checks cover phone and desktop views, free previews, cancellation, explicit purchases, insufficient funds, counter/shelf touch movement, shopkeeper position, and reload persistence. Physical Safari review remains pending. This replaces the earlier fixed-counter and fixed-shelf behavior; larger inventories and multiple copies are still future work.
+
+## Editor redesign and whole-game UI review
+
+Latest phone feedback: selecting a decoration can leave placement unavailable until exiting and reopening Edit. Resolve the preview/edit-mode transition so owned items can be selected and moved immediately, and temporary previews can be positioned before purchase without saving ownership or spending stars.
+
+Agreed collection rule: Decorations contains only unowned items; My decorations contains only owned items. A purchase moves its item into My decorations. Replace the previous All decorations tab and duplicated ownership listings.
+
+Editor redesign: keep the room visible in a stable region, with collection tabs and a separately scrolling panel below on portrait phones and beside it on larger/landscape screens. Show either collection cards or the selected item's style/purchase controls, with a clear return to the collection. Browsing, previewing, arranging, and confirming a purchase must have distinct feedback. Owned layout/style changes save automatically; Done leaves Edit rather than acting as a required save step.
+
+Broader UI direction: review the home shop, level selection, puzzle screen, and completion/dialog flows as one coherent interface. Use consistent navigation, typography, spacing, button priorities, and compact star displays. Keep puzzle readability, cozy character, accessible touch targets, and the existing game rules. Start with the editor and review it on a phone before carrying the visual language through the other screens; whole-game restyling has not shipped in this editor pass. Full-game dark appearance remains a separate exploration.
+
+Editor preview validation: automated browser checks pass for selection-to-drag, temporary preview movement/rotation, purchasing the chosen placement, immediate movement after buying, direct owned selection during a preview, cancellation, exclusive collections, shelf movement, insufficient funds, and reload persistence. Portrait, small-phone, landscape, and desktop layouts are checked. Buy/Cancel occupy a separate footer rather than covering the scrolling style controls. Physical Safari review is still required.
+
+Additional editor review direction: combine theme, sound, stars, and Edit/Done into one compact toolbar; remove the instruction text beneath the shop; slightly reduce button padding and type sizes. Preserve readable labels and usable touch targets. Apply the compact toolbar to shop home and Edit so the room gains space in both views.
+
+Remove the redundant “Choose a style” heading from purchase previews; the named style buttons and selected state provide the choice directly.
