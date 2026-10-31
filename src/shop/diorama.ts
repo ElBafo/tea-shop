@@ -1,3 +1,4 @@
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Camera } from "@babylonjs/core/Cameras/camera";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
@@ -75,6 +76,8 @@ export class Diorama {
   private customer: TransformNode | null = null;
   private walk: { from: Vector3; to: Vector3; t: number } | null = null;
   private warm = 0;
+  private night = false;
+  private readonly windowLight: PointLight;
   private disposed = false;
   private readonly resizeObs: ResizeObserver;
 
@@ -114,6 +117,10 @@ export class Diorama {
     this.lampLight.intensity = 0;
     this.lampLight.diffuse = new Color3(1, 0.8, 0.55);
     this.lampLight.range = 7;
+    this.windowLight = new PointLight("window-light", new Vector3(4.85, 2, 0.65), this.scene);
+    this.windowLight.diffuse = Color3.FromHexString("#ffce8c");
+    this.windowLight.range = 5;
+    this.windowLight.intensity = 0;
 
     this.shadows = new ShadowGenerator(512, this.sun);
     this.shadows.usePercentageCloserFiltering = true;
@@ -148,6 +155,25 @@ export class Diorama {
   }
 
   private readonly onWinResize = () => this.resize();
+
+  setNight(night: boolean): void {
+    this.night = night;
+    this.scene.clearColor = Color4.FromColor3(Color3.FromHexString(night ? "#192333" : C.cream), 1);
+    this.scene.ambientColor = night ? new Color3(0.28, 0.33, 0.45) : new Color3(0.55, 0.48, 0.42);
+    const sky = this.scene.getMeshByName("sky")?.material;
+    if (sky instanceof StandardMaterial) {
+      sky.emissiveColor = Color3.FromHexString("#ffd397").scale(night ? 0.8 : 0.22);
+    }
+    for (const mesh of this.visuals.items.lamp?.getChildMeshes() ?? []) {
+      const material = mesh.material;
+      if (material instanceof StandardMaterial && material.name === "lamp-shade") {
+        material.emissiveColor = Color3.FromHexString(C.gold).scale(night ? 0.65 : 0.22);
+      }
+    }
+    this.windowLight.intensity = night ? 0.85 : 0;
+    this.sun.diffuse = Color3.FromHexString(night ? "#9aafe0" : "#ffedc7");
+    this.updateLamp();
+  }
 
   setEditMode(on: boolean): void {
     this.edit = on;
@@ -195,7 +221,7 @@ export class Diorama {
       if (opts.animate === id) this.popIn(root, id);
     }
 
-    this.updateLamp();
+    this.setNight(this.night);
     this.updateRing();
     if (shop.owned.includes("lamp")) this.warm = Math.max(this.warm, 0.25);
     if (opts.animate === "paint") this.sparkleAt(new Vector3(2.8, 1.7, 1.1));
@@ -287,7 +313,7 @@ export class Diorama {
     const bulb = lamp.getChildMeshes().find((mesh) => mesh.name === "lamp-bulb");
     const pos = bulb ? bulb.getAbsolutePosition() : lamp.position.clone();
     this.lampLight.position.copyFrom(pos);
-    this.lampLight.intensity = 0.55 + this.warm * 0.25;
+    this.lampLight.intensity = (this.night ? 1.15 : 0.55) + this.warm * 0.25;
   }
 
   private updateRing(): void {
@@ -351,9 +377,9 @@ export class Diorama {
 
     const wantWarm = this.shop.finaleSeen || Boolean(this.walk) || this.shop.owned.length >= 8 ? 1 : this.shop.owned.includes("lamp") ? 0.35 : 0;
     this.warm += (wantWarm - this.warm) * Math.min(1, dt * 1.4);
-    this.hemi.intensity = 0.72 + this.warm * 0.38;
-    this.sun.intensity = 0.78 + this.warm * 0.38;
-    this.hemi.diffuse = Color3.Lerp(new Color3(1, 0.9, 0.82), new Color3(1, 0.86, 0.7), this.warm);
+    this.hemi.intensity = this.night ? 0.52 : 0.72 + this.warm * 0.38;
+    this.sun.intensity = this.night ? 0.22 : 0.78 + this.warm * 0.38;
+    this.hemi.diffuse = this.night ? new Color3(0.72, 0.79, 1) : Color3.Lerp(new Color3(1, 0.9, 0.82), new Color3(1, 0.86, 0.7), this.warm);
     this.updateLamp();
     this.scene.render();
   }

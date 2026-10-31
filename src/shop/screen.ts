@@ -1,3 +1,4 @@
+import { loadNight, saveNight } from "../game/appearance";
 import { isPreview, isShowroom } from "../game/preview";
 import { playChime, playClick, playFinale } from "../game/audio";
 import { isBakeryOpen, saveShop, spendableStars } from "../game/storage";
@@ -30,7 +31,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   root.innerHTML = `
     <div class="frame shop-room">
       <header class="topbar">
-        <span class="icon-btn ghost" aria-hidden="true"></span>
+        <button id="theme-toggle" class="icon-btn" type="button" aria-pressed="false">Day</button>
         <h2>Tea Shop</h2>
         <button id="mute" class="icon-btn" type="button">Sound</button>
       </header>
@@ -73,6 +74,8 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   const canvas = root.querySelector<HTMLCanvasElement>("#shop-canvas");
   if (!canvas) throw new Error("Missing shop canvas");
 
+  const appearanceKey = `tea-shop-${isPreview ? "preview-" : ""}appearance-v1`;
+  let night = loadNight(appearanceKey);
   let edit = false;
   let focus: UpgradeId | null = "counter";
   let selected: UpgradeId | null = null;
@@ -96,7 +99,16 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     },
   });
 
+  diorama.setNight(night);
+
   const paintChrome = () => {
+    root.querySelector(".shop-room")?.classList.toggle("is-night", night);
+    const themeToggle = root.querySelector("#theme-toggle");
+    if (themeToggle) {
+      themeToggle.textContent = night ? "Night" : "Day";
+      themeToggle.setAttribute("aria-pressed", String(night));
+      themeToggle.setAttribute("aria-label", `Switch to ${night ? "day" : "night"}`);
+    }
     const progress = host.progress;
     const spendable = spendableStars(progress);
     const available = UPGRADES.filter((item) => !isOwned(progress.shop, item.id) && item.cost <= spendable).length;
@@ -159,6 +171,13 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   };
 
   const bind = () => {
+    root.querySelector("#theme-toggle")?.addEventListener("click", () => {
+      night = !night;
+      if (!isShowroom) saveNight(appearanceKey, night);
+      diorama.setNight(night);
+      playClick(host.progress.muted);
+      paintChrome();
+    });
     root.querySelector("#mute")?.addEventListener("click", () => {
       host.toggleMute();
       paintChrome();

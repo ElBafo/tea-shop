@@ -6,7 +6,7 @@ This is the working delivery order, not a calendar promise. Priorities can chang
 
 - Implemented: 20 sorting puzzles, stars, eight upgrades with styles, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.
 - Hosted preview: https://elbafo.github.io/tea-shop/preview/ automatically rebuilds from preview/shop-polish. The released game remains at https://elbafo.github.io/tea-shop/.
-- Initial camera, window, furniture-detail, and lighting changes are in draft PR #2, awaiting visual review.
+- The simplified shop UI, showroom, touch picking, sign correction, and counter aisle were reviewed and merged in PR #2.
 - Mobile audio retry and clearer sound labels are implemented and checked with a mocked audio context; confirmed working by the owner in Safari.
 - The Bakery is an unlockable coming-soon card.
 
@@ -36,7 +36,7 @@ Done when phone-size views of the starting and finished room show a clear, charm
 
 ## 3. Personal expression and shop showcases — requested
 
-### Day/night theme
+### Day/night theme — implemented in preview, awaiting review
 
 Add an explicit day/night toggle (interpreting the user's “seat/night” request as day/night). Day retains the warm daytime room; night uses a darker surrounding background and visible lamp/window/shop lighting. Keep furniture, labels, and placement feedback readable in both modes. Persist the preference, respect reduced motion for transitions, and keep the choice independent of real-world time unless requested later.
 
@@ -94,4 +94,8 @@ No accounts, backend, monetization, or multiplayer are currently planned. Revisi
 
 ## Latest preview update
 
-A temporary showroom now exposes all decorations without writing saved progress. The home screen shows a compact star balance and affordable-upgrade notice; Edit opens the decoration controls. The sign has a separate readable face, the counter has a reserved rear aisle, and saved furniture placements are sanitized around it. Touch picking registration, drag thresholds, cancellation recovery, and lamp highlighting were corrected. Phone and desktop browser checks accompany the build and level checks; owner touch review remains part of acceptance.
+A temporary showroom now exposes all decorations without writing saved progress. The home screen shows a compact star balance and affordable-upgrade notice; Edit opens the decoration controls. The sign has a separate readable face, the counter has a reserved rear aisle, and saved furniture placements are sanitized around it. Touch picking registration, drag thresholds, cancellation recovery, and lamp highlighting were corrected. Phone and desktop browser checks accompany the build and level checks; the owner approved the update and requested its merge.
+
+## Day/night preview review
+
+A compact Day/Night switch changes shop lighting and background. The preference is saved independently from puzzle progress, with separate preview/release keys; showroom changes remain temporary. Night adds warm window light and stronger lamp lighting while retaining readable ambient light. Switching is immediate, with no added animation. Browser checks cover phone/desktop rendering, preference reload, showroom isolation, and touch dragging. Next after approval: agree a first expanded decoration collection and the inventory model for multiple items.

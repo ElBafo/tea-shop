@@ -950,3 +950,27 @@ h1,
 .shop-stars { box-shadow: none; }
 .shop-actions #bakery { min-height: 48px; padding: 10px 16px; background: transparent; box-shadow: none; }
 .shop-actions #bakery .card-art { display: none; }
+
+/* Night is a lighting choice for the shop; puzzle colors stay familiar. */
+body:has(.shop-room.is-night) {
+  background: radial-gradient(ellipse at 50% 35%, #293b53, #111a28 75%);
+}
+.shop-room.is-night {
+  --ink: #f4e6d6;
+  --muted: #c9c1b8;
+  color: var(--ink);
+}
+.is-night .shop-stage { background: #192333; box-shadow: 0 12px 32px #090f1b66; }
+.is-night .icon-btn,
+.is-night .shop-stars,
+.is-night .upgrade-chip,
+.is-night .upgrade-detail,
+.is-night .style-chip,
+.is-night .shop-card { background: #2e3b4b; color: #f4e6d6; }
+.is-night .upgrade-chip.active,
+.is-night .style-chip.active { background: #48505a; }
+.is-night .preview-bar,
+.is-night .upgrade-notice { background: #354b45; color: #e7f2df; }
+.is-night .shop-hint { color: #c9c1b8; }
+.is-night .modal { color: #5a4036; --muted: #8a6f64; }
+.is-night .upgrade-chip span { color: #e6cf8c; }
