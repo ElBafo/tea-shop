@@ -1,3 +1,4 @@
+import { isShowroom, showroomProgress } from "./preview";
 import { sanitizeShop } from "../shop/grid";
 import { bakeryUnlocked, emptyShop, spentStars } from "../shop/upgrades";
 import { LEVEL_COUNT, STORAGE_KEY, type Placement, type Progress, type ShopState, type UpgradeId, type WallFace } from "./types";
@@ -23,6 +24,11 @@ function emptyProgress(): Progress {
 }
 
 export function loadProgress(): Progress {
+  if (isShowroom) {
+    const demo = showroomProgress();
+    demo.shop = sanitizeShop(demo.shop);
+    return demo;
+  }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return emptyProgress();
@@ -53,6 +59,7 @@ export function loadProgress(): Progress {
 }
 
 export function saveProgress(progress: Progress): void {
+  if (isShowroom) return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
 

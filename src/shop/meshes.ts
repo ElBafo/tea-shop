@@ -112,6 +112,7 @@ function teapot(scene: Scene, parent: TransformNode, mats: { body: StandardMater
   const pot = new TransformNode("teapot", scene);
   pot.parent = parent;
   pot.position.set(x, y, z);
+  pot.scaling.setAll(1.35);
   sphere(scene, "pot-body", 0.13, pot, mats.body, 0, 0.12, 0);
   cyl(scene, "pot-lid", 0.04, 0.07, pot, mats.lid, 0, 0.24, 0);
   sphere(scene, "pot-knob", 0.025, pot, mats.lid, 0, 0.28, 0);
@@ -150,7 +151,7 @@ export function createShopVisuals(scene: Scene): ShopVisuals {
   box(scene, "cornice-back", 6.2, 0.12, 0.1, room, trimMat, 3, 3.2, 0.06);
   box(scene, "cornice-left", 0.1, 0.12, 6.2, room, trimMat, 0.06, 3.2, 3);
 
-  box(scene, "sky", 1.72, 1.55, 0.04, room, skyMat, 4.85, 1.92, -0.14);
+  box(scene, "sky", 1.72, 1.55, 0.04, room, skyMat, 4.85, 1.92, 0.015);
   box(scene, "win-sill", 1.9, 0.1, 0.36, room, frameMat, 4.85, 1.1, 0.16);
   box(scene, "win-top", 1.9, 0.1, 0.12, room, frameMat, 4.85, 2.72, 0.04);
   box(scene, "win-l", 0.12, 1.62, 0.12, room, frameMat, 3.96, 1.91, 0.04);
@@ -237,6 +238,16 @@ function buildCounter(scene: Scene, shop: ShopState, style: number): TransformNo
       1.16,
       0.08,
     );
+    const panel = paint(scene, "counter-panel", C.foam);
+    for (const x of [-0.95, 0, 0.95]) {
+      box(scene, "panel", 0.78, 0.65, 0.025, root, panel, x, 0.58, 0.58);
+      box(scene, "panel-inset", 0.66, 0.53, 0.03, root, body, x, 0.58, 0.60);
+    }
+    for (const [i, hex] of [C.leaf, C.gold, C.blush].entries()) {
+      const tin = paint(scene, `counter-tin-${i}`, hex);
+      cyl(scene, "tea-tin", 0.3, 0.12, root, tin, -0.35 + i * 0.3, 1.34, -0.2);
+      cyl(scene, "tin-cap", 0.04, 0.13, root, panel, -0.35 + i * 0.3, 1.51, -0.2);
+    }
     const cup = paint(scene, "counter-cup", C.foam);
     cyl(scene, "cup", 0.12, 0.08, root, cup, 0.95, 1.24, 0.16);
     box(scene, "saucer", 0.24, 0.03, 0.24, root, paint(scene, "saucer", C.ceramic), 0.95, 1.18, 0.16);
@@ -248,9 +259,14 @@ function buildCounter(scene: Scene, shop: ShopState, style: number): TransformNo
 
 function buildSign(scene: Scene, shop: ShopState, style: number): TransformNode {
   const root = new TransformNode("sign", scene);
-  const board = paint(scene, "sign-board", C.wood, { tex: signTexture(scene, style) });
+  const board = paint(scene, "sign-board", C.woodDeep);
   const hardware = paint(scene, "sign-hw", C.woodDeep);
-  box(scene, "sign-board", 1.95, 0.72, 0.1, root, board, 0, 0, 0);
+  box(scene, "sign-board", 1.95, 0.86, 0.1, root, board, 0, 0, 0);
+  const face = MeshBuilder.CreatePlane("sign-lettering", { width: 1.85, height: 0.76 }, scene);
+  face.parent = root;
+  face.position.z = 0.056;
+  face.rotation.y = Math.PI;
+  face.material = paint(scene, "sign-lettering", "#ffffff", { tex: signTexture(scene, style) });
   cyl(scene, "sign-hook-l", 0.16, 0.03, root, hardware, -0.62, 0.44, 0);
   cyl(scene, "sign-hook-r", 0.16, 0.03, root, hardware, 0.62, 0.44, 0);
   placeWallItem(root, "sign", shop);
@@ -317,6 +333,7 @@ function buildPlant(scene: Scene, shop: ShopState, style: number): TransformNode
       frond.rotation.x = Math.sin(a) * 0.45;
     }
   }
+  root.scaling.setAll(1.25);
   const place = placeOf(shop, "plant");
   const onSill = place.z === 0 && place.x >= 4;
   placeFloorItem(root, "plant", shop, onSill ? 1.16 : 0);
@@ -329,6 +346,12 @@ function buildRug(scene: Scene, shop: ShopState, style: number): TransformNode {
   const tex = rugTexture(scene, style);
   const mat = paint(scene, "rug", C.blush, { tex, spec: 0.05 });
   box(scene, "rug", 2.9, 0.05, 1.9, root, mat, 0, 0.04, 0);
+  const fringe = paint(scene, "rug-fringe", C.foam);
+  for (let i = 0; i < 14; i++) {
+    for (const z of [-0.99, 0.99]) {
+      box(scene, "fringe", 0.045, 0.025, 0.13, root, fringe, -1.3 + i * 0.2, 0.04, z);
+    }
+  }
   placeFloorItem(root, "rug", shop);
   tag(root, "rug");
   return root;
@@ -379,6 +402,18 @@ function buildTable(scene: Scene, shop: ShopState, style: number): TransformNode
     chair(scene, root, seat, deep, -0.95, 0, Math.PI / 2);
     chair(scene, root, seat, deep, 0.95, 0, -Math.PI / 2);
   }
+  const china = paint(scene, "table-china", C.foam);
+  const tea = paint(scene, "table-tea", C.woodDeep);
+  for (const x of [-0.32, 0.32]) {
+    cyl(scene, "tea-saucer", 0.025, 0.16, root, china, x, 0.64, 0.08);
+    cyl(scene, "tea-cup", 0.14, 0.1, root, china, x, 0.72, 0.08);
+    cyl(scene, "tea-surface", 0.01, 0.078, root, tea, x, 0.795, 0.08);
+  }
+  const cake = paint(scene, "macaron", C.blush);
+  cyl(scene, "cake-plate", 0.025, 0.18, root, china, 0, 0.64, -0.25);
+  for (const x of [-0.075, 0.075]) {
+    sphere(scene, "macaron", 0.075, root, cake, x, 0.71, -0.25).scaling.y = 0.65;
+  }
   placeFloorItem(root, "table", shop);
   tag(root, "table");
   return root;
@@ -424,8 +459,10 @@ export function applyRoomStyle(visuals: ShopVisuals, shop: ShopState, scene: Sce
   wallTex.uScale = 2;
   wallTex.vScale = 1.2;
   const wallMat = paint(scene, `wall-live-${hex}`, hex, { tex: wallTex });
+  const previous = visuals.backWall.material;
   visuals.backWall.material = wallMat;
   visuals.leftWall.material = wallMat;
+  previous?.dispose(false, true);
   const glass = visuals.glass.material as StandardMaterial;
   glass.diffuseColor = Color3.FromHexString(painted ? C.glass : C.dirtyGlass);
   glass.alpha = painted ? 0.28 : 0.42;
@@ -442,11 +479,14 @@ export function itemKey(id: UpgradeId, shop: ShopState): string {
   return `${id}:${styleOf(shop, id)}:${place.x}:${place.z}:${place.rot}:${place.wall ?? ""}`;
 }
 
+const originalEmission = new WeakMap<StandardMaterial, Color3>();
+
 export function setItemTint(root: TransformNode, hex: string | null): void {
   root.getChildMeshes().forEach((mesh) => {
     const material = mesh.material;
     if (!(material instanceof StandardMaterial)) return;
-    material.emissiveColor = hex ? Color3.FromHexString(hex).scale(0.28) : Color3.Black();
+    if (!originalEmission.has(material)) originalEmission.set(material, material.emissiveColor.clone());
+    material.emissiveColor = hex ? Color3.FromHexString(hex).scale(0.28) : originalEmission.get(material)!.clone();
   });
 }
 

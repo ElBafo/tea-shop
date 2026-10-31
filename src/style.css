@@ -888,3 +888,65 @@ h1,
 #edit-toggle:active {
   transform: scale(0.97);
 }
+
+.preview-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  background: #e6eedb;
+  color: #40533b;
+  font-size: 12px;
+}
+.preview-bar a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  font-weight: 700;
+}
+
+/* Keep controls outside the 3D view instead of covering furniture on phones. */
+.shop-room {
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+.shop-room > * { flex-shrink: 0; }
+.shop-stage {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+}
+.shop-stage canvas {
+  order: 1;
+  height: auto;
+  aspect-ratio: 1.1;
+}
+.shop-overlay {
+  order: 0;
+  position: static;
+  padding: 10px 10px 0;
+}
+.shop-hint {
+  order: 2;
+  position: static;
+  margin: 0 10px 10px;
+}
+
+#decorate-panel { display: flex; flex-direction: column; gap: 8px; }
+#decorate-panel.hidden { display: none; }
+.upgrade-notice {
+  padding: 12px 16px;
+  min-height: 48px;
+  border-radius: 18px;
+  background: #e6eedb;
+  color: #40533b;
+  font-weight: 700;
+}
+.shop-hint { text-align: center; font-size: 0.8rem; background: transparent; }
+.shop-stars { box-shadow: none; }
+.shop-actions #bakery { min-height: 48px; padding: 10px 16px; background: transparent; box-shadow: none; }
+.shop-actions #bakery .card-art { display: none; }

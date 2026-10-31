@@ -1,0 +1,11 @@
+name: Preview ready
+on:
+  push:
+    branches: ["preview/shop-polish"]
+permissions:
+  contents: read
+jobs:
+  ready:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Preview branch updated"

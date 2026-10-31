@@ -32,3 +32,12 @@ npm run build
 ```
 
 The GitHub Actions workflow on `main` verifies the levels, builds the site, and deploys it to GitHub Pages.
+
+## Project direction and architecture
+
+- [Roadmap](docs/ROADMAP.md): delivery order, completion criteria, and phone preview reviews.
+- [Product direction](docs/PRODUCT.md): the experience, established decisions, and implemented baseline.
+- [Architecture](docs/ARCHITECTURE.md): modules, state, persistence, rendering, and deployment.
+- [Shop polish plan](docs/POLISH_PLAN.md): the next art and camera milestone and its acceptance criteria.
+
+The tea shop decorating foundation is implemented. The Bakery currently unlocks a coming-soon message; a playable Bakery and the planned shop art polish have not shipped in this checkout.
