@@ -191,6 +191,24 @@ export class Diorama {
     this.hooks.onSelect(id);
   }
 
+  captureImage(): string {
+    const canvas = this.engine.getRenderingCanvas();
+    if (!canvas || this.disposed) throw new Error("The room is not ready");
+    const width = this.engine.getRenderWidth();
+    const height = this.engine.getRenderHeight();
+    try {
+      this.engine.setSize(1200, Math.round(1200 * height / Math.max(1, width)));
+      this.fitOrtho();
+      this.scene.render();
+      // Read synchronously before WebGL clears its drawing buffer.
+      return canvas.toDataURL("image/png");
+    } finally {
+      this.engine.setSize(width, height);
+      this.fitOrtho();
+      this.scene.render();
+    }
+  }
+
   selectedId(): UpgradeId | null {
     return this.selected;
   }

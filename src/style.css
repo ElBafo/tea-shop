@@ -974,3 +974,15 @@ body:has(.shop-room.is-night) {
 .is-night .shop-hint { color: #c9c1b8; }
 .is-night .modal { color: #5a4036; --muted: #8a6f64; }
 .is-night .upgrade-chip span { color: #e6cf8c; }
+
+.room-actions { display: flex; gap: 6px; pointer-events: auto; }
+.showcase-tools { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+.share-status { margin: 0; text-align: center; font-size: 0.85rem; color: var(--muted); min-height: 1.5em; }
+.showcasing > .topbar,
+.showcasing > .preview-bar,
+.showcasing .shop-overlay,
+.showcasing .shop-hint,
+.showcasing > .shop-dock,
+.showcasing > .upgrade-notice { display: none; }
+.showcasing .shop-stage { margin: auto 0; box-shadow: none; }
+.showcasing .showcase-tools { margin-top: auto; }

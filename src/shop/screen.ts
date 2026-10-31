@@ -1,3 +1,4 @@
+import { imageFile, saveImage } from "./share";
 import { loadNight, saveNight } from "../game/appearance";
 import { isPreview, isShowroom } from "../game/preview";
 import { playChime, playClick, playFinale } from "../game/audio";
@@ -40,10 +41,19 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
         <canvas id="shop-canvas" aria-label="The tea shop room"></canvas>
         <div class="shop-overlay">
           <p class="shop-stars" id="shop-stars"></p>
-          <button id="edit-toggle" class="icon-btn" type="button">Edit</button>
+          <div class="room-actions">
+            <button id="showcase-toggle" class="icon-btn" type="button">Showcase</button>
+            <button id="edit-toggle" class="icon-btn" type="button">Edit</button>
+          </div>
         </div>
         <p class="shop-hint" id="shop-hint"></p>
       </div>
+      <div class="showcase-tools hidden">
+        <button id="showcase-back" class="icon-btn" type="button">Back</button>
+        <button id="share-shop" class="icon-btn" type="button">Share image</button>
+        <button id="save-shop" class="icon-btn" type="button">Save image</button>
+      </div>
+      <p id="share-status" class="share-status hidden" role="status" aria-live="polite"></p>
       <button id="upgrade-notice" class="upgrade-notice hidden" type="button"></button>
       <div class="shop-dock">
         <section id="decorate-panel" class="hidden" aria-label="Decorations">
@@ -77,6 +87,8 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   const appearanceKey = `tea-shop-${isPreview ? "preview-" : ""}appearance-v1`;
   let night = loadNight(appearanceKey);
   let edit = false;
+  let showcasing = false;
+  let sharing = false;
   let focus: UpgradeId | null = "counter";
   let selected: UpgradeId | null = null;
   let finaleOpen = false;
@@ -109,6 +121,10 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
       themeToggle.setAttribute("aria-pressed", String(night));
       themeToggle.setAttribute("aria-label", `Switch to ${night ? "day" : "night"}`);
     }
+    root.querySelector(".shop-room")?.classList.toggle("showcasing", showcasing);
+    root.querySelector(".showcase-tools")?.classList.toggle("hidden", !showcasing);
+    root.querySelector("#share-status")?.classList.toggle("hidden", !showcasing);
+    root.querySelector("#showcase-toggle")?.classList.toggle("hidden", edit);
     const progress = host.progress;
     const spendable = spendableStars(progress);
     const available = UPGRADES.filter((item) => !isOwned(progress.shop, item.id) && item.cost <= spendable).length;
@@ -170,7 +186,42 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     }
   };
 
+  const exportImage = async (share: boolean) => {
+    if (sharing) return;
+    sharing = true;
+    const status = root.querySelector("#share-status");
+    if (status) status.textContent = "";
+    try {
+      const file = imageFile(diorama.captureImage());
+      if (share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: "My Tea Shop" });
+      } else {
+        saveImage(file);
+        if (status) status.textContent = "Image ready to save.";
+      }
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === "AbortError") && status) {
+        status.textContent = "Could not share the image. Try Save image instead.";
+      }
+    } finally {
+      sharing = false;
+    }
+  };
+
   const bind = () => {
+    root.querySelector("#showcase-toggle")?.addEventListener("click", () => {
+      showcasing = true;
+      root.querySelector(".shop-room")!.scrollTop = 0;
+      paintChrome();
+      root.querySelector<HTMLButtonElement>("#showcase-back")?.focus({preventScroll:true});
+    });
+    root.querySelector("#showcase-back")?.addEventListener("click", () => {
+      showcasing = false;
+      paintChrome();
+      root.querySelector<HTMLButtonElement>("#showcase-toggle")?.focus({preventScroll:true});
+    });
+    root.querySelector("#share-shop")?.addEventListener("click", () => { void exportImage(true); });
+    root.querySelector("#save-shop")?.addEventListener("click", () => { void exportImage(false); });
     root.querySelector("#theme-toggle")?.addEventListener("click", () => {
       night = !night;
       if (!isShowroom) saveNight(appearanceKey, night);
