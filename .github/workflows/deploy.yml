@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_run:
+    workflows: ["Preview ready"]
+    types: [completed]
+    branches: ["preview/shop-polish"]
   workflow_dispatch:
 
 permissions:
@@ -16,19 +20,54 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: release
+      - uses: actions/checkout@v4
+        with:
+          ref: preview/shop-polish
+          path: preview
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - run: npm run verify
-      - run: npm run build
+          cache-dependency-path: |
+            release/package-lock.json
+            preview/package-lock.json
+      - name: Build released game
+        working-directory: release
+        run: |
+          npm ci
+          npm run verify
+          npm run build
+      - name: Build preview without offline caching
+        working-directory: preview
+        run: |
+          npm ci
+          npm run verify
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          entry = Path("src/main.ts")
+          entry.write_text(entry.read_text().split('if ("serviceWorker" in navigator)')[0])
+          manifest = Path("public/manifest.webmanifest")
+          data = json.loads(manifest.read_text().replace("/tea-shop/", "/tea-shop/preview/"))
+          data["name"] = "Tea Shop Preview"
+          manifest.write_text(json.dumps(data))
+          PY
+          npm run build -- --base=/tea-shop/preview/
+      - name: Assemble release and preview
+        run: |
+          mkdir -p release/dist/preview
+          cp -a preview/dist/. release/dist/preview/
+          touch release/dist/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: release/dist
 
   deploy:
     needs: build
