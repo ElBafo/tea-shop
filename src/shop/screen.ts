@@ -68,11 +68,11 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
         </section>
         <div class="shop-actions">
           <button class="shop-card open" id="play-tea" type="button">
-            <span class="card-art tea-art" aria-hidden="true"></span>
+            <span class="home-play-icon" aria-hidden="true">▤</span>
             <span class="card-copy">
               <strong>Play puzzles</strong>
-              <em>Earn stars for your shop</em>
-            </span>
+              <em>Earn stars to decorate</em>
+            </span><span class="home-arrow" aria-hidden="true">→</span>
           </button>
           <button class="shop-card" id="bakery" type="button">
             <span class="card-art bake-art" aria-hidden="true"></span>
@@ -162,7 +162,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     root.querySelector(".shop-actions")?.classList.toggle("hidden", edit);
     const notice = root.querySelector("#upgrade-notice");
     notice?.classList.toggle("hidden", edit || available === 0);
-    if (notice) notice.textContent = `${available} ${available === 1 ? "upgrade" : "upgrades"} ready · Decorate`;
+    if (notice) notice.textContent = `${available} ${available === 1 ? "decoration" : "decorations"} available · Browse`;
     root.querySelector(".shop-room")?.classList.toggle("decorating", edit);
 
     const rail = root.querySelector("#upgrade-rail");
@@ -206,7 +206,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     if (bakeryCopy) {
       bakeryCopy.textContent = open
         ? "Coming soon"
-        : "Finish the tea shop to unlock";
+        : "Complete your shop to unlock";
     }
     if (bakeryLock) bakeryLock.classList.toggle("hidden", open);
 

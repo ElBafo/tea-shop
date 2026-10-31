@@ -179,3 +179,11 @@ Editor preview validation: automated browser checks pass for selection-to-drag, 
 Additional editor review direction: combine theme, sound, stars, and Edit/Done into one compact toolbar; remove the instruction text beneath the shop; slightly reduce button padding and type sizes. Preserve readable labels and usable touch targets. Apply the compact toolbar to shop home and Edit so the room gains space in both views.
 
 Remove the redundant “Choose a style” heading from purchase previews; the named style buttons and selected state provide the choice directly.
+
+## Whole-game UI pass — in preview review
+
+Carry the editor's compact controls and clearer action priorities through the shop home, puzzle selection, play, and results. Home has a stronger Play action and quieter Bakery/decoration notices. Puzzle selection uses a compact card grid, available-star balance, completion count, and a Continue action that opens the first unfinished puzzle (or a puzzle with stars to improve once all are complete).
+
+Puzzle play has compact navigation and move/star-target information, with only the initial first-puzzle instruction retained. Jar layouts adapt to small portrait phones and landscape without reducing the number of visible slots. Undo and Restart remain available. Results show the score, only newly earned stars, a primary Next puzzle action, and a direct Decorate shop action; replays do not grant duplicate rewards. Result dialogs isolate keyboard focus. Returning to another screen during a pour prevents that old animation callback from affecting a new puzzle.
+
+Validation: all twenty levels and production build pass. Browser touch checks cover locked levels, Continue, real pours, Undo/Restart, completion, replay rewards, return-to-shop stars, and navigation during an animation. Tall five-slot puzzles fit 320px phones, portrait, landscape, and desktop. Phone review is pending; this is not merged. The shop's Day/Night appearance remains a shop setting; full-game dark mode is still backlog exploration.
