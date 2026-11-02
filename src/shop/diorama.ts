@@ -118,8 +118,8 @@ export class Diorama {
     this.hemi.diffuse = new Color3(1, 0.94, 0.88);
     this.hemi.groundColor = new Color3(0.62, 0.5, 0.42);
 
-    this.sun = new DirectionalLight("sun", new Vector3(-0.28, -0.72, 0.5), this.scene);
-    this.sun.position = new Vector3(8.2, 7.4, -1.2);
+    this.sun = new DirectionalLight("sun", new Vector3(0.22, -1, 0.28), this.scene);
+    this.sun.position = new Vector3(1.2, 8, 0.8);
     this.sun.intensity = 0.92;
     this.sun.diffuse = new Color3(1, 0.93, 0.78);
 
@@ -139,8 +139,8 @@ export class Diorama {
 
     this.shadows = new ShadowGenerator(512, this.sun);
     this.shadows.usePercentageCloserFiltering = true;
-    this.shadows.filteringQuality = ShadowGenerator.QUALITY_LOW;
-    this.shadows.setDarkness(0.38);
+    this.shadows.filteringQuality = ShadowGenerator.QUALITY_MEDIUM;
+    this.shadows.setDarkness(0.6);
     this.shadows.transparencyShadow = false;
 
     this.visuals = createShopVisuals(this.scene);
@@ -329,9 +329,13 @@ export class Diorama {
   }
 
   private castShadows(root: TransformNode): void {
+    const id = root.metadata?.upgradeId as UpgradeId | undefined;
+    // Miniature-room shadows should ground furniture, not project wall ornaments
+    // or elevated window plants across unrelated surfaces.
+    const casts = !id || (UPGRADE_BY_ID[id].surface === "floor" && root.position.y < 0.1);
     collectMeshes(root).forEach((mesh) => {
       if (mesh.metadata?.steam) return;
-      this.shadows.addShadowCaster(mesh);
+      if (casts) this.shadows.addShadowCaster(mesh);
       mesh.receiveShadows = true;
     });
   }

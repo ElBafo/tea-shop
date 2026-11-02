@@ -239,3 +239,9 @@ Cozy polish: soften the over-bright daytime lighting so wood, fabrics, and ceram
 Larger rooms remain backlog consideration. Full-game dark mode, cloud progress, and Bakery design are separate later work. Review this combined preview on the phone before merging it.
 
 Cozy/zoom validation: 30 long and repeated lamp drags pass across three styles and two pixel densities with deliberate pointer-capture loss. Pinch/button/wheel bounds, cancellation of unfinished moves, post-pinch dragging, reduced motion, and responsive camera checks pass. All 38 levels and the production build pass. The previous test browser stopped delivering valid touch capture; the same drag suite passed in a clean headless browser. Physical Safari review remains the release gate.
+
+## Shadow polish — phone review follow-up
+
+The owner reported a detached window-pot shadow on the floor and an oversized clock shadow across the wall. Use a steeper light directed into the room for shorter furniture shadows, soften their contrast/filtering, and exclude wall ornaments and elevated windowsill plants from casting room-wide shadows. Floor-standing plants still cast grounding shadows; moving a plant between floor and sill updates that rule. Apply the same geometry rules in both day and night. Preserve placement, ownership, zoom, and inventory behavior. Review phone screenshots before merging PR #6.
+
+Validation: day/night caster checks, floor-to-sill and sill-to-floor plant transitions, phone/zoom/desktop screenshot review, all 38 level solutions, and production build pass. The clock and window pot no longer project shadows across the wall or floor. Changes remain in PR #6 preview.
