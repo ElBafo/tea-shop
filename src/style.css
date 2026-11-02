@@ -1145,3 +1145,6 @@ body:has(.shop-room.is-night) {
   .play .shelves .jar { width: min(78px, calc((100% - 56px) / 8)); }
   .result-overlay { place-items: center; }
 }
+.inventory-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.inventory-actions [data-act="place"] { background: #dce7ce; }
+.is-night .inventory-actions [data-act="place"] { background: #52664c; }

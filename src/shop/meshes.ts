@@ -17,7 +17,7 @@ import {
   woodTexture,
 } from "./textures";
 import { floorCenter, wallCenter } from "./grid";
-import { UPGRADE_BY_ID, placeOf, styleOf } from "./upgrades";
+import { UPGRADE_BY_ID, placeOf, styleOf, kindOf } from "./upgrades";
 
 export interface ShopVisuals {
   floor: Mesh;
@@ -31,6 +31,7 @@ export interface ShopVisuals {
 
 function paint(scene: Scene, name: string, hex: string, extra?: { tex?: Texture; spec?: number; emit?: string; alpha?: number }): StandardMaterial {
   const material = new StandardMaterial(name, scene);
+  material.maxSimultaneousLights = 5;
   material.diffuseColor = Color3.FromHexString(hex);
   const spec = extra?.spec ?? 0.12;
   material.specularColor = new Color3(spec, spec * 0.9, spec * 0.75);
@@ -196,6 +197,18 @@ function placeWallItem(root: TransformNode, id: UpgradeId, shop: ShopState): voi
 }
 
 export function buildItem(scene: Scene, id: UpgradeId, shop: ShopState): TransformNode {
+  const kind = kindOf(id);
+  if (kind !== id) {
+    const instanceShop: ShopState = {
+      ...shop,
+      style: {...shop.style, [kind]: styleOf(shop, id)},
+      place: {...shop.place, [kind]: placeOf(shop, id)},
+    };
+    const root = buildItem(scene, kind, instanceShop);
+    root.name = id;
+    tag(root, id);
+    return root;
+  }
   const style = styleOf(shop, id);
   if (id === "counter") return buildCounter(scene, shop, style);
   if (id === "sign") return buildSign(scene, shop, style);

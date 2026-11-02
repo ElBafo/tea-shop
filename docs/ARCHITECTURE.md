@@ -12,7 +12,7 @@ Tea Shop is a static, client-side TypeScript application built with Vite. Babylo
 | --- | --- |
 | `src/game/types.ts` | Shared board, level, progress, upgrade, and placement contracts |
 | `src/game/engine.ts` | Move validation and application, completion, board cloning, scoring, solver move helpers |
-| `src/game/levels.ts` | Twenty authored level definitions and par values |
+| `src/game/levels.ts` | Thirty static level definitions and par values; levels 21–30 are in `inventory-levels.ts` |
 | `src/game/solver.ts` | Bounded breadth-first search used by development scripts |
 | `src/game/storage.ts` | Load, validate, and save progress; best scores, unlocks, and available stars |
 | `src/game/audio.ts` | Web Audio sound effects, unlocked by a user gesture |
@@ -52,7 +52,7 @@ The solver is development tooling, not a live hint system. Its search has a node
 
 The shop is eagerly imported with the app, so Babylon contributes substantially to the initial bundle. The inspected production build emitted a main chunk of about 375 KB gzipped and a size warning. Consider loading boundaries if startup performance becomes an issue.
 
-There is level verification but no browser interaction or visual regression suite. Camera framing, dragging, touch behavior, and art changes require browser checks. The Bakery is an unlockable placeholder, not an implemented second game.
+The scripts directory contains level, inventory, placement, and CDP browser interaction checks. Camera framing, dragging, touch behavior, and art changes require browser checks. The Bakery is an unlockable placeholder, not an implemented second game.
 
 ## Shop appearance
 
@@ -61,3 +61,11 @@ There is level verification but no browser interaction or visual regression suit
 ## Editor state and previews
 
 The editor owns separate collection, selection, and draft state. Decorations lists unowned items; My decorations lists owned items. A temporary draft includes both style and placement, while Babylon stays in Edit mode throughout the editing session. Draft moves/rotations update only the temporary scene. Buying validates the draft placement and commits that exact style/layout; selecting an owned item or cancelling restores saved state without leaving Edit. The editor's collection/detail region scrolls independently of the room.
+
+## Inventory and paid copies
+
+`UpgradeKind` identifies a decoration design; `UpgradeId` identifies an owned copy. Original IDs remain the first copy for backwards compatibility. Five repeatable designs accept a second ID such as `lamp:2`. `DECORATIONS` contains the complete purchasable collection, while `UPGRADES` retains the original design catalogue and completion requirements.
+
+`ShopState.stored` is optional for legacy saves and normalized to an array on loading. Stored items retain ownership, styles, and last placements but do not render or occupy grid cells. `inventory.ts` implements pure cloning, storage, and placement operations. Restoration prefers the last position, falls back to an open position, and returns no change if the room is full. Sanitization stores an unplaceable paid item instead of forcing an overlap. Currency remains derived from purchased ownership, including stored items and second copies.
+
+The diorama tags each copy with its independent ID. Both lamps have independently positioned lights; stored lamps emit none. The shopkeeper is hidden when the counter is stored. Existing 20-level saves retain scores and receive ten empty score slots.

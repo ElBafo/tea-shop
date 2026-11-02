@@ -17,26 +17,14 @@ The core loop is: solve a shelf → earn stars → repair or decorate the shop �
 - Make the shabby-to-cozy transformation visible and rewarding at phone size.
 - Completing the tea shop unlocks the Bakery as the next destination.
 
-## Implemented baseline
+## Current release and inventory preview
 
-The repository includes the merged decorating work from PR #1 (commit `361a47e`):
+The released game includes twenty puzzles, eleven paid decoration designs, style previews, movable furniture, day/night lighting, image sharing, compact phone UI, and full-jar completion. Best scores and shop layouts are stored locally. The Bakery remains a coming-soon destination.
 
-- Twenty sorting levels, with hidden contents from level 6 and five-slot jars from level 16.
-- Eight upgrades: counter, sign, paint, shelves, plant, rug, lamp, and table, each with two or three styles.
-- A 3D room, camera movement, Edit mode, placement constraints, rotation, and saved decoration choices.
-- Device-local best scores, star spending, sound preference, and shop progress.
-- A completion celebration and Bakery unlock. The Bakery currently opens a coming-soon message; it has no playable room.
+The next review adds ten puzzles and an inventory: store and restore owned movable decorations for free, retaining their style and position. Plants, lamps, tables, prints, and baskets can each have a second copy bought for stars. Preview each style before buying; copies can be styled and arranged independently. Paint remains a fixed finish.
 
-## Next outcome: make it lovely
+Thirty puzzles offer 90 stars. All eleven designs and five second copies cost 88 stars. The original eight required designs still control shop completion; optional copies are not required to unlock the Bakery card.
 
-The next milestone is an art and camera polish pass on the existing shop. The desired result is a charming, readable miniature space with warmth, visual richness, and a satisfying transformation. Preserve the established puzzle and decorating mechanics.
+## Delivery
 
-The prior review described cropped room edges, a sparse and flat finished room, and small details that did not read well on phones. These are reported review findings to recheck in the browser, not a fresh visual assessment of this checkout.
-
-See [the polish plan](POLISH_PLAN.md) for scope and acceptance criteria.
-
-## History and delivery
-
-The user supplied the earlier discussion: the first decorating PR was approved and merged; a subsequent polish agent stopped before opening a PR because its service usage was exhausted. The current Git history contains the decorating merge and no subsequent polish commit.
-
-The earlier workflow used reviewable PRs with screenshots, followed by explicit merge approval. Continue that workflow for future implementation work unless the user directs otherwise. Only `main` publishes to the live site.
+Review changes on the hosted phone preview before merging to main. Preview and release saves are separate. Include screenshots and relevant verification in review PRs; merge only after approval. Larger shops, zoom, full-game dark appearance, cloud progress, and a playable Bakery remain roadmap work.

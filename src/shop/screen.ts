@@ -1,3 +1,4 @@
+import { cloneInventory as clone, storeItem, placeItem } from "./inventory";
 import { decorationIcon } from "./icons";
 import { imageFile, saveImage } from "./share";
 import { loadNight, saveNight } from "../game/appearance";
@@ -9,7 +10,10 @@ import { Diorama } from "./diorama";
 import { canPlace, findOpenPlacement, nextRotation } from "./grid";
 import {
   UPGRADE_BY_ID,
-  UPGRADES,
+  DECORATIONS,
+  canPurchaseCopy,
+  isStored,
+  kindOf,
   isOwned,
   shopComplete,
   styleOf,
@@ -145,7 +149,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     root.querySelector("#showcase-toggle")?.classList.toggle("hidden", edit);
     const progress = host.progress;
     const spendable = spendableStars(progress);
-    const available = UPGRADES.filter((item) => !isOwned(progress.shop, item.id) && item.cost <= spendable).length;
+    const available = DECORATIONS.filter((item) => !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
     const mute = root.querySelector("#mute");
     if (mute) mute.textContent = progress.muted ? "Sound off" : "Sound on";
 
@@ -169,14 +173,14 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
     root.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(button => {
       button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
     });
-    const collection = UPGRADES.filter(item => isOwned(progress.shop, item.id) === (filter === "owned"));
+    const collection = DECORATIONS.filter(item => isOwned(progress.shop, item.id) === (filter === "owned") && (filter === "owned" || canPurchaseCopy(progress.shop, item.id)));
     if (rail) rail.innerHTML = collection.map((upgrade) => {
       const owned = isOwned(progress.shop, upgrade.id);
       const active = focus === upgrade.id;
       return `
         <button aria-pressed="${active}" class="upgrade-chip ${owned ? "owned" : ""} ${active ? "active" : ""}" data-upgrade="${upgrade.id}" type="button">
           <span class="deco-icon" aria-hidden="true">${decorationIcon(upgrade.id)}</span><strong>${label(upgrade.id)}</strong>
-          <span>${owned ? UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name : `${upgrade.cost} ${STAR}`}</span>
+          <span>${owned ? `${isStored(progress.shop, upgrade.id) ? "Stored" : "In shop"} · ${UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name}` : `${upgrade.cost} ${STAR}`}</span>
         </button>`;
     }).join("");
 
@@ -325,6 +329,14 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
         restyle(id, variant);
       } else if (act === "rotate") {
         rotateSelected();
+      } else if ((act === "store" || act === "place") && selected) {
+        clearPreview();
+        const next = act === "store" ? storeItem(host.progress.shop, selected) : placeItem(host.progress.shop, selected);
+        if (next) {
+          commit(next);
+          diorama.select(selected);
+          playClick(host.progress.muted);
+        }
       }
     });
     root.querySelector("#shop-modal")?.addEventListener("click", (event) => {
@@ -385,7 +397,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   const buy = (id: UpgradeId, variant: number) => {
     const progress = host.progress;
     const def = UPGRADE_BY_ID[id];
-    if (isOwned(progress.shop, id) || spendableStars(progress) < def.cost) return;
+    if (isOwned(progress.shop, id) || !canPurchaseCopy(progress.shop, id) || spendableStars(progress) < def.cost) return;
     const shop = clone(progress.shop);
     const place = draft?.id === id ? draft.place : findOpenPlacement(id, shop);
     if (!place || !canPlace(id, place, shop)) return;
@@ -418,7 +430,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
 
   const rotateSelected = () => {
     const id = selected;
-    if (!id) return;
+    if (!id || isStored(host.progress.shop, id)) return;
     const next = nextRotation(id, draft?.id === id ? previewShop() : host.progress.shop);
     if (!next) return;
     if (draft?.id === id) {
@@ -442,20 +454,9 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   };
 }
 
-function clone(shop: ShopState): ShopState {
-  return {
-    owned: shop.owned.slice(),
-    style: { ...shop.style },
-    place: Object.fromEntries(
-      Object.entries(shop.place).map(([id, place]) => [id, { ...place }]),
-    ) as ShopState["place"],
-    finaleSeen: shop.finaleSeen,
-  };
-}
-
 function label(id: UpgradeId): string {
   const name = UPGRADE_BY_ID[id].moveName;
-  return name[0].toUpperCase() + name.slice(1);
+  return name[0].toUpperCase() + name.slice(1) + (kindOf(id) !== id ? " · 2" : "");
 }
 
 function taskDetail(progress: Progress, focus: UpgradeId | null, draft: DecorationDraft | null): string {
@@ -485,7 +486,9 @@ function editDetail(shop: ShopState, selected: UpgradeId | null): string {
         `<button class="style-chip ${current === index ? "active" : ""}" data-act="style" data-id="${selected}" data-style="${index}" type="button">${variant.name}</button>`,
     )
     .join("");
-  const rotate = def.movable
+  const stored = isStored(shop, selected);
+  const canRestore = stored && Boolean(placeItem(shop, selected));
+  const rotate = def.movable && !stored
     ? `<button class="style-chip rotate-action" data-act="rotate" type="button">${def.surface === "wall" ? "Other wall" : "Rotate"}</button>`
     : "";
   return `
@@ -495,8 +498,8 @@ function editDetail(shop: ShopState, selected: UpgradeId | null): string {
     </div>
     <p class="section-label">Style · Free to change</p>
     <div class="style-row">${styles}</div>
-    ${rotate}
-    <p class="editor-saved" role="status">Changes saved automatically</p>`;
+    <div class="inventory-actions">${rotate}${def.movable ? `<button class="style-chip" data-act="${stored ? "place" : "store"}" type="button" ${stored && !canRestore ? "disabled" : ""}>${stored ? "Place in shop" : "Store item"}</button>` : ""}</div>
+    <p class="editor-saved" role="status">${stored ? canRestore ? "Stored · Place it again for free" : "Stored · Make room to place it again" : "Changes saved automatically"}</p>`;
 }
 
 function finaleModal(): string {

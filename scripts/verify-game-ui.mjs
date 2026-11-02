@@ -26,7 +26,7 @@ await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisable
 
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await new Promise(r=>setTimeout(r,1400));
-const seed={muted:true,bestStars:Array(20).fill(0),bestMoves:Array(20).fill(0),shop:{owned:[],style:{},place:{},finaleSeen:false}};
+const seed={muted:true,bestStars:Array(30).fill(0),bestMoves:Array(30).fill(0),shop:{owned:[],style:{},place:{},finaleSeen:false}};
 await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 const tap=async(selector)=>{
@@ -35,7 +35,7 @@ const tap=async(selector)=>{
 };
 const shot=async(name)=>fs.writeFile('work/'+name+'.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
 await tap('#play-tea');
-if(await evaluate(`document.querySelectorAll('.level-btn:disabled').length`)!==19)throw Error('Locked levels changed');
+if(await evaluate(`document.querySelectorAll('.level-btn:disabled').length`)!==29)throw Error('Locked levels changed');
 await shot('ui-levels-phone');
 await tap('.continue-card');
 await shot('ui-puzzle-phone');
@@ -66,7 +66,7 @@ await tap('[data-go="levels"]');await tap('.level-btn[data-level="1"]');
 await tap(`[data-jar="${solution[0].from}"]`);await tap(`[data-jar="${solution[0].to}"]`);
 await tap('[data-go="levels"]');await tap('.level-btn[data-level="2"]');await new Promise(r=>setTimeout(r,700));
 if(await evaluate(`document.querySelector('.moves').textContent`)!=='0 moves')throw Error('Old animation changed new puzzle');
-seed.bestStars=Array(20).fill(3);
+seed.bestStars=Array(30).fill(3);
 await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));await tap('#play-tea');await tap('.level-btn[data-level="20"]');
 for(const [width,height,name] of [[390,844,'phone'],[320,568,'small-phone'],[844,390,'landscape'],[1280,900,'desktop']]){

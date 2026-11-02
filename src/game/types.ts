@@ -34,7 +34,7 @@ export interface Move {
   unsealed: boolean;
 }
 
-export type UpgradeId =
+export type UpgradeKind =
   | "counter"
   | "sign"
   | "paint"
@@ -46,6 +46,10 @@ export type UpgradeId =
   | "art"
   | "clock"
   | "basket";
+
+export type RepeatableKind = "plant" | "lamp" | "table" | "art" | "basket";
+// Existing IDs identify copy one; additional copies have stable independent IDs.
+export type UpgradeId = UpgradeKind | `${RepeatableKind}:2`;
 
 export type ShopSurface = "floor" | "wall" | "fixed";
 export type ShopLayer = "rug" | "furn" | "wall" | "fixed";
@@ -80,6 +84,7 @@ export interface UpgradeDef {
 
 export interface ShopState {
   owned: UpgradeId[];
+  stored?: UpgradeId[];
   style: Partial<Record<UpgradeId, number>>;
   place: Partial<Record<UpgradeId, Placement>>;
   finaleSeen: boolean;
@@ -93,4 +98,4 @@ export interface Progress {
 }
 
 export const STORAGE_KEY = "tea-shop-progress-v1";
-export const LEVEL_COUNT = 20;
+export const LEVEL_COUNT = 30;

@@ -1,7 +1,8 @@
-import type { UpgradeId } from "../game/types";
+import { kindOf } from "./upgrades";
+import type { UpgradeId, UpgradeKind } from "../game/types";
 
 // Small collection illustrations share one visual language, including in night mode.
-const shapes: Record<UpgradeId, string> = {
+const shapes: Record<UpgradeKind, string> = {
   counter: '<path d="M8 21h48v7H8zM12 28v25h40V28M18 34h12v13H18zM35 34h12v13H35z"/><path d="M23 21v-9h12v9M35 14h5v5h-5"/>',
   sign: '<path d="M18 15V9m28 6V9M9 15h46v33H9z"/><text x="32" y="36" text-anchor="middle" font-size="15" fill="currentColor" stroke="none">TEA</text>',
   paint: '<path d="M13 10h33v16H13zM46 17h7v16H32v9m-4 0h8v14h-8z"/>',
@@ -15,5 +16,5 @@ const shapes: Record<UpgradeId, string> = {
   basket: '<path d="M10 28h44l-5 26H15zM15 28C15 5 49 5 49 28M12 37h40M14 46h36M22 28l2 26M32 28v26M42 28l-2 26"/>',
 };
 export function decorationIcon(id: UpgradeId): string {
-  return `<svg viewBox="0 0 64 64" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${shapes[id]}</svg>`;
+  return `<svg viewBox="0 0 64 64" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${shapes[kindOf(id)]}</svg>`;
 }

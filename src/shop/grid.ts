@@ -1,5 +1,5 @@
 import type { Placement, ShopState, UpgradeId, WallFace } from "../game/types";
-import { UPGRADE_BY_ID, placeOf } from "./upgrades";
+import { UPGRADE_BY_ID, placeOf, isStored } from "./upgrades";
 
 export const ROOM = 6;
 
@@ -59,7 +59,7 @@ export function canPlace(
   if (cells.length === 0 || cells.some((cell) => !inRoom(cell))) return false;
 
   for (const otherId of shop.owned) {
-    if (otherId === id) continue;
+    if (otherId === id || isStored(shop, otherId)) continue;
     const other = UPGRADE_BY_ID[otherId];
     if (other.surface !== "floor") continue;
     if (def.layer === "rug" && other.layer === "furn") continue;
@@ -83,7 +83,7 @@ export function canPlaceWall(
   if (wall === "back" && slots.some((slot) => slot >= 3)) return false;
 
   for (const otherId of shop.owned) {
-    if (otherId === id) continue;
+    if (otherId === id || isStored(shop, otherId)) continue;
     const other = UPGRADE_BY_ID[otherId];
     if (other.surface !== "wall") continue;
     const otherPlace = placeOf(shop, otherId);
@@ -176,22 +176,28 @@ export function nextRotation(id: UpgradeId, shop: ShopState): Placement | null {
 }
 
 export function sanitizeShop(shop: ShopState): ShopState {
+  const owned = shop.owned.filter((id, index) => UPGRADE_BY_ID[id] && shop.owned.indexOf(id) === index);
   const next: ShopState = {
-    owned: shop.owned.filter((id, index) => shop.owned.indexOf(id) === index),
-    style: { ...shop.style },
-    place: { ...shop.place },
-    finaleSeen: shop.finaleSeen,
+    owned,
+    stored: [...new Set((shop.stored ?? []).filter(id => owned.includes(id) && UPGRADE_BY_ID[id].movable))],
+    style: {...shop.style}, place: {...shop.place}, finaleSeen: shop.finaleSeen,
   };
-  for (const id of next.owned) {
+  const placed: UpgradeId[] = [];
+  for (const id of owned) {
     const def = UPGRADE_BY_ID[id];
-    const style = next.style[id] ?? 0;
+    const value = next.style[id] ?? 0;
+    const style = Number.isFinite(value) ? Math.floor(value) : 0;
     next.style[id] = ((style % def.variants.length) + def.variants.length) % def.variants.length;
-    const place = next.place[id] ?? def.defaultPlace;
-    if (!canPlace(id, place, { ...next, place: { ...next.place, [id]: place } })) {
-      const open = findOpenPlacement(id, { ...next, owned: next.owned.filter((item) => item !== id) });
-      next.place[id] = open ?? def.defaultPlace;
+    if (isStored(next, id)) continue;
+    const occupied = {...next, owned: placed};
+    const candidate = next.place[id] ?? def.defaultPlace;
+    const place = canPlace(id, candidate, occupied) ? candidate : findOpenPlacement(id, occupied);
+    if (place) {
+      next.place[id] = {...place};
+      placed.push(id);
     } else {
-      next.place[id] = place;
+      // Keep paid ownership when the room is full; never force overlapping placement.
+      next.stored!.push(id);
     }
   }
   return next;
