@@ -283,3 +283,32 @@ Validation includes all puzzle/economy checks, production build, touch navigatio
 ## Jar preview feedback — steady jars and direct decorating
 
 Keep the source jar stationary while treats fly out; remove its sideways tilt while retaining item transfers and the completion celebration. The result screen’s Decorate shop action opens Edit mode directly on the Decorations catalogue, ready to preview purchases with earned stars. Ordinary Shop navigation still opens the home view. Continue on PR #8 preview, without merging until approval.
+
+## Reliability/jar milestone merged; UI review requested
+
+The owner approved PR #8, merged as `a28a44d37c076a1142ce3187a1e3299a43fd8933`. This includes offline/update reliability, animated transfers with stationary source jars, completion celebrations, and direct entry to decorating from results.
+
+The owner requested a UI review and suggestions before further implementation. The following are proposals, not accepted scope:
+
+- Use adaptive jar sizing to reduce empty puzzle space, especially on early levels, while preserving readable four/five-slot layouts on small phones.
+- Give the editor a collapsible catalogue/details tray so placement can use more of the room; retain clear access to Decorations and My decorations.
+- Show visual style thumbnails instead of text-only style choices, retaining free in-room previews before purchase and clear star prices.
+- Consolidate secondary controls (sound, day/night, showcase) while keeping the star balance and Edit/Done easy to reach. Keep generous touch targets despite smaller visual controls.
+- Make the next puzzle and earned stars easier to scan; reduce the visual weight of the long locked-level grid.
+- Simplify completion copy and distinguish newly earned stars from the available shop balance; retain Next puzzle and direct Decorate actions.
+
+Recommended first pass: puzzle proportions plus editor space and visual style selection. No new UI implementation or further merge is approved by this review request. Preserve the cozy palette, existing interaction behavior, saves, puzzle rules, and preview-first review process.
+
+## UI refinement — all five adjustments approved for preview
+
+The owner approved all five suggestions and explicitly highlighted the hard-to-see star balance. Implement on `preview/ui-refinement`, mirrored to the phone preview; do not merge until reviewed.
+
+- A contrasting gold balance pill with a stronger icon and larger number on shop and level screens, including night mode.
+- An explicit More room / Show decorations control that collapses the editor tray and enlarges the room. It preserves the current selection, unpurchased preview, saved placement, and star balance. Hidden controls are inert. No automatic collapsing during a drag.
+- Lightweight variant-specific style illustrations and selected checkmarks for both new purchases and owned decorations. The actual in-room preview remains available before purchase; illustrations do not add WebGL renderers. Keep the buy/cancel bar reachable independently of scrolling style details.
+- Larger jars/treats on sparse puzzles on taller portrait phones, while retaining compact layouts for small phones, landscape, and dense five-slot puzzles. Source jars remain steady during transfers.
+- Group sound, day/night, and showcase under Settings, leaving the balance and Edit/Done prominent. Support keyboard dismissal and tapping outside; preserve familiar labelled actions and touch targets.
+
+Rules, stars, prices, ownership, saves, and offline behavior are unchanged. Locked-level grouping and further result-copy changes remain separate proposals, outside this five-item pass.
+
+UI refinement validation: production build and all 38 solver/full-jar/economy checks pass. Browser checks cover touch puzzle play, undo/replay rewards, direct entry to Edit, 320px/phone/landscape/desktop layouts, menu dismissal, day/night and showcase access, style purchase/restyling/storage, and preview preservation when collapsing the tray. Drag checks pass with the tray collapsed and immediately after selection, purchase, cancellation, and shelf rotation. Phone/day/night/desktop screenshots reviewed. Await owner review on the hosted preview before merging.

@@ -60,6 +60,18 @@ export function mountApp(root: HTMLElement): void {
   root.addEventListener("pointerup", unlockOnGesture, { capture: true });
   root.addEventListener("click", unlockOnGesture, { capture: true });
   root.addEventListener("keydown", unlockOnGesture, { capture: true });
+  root.addEventListener("click", event => {
+    if (!(event.target as HTMLElement).closest('.settings-menu')) {
+      root.querySelectorAll('.settings-menu[open]').forEach(menu => menu.removeAttribute('open'));
+    }
+  });
+  root.addEventListener("keydown", event => {
+    if (event.key !== 'Escape') return;
+    root.querySelectorAll<HTMLDetailsElement>('.settings-menu[open]').forEach(menu => {
+      menu.open = false;
+      menu.querySelector<HTMLElement>('summary')?.focus();
+    });
+  });
 
   const render = (editShop = false) => {
     stopMotion();
@@ -418,8 +430,10 @@ function topBar(title: string, progress: Progress, dest: "shop" | "levels", bala
   return `<header class="topbar screen-toolbar">
     <button class="icon-btn" data-go="${dest}" type="button">← ${dest === "shop" ? "Shop" : "Puzzles"}</button>
     <h2>${title}</h2>
-    ${balance ? `<span class="balance-pill" aria-label="${spendableStars(progress)} stars available">${STAR} ${spendableStars(progress)}</span>` : ""}
-    <button id="mute" class="icon-btn" type="button" aria-label="${progress.muted ? "Turn sound on" : "Turn sound off"}">${progress.muted ? "Sound off" : "Sound on"}</button>
+    ${balance ? `<span class="balance-pill" aria-label="${spendableStars(progress)} stars available"><span aria-hidden="true">${STAR}</span> <strong>${spendableStars(progress)}</strong></span>` : ""}
+    <details class="settings-menu"><summary aria-label="Game settings">Settings</summary><div class="settings-popover">
+      <button id="mute" class="icon-btn" type="button" aria-label="${progress.muted ? "Turn sound on" : "Turn sound off"}">${progress.muted ? "Sound off" : "Sound on"}</button>
+    </div></details>
   </header>`;
 }
 
