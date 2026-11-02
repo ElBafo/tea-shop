@@ -1,3 +1,4 @@
+import { animatePour, pourOrigins, reducedMotion } from "./motion";
 import {
   playClick,
   playComplete,
@@ -39,6 +40,7 @@ interface PlayState {
   won: boolean;
   hint: boolean;
   earnedStars: number;
+  celebrating: boolean;
 }
 
 const STAR = "✦";
@@ -50,6 +52,7 @@ export function mountApp(root: HTMLElement): void {
   let pendingComplete: number[] = [];
   let landed: { jar: number; count: number } | null = null;
   let shop: ShopScreen | null = null;
+  let stopMotion = () => {};
 
   const unlockOnGesture = () => {
     void unlockAudio();
@@ -59,6 +62,9 @@ export function mountApp(root: HTMLElement): void {
   root.addEventListener("keydown", unlockOnGesture, { capture: true });
 
   const render = () => {
+    stopMotion();
+    stopMotion = () => {};
+    const focusedJar = (document.activeElement as HTMLElement | null)?.dataset.jar;
     if (screen === "shop") {
       if (shop) {
         shop.refresh();
@@ -93,6 +99,9 @@ export function mountApp(root: HTMLElement): void {
       root.innerHTML = playMarkup(play, progress, pendingComplete, landed);
     }
     bind(root);
+    if (focusedJar !== undefined && !root.querySelector('.result-overlay')) {
+      root.querySelector<HTMLElement>(`[data-jar="${focusedJar}"]`)?.focus({preventScroll:true});
+    }
   };
 
   const leaveShop = () => {
@@ -195,6 +204,7 @@ export function mountApp(root: HTMLElement): void {
       won: false,
       hint: level.id === 1,
       earnedStars: 0,
+      celebrating: false,
     };
     render();
   };
@@ -233,6 +243,7 @@ export function mountApp(root: HTMLElement): void {
       return;
     }
 
+    const origins = pourOrigins(root, from, count);
     const snapshot = cloneBoard(play.board);
     const destWasComplete = isCompleteTube(play.board.tubes[index], play.board.capacity);
     const move = applyMove(play.board, from, index);
@@ -251,30 +262,42 @@ export function mountApp(root: HTMLElement): void {
       !destWasComplete && isCompleteTube(play.board.tubes[index], play.board.capacity);
     if (destNowComplete) pendingComplete = [index];
 
+    // Award the logical win before visual effects, so backgrounding or leaving
+    // during the celebration cannot lose earned stars. Rules/scoring stay unchanged.
+    const won = isWon(play.board);
+    if (won) {
+      play.won = true;
+      const stars = starsForMoves(play.moves, play.level.par);
+      play.earnedStars = Math.max(0, stars - progress.bestStars[play.level.id - 1]);
+      progress = recordWin(progress, play.level.id - 1, stars, play.moves);
+    }
     render();
-
     const activePlay = play;
-    window.setTimeout(() => {
-      if (play !== activePlay) return;
+    const motion = animatePour(root, from, index, move.item, origins);
+    stopMotion = motion.cancel;
+    void motion.finished.then(() => {
+      if (play !== activePlay || screen !== "play") return;
+      stopMotion = () => {};
       if (destNowComplete) playComplete(progress.muted);
-      if (isWon(play.board)) {
-        play.won = true;
-        const stars = starsForMoves(play.moves, play.level.par);
-        play.earnedStars = Math.max(0, stars - progress.bestStars[play.level.id - 1]);
-        progress = recordWin(progress, play.level.id - 1, stars, play.moves);
+      if (won) {
+        landed = null;
+        play.celebrating = true;
         playWin(progress.muted);
+        render();
         window.setTimeout(() => {
-          if (play !== activePlay) return;
+          if (play !== activePlay || screen !== "play") return;
+          play.celebrating = false;
           play.busy = false;
+          pendingComplete = [];
           render();
-        }, 420);
+        }, reducedMotion() ? 0 : 420);
       } else {
         play.busy = false;
-        pendingComplete = [];
-        landed = null;
         render();
+        landed = null;
+        pendingComplete = [];
       }
-    }, 360);
+    });
   };
 
   const shake = (index: number) => {
@@ -342,20 +365,23 @@ function playMarkup(
           `<div class="slot ${held ? "held" : ""} ${justLanded ? "landed" : ""}">${treatMarkup(item, hidden)}</div>`,
         );
       }
-      const done = pendingComplete.includes(index) || (won && isCompleteTube(tube, board.capacity));
+      const done = isCompleteTube(tube, board.capacity);
+      const celebrate = pendingComplete.includes(index) || play.celebrating;
+      const validTarget = selected !== null && selected !== index && canPour(board, selected, index) > 0;
       const lid = board.sealed[index]
         ? `<span class="lid" aria-hidden="true"></span>`
         : "";
-      const puff = done
+      const puff = done && celebrate
         ? `<span class="puff" aria-hidden="true">${sparkles()}</span>`
         : "";
       return `
-        <button class="jar ${lifted ? "selected" : ""} ${done ? "done" : ""}" data-jar="${index}" type="button" aria-label="Jar ${index + 1}">
+        <button class="jar ${lifted ? "selected" : ""} ${done ? "done" : ""} ${validTarget ? "valid-target" : ""} ${celebrate ? "just-completed" : ""}" style="--jar-order:${index}" data-jar="${index}" type="button" aria-pressed="${lifted}" aria-label="Jar ${index + 1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}">
           <span class="jar-neck"></span>
           <span class="jar-glass">
             ${lid}
             <span class="stack" style="--slots:${board.capacity}">${slots.join("")}</span>
           </span>
+          ${done ? '<span class="jar-check" aria-hidden="true">✓</span>' : ''}
           ${puff}
         </button>`;
     })
@@ -365,24 +391,25 @@ function playMarkup(
     ? `<p class="hint">Fill each jar with one kind. Tap two jars to move treats.</p>`
     : "";
 
-  const overlay = won ? winOverlay(play, progress) : "";
+  const overlay = won && !play.busy ? winOverlay(play, progress) : "";
 
   return `
-    <div class="frame play">
+    <div class="frame play ${play.celebrating ? "celebrating" : ""}">
       ${topBar(level.name, progress, "levels")}
       <div class="play-meta">
         <p class="moves">${moves} ${moves === 1 ? "move" : "moves"}</p>
         <p class="par" aria-label="Three stars in ${level.par} moves or fewer">3 ${STAR} ≤ ${level.par} moves</p>
       </div>
       ${hint}
-      <div class="shelves" data-count="${board.tubes.length}" data-capacity="${board.capacity}">
+      <div class="shelves" aria-busy="${play.busy}" data-count="${board.tubes.length}" data-capacity="${board.capacity}">
         <div class="shelf-row">${jars}</div>
         <div class="plank" aria-hidden="true"></div>
       </div>
       <div class="play-bar">
-        <button id="undo" type="button" ${play.history.length === 0 || won ? "disabled" : ""}>Undo</button>
-        <button id="restart" type="button">Restart</button>
+        <button id="undo" type="button" ${play.history.length === 0 || won || play.busy ? "disabled" : ""}>Undo</button>
+        <button id="restart" type="button" ${play.busy ? "disabled" : ""}>Restart</button>
       </div>
+      <p class="visually-hidden" role="status">${play.celebrating ? 'All jars tidy. Puzzle complete.' : pendingComplete.length ? 'Jar complete.' : ''}</p>
       ${overlay}
     </div>`;
 }
@@ -402,6 +429,8 @@ function winOverlay(play: PlayState, progress: Progress): string {
   const next = LEVELS[play.level.id];
   return `<div class="overlay result-overlay" role="dialog" aria-modal="true" aria-labelledby="result-title">
     <div class="modal result-card">
+      <div class="result-confetti" aria-hidden="true">${Array.from({length:16},(_,i)=>`<i style="--i:${i};--x:${(i*37)%100}%;--turn:${i%2?180:-160}deg"></i>`).join('')}</div>
+      <span class="result-seal" aria-hidden="true">✓</span>
       <p class="kicker">Puzzle ${play.level.id} complete</p>
       <h3 id="result-title">All tidy</h3>
       <p class="big-stars" aria-label="${stars} of 3 stars">${starText(stars)}</p>

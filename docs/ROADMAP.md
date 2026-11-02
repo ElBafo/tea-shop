@@ -6,7 +6,7 @@ This is the working delivery order, not a calendar promise. Priorities can chang
 
 ## Current priority
 
-Release polish after the approved cozy/zoom/lighting milestone. First, keep repeated decorating sessions stable by releasing replaced materials/textures, reusing unchanged wall finishes, and pausing rendering while hidden. Continue the release checklist before further catalogue expansion or Bakery implementation. Larger rooms remain backlog consideration.
+Review the isolated reliability and jar-animation preview: installed/Home Screen updates, offline reopening, saved rewards, smoother transfers, and level celebrations. Preserve gameplay and shop progress; merge only after owner acceptance. Larger rooms remain backlog consideration.
 
 ## Current baseline
 
@@ -263,3 +263,19 @@ Proceed with the tea-shop release checklist. Repeated style changes exposed reta
 Pause the shop render loop when the document becomes hidden and resume exactly one loop on return. Preserve layouts, scores, lighting, and gestures. These changes refine the existing experience without adding catalogue content or changing the economy.
 
 Validation: 120 style changes, 12 store/restore cycles, and 12 preview/cancel cycles keep materials/textures/meshes at 43/7/107. Paint previews still change walls, second-copy materials remain independent, repeated sparkles clean up correctly, three hide/resume cycles pause/resume rendering, and three shop exits/re-entries release their scenes. Production build passes. Review this performance pass on preview before a separate merge. Installed/offline update behavior and the remaining release checklist are later checks; cloud saves and Bakery decisions remain planned.
+
+## Performance release approved
+
+The owner approved merging PR #7. Material/texture cleanup, unchanged-wall reuse, reliable placement sparkles, and background render-loop pausing are now merged into main. The next existing roadmap item is installed/offline update behavior, especially the iPhone Home Screen experience; implementation has not started in this merge-and-roadmap turn. Bakery design follows release reliability work and still requires its content/progression decisions.
+
+## Reliability and jar polish — isolated review branch
+
+The owner requested finishing release reliability alongside smoother, more expressive jar gameplay, with preview approval before any merge. Work lives on `preview/jar-polish`, mirrored to the hosted preview branch. Main keeps the approved experience until acceptance.
+
+Jar selection lifts gently and highlights legal destinations. Treats travel between jars, settle on landing, and completed jars gain a check mark. A completed puzzle briefly celebrates its full jars, then reveals staggered stars and a short confetti finish. Effects are finite and respect reduced motion. Preserve full monochrome jar completion, all 38 puzzles, pars, unlimited undo, star rewards, and purchased shop content. Save a win before visual effects so leaving during the celebration cannot lose its reward. Input stays guarded during transfers; navigating away removes temporary effects.
+
+Installed reliability: generate a content-versioned cache of the complete production build. Install only when every required asset is available. Updates wait for an explicit Update action, with Later available, and never force a mid-puzzle reload. Keep one previous app cache for open tabs and leave unrelated caches and local progress alone. Offline remains device-local; this is not cloud backup or in-progress puzzle persistence.
+
+Keep the normal preview uncached. Provide an optional `/tea-shop/preview/offline/` rehearsal with its own worker scope and manifest, sharing only preview progress. The main save and installed main app remain separate. First open the rehearsal online and wait for “Ready” before testing airplane mode or adding it to the Home Screen.
+
+Validation includes all puzzle/economy checks, production build, touch navigation, undo/restart, full-jar wins, replay rewards, phone/landscape/desktop layouts, transfer cleanup, reduced motion, worker failure/isolation checks, and a two-version production browser test for deferred updates and offline reopening. Physical iPhone Safari/Home Screen acceptance remains pending; automated Chromium checks do not establish iOS behavior. Bakery and cloud progress stay separate roadmap work.

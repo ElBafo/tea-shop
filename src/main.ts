@@ -1,5 +1,6 @@
 import { mountApp } from "./ui/app";
 import "./style.css";
+import { setupOffline, setupOfflinePreview } from "./game/offline";
 
 const root = document.querySelector<HTMLDivElement>("#app");
 if (!root) {
@@ -8,9 +9,8 @@ if (!root) {
 
 mountApp(root);
 
+setupOfflinePreview();
+
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    if (import.meta.env.DEV || import.meta.env.BASE_URL === "/tea-shop/preview/") return;
-    void navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
-  });
+  setupOffline();
 }

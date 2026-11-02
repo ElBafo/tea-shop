@@ -1,0 +1,23 @@
+// Service-worker lifecycle and isolation, including failed asset installation.
+import vm from 'node:vm';
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const source=await fs.readFile('public/sw.js','utf8');
+const prefix='tea-shop-shell-v3:/tea-shop/:';
+const data=new Map([['unrelated',new Map()],['tea-shop-v2',new Map()],[prefix+'oldest',new Map()],[prefix+'previous',new Map([['https://test/tea-shop/assets/old.js','old-script']])]]);
+let fail=false,skipped=0,claimed=0;
+const handlers={};
+const caches={keys:async()=>[...data.keys()],delete:async k=>data.delete(k),open:async k=>{if(!data.has(k))data.set(k,new Map());return{addAll:async reqs=>{if(fail)throw Error('Missing asset');for(const r of reqs)data.get(k).set(r.url,'new:'+r.url);},match:async r=>data.get(k).get(typeof r==='string'?r:r.url)};}};
+vm.runInNewContext(source.replace('"__BUILD_VERSION__"','"current"').replace('/* __PRECACHE__ */ []','["index.html","assets/new.js"]'),{URL,Request,caches,fetch:async()=>'network',self:{registration:{scope:'https://test/tea-shop/'},location:{href:'https://test/tea-shop/sw.js'},addEventListener:(n,f)=>handlers[n]=f,skipWaiting:async()=>skipped++,clients:{claim:async()=>claimed++}}});
+const lifecycle=async name=>{let task;handlers[name]({waitUntil:p=>task=p});await task;};
+fail=true;await assert.rejects(lifecycle('install'));assert.equal(skipped,0);assert.ok(data.has(prefix+'previous'));
+fail=false;await lifecycle('install');assert.equal(skipped,0,'Installation must wait for approval');
+let task;handlers.message({data:{type:'ACTIVATE_UPDATE'},waitUntil:p=>task=p});await task;assert.equal(skipped,1);
+await lifecycle('activate');assert.equal(claimed,1);assert.ok(data.has('unrelated'));assert.ok(data.has('tea-shop-v2'));assert.ok(data.has(prefix+'previous'));assert.ok(!data.has(prefix+'oldest'));
+const request=async(path,mode='cors')=>{let result;handlers.fetch({request:{url:'https://test'+path,method:'GET',mode},respondWith:p=>result=p});return result;};
+assert.equal(await request('/tea-shop/preview/','navigate'),undefined);
+assert.equal(await request('/other/','navigate'),undefined);
+assert.equal(await request('/tea-shop/','navigate'),'new:https://test/tea-shop/index.html');
+assert.equal(await request('/tea-shop/assets/old.js'),'old-script');
+assert.equal(await request('/tea-shop/unknown.json'),undefined);
+console.log('PASS: failed install preserves active assets, explicit activation, scoped cache cleanup, coherent navigation, previous assets, preview isolation.');
