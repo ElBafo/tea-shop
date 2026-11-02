@@ -33,12 +33,12 @@ export function isMono(tube: Tube): boolean {
   return tube.every((item) => item === tube[0]);
 }
 
-export function isCompleteTube(tube: Tube): boolean {
-  return tube.length > 0 && isMono(tube);
+export function isCompleteTube(tube: Tube, capacity: number): boolean {
+  return tube.length === capacity && isMono(tube);
 }
 
 export function isWon(board: Board): boolean {
-  return board.tubes.every((tube) => isMono(tube));
+  return board.tubes.every((tube) => tube.length === 0 || isCompleteTube(tube, board.capacity));
 }
 
 export function canPour(board: Board, from: number, to: number): number {
@@ -95,7 +95,7 @@ export function shouldSkipMove(
 ): boolean {
   const source = board.tubes[from];
   const dest = board.tubes[to];
-  if (isCompleteTube(source)) return true;
+  if (isCompleteTube(source, board.capacity)) return true;
   if (dest.length === 0 && count === source.length) return true;
   return false;
 }

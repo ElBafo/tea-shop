@@ -234,7 +234,7 @@ export function mountApp(root: HTMLElement): void {
     }
 
     const snapshot = cloneBoard(play.board);
-    const destWasComplete = isCompleteTube(play.board.tubes[index]);
+    const destWasComplete = isCompleteTube(play.board.tubes[index], play.board.capacity);
     const move = applyMove(play.board, from, index);
     if (!move) return;
 
@@ -248,7 +248,7 @@ export function mountApp(root: HTMLElement): void {
     playDrop(progress.muted);
 
     const destNowComplete =
-      !destWasComplete && isCompleteTube(play.board.tubes[index]);
+      !destWasComplete && isCompleteTube(play.board.tubes[index], play.board.capacity);
     if (destNowComplete) pendingComplete = [index];
 
     render();
@@ -342,7 +342,7 @@ function playMarkup(
           `<div class="slot ${held ? "held" : ""} ${justLanded ? "landed" : ""}">${treatMarkup(item, hidden)}</div>`,
         );
       }
-      const done = pendingComplete.includes(index) || (won && isCompleteTube(tube));
+      const done = pendingComplete.includes(index) || (won && isCompleteTube(tube, board.capacity));
       const lid = board.sealed[index]
         ? `<span class="lid" aria-hidden="true"></span>`
         : "";
@@ -362,7 +362,7 @@ function playMarkup(
     .join("");
 
   const hint = play.hint
-    ? `<p class="hint">Tap two jars to move matching treats.</p>`
+    ? `<p class="hint">Fill each jar with one kind. Tap two jars to move treats.</p>`
     : "";
 
   const overlay = won ? winOverlay(play, progress) : "";

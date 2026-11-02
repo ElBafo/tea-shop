@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import { applyMove, isCompleteTube, isWon, legalMoves } from '../src/game/engine';
+import { solve } from '../src/game/solver';
+import type { Board } from '../src/game/types';
+
+const split: Board = {capacity:4,tubes:[['jasmine'],['matcha','matcha','matcha','matcha'],['jasmine','jasmine','jasmine']],sealed:[false,false,false]};
+assert.equal(isWon(split),false,'one yellow + three yellow must not finish');
+assert.equal(isCompleteTube(split.tubes[0],4),false,'partial monochrome jars do not celebrate');
+assert.equal(isCompleteTube(split.tubes[1],4),true);
+assert.ok(legalMoves(split).some(move=>move.from===0&&move.to===2),'solver may consolidate partial monochrome jars');
+const result=solve(split);
+assert.equal(result.solvable,true);
+assert.equal(result.moves.length,1);
+for(const move of result.moves)assert.ok(applyMove(split,move.from,move.to));
+assert.equal(isWon(split),true,'four yellow + four green + empty finishes');
+assert.equal(isWon({capacity:4,tubes:[['rose','rose','rose','jasmine'],[]],sealed:[false,false]}),false,'full but mixed is unfinished');
+const tall: Board={capacity:5,tubes:[['rose','rose','rose','rose'],['rose'],[]],sealed:[false,false,false]};
+assert.equal(isCompleteTube(tall.tubes[0],5),false,'four is not full in a five-slot jar');
+assert.equal(isWon(tall),false);
+assert.ok(applyMove(tall,1,0));
+assert.equal(isWon(tall),true);
+console.log('Split-color, full/mixed, solver consolidation, and five-slot completion checks passed.');

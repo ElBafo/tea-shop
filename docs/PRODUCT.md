@@ -8,6 +8,8 @@ The core loop is: solve a shelf → earn stars → repair or decorate the shop �
 
 ## Established decisions
 
+- Finish a puzzle only when every non-empty jar is full of one type: four matching treats in standard jars, five in taller jars. Partial matching stacks must be consolidated.
+
 - Use Babylon.js for a real 3D cutaway diorama, with an isometric-style view.
 - Let players move selected furnishings through drag-and-snap placement and rotation.
 - Keep an explicit Edit mode so moving furniture does not fight camera movement.

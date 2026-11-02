@@ -41,13 +41,13 @@ await tap('.continue-card');
 await shot('ui-puzzle-phone');
 if(!await evaluate(`document.querySelector('#undo').disabled`))throw Error('Undo enabled initially');
 // Known shortest solution to First Pour; level verification independently checks its par.
-const solution=[{from:0,to:2},{from:1,to:0}];
+const solution=[{from:0,to:2},{from:1,to:0},{from:1,to:2}];
 await tap(`[data-jar="${solution[0].from}"]`);await tap(`[data-jar="${solution[0].to}"]`);await new Promise(r=>setTimeout(r,400));
 if(await evaluate(`document.querySelector('.moves').textContent`)!=='1 move')throw Error('Move not counted');
 await tap('#undo');
 if(await evaluate(`document.querySelector('.moves').textContent`)!=='0 moves')throw Error('Undo failed');
 await tap('#restart');
-const win=async()=>{for(const move of solution){await tap(`[data-jar="${move.from}"]`);await tap(`[data-jar="${move.to}"]`);await new Promise(r=>setTimeout(r,420));}await new Promise(r=>setTimeout(r,450));};
+const win=async()=>{for(const [index,move] of solution.entries()){await tap(`[data-jar="${move.from}"]`);await tap(`[data-jar="${move.to}"]`);await new Promise(r=>setTimeout(r,420));if(index<solution.length-1&&await evaluate(`Boolean(document.querySelector('.result-overlay'))`))throw Error('Puzzle finished before jars were full');if(index===1)await shot('full-jars-still-playing-phone');}await new Promise(r=>setTimeout(r,450));};
 await win();
 if(!await evaluate(`document.querySelector('.result-reward').textContent.includes('+3')`))throw Error('Reward mismatch');
 if(!await evaluate(`document.querySelector('.screen-toolbar').inert&&document.activeElement.matches('[data-next]')`))throw Error('Result dialog focus not isolated');
