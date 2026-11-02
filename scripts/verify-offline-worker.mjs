@@ -10,7 +10,7 @@ const handlers={};
 const caches={keys:async()=>[...data.keys()],delete:async k=>data.delete(k),open:async k=>{if(!data.has(k))data.set(k,new Map());return{addAll:async reqs=>{if(fail)throw Error('Missing asset');for(const r of reqs)data.get(k).set(r.url,'new:'+r.url);},match:async r=>data.get(k).get(typeof r==='string'?r:r.url)};}};
 vm.runInNewContext(source.replace('"__BUILD_VERSION__"','"current"').replace('/* __PRECACHE__ */ []','["index.html","assets/new.js"]'),{URL,Request,caches,fetch:async()=>'network',self:{registration:{scope:'https://test/tea-shop/'},location:{href:'https://test/tea-shop/sw.js'},addEventListener:(n,f)=>handlers[n]=f,skipWaiting:async()=>skipped++,clients:{claim:async()=>claimed++}}});
 const lifecycle=async name=>{let task;handlers[name]({waitUntil:p=>task=p});await task;};
-fail=true;await assert.rejects(lifecycle('install'));assert.equal(skipped,0);assert.ok(data.has(prefix+'previous'));
+fail=true;await assert.rejects(lifecycle('install'));assert.equal(skipped,0);assert.ok(data.has(prefix+'previous'));assert.ok(!data.has(prefix+'current'));
 fail=false;await lifecycle('install');assert.equal(skipped,0,'Installation must wait for approval');
 let task;handlers.message({data:{type:'ACTIVATE_UPDATE'},waitUntil:p=>task=p});await task;assert.equal(skipped,1);
 await lifecycle('activate');assert.equal(claimed,1);assert.ok(data.has('unrelated'));assert.ok(data.has('tea-shop-v2'));assert.ok(data.has(prefix+'previous'));assert.ok(!data.has(prefix+'oldest'));

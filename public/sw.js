@@ -12,7 +12,13 @@ self.addEventListener('install', event => {
   // Installation succeeds only after this version's HTML AND assets are available.
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
-    await cache.addAll([...new Set([...ASSETS, SHELL])].map(url=>new Request(url,{cache:'reload'})));
+    try {
+      await cache.addAll([...new Set([...ASSETS, SHELL])].map(url=>new Request(url,{cache:'reload'})));
+    } catch (error) {
+      // A failed download must not displace a usable previous cache later.
+      await caches.delete(CACHE);
+      throw error;
+    }
   })());
 });
 self.addEventListener('message', event => {
