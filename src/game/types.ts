@@ -45,7 +45,10 @@ export type UpgradeKind =
   | "table"
   | "art"
   | "clock"
-  | "basket";
+  | "basket"
+  | "bench"
+  | "trolley"
+  | "planter";
 
 export type RepeatableKind = "plant" | "lamp" | "table" | "art" | "basket";
 // Existing IDs identify copy one; additional copies have stable independent IDs.
@@ -98,4 +101,4 @@ export interface Progress {
 }
 
 export const STORAGE_KEY = "tea-shop-progress-v1";
-export const LEVEL_COUNT = 30;
+export const LEVEL_COUNT = 38;

@@ -63,7 +63,7 @@ assert(!(await saved()).stored.includes('lamp:2'),'Place failed');
 assert((await saved()).style['lamp:2']===2,'Restore lost style');
 assert(await evaluate(`document.querySelector('#shop-stars').textContent.trim().endsWith('50')`),'Store/place changed balance');
 const progress=await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1'))`);
-assert(progress.bestStars.length===30&&progress.bestStars.slice(0,20).every(s=>s===3)&&progress.bestStars.slice(20).every(s=>s===0),'Legacy score migration');
+assert(progress.bestStars.length===38&&progress.bestStars.slice(0,20).every(s=>s===3)&&progress.bestStars.slice(20).every(s=>s===0),'Legacy score migration');
 await click('[data-act="browse"]');
 await fs.writeFile('work/inventory-collection-phone.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
 await send('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});await new Promise(r=>setTimeout(r,300));

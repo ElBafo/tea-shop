@@ -13,6 +13,9 @@ const shapes: Record<UpgradeKind, string> = {
   table: '<ellipse cx="32" cy="23" rx="23" ry="11"/><path d="M32 34v19m-12 3h24M9 42v14m46-14v14M5 42h11m32 0h11M27 22v-8h10v8z"/>',
   art: '<path d="M10 8h44v48H10zM16 14h32v36H16zM16 44l11-16 9 10 6-7 6 11"/><circle cx="39" cy="23" r="4"/>',
   clock: '<circle cx="32" cy="32" r="23"/><path d="M32 14v4m18 14h-4M32 50v-4M14 32h4M32 23v10l9 5"/>',
+  bench: '<path d="M9 20h46v19H9zM7 39h50v7H7zM13 46v10m38-10v10M17 25h12v10H17zM35 25h12v10H35z"/>',
+  trolley: '<path d="M14 13v37m36-37v37M14 28h36M14 46h36M50 13h8M22 28V17h13v11m0-9h5v6h-5"/><circle cx="18" cy="54" r="4"/><circle cx="46" cy="54" r="4"/>',
+  planter: '<path d="M20 42h24l-4 15H24zM32 42V19"/><path d="M32 31C8 37 8 14 21 13c-4-14 25-14 24 0 17 9 8 26-13 18Z"/>',
   basket: '<path d="M10 28h44l-5 26H15zM15 28C15 5 49 5 49 28M12 37h40M14 46h36M22 28l2 26M32 28v26M42 28l-2 26"/>',
 };
 export function decorationIcon(id: UpgradeId): string {

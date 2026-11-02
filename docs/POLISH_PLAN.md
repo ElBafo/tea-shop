@@ -1,12 +1,16 @@
 # Shop art and camera polish
 
-Status: initial polish changes are implemented locally; visual review and a PR are pending. This plan captures the user's requested continuation after the decorating merge.
+Status: the original art, mobile UI, and inventory passes have shipped after phone review. The owner has prioritised another cozy polish pass and zoom before further catalogue expansion. See [ROADMAP.md](ROADMAP.md) for the current delivery status.
 
-## Local implementation progress
+## Current pass
 
-The first pass adjusts camera fitting for both canvas dimensions, moves the window backdrop in front of the wall, increases sign height and teapot size, adds counter paneling and tea tins, and adds cups and pastries to the table. Lighting now gives the unfinished room a more subdued baseline. Replaced wall materials are disposed during synchronization.
+- Softer daytime lighting preserves wood, fabric, and ceramic colours; warm lamps remain readable at night.
+- Gentle teapot steam respects reduced-motion preferences and cannot intercept taps.
+- Pinch, wheel, and compact minus/Fit/plus controls zoom the diorama with bounded framing. Fit restores the whole-room view.
+- Two-finger gestures cancel unfinished decoration moves; test regular dragging immediately afterward.
+- The already-built paid bench, trolley, and tall planter collection provides more furnished compositions, with eight new puzzles funding its cost.
 
-Production build and all twenty level checks pass. Browser screenshot capture stalled during validation, so appearance and interaction acceptance criteria remain unchecked. GitHub authentication reported an invalid token; no PR or deployment was created.
+Preview review must include phone day/night views, zoomed details, Edit mode, landscape, and desktop. Main retains the approved inventory release until this preview is approved.
 
 ## Priorities
 
@@ -23,13 +27,13 @@ Production build and all twenty level checks pass. Browser screenshot capture st
 - The shop sign is readable and small objects have clear silhouettes.
 - Camera movement, Edit mode, selection, dragging, snapping, collision checks, rotation, and free restyling still work.
 - Existing progress loads correctly; purchases and placements survive a reload.
-- All twenty puzzles, scoring, undo, level unlocks, and the completion/Bakery placeholder flow retain their behavior.
+- All 38 puzzles, scoring, undo, level unlocks, and the completion/Bakery placeholder flow retain their behavior.
 - Effects and scene resources are cleaned up when leaving the shop.
 - Level verification and the production build pass.
 - The review includes phone and desktop screenshots of the shabby start and decorated finish, plus an Edit-mode view. Record viewport sizes and any performance limitations.
 
 ## Scope and handoff
 
-Focus this milestone on the existing tea shop. Building a playable Bakery, changing the star economy, adding levels, accounts, or a backend are separate work.
+Focus this milestone on the existing tea shop. Building a playable Bakery, larger rooms, accounts, and a backend remain separate work. The collection and its matching puzzle rewards were already implemented before the owner promoted cozy polish and zoom.
 
 Inspect the current visuals before choosing final props or camera values. Submit implementation as a reviewable PR with screenshots; wait for merge approval unless the user explicitly directs otherwise. This document is a plan, not evidence that any listed visual change has shipped.

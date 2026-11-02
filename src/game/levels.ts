@@ -1,3 +1,4 @@
+import { COLLECTION_LEVELS } from "./collection-levels";
 import { INVENTORY_LEVELS } from "./inventory-levels";
 import type { ItemId, LevelDef } from "./types";
 
@@ -332,6 +333,7 @@ export const LEVELS: LevelDef[] = [
     par: 18,
   },
   ...INVENTORY_LEVELS,
+  ...COLLECTION_LEVELS,
 ];
 
 export function getLevel(id: number): LevelDef | undefined {

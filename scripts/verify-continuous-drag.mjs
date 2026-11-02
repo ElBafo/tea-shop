@@ -1,8 +1,8 @@
 // Browser regression check. Requires Vite at 127.0.0.1:5174 with base /tea-shop/preview/
-// and Chromium remote debugging on 127.0.0.1:9223. Run with Node 22 or newer.
+// and Chromium remote debugging on 127.0.0.1:9224. Run with Node 22 or newer.
 import fs from 'node:fs/promises';
 await fs.mkdir('work', {recursive:true});
-const tabs=await (await fetch('http://127.0.0.1:9223/json')).json();
+const tabs=await (await fetch(`http://127.0.0.1:${process.env.CDP_PORT ?? 9224}/json`)).json();
 const ws=new WebSocket(tabs[0].webSocketDebuggerUrl);await new Promise(r=>ws.addEventListener('open',r,{once:true}));
 let id=0;const pending=new Map(); const errors=[];
 ws.addEventListener('message',e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(m.error):p.resolve(m.result);}if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text);});
@@ -16,7 +16,7 @@ const touch = async p => {
  await send('Input.dispatchTouchEvent',{type,touchPoints:touching?[{x:p.x,y:p.y,id:1}]:[]});
 };
 await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
-await send('Runtime.enable');await send('Page.enable');
+await send('Runtime.enable');await send('Page.enable');await send('Page.bringToFront');
 await send('Storage.clearDataForOrigin',{origin:'http://127.0.0.1:5174',storageTypes:'service_workers,cache_storage'});
 await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});
 
@@ -24,7 +24,9 @@ await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisable
 const results=[];
 for(const dpr of [1,2]) for(const style of [0,1,2]){
  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:dpr,mobile:true});
- await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/?showroom=1'});await new Promise(r=>setTimeout(r,1500));
+ await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await new Promise(r=>setTimeout(r,1500));
+ await evaluate(`localStorage.setItem('tea-shop-progress-v1',JSON.stringify({muted:true,bestStars:Array(38).fill(3),bestMoves:Array(38).fill(0),shop:{owned:['lamp'],style:{lamp:${style}},place:{},finaleSeen:true}}))`);
+ await send('Page.reload');await new Promise(r=>setTimeout(r,1500));
  await evaluate(`(async()=>{const url=performance.getEntriesByType('resource').find(e=>e.name.includes('@babylonjs_core_Engines_engine.js')).name;const {Engine}=await import(url);window.__qaScene=Engine.Instances[0].scenes[0];await window.__qaScene.whenReadyAsync();document.querySelector('canvas').addEventListener('pointerdown',e=>window.__qaPointer=e.pointerId);})()`);
  if(await evaluate(`document.querySelector('#theme-toggle').textContent`)!=='Night')await evaluate(`document.querySelector('#theme-toggle').click()`);
  await evaluate(`document.querySelector('#edit-toggle').click();document.querySelector('[data-upgrade="lamp"]').click();document.querySelector('[data-act="style"][data-style="${style}"]').click()`);

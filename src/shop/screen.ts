@@ -50,7 +50,12 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
       </header>
       ${isPreview ? `<aside class="preview-bar"><span>${isShowroom ? "Showroom · temporary" : "Preview"}</span><a href="${import.meta.env.BASE_URL}${isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
       <div class="shop-stage">
-        <canvas id="shop-canvas" aria-label="The tea shop room"></canvas>
+        <canvas id="shop-canvas" aria-label="The tea shop room. Pinch to zoom."></canvas>
+        <div class="shop-zoom" role="group" aria-label="Shop view">
+          <button data-zoom="out" type="button" aria-label="Zoom out">−</button>
+          <button data-zoom="fit" type="button" aria-label="Reset shop view">Fit</button>
+          <button data-zoom="in" type="button" aria-label="Zoom in">+</button>
+        </div>
       </div>
       <div class="showcase-tools hidden">
         <button id="showcase-back" class="icon-btn" type="button">Back</button>
@@ -107,6 +112,10 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   let draft: DecorationDraft | null = null;
 
   const diorama = new Diorama(canvas, host.progress.shop, {
+    onZoom: zoom => {
+      root.querySelector<HTMLButtonElement>('[data-zoom="out"]')!.disabled = zoom <= 0.85;
+      root.querySelector<HTMLButtonElement>('[data-zoom="in"]')!.disabled = zoom >= 1.9;
+    },
     onSelect: (id) => {
       selected = id;
       if (id) {
@@ -245,6 +254,10 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   };
 
   const bind = () => {
+    root.querySelectorAll<HTMLButtonElement>("[data-zoom]").forEach(button => button.addEventListener("click", () => {
+      if (button.dataset.zoom === "fit") diorama.resetView();
+      else diorama.zoomBy(button.dataset.zoom === "in" ? 1.2 : 1/1.2);
+    }));
     root.querySelector("#showcase-toggle")?.addEventListener("click", () => {
       showcasing = true;
       root.querySelector(".shop-room")!.scrollTop = 0;

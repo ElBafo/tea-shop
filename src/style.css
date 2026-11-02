@@ -1148,3 +1148,12 @@ body:has(.shop-room.is-night) {
 .inventory-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .inventory-actions [data-act="place"] { background: #dce7ce; }
 .is-night .inventory-actions [data-act="place"] { background: #52664c; }
+
+/* Camera controls stay on the canvas, outside the compact main toolbar. */
+.shop-stage { position: relative; }
+.shop-zoom { position: absolute; right: 8px; bottom: 8px; display: flex; gap: 2px; padding: 2px; border-radius: 18px; background: #fffaf0dd; box-shadow: 0 2px 8px #674d3314; }
+.shop-zoom button { min-width: 44px; min-height: 44px; padding: 4px 8px; border: 0; border-radius: 14px; font-size: 17px; box-shadow: none; background: transparent; }
+.shop-zoom [data-zoom="fit"] { font-size: 12px; }
+.shop-zoom button:disabled { opacity: .35; }
+.is-night .shop-zoom { background: #263648e8; }
+.is-night .shop-zoom button { color: #f8ead5; background: transparent; }
