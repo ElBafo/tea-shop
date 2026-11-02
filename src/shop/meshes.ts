@@ -106,7 +106,7 @@ function sphere(
 function tag(root: TransformNode, id: UpgradeId): void {
   root.metadata = { upgradeId: id };
   root.getChildMeshes().forEach((mesh) => {
-    mesh.metadata = { upgradeId: id };
+    mesh.metadata = { ...mesh.metadata, upgradeId: id };
   });
 }
 
@@ -218,6 +218,9 @@ export function buildItem(scene: Scene, id: UpgradeId, shop: ShopState): Transfo
   if (id === "lamp") return buildLamp(scene, shop, style);
   if (id === "table") return buildTable(scene, shop, style);
   if (id === "art" || id === "clock") return buildWallDecor(scene, shop, id, style);
+  if (id === "bench") return buildBench(scene, shop, style);
+  if (id === "trolley") return buildTrolley(scene, shop, style);
+  if (id === "planter") return buildPlanter(scene, shop, style);
   if (id === "basket") return buildBasket(scene, shop, style);
   return new TransformNode("empty", scene);
 }
@@ -254,6 +257,7 @@ function buildCounter(scene: Scene, shop: ShopState, style: number): TransformNo
       1.16,
       0.08,
     );
+    addSteam(scene, root, -1.05, 1.63, 0.08);
     const panel = paint(scene, "counter-panel", C.foam);
     for (const x of [-0.95, 0, 0.95]) {
       box(scene, "panel", 0.78, 0.65, 0.025, root, panel, x, 0.58, 0.58);
@@ -566,4 +570,124 @@ function buildBasket(scene: Scene, shop: ShopState, style: number): TransformNod
   placeFloorItem(root, "basket", shop);
   tag(root, "basket");
   return root;
+}
+
+function buildBench(scene: Scene, shop: ShopState, style: number): TransformNode {
+  const root = new TransformNode("bench", scene);
+  const frame = paint(scene, "bench-frame", [C.wood, C.leaf, C.brass][style]);
+  const fabric = paint(scene, "bench-fabric", [C.mint, C.blush, C.roseWall][style]);
+  const cream = paint(scene, "bench-pillow", C.foam);
+  for (const x of [-0.72, 0.72]) for (const z of [-0.28, 0.28]) {
+    box(scene, "bench-leg", 0.1, 0.38, 0.1, root, frame, x, 0.19, z);
+  }
+  box(scene, "bench-seat", 1.8, 0.13, 0.8, root, frame, 0, 0.43);
+  if (style === 1) {
+    for (const y of [0.7, 0.9]) box(scene, "bench-slat", 1.8, 0.12, 0.08, root, frame, 0, y, -0.34);
+    for (const x of [-0.8, 0.8]) box(scene, "bench-post", 0.08, 0.6, 0.1, root, frame, x, 0.72, -0.34);
+    box(scene, "bench-cushion", 0.58, 0.13, 0.58, root, fabric, 0.4, 0.56);
+  } else {
+    box(scene, "bench-cushion", 1.72, 0.2, 0.72, root, fabric, 0, 0.55);
+    box(scene, "bench-back", 1.74, 0.45, 0.18, root, style === 2 ? fabric : frame, 0, 0.8, -0.31);
+    for (const x of [-0.81, 0.81]) {
+      const arm = sphere(scene, "bench-rounded-arm", 0.19, root, fabric, x, 0.7);
+      arm.scaling.z = 1.8;
+    }
+    const pillow = box(scene, "bench-pillow", 0.4, 0.35, 0.15, root, cream, -0.44, 0.76, -0.15);
+    pillow.rotation.z = -0.14;
+    if (style === 0) {
+      box(scene, "bench-book", 0.34, 0.055, 0.27, root, paint(scene,"bench-book",C.blush), 0.42, 0.68, 0.12);
+      box(scene, "bench-pages", 0.31, 0.025, 0.25, root, cream, 0.42, 0.685, 0.12);
+    } else {
+      for (const x of [-0.4, 0, 0.4]) sphere(scene, "bench-button", 0.035, root, frame, x, 0.84, -0.205);
+    }
+  }
+  placeFloorItem(root, "bench", shop); tag(root, "bench"); return root;
+}
+
+function buildTrolley(scene: Scene, shop: ShopState, style: number): TransformNode {
+  const root = new TransformNode("trolley", scene);
+  const frame = paint(scene, "trolley-frame", [C.brass, C.mint, C.woodDeep][style]);
+  const china = paint(scene, "trolley-china", C.foam);
+  const accent = paint(scene, "trolley-accent", C.blush);
+  const rubber = paint(scene, "trolley-wheels", C.hair);
+  for (const x of [-0.32, 0.32]) for (const z of [-0.3, 0.3]) {
+    const wheel = cyl(scene, "trolley-wheel", 0.07, 0.1, root, rubber, x, 0.11, z);
+    wheel.rotation.z = Math.PI / 2;
+    box(scene, "trolley-upright", 0.055, 0.7, 0.055, root, frame, x, 0.48, z);
+  }
+  for (const y of [0.28, 0.76]) box(scene, "trolley-tray", 0.8, 0.06, 0.75, root, frame, 0, y);
+  box(scene, "trolley-handle", 0.06, 0.06, 0.67, root, frame, 0.4, 0.95);
+  for (const z of [-0.29, 0.29]) box(scene,"trolley-handle-post",0.05,0.18,0.05,root,frame,0.36,0.87,z);
+  if (style === 0) {
+    addSteam(scene, root, -0.12, 1.16, 0);
+    sphere(scene, "trolley-teapot", 0.17, root, china, -0.12, 0.96);
+    cyl(scene, "trolley-lid", 0.03, 0.12, root, accent, -0.12, 1.11);
+    const spout = cyl(scene,"trolley-spout",0.19,0.045,root,china,-0.31,1.0);
+    spout.rotation.z = 0.8;
+    const handle = MeshBuilder.CreateTorus("trolley-pot-handle",{diameter:0.23,thickness:0.04,tessellation:12},scene);
+    handle.parent=root;handle.position.set(0.06,0.98,0);handle.rotation.x=Math.PI/2;handle.material=china;
+    for (const z of [-0.2, 0.2]) cyl(scene,"trolley-cup",0.12,0.07,root,china,0.19,0.86,z);
+    for (let i=0;i<3;i++) cyl(scene,"trolley-tea-tin",0.22,0.09,root,i%2?accent:china,-0.24+i*0.24,0.42);
+  } else if (style === 1) {
+    cyl(scene,"cake-stand",0.5,0.025,root,frame,0,1.02);
+    for (const [y,r] of [[0.85,0.28],[1.12,0.2]]) {
+      cyl(scene,"cake-tier",0.035,r,root,china,0,y);
+      for(let i=0;i<3;i++) {
+        const angle=i*Math.PI*2/3;
+        const x=Math.cos(angle)*r*0.6,z=Math.sin(angle)*r*0.6;
+        cyl(scene,"tiny-cake",0.09,0.065,root,accent,x,y+0.06,z);
+        sphere(scene,"cake-icing",0.067,root,china,x,y+0.105,z).scaling.y=0.5;
+      }
+    }
+    box(scene,"trolley-napkins",0.38,0.09,0.34,root,china,0,0.36);
+  } else {
+    for (const y of [0.36,0.84]) for(let i=0;i<3;i++) {
+      box(scene,"cart-book",0.45,0.065,0.37,root,i%2?accent:frame,0,y+i*0.075);
+      box(scene,"cart-pages",0.42,0.035,0.36,root,china,0,y+i*0.075);
+    }
+  }
+  placeFloorItem(root, "trolley", shop); tag(root, "trolley"); return root;
+}
+
+function buildPlanter(scene: Scene, shop: ShopState, style: number): TransformNode {
+  const root = new TransformNode("planter", scene);
+  const pot = paint(scene,"planter-pot",["#bc7755",C.foam,"#7a9da9"][style]);
+  const soil = paint(scene,"planter-soil",C.woodDeep);
+  const trunk = paint(scene,"planter-trunk",style===1?C.leaf:C.wood);
+  const leaf = paint(scene,"planter-leaves",style===0?"#91a77b":C.leaf);
+  if(style===1) box(scene,"planter-box",0.65,0.45,0.65,root,pot,0,0.25);
+  else cyl(scene,"planter-pot",0.48,0.34,root,pot,0,0.26,0,16);
+  cyl(scene,"planter-soil",0.02,0.29,root,soil,0,0.5);
+  if(style===1) {
+    for(const [x,z,h] of [[-0.16,0.08,1.2],[0.15,0,1.5],[0,-0.16,1.35]]) {
+      cyl(scene,"bamboo-stem",h,0.035,root,trunk,x,0.5+h/2,z);
+      for(let j=0;j<3;j++) {
+        const sprig=sphere(scene,"bamboo-leaf",0.13,root,leaf,x+(j%2?-.13:.13),0.95+j*0.27,z);
+        sprig.scaling.set(1.7,0.35,0.55);sprig.rotation.z=j%2?0.45:-0.45;
+      }
+    }
+  } else {
+    cyl(scene,"tree-trunk",1.15,0.055,root,trunk,0,1.0);
+    for(const [x,y,z,r] of [[0,1.75,0,.3],[-.21,1.52,0,.24],[.2,1.58,.06,.25],[0,1.52,-.18,.24]]) {
+      const crown=sphere(scene,"tree-crown",r,root,leaf,x,y,z);
+      crown.scaling.y=style===0?0.75:1;
+    }
+    if(style===2) {
+      const fruit=paint(scene,"citrus-fruit",C.gold);
+      for(const [x,y,z] of [[-.23,1.6,.18],[.21,1.7,.2],[.03,1.9,.16],[.25,1.45,.12],[-.03,1.4,.17]]) sphere(scene,"citrus",0.065,root,fruit,x,y,z);
+    }
+  }
+  placeFloorItem(root, "planter", shop); tag(root, "planter"); return root;
+}
+
+
+function addSteam(scene: Scene, root: TransformNode, x: number, y: number, z: number): void {
+  const material = paint(scene, "tea-steam", "#fff3dc", {alpha:0.35, emit:"#f7e7cc"});
+  material.disableLighting = true;
+  for (let i=0;i<3;i++) {
+    const wisp = sphere(scene, "tea-steam", 0.055, root, material, x, y, z);
+    wisp.isPickable = false;
+    wisp.receiveShadows = false;
+    wisp.metadata = {steam:{x,y,phase:i/3}};
+  }
 }

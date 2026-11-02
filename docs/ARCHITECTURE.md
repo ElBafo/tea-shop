@@ -12,7 +12,7 @@ Tea Shop is a static, client-side TypeScript application built with Vite. Babylo
 | --- | --- |
 | `src/game/types.ts` | Shared board, level, progress, upgrade, and placement contracts |
 | `src/game/engine.ts` | Move validation and application, completion, board cloning, scoring, solver move helpers |
-| `src/game/levels.ts` | Thirty static level definitions and par values; levels 21–30 are in `inventory-levels.ts` |
+| `src/game/levels.ts` | 38 static level definitions and par values; additions live in `inventory-levels.ts` and `collection-levels.ts` |
 | `src/game/solver.ts` | Bounded breadth-first search used by development scripts |
 | `src/game/storage.ts` | Load, validate, and save progress; best scores, unlocks, and available stars |
 | `src/game/audio.ts` | Web Audio sound effects, unlocked by a user gesture |
@@ -69,3 +69,13 @@ The editor owns separate collection, selection, and draft state. Decorations lis
 `ShopState.stored` is optional for legacy saves and normalized to an array on loading. Stored items retain ownership, styles, and last placements but do not render or occupy grid cells. `inventory.ts` implements pure cloning, storage, and placement operations. Restoration prefers the last position, falls back to an open position, and returns no change if the room is full. Sanitization stores an unplaceable paid item instead of forcing an overlap. Currency remains derived from purchased ownership, including stored items and second copies.
 
 The diorama tags each copy with its independent ID. Both lamps have independently positioned lights; stored lamps emit none. The shopkeeper is hidden when the counter is stored. Existing 20-level saves retain scores and receive ten empty score slots.
+
+## Cozy corners collection
+
+Bench, trolley, and planter are optional single-copy designs. Their procedural meshes share existing placement, preview, purchase, and inventory paths. No new light or animation loop is added. Each design has three variants with different geometry or contents. Levels 31–38 are static definitions in `collection-levels.ts`; the shared level count extends score arrays without replacing old entries. The showroom stores second copies to leave space for the new designs, without writing to player progress.
+
+## View controls and cozy details
+
+Diorama owns a bounded zoom multiplier applied to the responsive orthographic span. Zoom buttons, wheel events, and a two-pointer pinch share the same clamp. Pointer tracking cancels an item drag before pinching; remaining fingers cannot resume a drag until all lift. Blur, visibility changes, pointer cancellation, and disposal clear gesture state. Zoom stays out of saved progress. Fit restores camera angle and scale; image export keeps the current scale.
+
+Three non-pickable steam meshes are attached to each eligible teapot. Synchronization caches them for the existing render loop; there is no extra timer or particle system. Reduced-motion preferences hide steam. Daytime illumination is reduced to preserve material colours; lamp lighting remains independent of input handling.

@@ -4,9 +4,13 @@ Record every agreed product decision here in the same work session. Clearly dist
 
 This is the working delivery order, not a calendar promise. Priorities can change after phone reviews. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
+## Current priority
+
+Cozy polish and zoom in/out, as requested after the inventory release. The already-built Cozy corners collection will be included in the next preview; further catalogue expansion waits until presentation and camera controls are reviewed. Larger rooms remain backlog consideration.
+
 ## Current baseline
 
-- Released: 20 sorting puzzles, stars, eleven decorations with styles, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.
+- Released: 30 sorting puzzles, stars, eleven decoration designs plus five paid second copies, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.
 - Hosted preview: https://elbafo.github.io/tea-shop/preview/ automatically rebuilds from preview/shop-polish. The released game remains at https://elbafo.github.io/tea-shop/.
 - The simplified shop UI, showroom, touch picking, sign correction, and counter aisle were reviewed and merged in PR #2.
 - Mobile audio retry and clearer sound labels are implemented and checked with a mocked audio context; confirmed working by the owner in Safari.
@@ -147,12 +151,12 @@ Phone feedback reported the lamp stopping after roughly one cell, rather than sn
 A Showcase view hides the shop UI while retaining camera movement and the selected day/night lighting. Share image opens native file sharing when supported; Save image and unsupported-share fallback download a PNG. Export renders the current room at 1200 pixels wide without UI overlays, then restores the live canvas size. Export does not change scores, ownership, placements, or theme preference. The native Safari share sheet still requires phone review; browser tests cover image dimensions/content, share invocation, download fallback, cancellation, and save isolation. Public galleries and accounts remain separate roadmap work.
 
 
-## Backlog for consideration — larger shops and zoom
+## Larger shops backlog; zoom promoted to current work
 
 - Consider progressively larger shop spaces as players advance to later shops, allowing more room for decorations and distinct layouts.
-- Consider player-controlled zoom in and out, including phone-friendly pinch zoom, to inspect details and view the whole room.
+- Player-controlled zoom was promoted from consideration to the next implementation priority by the owner; see Cozy polish and zoom below.
 
-These are exploration ideas, not committed implementation or release scope. Evaluate room sizes, camera limits, touch interaction with furniture dragging, and phone performance before scheduling.
+Larger shop spaces remain an exploration idea. Zoom is now committed work; test camera limits, touch interaction with furniture dragging, and phone performance.
 
 ## Decoration selection and shopkeeper — phone review follow-up
 
@@ -200,7 +204,7 @@ Update the solver's completion/pruning rule and individual-jar celebration check
 
 Validation: explicit split-stack and five-slot regressions; every level has capacity-compatible item counts; all twenty solver paths are replayed to legal, fully completed boards; recalculated par/scoring checks and production build pass. Browser review checks that split stacks remain playable and that only the final consolidation shows the result. The owner approved merging this fix directly into main so his wife can test it from the normal live game URL.
 
-## Inventory and second copies — ready for preview review
+## Inventory and second copies — released in PR #5
 
 Proceed with personal expression through inventory and additional placements. Every owned movable decoration can be stored and placed again for free. Ownership, chosen style, and last position remain saved; storing never refunds stars or revokes completion. Paint remains a fixed wall finish. When restoring, use the previous position if available, otherwise find a legal space. If none fits, keep it safely stored and explain that space is needed.
 
@@ -210,4 +214,28 @@ Add ten static puzzles (21–30) to fund the collection. The original catalogue 
 
 Verification: all 30 solver paths replay to fully completed jars; inventory, collision, paid-copy budget, and legacy-score migration checks pass. Browser checks cover phone purchase previews, independent second-lamp touch dragging, night lights turning off when stored, free restoration, reload persistence, and desktop layout. Physical Safari review remains required before release.
 
-Next after review: expand distinct decoration designs with matching earnable rewards, then release polish and Bakery design. Larger rooms/zoom, whole-game dark appearance, and cross-device progress retain their separate backlog/planning status.
+The initial next-step plan was to expand decoration designs with matching rewards. After the Cozy corners collection was built, the owner prioritised cozy polish and zoom before further catalogue expansion; see the current priority above. Larger rooms/zoom, whole-game dark appearance, and cross-device progress retain their separate backlog/planning status.
+
+## Cozy corners collection — next preview
+
+The owner approved and merged PR #5 after phone review. Inventory and the 30-level reward plan are now released. Proceed with three distinct optional designs: a bench (6 stars), tea trolley (8), and tall planter (10). Each purchase includes three freely changeable styles with different shapes or contents: reading/garden/velvet seating, tea/treat/book carts, and olive/bamboo/citrus plants. Each supports preview-before-buy, dragging, rotation, storage, and restoration. Keep one copy of each new design for this small room; existing repeatable designs retain their two-copy limits.
+
+Eight puzzles (31–38) fund the 24-star addition. The full catalogue including existing second copies costs 112 of 114 earnable stars. Existing prices, prior scores, and the original eight-item completion requirement stay intact. No free unlocks or replay farming.
+
+The temporary showroom presents the new pieces in a composed room with second copies stored; reviewers can place them again from My decorations. This arrangement affects only the showroom, never a player's saved layout.
+
+Validation: all 38 puzzle solutions replay to full jars, catalogue and inventory economy checks, and production build. Automated browser checks pass for all nine new style previews, star purchases, touch placement, storage, and 30-level save migration. Phone day/night and desktop screenshots were reviewed. Existing inventory and puzzle flows are also checked. Physical phone approval is required before merging this collection.
+
+## Cozy polish and zoom — priority confirmed by owner
+
+The owner explicitly prioritised a cozier polish pass and zoom in/out ahead of further catalogue expansion. Finish the already-built Cozy corners collection in this preview, then focus on room presentation and camera usability rather than adding more catalogue designs.
+
+Provide pinch-to-zoom on phones, wheel zoom on desktop, and compact minus/Fit/plus buttons on the canvas. Keep the top toolbar compact. Limit the camera to 0.85–1.9 times the fitted view; Fit restores the default framing and angle. Zoom is a temporary view setting, preserved across day/night and Edit changes in the same shop session, and never changes purchases or layouts. Export captures the current framing.
+
+Two fingers switch to a camera gesture. Cancel any uncommitted item movement before pinching and require all fingers to lift before another drag starts. Test normal lamp dragging immediately after pinch and at non-default zoom. Camera changes must not spend stars or save furniture movement.
+
+Cozy polish: soften the over-bright daytime lighting so wood, fabrics, and ceramic colours remain visible; retain readable nighttime furniture and warm lamps. Add subtle rising steam to purchased teapots. Steam is non-interactive, does not cast shadows, and is hidden when reduced motion is requested. No added decoration is granted for free: the new collection remains star-bought, while lighting and steam refine existing purchased furniture.
+
+Larger rooms remain backlog consideration. Full-game dark mode, cloud progress, and Bakery design are separate later work. Review this combined preview on the phone before merging it.
+
+Cozy/zoom validation: 30 long and repeated lamp drags pass across three styles and two pixel densities with deliberate pointer-capture loss. Pinch/button/wheel bounds, cancellation of unfinished moves, post-pinch dragging, reduced motion, and responsive camera checks pass. All 38 levels and the production build pass. The previous test browser stopped delivering valid touch capture; the same drag suite passed in a clean headless browser. Physical Safari review remains the release gate.

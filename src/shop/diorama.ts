@@ -13,6 +13,7 @@ import "@babylonjs/core/Culling/ray";
 import type { Ray } from "@babylonjs/core/Culling/ray";
 import { ParticleSystem } from "@babylonjs/core/Particles/particleSystem";
 import { Scene } from "@babylonjs/core/scene";
+import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 import type { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import type { Placement, ShopState, UpgradeId } from "../game/types";
 import { C } from "./palette";
@@ -35,6 +36,7 @@ export interface DioramaHooks {
   onSelect(id: UpgradeId | null): void;
   onMove(id: UpgradeId, place: Placement): void;
   onPlaced(id: UpgradeId): void;
+  onZoom?(zoom: number): void;
 }
 
 interface Tween {
@@ -61,6 +63,13 @@ export class Diorama {
   private shop: ShopState;
   private keys: Partial<Record<UpgradeId, string>> = {};
   private edit = false;
+  private zoom = 1;
+  private readonly touches = new Map<number, {x: number; y: number}>();
+  private pinch: {distance: number; zoom: number} | null = null;
+  private pinching = false;
+  private steam: AbstractMesh[] = [];
+  private elapsed = 0;
+  private readonly reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   private selected: UpgradeId | null = null;
   private pointer = { x: 0, y: 0 };
   private drag: {
@@ -148,6 +157,7 @@ export class Diorama {
     }
 
     canvas.addEventListener("pointerdown", this.onDragStart);
+    canvas.addEventListener("wheel", this.onWheel, {passive: false});
     window.addEventListener("pointermove", this.onDragMove, { capture: true, passive: false });
     window.addEventListener("pointerup", this.onDragEnd, true);
     window.addEventListener("pointercancel", this.onDragCancel, true);
@@ -182,6 +192,7 @@ export class Diorama {
   }
 
   setEditMode(on: boolean): void {
+    if (this.edit !== on) this.cancelDrag();
     this.edit = on;
     if (!on) {
       this.drag = null;
@@ -214,6 +225,31 @@ export class Diorama {
     }
   }
 
+  zoomBy(factor: number): void {
+    this.cancelDrag();
+    this.setZoom(this.zoom * factor);
+  }
+
+  resetView(): void {
+    this.cancelDrag();
+    this.camera.alpha = Math.PI / 4;
+    this.camera.beta = 0.98;
+    this.setZoom(1);
+  }
+
+  private setZoom(value: number): void {
+    this.zoom = Math.max(0.85, Math.min(1.9, value));
+    this.fitOrtho();
+    this.hooks.onZoom?.(this.zoom);
+  }
+
+  private readonly onWheel = (event: WheelEvent): void => {
+    event.preventDefault();
+    if (this.drag || this.pinching) return;
+    const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 300 : 1);
+    this.setZoom(this.zoom * Math.exp(-Math.max(-150, Math.min(150, delta)) * 0.002));
+  };
+
   selectedId(): UpgradeId | null {
     return this.selected;
   }
@@ -245,6 +281,7 @@ export class Diorama {
       if (opts.animate === id) this.popIn(root, id);
     }
 
+    this.steam = Object.values(this.visuals.items).flatMap(root => root?.getChildMeshes().filter(mesh => mesh.metadata?.steam) ?? []);
     this.positionShopkeeper();
     this.setNight(this.night);
     this.updateRing();
@@ -268,6 +305,8 @@ export class Diorama {
     this.resizeObs.disconnect();
     const canvas = this.engine.getRenderingCanvas();
     canvas?.removeEventListener("pointerdown", this.onDragStart);
+    canvas?.removeEventListener("wheel", this.onWheel);
+    this.touches.clear();
     window.removeEventListener("pointermove", this.onDragMove, true);
     window.removeEventListener("pointerup", this.onDragEnd, true);
     window.removeEventListener("pointercancel", this.onDragCancel, true);
@@ -282,7 +321,7 @@ export class Diorama {
   private fitOrtho(): void {
     const aspect = this.engine.getRenderWidth() / Math.max(1, this.engine.getRenderHeight());
     // Fit both axes: a wide, short canvas must not crop the roof or floor.
-    const halfW = Math.max(4.65, 4.3 * aspect);
+    const halfW = Math.max(4.65, 4.3 * aspect) / this.zoom;
     this.camera.orthoLeft = -halfW;
     this.camera.orthoRight = halfW;
     this.camera.orthoTop = halfW / aspect;
@@ -291,6 +330,7 @@ export class Diorama {
 
   private castShadows(root: TransformNode): void {
     collectMeshes(root).forEach((mesh) => {
+      if (mesh.metadata?.steam) return;
       this.shadows.addShadowCaster(mesh);
       mesh.receiveShadows = true;
     });
@@ -343,7 +383,7 @@ export class Diorama {
       }
       const bulb = lamp.getChildMeshes().find(mesh => mesh.name === "lamp-bulb");
       light.position.copyFrom(bulb ? bulb.getAbsolutePosition() : lamp.position);
-      light.intensity = (this.night ? 1.15 : 0.55) + this.warm * 0.25;
+      light.intensity = (this.night ? 1.0 : 0.28) + this.warm * 0.18;
     }
   }
 
@@ -379,7 +419,18 @@ export class Diorama {
   }
 
   private tick(): void {
-    const dt = this.engine.getDeltaTime() / 1000;
+    const dt = Math.min(0.1, this.engine.getDeltaTime() / 1000);
+    this.elapsed += dt;
+    for (const mesh of this.steam) {
+      mesh.setEnabled(!this.reducedMotion.matches);
+      if (this.reducedMotion.matches) continue;
+      const {x, y, phase} = mesh.metadata.steam;
+      const t = (this.elapsed * 0.35 + phase) % 1;
+      mesh.position.y = y + t * 0.42;
+      mesh.position.x = x + Math.sin(t * Math.PI * 2 + phase) * 0.035;
+      mesh.visibility = Math.sin(t * Math.PI) * 0.45;
+      mesh.scaling.set(0.7 + t * 0.65, 1.2 + t * 0.8, 0.7 + t * 0.65);
+    }
     this.tweens = this.tweens.filter((tween) => {
       tween.t += dt;
       const u = Math.min(1, tween.t / tween.dur);
@@ -409,8 +460,8 @@ export class Diorama {
 
     const wantWarm = this.shop.finaleSeen || Boolean(this.walk) || shopComplete(this.shop) ? 1 : this.shop.owned.includes("lamp") ? 0.35 : 0;
     this.warm += (wantWarm - this.warm) * Math.min(1, dt * 1.4);
-    this.hemi.intensity = this.night ? 0.52 : 0.72 + this.warm * 0.38;
-    this.sun.intensity = this.night ? 0.22 : 0.78 + this.warm * 0.38;
+    this.hemi.intensity = this.night ? 0.52 : 0.72 + this.warm * 0.16;
+    this.sun.intensity = this.night ? 0.22 : 0.70 + this.warm * 0.12;
     this.hemi.diffuse = this.night ? new Color3(0.72, 0.79, 1) : Color3.Lerp(new Color3(1, 0.9, 0.82), new Color3(1, 0.86, 0.7), this.warm);
     this.updateLamp();
     this.scene.render();
@@ -422,12 +473,36 @@ export class Diorama {
   }
 
   private readonly onDragStart = (event: PointerEvent): void => {
+    if (event.pointerType === "touch") {
+      this.touches.set(event.pointerId, {x: event.clientX, y: event.clientY});
+      if (this.touches.size >= 2) {
+        event.preventDefault();
+        this.restoreDrag();
+        try { this.engine.getRenderingCanvas()?.setPointerCapture(event.pointerId); } catch { /* Window listeners remain active. */ }
+        if (!this.pinch) {
+          const [a, b] = [...this.touches.values()];
+          this.pinch = {distance: Math.max(12, Math.hypot(b.x-a.x, b.y-a.y)), zoom: this.zoom};
+        }
+        this.pinching = true;
+        return;
+      }
+      if (this.pinching) return;
+    }
     this.updatePointer(event);
     this.pointerDown(event);
     if (this.drag) event.preventDefault();
   };
 
   private readonly onDragMove = (event: PointerEvent): void => {
+    if (this.touches.has(event.pointerId)) this.touches.set(event.pointerId, {x:event.clientX, y:event.clientY});
+    if (this.pinching) {
+      if (this.touches.has(event.pointerId)) event.preventDefault();
+      if (this.pinch && this.touches.size >= 2) {
+        const [a,b] = [...this.touches.values()];
+        this.setZoom(this.pinch.zoom * Math.hypot(b.x-a.x,b.y-a.y) / this.pinch.distance);
+      }
+      return;
+    }
     if (!this.drag || this.drag.pointerId !== event.pointerId) return;
     event.preventDefault();
     this.updatePointer(event);
@@ -435,13 +510,19 @@ export class Diorama {
   };
 
   private readonly onDragEnd = (event: PointerEvent): void => {
+    this.touches.delete(event.pointerId);
+    if (this.pinching) {
+      if (this.touches.size < 2) this.pinch = null;
+      if (this.touches.size === 0) this.pinching = false;
+      return;
+    }
     if (!this.drag || this.drag.pointerId !== event.pointerId) return;
     this.updatePointer(event);
     this.pointerUp(event);
   };
 
   private readonly onDragCancel = (event: PointerEvent): void => {
-    if (this.drag?.pointerId === event.pointerId) this.cancelDrag();
+    if (this.touches.has(event.pointerId) || this.drag?.pointerId === event.pointerId) this.cancelDrag();
   };
 
   private readonly onVisibilityChange = (): void => {
@@ -449,6 +530,13 @@ export class Diorama {
   };
 
   private readonly cancelDrag = (): void => {
+    this.restoreDrag();
+    this.touches.clear();
+    this.pinch = null;
+    this.pinching = false;
+  };
+
+  private restoreDrag(): void {
     const id = this.drag?.id;
     this.drag = null;
     if (id) {
@@ -486,7 +574,7 @@ export class Diorama {
   private pointerDown(event: PointerEvent): void {
     if (this.drag || event.button !== 0) return;
     try { this.engine.getRenderingCanvas()?.setPointerCapture(event.pointerId); } catch { /* Window listeners keep the active drag alive. */ }
-    const pick = this.scene.pick(this.pointer.x, this.pointer.y, (mesh) => Boolean(mesh.isEnabled() && mesh.isVisible));
+    const pick = this.scene.pick(this.pointer.x, this.pointer.y, (mesh) => Boolean(mesh.isPickable && mesh.isEnabled() && mesh.isVisible));
     let id = (pick?.hit && pick.pickedMesh?.metadata?.upgradeId) as UpgradeId | undefined;
     // Preserve direct hits on other furniture; the rug is a surface under it.
     if (this.edit && (!id || id === "rug" || !UPGRADE_BY_ID[id]?.movable)) id = this.nearLamp(event) ?? id;

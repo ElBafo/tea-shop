@@ -170,6 +170,39 @@ export const UPGRADES: UpgradeDef[] = [
       { name: "Reading", blurb: "A few books for an unhurried visit." },
     ],
   },
+  {
+    id: "bench", title: "A cozy bench", moveName: "bench",
+    blurb: "A quiet seat for a longer visit.", cost: 6, optional: true,
+    movable: true, surface: "floor", layer: "furn", size: { w: 2, d: 1 },
+    defaultPlace: { x: 1, z: 5, rot: 0 },
+    variants: [
+      { name: "Reading nook", blurb: "A cushioned oak bench with a book waiting." },
+      { name: "Garden slats", blurb: "An open-backed sage bench with a rose cushion." },
+      { name: "Velvet", blurb: "A rounded rose seat with golden feet." },
+    ],
+  },
+  {
+    id: "trolley", title: "A tea trolley", moveName: "tea trolley",
+    blurb: "A little cart for your favourite afternoon ritual.", cost: 8, optional: true,
+    movable: true, surface: "floor", layer: "furn", size: { w: 1, d: 1 },
+    defaultPlace: { x: 3, z: 5, rot: 0 },
+    variants: [
+      { name: "Tea service", blurb: "A brass cart with a teapot and tiny cups." },
+      { name: "Sweet treats", blurb: "A mint cart carrying a tiered cake stand." },
+      { name: "Book cart", blurb: "A walnut cart stacked with well-loved books." },
+    ],
+  },
+  {
+    id: "planter", title: "A statement planter", moveName: "tall planter",
+    blurb: "A leafy focal point for a favourite corner.", cost: 10, optional: true,
+    movable: true, surface: "floor", layer: "furn", size: { w: 1, d: 1 },
+    defaultPlace: { x: 5, z: 2, rot: 0 },
+    variants: [
+      { name: "Olive tree", blurb: "A terracotta pot and a silver-green crown." },
+      { name: "Bamboo", blurb: "Slender bamboo stems in a square cream planter." },
+      { name: "Citrus", blurb: "A round blue pot and a tree full of golden fruit." },
+    ],
+  },
 ];
 
 export const REPEATABLE: readonly RepeatableKind[] = ["plant", "lamp", "table", "art", "basket"];

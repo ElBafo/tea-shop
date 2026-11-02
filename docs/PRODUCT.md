@@ -17,13 +17,15 @@ The core loop is: solve a shelf → earn stars → repair or decorate the shop �
 - Make the shabby-to-cozy transformation visible and rewarding at phone size.
 - Completing the tea shop unlocks the Bakery as the next destination.
 
-## Current release and inventory preview
+## Current release and collection preview
 
-The released game includes twenty puzzles, eleven paid decoration designs, style previews, movable furniture, day/night lighting, image sharing, compact phone UI, and full-jar completion. Best scores and shop layouts are stored locally. The Bakery remains a coming-soon destination.
+The released game includes thirty puzzles, eleven paid decoration designs, style previews, movable furniture, day/night lighting, image sharing, compact phone UI, and full-jar completion. Best scores and shop layouts are stored locally. The Bakery remains a coming-soon destination.
 
-The next review adds ten puzzles and an inventory: store and restore owned movable decorations for free, retaining their style and position. Plants, lamps, tables, prints, and baskets can each have a second copy bought for stars. Preview each style before buying; copies can be styled and arranged independently. Paint remains a fixed finish.
+The released inventory supports: store and restore owned movable decorations for free, retaining their style and position. Plants, lamps, tables, prints, and baskets can each have a second copy bought for stars. Preview each style before buying; copies can be styled and arranged independently. Paint remains a fixed finish.
 
-Thirty puzzles offer 90 stars. All eleven designs and five second copies cost 88 stars. The original eight required designs still control shop completion; optional copies are not required to unlock the Bakery card.
+The inventory release offers 90 stars across thirty puzzles; eleven designs and five second copies cost 88 stars. The Cozy corners preview adds a bench, trolley, and tall planter with three styles each, plus eight puzzles. That brings rewards to 114 stars and total purchases to 112. The original eight required designs still control shop completion; optional copies are not required to unlock the Bakery card.
+
+The owner has now prioritised cozy polish and zoom ahead of additional catalogue expansion. This preview softens daytime lighting, adds reduced-motion-aware teapot steam, and provides bounded pinch/wheel/button zoom with a Fit reset. Camera gestures do not save decoration movement.
 
 ## Delivery
 
