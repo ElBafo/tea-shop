@@ -1,3 +1,4 @@
+import { audioToggle, themeToggle, updateAudioToggle, updateThemeToggle } from "../ui/toggles";
 import { isOfflinePreview } from "../game/offline";
 import { cloneInventory as clone, storeItem, placeItem } from "./inventory";
 import { decorationIcon, styleThumbnail } from "./icons";
@@ -43,11 +44,11 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
         <h2 class="visually-hidden">Tea Shop</h2>
         <p class="shop-stars" id="shop-stars"></p>
         <div class="room-actions">
+          ${themeToggle(false)}
+          ${audioToggle(host.progress.muted)}
           <details class="settings-menu">
-            <summary aria-label="Shop settings">Settings</summary>
+            <summary aria-label="More shop options" title="More shop options"><span aria-hidden="true">⋯</span></summary>
             <div class="settings-popover">
-              <button id="theme-toggle" class="icon-btn" type="button" aria-pressed="false">Day</button>
-              <button id="mute" class="icon-btn" type="button">Sound</button>
               <button id="showcase-toggle" class="icon-btn" type="button">Showcase</button>
             </div>
           </details>
@@ -161,12 +162,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     tray.setAttribute("aria-expanded", String(!trayCollapsed));
     tray.innerHTML = trayCollapsed ? 'Show decorations <span aria-hidden="true">⌃</span>' : 'More room <span aria-hidden="true">⌄</span>';
     root.querySelector<HTMLElement>("#editor-body")!.inert = trayCollapsed;
-    const themeToggle = root.querySelector("#theme-toggle");
-    if (themeToggle) {
-      themeToggle.textContent = night ? "Night" : "Day";
-      themeToggle.setAttribute("aria-pressed", String(night));
-      themeToggle.setAttribute("aria-label", `Switch to ${night ? "day" : "night"}`);
-    }
+    updateThemeToggle(root.querySelector("#theme-toggle"), night);
+    root.querySelector(".settings-menu")?.classList.toggle("hidden", edit);
     root.querySelector(".shop-room")?.classList.toggle("showcasing", showcasing);
     root.querySelector(".showcase-tools")?.classList.toggle("hidden", !showcasing);
     root.querySelector("#share-status")?.classList.toggle("hidden", !showcasing);
@@ -174,8 +171,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     const progress = host.progress;
     const spendable = spendableStars(progress);
     const available = DECORATIONS.filter((item) => !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
-    const mute = root.querySelector("#mute");
-    if (mute) mute.textContent = progress.muted ? "Sound off" : "Sound on";
+    updateAudioToggle(root.querySelector("#mute"), progress.muted);
 
     const starLine = root.querySelector("#shop-stars");
     if (starLine) {

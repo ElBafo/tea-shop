@@ -1,3 +1,4 @@
+import { audioToggle, updateAudioToggle } from "./toggles";
 import { animatePour, pourOrigins, reducedMotion } from "./motion";
 import {
   playClick,
@@ -160,7 +161,7 @@ export function mountApp(root: HTMLElement): void {
     node.querySelector("#mute")?.addEventListener("click", () => {
       progress = setMuted(progress, !progress.muted);
       if (!progress.muted) playClick(false);
-      render();
+      updateAudioToggle(node.querySelector("#mute"), progress.muted);
     });
 
     node.querySelector("#undo")?.addEventListener("click", () => {
@@ -431,9 +432,7 @@ function topBar(title: string, progress: Progress, dest: "shop" | "levels", bala
     <button class="icon-btn" data-go="${dest}" type="button">← ${dest === "shop" ? "Shop" : "Puzzles"}</button>
     <h2>${title}</h2>
     ${balance ? `<span class="balance-pill" aria-label="${spendableStars(progress)} stars available"><span aria-hidden="true">${STAR}</span> <strong>${spendableStars(progress)}</strong></span>` : ""}
-    <details class="settings-menu"><summary aria-label="Game settings">Settings</summary><div class="settings-popover">
-      <button id="mute" class="icon-btn" type="button" aria-label="${progress.muted ? "Turn sound on" : "Turn sound off"}">${progress.muted ? "Sound off" : "Sound on"}</button>
-    </div></details>
+    ${audioToggle(progress.muted)}
   </header>`;
 }
 
