@@ -20,6 +20,7 @@ import { floorCenter, wallCenter } from "./grid";
 import { UPGRADE_BY_ID, placeOf, styleOf, kindOf } from "./upgrades";
 
 export interface ShopVisuals {
+  wallStyleKey?: string;
   floor: Mesh;
   backWall: Mesh;
   leftWall: Mesh;
@@ -196,7 +197,23 @@ function placeWallItem(root: TransformNode, id: UpgradeId, shop: ShopState): voi
   root.rotation.y = place.wall === "left" ? Math.PI / 2 : 0;
 }
 
+// Each rebuilt visual owns every material it creates, including variant-only
+// materials that may not end up attached to a mesh. Nothing is shared with other items.
+function ownedVisual(scene: Scene, build: () => TransformNode): TransformNode {
+  const existing = new Set(scene.materials);
+  const root = build();
+  const materials = scene.materials.filter(material => !existing.has(material));
+  root.onDisposeObservable.add(() => {
+    for (const material of materials) material.dispose(false, true);
+  });
+  return root;
+}
+
 export function buildItem(scene: Scene, id: UpgradeId, shop: ShopState): TransformNode {
+  return ownedVisual(scene, () => buildItemMeshes(scene, id, shop));
+}
+
+function buildItemMeshes(scene: Scene, id: UpgradeId, shop: ShopState): TransformNode {
   const kind = kindOf(id);
   if (kind !== id) {
     const instanceShop: ShopState = {
@@ -204,7 +221,7 @@ export function buildItem(scene: Scene, id: UpgradeId, shop: ShopState): Transfo
       style: {...shop.style, [kind]: styleOf(shop, id)},
       place: {...shop.place, [kind]: placeOf(shop, id)},
     };
-    const root = buildItem(scene, kind, instanceShop);
+    const root = buildItemMeshes(scene, kind, instanceShop);
     root.name = id;
     tag(root, id);
     return root;
@@ -455,6 +472,10 @@ function chair(scene: Scene, parent: TransformNode, seat: StandardMaterial, fram
 }
 
 export function buildCustomer(scene: Scene): TransformNode {
+  return ownedVisual(scene, () => buildCustomerMeshes(scene));
+}
+
+function buildCustomerMeshes(scene: Scene): TransformNode {
   const root = new TransformNode("shopkeeper", scene);
   const coat = paint(scene, "coat", C.coat);
   const skin = paint(scene, "skin", C.skin);
@@ -476,14 +497,18 @@ export function applyRoomStyle(visuals: ShopVisuals, shop: ShopState, scene: Sce
   const painted = shop.owned.includes("paint");
   const style = styleOf(shop, "paint");
   const hex = painted ? [C.creamWall, C.sageWall, C.roseWall][style] ?? C.creamWall : C.plaster;
-  const wallTex = plasterTexture(scene, hex, `wall-${painted ? style : "bare"}`);
-  wallTex.uScale = 2;
-  wallTex.vScale = 1.2;
-  const wallMat = paint(scene, `wall-live-${hex}`, hex, { tex: wallTex });
-  const previous = visuals.backWall.material;
-  visuals.backWall.material = wallMat;
-  visuals.leftWall.material = wallMat;
-  previous?.dispose(false, true);
+  const key = `${painted}:${style}`;
+  if (visuals.wallStyleKey !== key) {
+    const wallTex = plasterTexture(scene, hex, `wall-${painted ? style : "bare"}`);
+    wallTex.uScale = 2;
+    wallTex.vScale = 1.2;
+    const wallMat = paint(scene, `wall-live-${hex}`, hex, { tex: wallTex });
+    const previous = visuals.backWall.material;
+    visuals.backWall.material = wallMat;
+    visuals.leftWall.material = wallMat;
+    previous?.dispose(false, true);
+    visuals.wallStyleKey = key;
+  }
   const glass = visuals.glass.material as StandardMaterial;
   glass.diffuseColor = Color3.FromHexString(painted ? C.glass : C.dirtyGlass);
   glass.alpha = painted ? 0.28 : 0.42;

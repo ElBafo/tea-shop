@@ -1,6 +1,6 @@
 # Shop art and camera polish
 
-Status: the original art, mobile UI, and inventory passes have shipped after phone review. The owner has prioritised another cozy polish pass and zoom before further catalogue expansion. See [ROADMAP.md](ROADMAP.md) for the current delivery status.
+Status: the original art, mobile UI, inventory, cozy collection, zoom, and lamp-shadow passes have shipped after phone review. Current work is release polish and stable long-session resource use before further catalogue expansion. See [ROADMAP.md](ROADMAP.md) for the current delivery status.
 
 ## Current pass
 
@@ -10,7 +10,7 @@ Status: the original art, mobile UI, and inventory passes have shipped after pho
 - Two-finger gestures cancel unfinished decoration moves; test regular dragging immediately afterward.
 - The already-built paid bench, trolley, and tall planter collection provides more furnished compositions, with eight new puzzles funding its cost.
 
-Preview review must include phone day/night views, zoomed details, Edit mode, landscape, and desktop. Main retains the approved inventory release until this preview is approved.
+Preview review must include phone day/night views, zoomed details, Edit mode, landscape, and desktop. PR #6 was approved and merged; main includes the reviewed cozy, zoom, and lighting work. Subsequent performance changes receive their own preview review.
 
 ## Priorities
 

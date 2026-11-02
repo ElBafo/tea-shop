@@ -42,8 +42,10 @@ The GitHub Actions workflow on `main` verifies the levels, builds the site, and 
 
 The shop includes day/night lighting, touch editing, style previews, and image sharing. The Bakery remains a coming-soon destination.
 
-The inventory adds free storage and restoration for owned furniture, plus a paid second plant, lamp, table, print, and basket. Each copy has its own style and position. Thirty puzzles offer 90 stars; the full collection with all second copies costs 88.
+The inventory adds free storage and restoration for owned furniture, plus a paid second plant, lamp, table, print, and basket. Each copy has its own style and position. The complete collection costs 112 of the 114 stars available across 38 puzzles.
 
-The Cozy corners preview adds a bench, tea trolley, and tall planter, each with three distinct styles. Eight more puzzles bring the total to 38 and the reward budget to 114 stars; all purchases together cost 112.
+The Cozy corners collection adds a bench, tea trolley, and tall planter, each with three distinct styles. Eight more puzzles bring the total to 38 and the reward budget to 114 stars; all purchases together cost 112.
 
-The cozy preview also adds bounded pinch/wheel zoom and − / Fit / + controls. Daytime lighting is softer, with subtle teapot steam that respects reduced-motion preferences. Zoom changes your view without changing your saved shop.
+The game also includes bounded pinch/wheel zoom and − / Fit / + controls. Daytime lighting is softer, with subtle teapot steam that respects reduced-motion preferences. Zoom changes your view without changing your saved shop.
+
+The release-polish preview keeps resources stable during repeated editing, reuses unchanged wall textures, and pauses rendering while the page is hidden.
