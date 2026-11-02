@@ -20,7 +20,7 @@ export const LEVELS: LevelDef[] = [
       [J, J, R, R],
       [],
     ],
-    par: 2,
+    par: 3,
   },
   {
     id: 2,
@@ -32,7 +32,7 @@ export const LEVELS: LevelDef[] = [
       [J, R, J, R],
       [],
     ],
-    par: 6,
+    par: 7,
   },
   {
     id: 3,
@@ -40,12 +40,12 @@ export const LEVELS: LevelDef[] = [
     blurb: "Rose, jasmine, and matcha share a shelf.",
     capacity: 4,
     tubes: [
-      [R, J, M],
-      [M, R, J],
-      [J, M, R],
+      [R, R, J, M],
+      [M, M, R, J],
+      [J, J, M, R],
       [],
     ],
-    par: 6,
+    par: 7,
   },
   {
     id: 4,
@@ -59,7 +59,7 @@ export const LEVELS: LevelDef[] = [
       [],
       [],
     ],
-    par: 9,
+    par: 10,
   },
   {
     id: 5,
@@ -74,7 +74,7 @@ export const LEVELS: LevelDef[] = [
       [],
       [],
     ],
-    par: 12,
+    par: 13,
   },
   {
     id: 6,
@@ -90,7 +90,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, false, false],
-    par: 11,
+    par: 12,
   },
   {
     id: 7,
@@ -106,7 +106,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, false, true, false, false],
-    par: 12,
+    par: 13,
   },
   {
     id: 8,
@@ -123,7 +123,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, false, true, false, false, false, false],
-    par: 15,
+    par: 16,
   },
   {
     id: 9,
@@ -141,7 +141,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, true, false, false, false],
-    par: 18,
+    par: 19,
   },
   {
     id: 10,
@@ -159,7 +159,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, true, false, false, true, false, false],
-    par: 18,
+    par: 19,
   },
   {
     id: 11,
@@ -175,7 +175,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, false, false],
-    par: 9,
+    par: 11,
   },
   {
     id: 12,
@@ -192,7 +192,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, false, true, false, false, false],
-    par: 11,
+    par: 13,
   },
   {
     id: 13,
@@ -209,7 +209,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, false, true, false, false, false, false],
-    par: 12,
+    par: 13,
   },
   {
     id: 14,
@@ -226,7 +226,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, true, false, false],
-    par: 12,
+    par: 14,
   },
   {
     id: 15,
@@ -243,7 +243,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, true, false, false, false, false],
-    par: 13,
+    par: 15,
   },
   {
     id: 16,
@@ -259,7 +259,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, false, false],
-    par: 12,
+    par: 14,
   },
   {
     id: 17,
@@ -276,7 +276,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, false, true, false, false, false],
-    par: 18,
+    par: 20,
   },
   {
     id: 18,
@@ -293,7 +293,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, false, true, false, true, false, false],
-    par: 17,
+    par: 19,
   },
   {
     id: 19,
@@ -311,7 +311,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, true, false, true, false, false],
-    par: 17,
+    par: 19,
   },
   {
     id: 20,
@@ -328,7 +328,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, true, false, true, false, false],
-    par: 16,
+    par: 18,
   },
 ];
 

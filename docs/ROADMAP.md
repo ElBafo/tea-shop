@@ -188,7 +188,14 @@ Puzzle play has compact navigation and move/star-target information, with only t
 
 Validation: all twenty levels and production build pass. Browser touch checks cover locked levels, Continue, real pours, Undo/Restart, completion, replay rewards, return-to-shop stars, and navigation during an animation. Tall five-slot puzzles fit 320px phones, portrait, landscape, and desktop. Phone review is pending; this is not merged. The shop's Day/Night appearance remains a shop setting; full-game dark mode is still backlog exploration.
 
-
 ## Release approved for family testing
 
 The owner approved the reviewed editor, shop, and whole-game UI changes for merging into main and testing with his wife. Use the normal live URL for this review; preview and release saves remain separate. Collect feedback from actual phone play before selecting the next implementation milestone.
+
+## Full-jar puzzle completion — family feedback
+
+A puzzle finishes only when every jar is empty or completely full of one type. A one-item yellow stack and a separate three-item yellow stack must still be combined; matching partial stacks no longer count as completed jars or completed puzzles. Standard jars require four items and taller jars require five.
+
+Update the solver's completion/pruning rule and individual-jar celebration checks together. Level 3 previously contained only three of each type in four-slot jars; add the missing items so each type can fill a jar. Recalculate all twenty par values under the new goal so three stars remain earnable. Maximum available rewards remain 60 stars. Preserve existing earned stars, unlocks, decoration ownership, and historical scores.
+
+Validation: explicit split-stack and five-slot regressions; every level has capacity-compatible item counts; all twenty solver paths are replayed to legal, fully completed boards; recalculated par/scoring checks and production build pass. Browser review checks that split stacks remain playable and that only the final consolidation shows the result. The owner approved merging this fix directly into main so his wife can test it from the normal live game URL.

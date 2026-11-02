@@ -1,4 +1,4 @@
-import { boardFromLevel, isWon, starsForMoves } from "../src/game/engine";
+import { applyMove, boardFromLevel, isWon, starsForMoves } from "../src/game/engine";
 import { LEVELS } from "../src/game/levels";
 import { solve } from "../src/game/solver";
 import { LEVEL_COUNT } from "../src/game/types";
@@ -35,9 +35,9 @@ for (const [index, level] of LEVELS.entries()) {
   }
   const counts = countItems(level);
   for (const [item, count] of counts) {
-    if (count > level.capacity) {
+    if (count % level.capacity !== 0) {
       console.error(
-        `Level ${level.id} has ${count} ${item} items, more than one jar can hold`,
+        `Level ${level.id} has ${count} ${item} items, not a multiple of its jar capacity`,
       );
       failed += 1;
     }
@@ -61,6 +61,17 @@ for (const [index, level] of LEVELS.entries()) {
     continue;
   }
 
+  for (const move of result.moves) {
+    if (!applyMove(board, move.from, move.to)) {
+      console.error(`Level ${level.id} solver returned an illegal move`);
+      failed += 1;
+      break;
+    }
+  }
+  if (!isWon(board)) {
+    console.error(`Level ${level.id} solution leaves unfinished jars`);
+    failed += 1;
+  }
   const shortest = result.moves.length;
   if (level.par !== shortest) {
     console.error(

@@ -26,7 +26,7 @@ Tea Shop is a static, client-side TypeScript application built with Vite. Babylo
 
 ## Data flow
 
-Puzzle interaction validates a pour, snapshots the board for undo, applies the move, then renders feedback. On a win, scoring updates the level's best stars and best move count and saves progress. The next level opens after completing its predecessor.
+Puzzle interaction validates a pour, snapshots the board for undo, applies the move, then renders feedback. Completion requires every non-empty jar to be full and monochrome, using the board capacity (four or five). The same predicate drives individual jar completion effects and solver pruning. On a win, scoring updates the level's best stars and best move count and saves progress. The next level opens after completing its predecessor.
 
 The app passes a host interface to the shop screen. Purchases, styles, and accepted moves update `ShopState`, persist it through the storage layer, and synchronize the diorama. The diorama reports selection and placement through callbacks rather than writing storage itself. Unowned style previews use a temporary shop clone; only the explicit Buy action persists ownership and spends stars. Cancelling or leaving Edit restores the saved scene. Visual keys allow unchanged shop items to be retained during synchronization.
 

@@ -10,7 +10,7 @@ Made for a quiet moment on a phone. Add it to your Home Screen from Safari if yo
 
 Tap a jar to lift the matching treats on top. Tap another jar to set them down. A drop only works on an empty jar, or on the same kind, and only when there is room.
 
-A shelf is finished when every jar holds one kind, or is empty. Undo as much as you like. Restart whenever you want.
+A shelf is finished when every jar is either empty or completely full of one kind. Matching treats split between partly filled jars still need to be brought together. Undo as much as you like. Restart whenever you want.
 
 From level 6, some jars wear a little lid. You can see the top treat, but not what waits underneath until you lift it.
 
