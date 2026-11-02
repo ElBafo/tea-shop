@@ -62,7 +62,6 @@ export class Diorama {
   private readonly shadowPreviewKeys = new WeakMap<TransformNode, string>();
   private readonly visuals: ShopVisuals;
   private readonly ring: ReturnType<typeof selectionRing>;
-  private readonly sparkTex;
   private readonly hooks: DioramaHooks;
   private shop: ShopState;
   private keys: Partial<Record<UpgradeId, string>> = {};
@@ -166,7 +165,6 @@ export class Diorama {
     this.visuals.backWall.receiveShadows = true;
     this.visuals.leftWall.receiveShadows = true;
     this.ring = selectionRing(this.scene);
-    this.sparkTex = sparkTexture(this.scene);
 
     this.sync(shop, { quiet: true });
     if (shop.finaleSeen) {
@@ -181,13 +179,14 @@ export class Diorama {
     window.addEventListener("pointercancel", this.onDragCancel, true);
     window.addEventListener("blur", this.cancelDrag);
     document.addEventListener("visibilitychange", this.onVisibilityChange);
-    this.engine.runRenderLoop(() => this.tick());
+    if (!document.hidden) this.engine.runRenderLoop(this.renderFrame);
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(canvas);
     window.addEventListener("resize", this.onWinResize);
     requestAnimationFrame(() => this.resize());
   }
 
+  private readonly renderFrame = () => this.tick();
   private readonly onWinResize = () => this.resize();
 
   setNight(night: boolean): void {
@@ -385,7 +384,7 @@ export class Diorama {
 
   private sparkleAt(position: Vector3): void {
     const ps = new ParticleSystem("sparkle", 28, this.scene);
-    ps.particleTexture = this.sparkTex;
+    ps.particleTexture = sparkTexture(this.scene);
     ps.emitter = position.clone();
     ps.minSize = 0.05;
     ps.maxSize = 0.14;
@@ -471,6 +470,7 @@ export class Diorama {
       mesh.scaling.set(0.7 + t * 0.65, 1.2 + t * 0.8, 0.7 + t * 0.65);
     }
     this.tweens = this.tweens.filter((tween) => {
+      if (tween.node.isDisposed()) return false;
       tween.t += dt;
       const u = Math.min(1, tween.t / tween.dur);
       const ease = 1 - Math.pow(1 - u, 3);
@@ -565,7 +565,13 @@ export class Diorama {
   };
 
   private readonly onVisibilityChange = (): void => {
-    if (document.hidden) this.cancelDrag();
+    if (this.disposed) return;
+    if (document.hidden) {
+      this.cancelDrag();
+      this.engine.stopRenderLoop(this.renderFrame);
+    } else {
+      this.engine.runRenderLoop(this.renderFrame);
+    }
   };
 
   private readonly cancelDrag = (): void => {

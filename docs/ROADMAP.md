@@ -6,11 +6,11 @@ This is the working delivery order, not a calendar promise. Priorities can chang
 
 ## Current priority
 
-Cozy polish and zoom in/out, as requested after the inventory release. The already-built Cozy corners collection will be included in the next preview; further catalogue expansion waits until presentation and camera controls are reviewed. Larger rooms remain backlog consideration.
+Release polish after the approved cozy/zoom/lighting milestone. First, keep repeated decorating sessions stable by releasing replaced materials/textures, reusing unchanged wall finishes, and pausing rendering while hidden. Continue the release checklist before further catalogue expansion or Bakery implementation. Larger rooms remain backlog consideration.
 
 ## Current baseline
 
-- Released: 30 sorting puzzles, stars, eleven decoration designs plus five paid second copies, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.
+- Released: 38 sorting puzzles, stars, fourteen decoration designs plus five paid second copies, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.
 - Hosted preview: https://elbafo.github.io/tea-shop/preview/ automatically rebuilds from preview/shop-polish. The released game remains at https://elbafo.github.io/tea-shop/.
 - The simplified shop UI, showroom, touch picking, sign correction, and counter aisle were reviewed and merged in PR #2.
 - Mobile audio retry and clearer sound labels are implemented and checked with a mocked audio context; confirmed working by the owner in Safari.
@@ -42,7 +42,7 @@ Done when phone-size views of the starting and finished room show a clear, charm
 
 ## 3. Personal expression and shop showcases — requested
 
-### Day/night theme — implemented in preview, awaiting review
+### Day/night theme — released and reviewed
 
 Add an explicit day/night toggle (interpreting the user's “seat/night” request as day/night). Day retains the warm daytime room; night uses a darker surrounding background and visible lamp/window/shop lighting. Keep furniture, labels, and placement feedback readable in both modes. Persist the preference, respect reduced motion for transitions, and keep the choice independent of real-world time unless requested later.
 
@@ -58,7 +58,7 @@ Expand furniture, plants, wall art, textiles, lighting, countertop props, and st
 
 Start with a reviewed collection spanning several categories; agree the catalogue size after the first visual collection is approved. Variety should support distinct tastes and layouts, not just recolors.
 
-### Showcase shops — initial implementation in preview
+### Showcase shops — initial implementation released
 
 Provide a clean view with controls hidden for admiring and capturing a shop, including its chosen day/night theme. Plan a phone-friendly image export/share flow. Public profiles, a gallery, cloud saves, and social features are not implied by this request; evaluate them separately if image sharing is insufficient.
 
@@ -253,3 +253,13 @@ After noticing that lamp movement did not affect shadows, the owner approved con
 Keep clock/wall ornaments and windowsill plants excluded from large projected shadows, and prevent lamp shades from blocking their own bulbs. Preserve continuous touch dragging and inventory behavior. Validate both lamps, map caching, moving other furniture, floor/sill transitions, and physical iPhone performance before release; desktop emulation cannot establish iPhone frame rate. This continues PR #6 preview without merging new lighting into main.
 
 Lamp-shadow validation: browser checks pass for two independent non-cubemap 512px maps, no idle redraws, light and furniture movement invalidation, storage, day/night switching, and retained wall/sill shadow exclusions. Shadow refreshes during drags are limited to snapped grid changes. Production build and all 38 puzzles pass; physical iPhone performance still requires owner review.
+
+## Cozy milestone released; long-session performance polish
+
+The owner approved and merged PR #6, including the Cozy corners collection, zoom, steam, corrected room shadows, and cached moving-lamp shadows. The main deployment passed. This releases 38 levels, 114 earnable stars, and 112 stars of purchases.
+
+Proceed with the tea-shop release checklist. Repeated style changes exposed retained materials/textures: a 90-change probe grew from 40 to 260 materials and 8 to 68 textures while mesh count remained 103. Every rebuilt visual now releases its own materials and textures, including unused variant materials. Unchanged wall finishes retain their material/texture instead of regenerating on unrelated edits. Placement sparkle systems own their disposable textures so later sparkles remain valid. Disposed pieces stop pending pop-in effects.
+
+Pause the shop render loop when the document becomes hidden and resume exactly one loop on return. Preserve layouts, scores, lighting, and gestures. These changes refine the existing experience without adding catalogue content or changing the economy.
+
+Validation: 120 style changes, 12 store/restore cycles, and 12 preview/cancel cycles keep materials/textures/meshes at 43/7/107. Paint previews still change walls, second-copy materials remain independent, repeated sparkles clean up correctly, three hide/resume cycles pause/resume rendering, and three shop exits/re-entries release their scenes. Production build passes. Review this performance pass on preview before a separate merge. Installed/offline update behavior and the remaining release checklist are later checks; cloud saves and Bakery decisions remain planned.
