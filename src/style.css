@@ -1194,3 +1194,60 @@ body:has(.shop-room.is-night) {
   .play *, .play *::before, .play *::after { animation: none !important; transition: none !important; }
   .play .spark, .result-confetti, .flying-treat { display: none !important; }
 }
+
+/* UI refinement: visible rewards, quiet secondary actions, room to arrange. */
+.shop-toolbar #shop-stars, .screen-toolbar .balance-pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-width: 64px; min-height: 44px; padding: 6px 12px; margin: 0;
+  border: 1px solid #c69b43; border-radius: 15px; background: #f6dda1;
+  color: #59401b; font-size: 1rem; font-weight: 800; line-height: 1;
+  box-shadow: 0 2px 5px #8a61251a; flex-shrink: 0;
+}
+.shop-toolbar #shop-stars .star-glyph, .balance-pill > span { color: #8b5a08; font-size: 1.25rem; }
+.is-night .shop-toolbar #shop-stars { background: #ecd18d; color: #3e301a; border-color: #e6c371; }
+.shop-toolbar .room-actions { margin-left: auto; align-items: center; }
+.shop-toolbar #edit-toggle { background: #dce7ce; color: #40533b; min-width: 62px; min-height: 44px; }
+.is-night .shop-toolbar #edit-toggle { background: #52664c; color: #fff4e6; }
+.settings-menu { position: relative; flex-shrink: 0; font-size: .78rem; }
+.settings-menu summary { list-style: none; cursor: pointer; min-height: 44px; display: flex; align-items: center; justify-content: center; padding: 7px 11px; border-radius: 15px; background: #fffaf3; color: #695044; font-weight: 700; }
+.settings-menu summary::-webkit-details-marker { display: none; }
+.settings-menu[open] summary { background: #eee1cd; }
+.settings-menu summary:focus-visible { outline: 3px solid #a77b36; outline-offset: 2px; }
+.settings-popover { position: absolute; right: 0; top: calc(100% + 7px); z-index: 20; display: flex; flex-direction: column; gap: 5px; width: 180px; padding: 8px; border: 1px solid #e4d4bd; border-radius: 18px; background: #fffaf3; box-shadow: 0 12px 28px #4c352a30; }
+.settings-popover .icon-btn { width: 100%; min-height: 44px; text-align: left; padding: 9px 12px; }
+.is-night .settings-menu summary, .is-night .settings-popover { background: #2e3b4b; color: #f4e6d6; border-color: #526074; }
+.is-night .settings-menu[open] summary { background: #445268; }
+.screen-toolbar { position: relative; z-index: 11; }
+.play:has(.result-overlay) .screen-toolbar { z-index: auto; }
+.shop-toolbar { position: relative; z-index: 12; overflow: visible; }
+#editor-body { display: flex; flex: 1; flex-direction: column; min-height: 0; overflow: hidden; }
+.tray-toggle { display: flex; justify-content: space-between; align-items: center; flex: 0 0 auto; width: 100%; min-height: 44px; padding: 8px 15px; font-size: .78rem; font-weight: 700; border-radius: 0; background: #fffaf3; color: #695044; box-shadow: none; border-bottom: 1px solid #eadfce; }
+.tray-toggle span { font-size: 1.1rem; }
+.is-night .tray-toggle { background: #243142; color: #eee2d2; border-color: #415064; }
+.decorating.tray-collapsed #editor-body { display: none; }
+.decorating.tray-collapsed .shop-dock { flex: 0 0 auto; }
+.decorating.tray-collapsed #decorate-panel { flex: 0 0 auto; }
+.decorating.tray-collapsed .shop-stage { flex: 1 1 0; min-height: 0; }
+.decorating.tray-collapsed .shop-stage canvas { height: 0; flex: 1; min-height: 0; }
+.decorating .style-row .style-chip { position: relative; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 3px 8px; min-height: 100px; font-size: .75rem; line-height: 1.25; }
+.style-thumbnail { display: flex; justify-content: center; align-items: center; width: 100%; border-radius: 10px; background: #fff8ec; }
+.style-thumbnail svg { display: block; width: 60px; height: 60px; }
+.style-row .style-chip.active::after { content: '✓'; position: absolute; top: 3px; right: 3px; width: 17px; height: 17px; border-radius: 50%; background: #536d42; color: #fff; font-size: 11px; line-height: 17px; }
+.is-night .style-thumbnail { background: #e5ddc8; }
+.decorating .buy-decoration { min-height: 44px; }
+@media (min-width: 760px), (orientation: landscape) and (min-width: 560px) {
+  .shop-room.decorating.tray-collapsed { grid-template-columns: minmax(0, 1fr) 160px; }
+  .decorating.tray-collapsed .shop-dock { align-self: start; }
+}
+/* Scale sparse puzzles up without squeezing the dense/tall layouts. */
+@media (min-height: 700px) and (orientation: portrait) {
+  .play .shelves[data-count="3"] { --slot-height: clamp(44px, 6.2dvh, 58px); }
+  .play .shelves[data-count="3"] .shelf-row { max-width: 360px; gap: 12px; }
+  .play .shelves[data-count="3"] .jar { width: calc((100% - 24px) / 3); max-width: 108px; }
+  .play .shelves[data-count="3"] .treat { width: min(72px, 100%); height: min(46px, var(--slot-height)); }
+  .play .shelves[data-count="4"], .play .shelves[data-count="5"], .play .shelves[data-count="6"] { --slot-height: clamp(34px, 4.6dvh, 43px); }
+  .play .shelves[data-count="4"] .shelf-row, .play .shelves[data-count="5"] .shelf-row, .play .shelves[data-count="6"] .shelf-row { max-width: 324px; }
+  .play .shelves[data-count="4"] .jar, .play .shelves[data-count="5"] .jar, .play .shelves[data-count="6"] .jar { width: min(98px, calc((100% - 16px) / 3)); }
+}
+.style-thumbnail { color: #6e5947; }
+@media (max-height: 650px) { .play { --slot-height: 26px; } }
