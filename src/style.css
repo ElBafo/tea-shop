@@ -1165,7 +1165,6 @@ body:has(.shop-room.is-night) {
 .jar.valid-target .jar-glass { border-color: #b5ca9c; box-shadow: inset 0 0 0 1px #b5ca9c66, 0 5px 12px #61774316; }
 .jar-check { position: absolute; right: 3px; bottom: 4px; width: 18px; height: 18px; border-radius: 50%; background: #e4edce; color: #526746; font-size: 12px; line-height: 18px; box-shadow: 0 1px 3px #394b3022; }
 .jar.just-completed .jar-check { animation: tidy-pop 260ms ease-out; }
-.jar.pouring-from .jar-glass { animation: jar-tip 260ms ease-in-out; transform-origin: center bottom; }
 .jar.receiving .jar-glass { border-color: #dfc677; }
 .flying-treat { position: fixed; z-index: 8; pointer-events: none; filter: drop-shadow(0 5px 4px #593b3522); }
 .flying-treat > .treat { width: 100%; height: 100%; }
@@ -1183,7 +1182,6 @@ body:has(.shop-room.is-night) {
 .result-confetti i:nth-child(3n) { background: #b7ca9c; }
 .result-confetti i:nth-child(3n + 1) { background: #e5b4ad; }
 @keyframes jar-select { from { transform: translateY(2px); } to { transform: translateY(0); } }
-@keyframes jar-tip { 40% { transform: rotate(-3deg) translateY(-2px); } }
 @keyframes treat-settle { 0% { transform: translateY(-6px) scale(.96,1.04); } 65% { transform: scale(1.06,.94); } 100% { transform: none; } }
 @keyframes tidy-pop { 0% { transform: scale(.96); } 55% { transform: scale(1.04); } 100% { transform: scale(1); } }
 @keyframes result-fade { from { opacity: 0; } to { opacity: 1; } }

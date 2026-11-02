@@ -36,7 +36,7 @@ export interface ShopScreen {
   dispose(): void;
 }
 
-export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
+export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false): ShopScreen {
   root.innerHTML = `
     <div class="frame shop-room">
       <header class="topbar shop-overlay shop-toolbar">
@@ -102,7 +102,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
 
   const appearanceKey = `tea-shop-${isPreview ? "preview-" : ""}appearance-v1`;
   let night = loadNight(appearanceKey);
-  let edit = false;
+  let edit = startInEdit;
   let showcasing = false;
   let sharing = false;
   let focus: UpgradeId | null = null;
@@ -460,6 +460,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   };
 
   bind();
+  diorama.setEditMode(edit);
   paintChrome();
 
   return {

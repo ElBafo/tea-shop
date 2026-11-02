@@ -279,3 +279,7 @@ Installed reliability: generate a content-versioned cache of the complete produc
 Keep the normal preview uncached. Provide an optional `/tea-shop/preview/offline/` rehearsal with its own worker scope and manifest, sharing only preview progress. The main save and installed main app remain separate. First open the rehearsal online and wait for “Ready” before testing airplane mode or adding it to the Home Screen.
 
 Validation includes all puzzle/economy checks, production build, touch navigation, undo/restart, full-jar wins, replay rewards, phone/landscape/desktop layouts, transfer cleanup, reduced motion, worker failure/isolation checks, and a two-version production browser test for deferred updates and offline reopening. Physical iPhone Safari/Home Screen acceptance remains pending; automated Chromium checks do not establish iOS behavior. Bakery and cloud progress stay separate roadmap work.
+
+## Jar preview feedback — steady jars and direct decorating
+
+Keep the source jar stationary while treats fly out; remove its sideways tilt while retaining item transfers and the completion celebration. The result screen’s Decorate shop action opens Edit mode directly on the Decorations catalogue, ready to preview purchases with earned stars. Ordinary Shop navigation still opens the home view. Continue on PR #8 preview, without merging until approval.

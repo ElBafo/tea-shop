@@ -57,6 +57,9 @@ if(!await evaluate(`document.querySelector('.result-reward').textContent.include
 if(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).bestStars[0]`)!==3)throw Error('Best stars lost');
 await tap('.result-overlay [data-go="shop"]');await new Promise(r=>setTimeout(r,1000));
 if(!await evaluate(`document.querySelector('#shop-stars').textContent.includes('3')`))throw Error('Reward missing on shop');
+if(!await evaluate(`document.querySelector('#edit-toggle').textContent==='Done' && document.querySelector('[data-filter="all"]').getAttribute('aria-pressed')==='true'`))throw Error('Decorate did not open the editor catalogue');
+await shot('jars-direct-editor-phone');
+await tap('#edit-toggle');
 await tap('#play-tea');
 if(await evaluate(`document.querySelector('.continue-card').dataset.level`)!=='2')throw Error('Continue does not follow progress');
 await tap('.continue-card');

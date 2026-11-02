@@ -61,7 +61,7 @@ export function mountApp(root: HTMLElement): void {
   root.addEventListener("click", unlockOnGesture, { capture: true });
   root.addEventListener("keydown", unlockOnGesture, { capture: true });
 
-  const render = () => {
+  const render = (editShop = false) => {
     stopMotion();
     stopMotion = () => {};
     const focusedJar = (document.activeElement as HTMLElement | null)?.dataset.jar;
@@ -89,7 +89,7 @@ export function mountApp(root: HTMLElement): void {
           progress = setMuted(progress, !progress.muted);
           if (!progress.muted) playClick(false);
         },
-      });
+      }, editShop);
       return;
     }
     leaveShop();
@@ -130,7 +130,7 @@ export function mountApp(root: HTMLElement): void {
         if (dest === "shop" || dest === "levels") {
           screen = dest;
           play = null;
-          render();
+          render(dest === "shop" && el.hasAttribute("data-edit"));
         }
       });
     });
@@ -273,7 +273,7 @@ export function mountApp(root: HTMLElement): void {
     }
     render();
     const activePlay = play;
-    const motion = animatePour(root, from, index, move.item, origins);
+    const motion = animatePour(root, index, move.item, origins);
     stopMotion = motion.cancel;
     void motion.finished.then(() => {
       if (play !== activePlay || screen !== "play") return;
@@ -438,7 +438,7 @@ function winOverlay(play: PlayState, progress: Progress): string {
       <p class="result-stats">${play.moves} moves · Best ${best}</p>
       <div class="modal-actions">
         <button class="primary-action" data-next type="button">${next ? "Next puzzle →" : "All puzzles"}</button>
-        <button data-go="shop" type="button">Decorate shop <span aria-label="${spendableStars(progress)} stars available">${STAR} ${spendableStars(progress)}</span></button>
+        <button data-go="shop" data-edit type="button">Decorate shop <span aria-label="${spendableStars(progress)} stars available">${STAR} ${spendableStars(progress)}</span></button>
         <button data-replay type="button" class="ghost-btn">Play again</button>
       </div>
     </div>

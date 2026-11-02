@@ -8,14 +8,12 @@ export function pourOrigins(root: HTMLElement, from: number, count: number): DOM
     .slice(-count).map(treat=>treat.getBoundingClientRect());
 }
 
-export function animatePour(root: HTMLElement, from: number, to: number, item: ItemId, origins: DOMRect[]): {finished: Promise<void>; cancel(): void} {
+export function animatePour(root: HTMLElement, to: number, item: ItemId, origins: DOMRect[]): {finished: Promise<void>; cancel(): void} {
   if (reducedMotion() || !Element.prototype.animate) return {finished:Promise.resolve(), cancel() {}};
-  const source = root.querySelector<HTMLElement>(`[data-jar="${from}"]`);
   const destination = root.querySelector<HTMLElement>(`[data-jar="${to}"]`);
   const targets = [...root.querySelectorAll<HTMLElement>(`[data-jar="${to}"] .slot.landed .treat`)];
   const flyers: HTMLElement[] = [];
   const animations: Animation[] = [];
-  source?.classList.add('pouring-from');
   destination?.classList.add('receiving');
   const motions = targets.map((target,index) => {
     const start = origins[index];
@@ -38,7 +36,7 @@ export function animatePour(root: HTMLElement, from: number, to: number, item: I
     animations.push(animation);
     return animation.finished.catch(()=>{}).then(()=> { target.classList.remove('in-flight');flyer.remove(); });
   });
-  const cleanup=()=>{source?.classList.remove('pouring-from');destination?.classList.remove('receiving');targets.forEach(t=>t.classList.remove('in-flight'));flyers.forEach(f=>f.remove());};
+  const cleanup=()=>{destination?.classList.remove('receiving');targets.forEach(t=>t.classList.remove('in-flight'));flyers.forEach(f=>f.remove());};
   return {
     finished:Promise.all(motions).then(cleanup),
     cancel() { animations.forEach(animation=>animation.cancel());cleanup(); },
