@@ -1157,3 +1157,40 @@ body:has(.shop-room.is-night) {
 .shop-zoom button:disabled { opacity: .35; }
 .is-night .shop-zoom { background: #263648e8; }
 .is-night .shop-zoom button { color: #f8ead5; background: transparent; }
+
+/* Short, finite puzzle motion: the game state never waits for decorative loops. */
+.jar { transition: filter 140ms ease; -webkit-tap-highlight-color: transparent; }
+.jar.selected { animation: jar-select 180ms ease-out; }
+.jar.selected .jar-neck { transform: translateY(-4px); }
+.jar.valid-target .jar-glass { border-color: #b5ca9c; box-shadow: inset 0 0 0 1px #b5ca9c66, 0 5px 12px #61774316; }
+.jar-check { position: absolute; right: 3px; bottom: 4px; width: 18px; height: 18px; border-radius: 50%; background: #e4edce; color: #526746; font-size: 12px; line-height: 18px; box-shadow: 0 1px 3px #394b3022; }
+.jar.just-completed .jar-check { animation: tidy-pop 260ms ease-out; }
+.jar.receiving .jar-glass { border-color: #dfc677; }
+.flying-treat { position: fixed; z-index: 8; pointer-events: none; filter: drop-shadow(0 5px 4px #593b3522); }
+.flying-treat > .treat { width: 100%; height: 100%; }
+.slot.landed .treat { animation: treat-settle 180ms ease-out; }
+.slot.landed .treat.in-flight { opacity: 0; animation: none; transform: none; }
+.celebrating .jar.done { animation: tidy-pop 320ms ease-out both; animation-delay: calc(var(--jar-order) * 24ms); }
+.result-overlay { animation: result-fade 160ms ease-out both; }
+.result-card { position: relative; isolation: isolate; animation: result-arrive 280ms cubic-bezier(.2,.8,.3,1) both; border: 1px solid #eadbb7; }
+.result-seal { display: grid; place-items: center; margin: 0 auto 8px; width: 38px; height: 38px; border-radius: 50%; color: #617b45; background: #e5edcd; box-shadow: 0 0 0 5px #e5edcd44; }
+.result-card .big-stars .on { display: inline-block; animation: result-star 360ms cubic-bezier(.25,1.4,.5,1) both; text-shadow: 0 3px 10px #d9ab3f33; }
+.result-card .big-stars span:nth-child(2) { animation-delay: 100ms; }
+.result-card .big-stars span:nth-child(3) { animation-delay: 200ms; }
+.result-confetti { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; z-index: -1; }
+.result-confetti i { position: absolute; left: var(--x); top: -12px; width: 6px; height: 10px; border-radius: 2px; background: #e2c36b; animation: tea-confetti 1000ms ease-out both; animation-delay: calc(var(--i) * 22ms); }
+.result-confetti i:nth-child(3n) { background: #b7ca9c; }
+.result-confetti i:nth-child(3n + 1) { background: #e5b4ad; }
+@keyframes jar-select { from { transform: translateY(2px); } to { transform: translateY(0); } }
+@keyframes treat-settle { 0% { transform: translateY(-6px) scale(.96,1.04); } 65% { transform: scale(1.06,.94); } 100% { transform: none; } }
+@keyframes tidy-pop { 0% { transform: scale(.96); } 55% { transform: scale(1.04); } 100% { transform: scale(1); } }
+@keyframes result-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes result-arrive { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes result-star { from { opacity: 0; transform: translateY(8px) rotate(-12deg) scale(.5); } to { opacity: 1; transform: none; } }
+@keyframes tea-confetti { 0% { transform: translateY(0) rotate(0); opacity: 0; } 15% { opacity: .8; } 100% { transform: translateY(170px) rotate(var(--turn)); opacity: 0; } }
+.update-notice { position: fixed; z-index: 100; bottom: calc(12px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 18px; background: #fff9ec; color: #594237; box-shadow: 0 3px 20px #46302133; font-size: 12px; }
+.update-notice button { padding: 8px; min-height: 40px; font-size: 12px; background: #e4edce; }
+@media (prefers-reduced-motion: reduce) {
+  .play *, .play *::before, .play *::after { animation: none !important; transition: none !important; }
+  .play .spark, .result-confetti, .flying-treat { display: none !important; }
+}

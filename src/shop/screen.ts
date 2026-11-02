@@ -1,3 +1,4 @@
+import { isOfflinePreview } from "../game/offline";
 import { cloneInventory as clone, storeItem, placeItem } from "./inventory";
 import { decorationIcon } from "./icons";
 import { imageFile, saveImage } from "./share";
@@ -35,7 +36,7 @@ export interface ShopScreen {
   dispose(): void;
 }
 
-export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
+export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false): ShopScreen {
   root.innerHTML = `
     <div class="frame shop-room">
       <header class="topbar shop-overlay shop-toolbar">
@@ -48,7 +49,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
           <button id="edit-toggle" class="icon-btn" type="button">Edit</button>
         </div>
       </header>
-      ${isPreview ? `<aside class="preview-bar"><span>${isShowroom ? "Showroom · temporary" : "Preview"}</span><a href="${import.meta.env.BASE_URL}${isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
+      ${isPreview ? `<aside class="preview-bar"><span>${isShowroom ? "Showroom · temporary" : isOfflinePreview ? "Offline preview" : "Preview"}</span><a href="${import.meta.env.BASE_URL}${isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
       <div class="shop-stage">
         <canvas id="shop-canvas" aria-label="The tea shop room. Pinch to zoom."></canvas>
         <div class="shop-zoom" role="group" aria-label="Shop view">
@@ -101,7 +102,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
 
   const appearanceKey = `tea-shop-${isPreview ? "preview-" : ""}appearance-v1`;
   let night = loadNight(appearanceKey);
-  let edit = false;
+  let edit = startInEdit;
   let showcasing = false;
   let sharing = false;
   let focus: UpgradeId | null = null;
@@ -459,6 +460,7 @@ export function mountShop(root: HTMLElement, host: ShopHost): ShopScreen {
   };
 
   bind();
+  diorama.setEditMode(edit);
   paintChrome();
 
   return {

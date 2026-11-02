@@ -49,3 +49,21 @@ The Cozy corners collection adds a bench, tea trolley, and tall planter, each wi
 The game also includes bounded pinch/wheel zoom and − / Fit / + controls. Daytime lighting is softer, with subtle teapot steam that respects reduced-motion preferences. Zoom changes your view without changing your saved shop.
 
 The release-polish preview keeps resources stable during repeated editing, reuses unchanged wall textures, and pauses rendering while the page is hidden.
+
+The jar-polish review adds animated transfers, completed-jar checks, and a short star/confetti celebration. Reduced-motion preferences suppress movement; rules and rewards stay unchanged.
+
+Production builds precache the full game for offline reopening after an online visit. Available updates ask for Update or Later outside active puzzles. This preserves local scores and purchases, but does not add cloud backup or save an unfinished puzzle.
+
+The ordinary [phone preview](https://elbafo.github.io/tea-shop/preview/) stays uncached. For installed/offline review, open the separate [offline rehearsal](https://elbafo.github.io/tea-shop/preview/offline/) online and wait for “Ready”, then add it to the Home Screen or reopen in airplane mode. It uses preview progress and never replaces the main installed game's save.
+
+Additional reliability checks:
+
+```bash
+node scripts/verify-offline-worker.mjs
+# With Chromium remote debugging on port 9225:
+npx vite build --base=/tea-shop/preview/ --outDir=work/offline-a
+CDP_PORT=9225 node scripts/verify-offline.mjs
+# With Vite at 5174, base /tea-shop/preview/:
+CDP_PORT=9225 node scripts/verify-game-ui.mjs
+CDP_PORT=9225 node scripts/verify-jar-motion.mjs
+```

@@ -2,7 +2,7 @@
 // and Chromium remote debugging on 127.0.0.1:9224. Run with Node 22 or newer.
 import fs from 'node:fs/promises';
 await fs.mkdir('work', {recursive:true});
-const tabs=await (await fetch('http://127.0.0.1:9224/json')).json();
+const tabs=await (await fetch(`http://127.0.0.1:${process.env.CDP_PORT ?? 9224}/json`)).json();
 const ws=new WebSocket(tabs[0].webSocketDebuggerUrl);await new Promise(r=>ws.addEventListener('open',r,{once:true}));
 let id=0;const pending=new Map(); const errors=[];
 ws.addEventListener('message',e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(m.error):p.resolve(m.result);}if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text);});
@@ -57,6 +57,9 @@ if(!await evaluate(`document.querySelector('.result-reward').textContent.include
 if(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).bestStars[0]`)!==3)throw Error('Best stars lost');
 await tap('.result-overlay [data-go="shop"]');await new Promise(r=>setTimeout(r,1000));
 if(!await evaluate(`document.querySelector('#shop-stars').textContent.includes('3')`))throw Error('Reward missing on shop');
+if(!await evaluate(`document.querySelector('#edit-toggle').textContent==='Done' && document.querySelector('[data-filter="all"]').getAttribute('aria-pressed')==='true'`))throw Error('Decorate did not open the editor catalogue');
+await shot('jars-direct-editor-phone');
+await tap('#edit-toggle');
 await tap('#play-tea');
 if(await evaluate(`document.querySelector('.continue-card').dataset.level`)!=='2')throw Error('Continue does not follow progress');
 await tap('.continue-card');
