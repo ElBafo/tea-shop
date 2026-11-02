@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import http from 'node:http';
 import assert from 'node:assert/strict';
 import {buildOffline} from './build-offline.mjs';
+const saveKey=process.env.SAVE_KEY || 'tea-shop-progress-v1';
 await fs.cp('work/offline-a','work/offline-b',{recursive:true});
 for(const version of ['a','b']) {
  const dir='work/offline-'+version;
@@ -48,14 +49,14 @@ try{
  assert.equal(await ev(`document.querySelector('[name="test-build"]').content`),'a','No forced reload');
  for(const [from,to] of [[0,2],[1,0],[1,2]]){
   await ev(`document.querySelector('[data-jar="${from}"]').click();document.querySelector('[data-jar="${to}"]').click()`);
-  if(from===1&&to===2)assert.equal(await ev(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).bestStars[0]`),3,'Save precedes celebration');
+  if(from===1&&to===2)assert.equal(await ev(`JSON.parse(localStorage.getItem('${saveKey}')).bestStars[0]`),3,'Save precedes celebration');
   await wait(`document.querySelector('.shelves').getAttribute('aria-busy')==='false'`);
  }
  await wait(`!!document.querySelector('.result-overlay') && !!document.querySelector('[data-update]')`);
  await fs.writeFile('work/jars-celebration.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
  await ev(`document.querySelector('[data-update]').click()`);
  await wait(`document.querySelector('[name="test-build"]')?.content==='b' && !!document.querySelector('#play-tea')`);
- assert.equal(await ev(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).bestStars[0]`),3);
+ assert.equal(await ev(`JSON.parse(localStorage.getItem('${saveKey}')).bestStars[0]`),3);
  assert.equal(await ev(`caches.has('unrelated-app')`),true);
  await send('Network.emulateNetworkConditions',{offline:true,latency:0,downloadThroughput:0,uploadThroughput:0});
  await send('Page.reload');
@@ -63,7 +64,7 @@ try{
  assert.equal(await ev(`document.querySelector('[name="test-build"]').content`),'b');
  await ev(`document.querySelector('#play-tea').click();document.querySelector('.continue-card').click()`);
  await wait(`!!document.querySelector('.shelves')`);
- assert.equal(await ev(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).bestStars[0]`),3);
+ assert.equal(await ev(`JSON.parse(localStorage.getItem('${saveKey}')).bestStars[0]`),3);
  await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
  await send('Page.navigate',{url:'http://127.0.0.1:5180/tea-shop/preview/'});
  await wait(`!!document.querySelector('#play-tea')`);

@@ -1,6 +1,6 @@
 import { mountApp } from "./ui/app";
 import "./style.css";
-import { setupOffline, setupOfflinePreview } from "./game/offline";
+import * as offline from "./game/offline";
 
 const root = document.querySelector<HTMLDivElement>("#app");
 if (!root) {
@@ -9,8 +9,8 @@ if (!root) {
 
 mountApp(root);
 
-setupOfflinePreview();
+offline.setupOfflinePreview();
 
 if ("serviceWorker" in navigator) {
-  setupOffline();
+  offline.setupOffline();
 }
