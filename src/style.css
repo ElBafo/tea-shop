@@ -1251,3 +1251,29 @@ body:has(.shop-room.is-night) {
 }
 .style-thumbnail { color: #6e5947; }
 @media (max-height: 650px) { .play { --slot-height: 26px; } }
+
+/* Direct day/night and audio controls, with quiet state-change animation. */
+.shop-toolbar .toolbar-toggle, .screen-toolbar .toolbar-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: 0 0 44px; min-width: 44px; width: 44px; min-height: 44px; height: 44px;
+  padding: 10px; border-radius: 15px; background: #fffaf3; color: #695044;
+}
+.shop-toolbar .theme-toggle[data-state="day"] { color: #9b6a16; background: #fff1d4; }
+.is-night .shop-toolbar .toolbar-toggle { background: #2e3b4b; color: #eee2d2; }
+.is-night .shop-toolbar .theme-toggle { color: #f2dba4; }
+.toolbar-toggle svg { display: block; flex-shrink: 0; overflow: visible; }
+.sun-icon, .moon-icon, .sound-waves, .sound-slash { transform-origin: 12px 12px; transition: transform 280ms ease, opacity 200ms ease; }
+.theme-toggle[data-state="day"] .moon-icon { opacity: 0; transform: rotate(-45deg) scale(.5); }
+.theme-toggle[data-state="night"] .sun-icon { opacity: 0; transform: rotate(90deg) scale(.4); }
+.theme-toggle[data-state="night"] .moon-icon, .theme-toggle[data-state="day"] .sun-icon { opacity: 1; transform: rotate(0) scale(1); }
+.audio-toggle[data-state="on"] .sound-slash { opacity: 0; transform: scale(.5); }
+.audio-toggle[data-state="off"] .sound-waves { opacity: 0; transform: translateX(-2px) scale(.7); }
+.audio-toggle[data-state="off"] .sound-slash, .audio-toggle[data-state="on"] .sound-waves { opacity: 1; transform: translateX(0) scale(1); }
+.shop-toolbar .settings-menu summary { width: 44px; min-width: 44px; padding: 6px; font-size: 24px; line-height: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .sun-icon, .moon-icon, .sound-waves, .sound-slash { transition: none; }
+}
+@media (max-width: 360px) {
+  .shop-toolbar #shop-stars { padding: 6px 8px; gap: 5px; }
+  .shop-toolbar .room-actions { gap: 4px; }
+}

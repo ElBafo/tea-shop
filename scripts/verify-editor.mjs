@@ -77,7 +77,7 @@ if((await saved()).place.shelves.wall!=='left'||(await saved()).place.shelves.x!
 await click('[data-filter="all"]');await click('[data-upgrade="basket"]');await click('[data-act="cancel-preview"]');
 await click('[data-filter="owned"]');await click('[data-upgrade="lamp"]');await drag('lamp',1.28,-2,0);
 if((await saved()).place.lamp.x!==1)throw Error('Cannot move after cancelling preview');
-await click('[data-filter="owned"]');await click('.settings-menu summary');await click('#theme-toggle');await click('.settings-menu summary');
+await click('[data-filter="owned"]');await click('#theme-toggle');
 await fs.writeFile('work/editor-night-phone.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
 for(const [width,height,name] of [[1280,900,'desktop'],[844,390,'landscape'],[375,667,'small-phone'],[320,568,'narrow-phone']]) {
  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});await new Promise(r=>setTimeout(r,300));

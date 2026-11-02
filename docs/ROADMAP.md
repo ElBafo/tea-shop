@@ -312,3 +312,17 @@ The owner approved all five suggestions and explicitly highlighted the hard-to-s
 Rules, stars, prices, ownership, saves, and offline behavior are unchanged. Locked-level grouping and further result-copy changes remain separate proposals, outside this five-item pass.
 
 UI refinement validation: production build and all 38 solver/full-jar/economy checks pass. Browser checks cover touch puzzle play, undo/replay rewards, direct entry to Edit, 320px/phone/landscape/desktop layouts, menu dismissal, day/night and showcase access, style purchase/restyling/storage, and preview preservation when collapsing the tray. Drag checks pass with the tray collapsed and immediately after selection, purchase, cancellation, and shelf rotation. Phone/day/night/desktop screenshots reviewed. Await owner review on the hosted preview before merging.
+
+## UI refinement release approved
+
+The owner approved merging PR #9. The visible gold star balance, grouped Settings controls, collapsible editor tray, illustrated style choices, and larger sparse-puzzle jars are merged into main as `30cb8510e83e45a8f9527ebf34e28026fa966204`. No additional UI changes are authorized by this merge request.
+
+## Direct animated appearance/audio controls — preview requested
+
+The owner asked to move day/night and audio back onto the top bar as animated icons. This supersedes grouping those two controls inside Settings. Keep the prominent star balance and Edit/Done. Show sun/moon for the current shop lighting and a speaker/waves or muted speaker for audio. Use short transitions, accessible action labels, 44px touch targets, and reduced-motion support. Showcase remains under a compact More options control, hidden in Edit when there are no secondary actions.
+
+Audio is on by default for new players (the existing `muted: false` default); retain saved explicit mute choices. Mobile browser audio unlock still happens on a user gesture. Keep audio directly accessible on shop, puzzle list, and puzzle screens. Toggling sound during a pour must not rebuild or cancel the puzzle's visual state. Day/night remains a shop-lighting setting; full-game dark mode is still separate backlog work.
+
+Implement on `preview/top-bar-icons`, mirror to hosted preview, and await review before merging.
+
+Direct-control validation: production build, all 38 puzzles, inventory/full-jar checks, and audio unlock/interruption/mute checks pass. Browser checks verify new-player audio-on default, persisted mute and night preferences, correct visible icon states, direct audio on all game screens, sound toggling during a pour without rebuilding jars, 44px touch targets at 320px width, and reduced-motion transitions. Phone/day/night/desktop screenshots reviewed. Await phone preview acceptance before merge.

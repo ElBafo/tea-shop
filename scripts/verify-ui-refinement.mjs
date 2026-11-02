@@ -41,6 +41,7 @@ if(!await evaluate(`document.querySelector('#shop-stars strong').textContent==='
 await tap('.settings-menu summary');await shot('refine-settings-phone');
 await tap('#theme-toggle');
 if(!await evaluate(`document.querySelector('.shop-room').classList.contains('is-night')`))throw Error('Theme menu failed');
+await tap('.settings-menu summary');
 await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});
 if(await evaluate(`document.querySelector('.settings-menu').open`))throw Error('Escape did not dismiss settings');
 await tap('#edit-toggle');await tap('[data-upgrade="lamp"]');
@@ -59,7 +60,7 @@ if(!await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).sho
 await tap('[data-act="style"][data-style="1"]');
 if(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop.style.lamp`)!==1)throw Error('Owned restyle failed');
 await tap('[data-act="store"]');await tap('[data-act="place"]');
-await tap('.settings-menu summary');await tap('#theme-toggle');await tap('#tray-toggle');await tap('#tray-toggle');
+await tap('#theme-toggle');await tap('#tray-toggle');await tap('#tray-toggle');
 for(const [width,height,name] of [[390,844,'phone'],[320,568,'small-phone'],[844,390,'landscape'],[1280,900,'desktop']]){
  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});await new Promise(r=>setTimeout(r,300));
  const fits=await evaluate(`(()=>{const b=document.querySelector('#decorate-panel').getBoundingClientRect();return b.bottom<=innerHeight+1 && b.right<=innerWidth+1 && document.documentElement.scrollWidth===innerWidth;})()`);
