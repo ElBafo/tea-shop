@@ -1,6 +1,7 @@
+import { cloneInventory } from "../shop/inventory";
 import { isShowroom, showroomProgress } from "./preview";
 import { sanitizeShop } from "../shop/grid";
-import { bakeryUnlocked, emptyShop, spentStars, UPGRADE_IDS } from "../shop/upgrades";
+import { bakeryUnlocked, emptyShop, spentStars, UPGRADE_IDS, UPGRADE_BY_ID } from "../shop/upgrades";
 import { LEVEL_COUNT, STORAGE_KEY, type Placement, type Progress, type ShopState, type UpgradeId, type WallFace } from "./types";
 
 function emptyProgress(): Progress {
@@ -101,16 +102,7 @@ export function saveShop(progress: Progress, shop: ShopState): Progress {
   return next;
 }
 
-export function cloneShop(shop: ShopState): ShopState {
-  return {
-    owned: shop.owned.slice(),
-    style: { ...shop.style },
-    place: Object.fromEntries(
-      Object.entries(shop.place).map(([id, place]) => [id, { ...place }]),
-    ),
-    finaleSeen: shop.finaleSeen,
-  };
-}
+export const cloneShop = cloneInventory;
 
 function readShop(raw: unknown): ShopState {
   const shop = emptyShop();
@@ -120,6 +112,9 @@ function readShop(raw: unknown): ShopState {
     shop.owned = parsed.owned.filter((id): id is UpgradeId =>
       UPGRADE_IDS.includes(id as UpgradeId),
     );
+  }
+  if (Array.isArray(parsed.stored)) {
+    shop.stored = parsed.stored.filter(id => shop.owned.includes(id) && UPGRADE_BY_ID[id]?.movable);
   }
   if (parsed.style && typeof parsed.style === "object") {
     for (const id of UPGRADE_IDS) {
@@ -142,8 +137,8 @@ function readShop(raw: unknown): ShopState {
 function readPlacement(raw: unknown): Placement | null {
   if (!raw || typeof raw !== "object") return null;
   const parsed = raw as Partial<Placement>;
-  if (typeof parsed.x !== "number" || typeof parsed.z !== "number") return null;
-  const rot = typeof parsed.rot === "number" ? ((Math.floor(parsed.rot) % 4) + 4) % 4 : 0;
+  if (typeof parsed.x !== "number" || typeof parsed.z !== "number" || !Number.isFinite(parsed.x) || !Number.isFinite(parsed.z)) return null;
+  const rot = typeof parsed.rot === "number" && Number.isFinite(parsed.rot) ? ((Math.floor(parsed.rot) % 4) + 4) % 4 : 0;
   const wall: WallFace | undefined =
     parsed.wall === "back" || parsed.wall === "left" ? parsed.wall : undefined;
   return {

@@ -1,3 +1,4 @@
+import { INVENTORY_LEVELS } from "./inventory-levels";
 import type { ItemId, LevelDef } from "./types";
 
 const R: ItemId = "rose";
@@ -330,6 +331,7 @@ export const LEVELS: LevelDef[] = [
     sealed: [true, false, true, false, true, false, false],
     par: 18,
   },
+  ...INVENTORY_LEVELS,
 ];
 
 export function getLevel(id: number): LevelDef | undefined {

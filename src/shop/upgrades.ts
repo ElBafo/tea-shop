@@ -1,4 +1,4 @@
-import type { Placement, ShopState, UpgradeDef, UpgradeId } from "../game/types";
+import type { Placement, ShopState, UpgradeDef, UpgradeId, UpgradeKind, RepeatableKind } from "../game/types";
 
 export const UPGRADES: UpgradeDef[] = [
   {
@@ -172,15 +172,31 @@ export const UPGRADES: UpgradeDef[] = [
   },
 ];
 
-export const UPGRADE_BY_ID: Record<UpgradeId, UpgradeDef> = Object.fromEntries(
-  UPGRADES.map((upgrade) => [upgrade.id, upgrade]),
-) as Record<UpgradeId, UpgradeDef>;
+export const REPEATABLE: readonly RepeatableKind[] = ["plant", "lamp", "table", "art", "basket"];
+export const EXTRA_COPIES: UpgradeDef[] = UPGRADES
+  .filter(def => REPEATABLE.includes(def.id as RepeatableKind))
+  .map(def => ({...def, id: `${def.id}:2` as UpgradeId, optional: true}));
+export const DECORATIONS: UpgradeDef[] = [...UPGRADES, ...EXTRA_COPIES];
+export const UPGRADE_BY_ID = Object.fromEntries(DECORATIONS.map(def => [def.id, def])) as Record<UpgradeId, UpgradeDef>;
+export const UPGRADE_IDS = DECORATIONS.map(def => def.id);
 
-export const UPGRADE_IDS = UPGRADES.map((upgrade) => upgrade.id);
+export function kindOf(id: UpgradeId): UpgradeKind {
+  return id.split(":")[0] as UpgradeKind;
+}
+export function isStored(shop: ShopState, id: UpgradeId): boolean {
+  return shop.stored?.includes(id) ?? false;
+}
+export function isPlaced(shop: ShopState, id: UpgradeId): boolean {
+  return isOwned(shop, id) && !isStored(shop, id);
+}
+export function canPurchaseCopy(shop: ShopState, id: UpgradeId): boolean {
+  return !id.includes(":") || isOwned(shop, kindOf(id));
+}
 
 export function emptyShop(): ShopState {
   return {
     owned: [],
+    stored: [],
     style: {},
     place: {},
     finaleSeen: false,

@@ -26,7 +26,7 @@ Spend those stars on the home screen to repair and decorate the tea shop: pick a
 
 ```bash
 npm install
-npm run verify   # proves all 20 levels are solvable
+npm run verify   # proves all 30 levels are solvable
 npm run dev      # http://localhost:5173/tea-shop/
 npm run build
 ```
@@ -40,4 +40,6 @@ The GitHub Actions workflow on `main` verifies the levels, builds the site, and 
 - [Architecture](docs/ARCHITECTURE.md): modules, state, persistence, rendering, and deployment.
 - [Shop polish plan](docs/POLISH_PLAN.md): the next art and camera milestone and its acceptance criteria.
 
-The tea shop decorating foundation is implemented. The Bakery currently unlocks a coming-soon message; a playable Bakery and the planned shop art polish have not shipped in this checkout.
+The shop includes day/night lighting, touch editing, style previews, and image sharing. The Bakery remains a coming-soon destination.
+
+The inventory preview adds free storage and restoration for owned furniture, plus a paid second plant, lamp, table, print, and basket. Each copy has its own style and position. Thirty puzzles offer 90 stars; the full collection with all second copies costs 88.

@@ -29,7 +29,7 @@ import {
   type ShopVisuals,
 } from "./meshes";
 import { canPlace, floorCenter, snapFloor, snapWall } from "./grid";
-import { UPGRADE_BY_ID, placeOf, shopComplete } from "./upgrades";
+import { UPGRADE_BY_ID, placeOf, shopComplete, isPlaced, kindOf } from "./upgrades";
 
 export interface DioramaHooks {
   onSelect(id: UpgradeId | null): void;
@@ -52,7 +52,7 @@ export class Diorama {
   private readonly camera: ArcRotateCamera;
   private readonly hemi: HemisphericLight;
   private readonly sun: DirectionalLight;
-  private readonly lampLight: PointLight;
+  private readonly lampLights: Record<"lamp" | "lamp:2", PointLight>;
   private readonly shadows: ShadowGenerator;
   private readonly visuals: ShopVisuals;
   private readonly ring: ReturnType<typeof selectionRing>;
@@ -114,10 +114,15 @@ export class Diorama {
     this.sun.intensity = 0.92;
     this.sun.diffuse = new Color3(1, 0.93, 0.78);
 
-    this.lampLight = new PointLight("lamp-light", new Vector3(0.4, 1.4, 5.2), this.scene);
-    this.lampLight.intensity = 0;
-    this.lampLight.diffuse = new Color3(1, 0.8, 0.55);
-    this.lampLight.range = 7;
+    this.lampLights = {
+      lamp: new PointLight("lamp-light", Vector3.Zero(), this.scene),
+      "lamp:2": new PointLight("lamp:2-light", Vector3.Zero(), this.scene),
+    };
+    for (const light of Object.values(this.lampLights)) {
+      light.intensity = 0;
+      light.diffuse = new Color3(1, 0.8, 0.55);
+      light.range = 7;
+    }
     this.windowLight = new PointLight("window-light", new Vector3(4.85, 2, 0.65), this.scene);
     this.windowLight.diffuse = Color3.FromHexString("#ffce8c");
     this.windowLight.range = 5;
@@ -165,7 +170,7 @@ export class Diorama {
     if (sky instanceof StandardMaterial) {
       sky.emissiveColor = Color3.FromHexString("#ffd397").scale(night ? 0.8 : 0.22);
     }
-    for (const mesh of this.visuals.items.lamp?.getChildMeshes() ?? []) {
+    for (const mesh of ["lamp", "lamp:2"].flatMap(id => this.visuals.items[id as UpgradeId]?.getChildMeshes() ?? [])) {
       const material = mesh.material;
       if (material instanceof StandardMaterial && material.name === "lamp-shade") {
         material.emissiveColor = Color3.FromHexString(C.gold).scale(night ? 0.65 : 0.22);
@@ -218,7 +223,7 @@ export class Diorama {
     applyRoomStyle(this.visuals, shop, this.scene);
     const unique: UpgradeId[] = [];
     for (const id of shop.owned) {
-      if (id !== "paint") unique.push(id);
+      if (id !== "paint" && isPlaced(shop, id)) unique.push(id);
     }
 
     for (const id of Object.keys(this.visuals.items) as UpgradeId[]) {
@@ -329,15 +334,17 @@ export class Diorama {
   }
 
   private updateLamp(): void {
-    const lamp = this.visuals.items.lamp;
-    if (!lamp || !this.shop.owned.includes("lamp")) {
-      this.lampLight.intensity = 0;
-      return;
+    for (const id of ["lamp", "lamp:2"] as const) {
+      const light = this.lampLights[id];
+      const lamp = this.visuals.items[id];
+      if (!lamp || !isPlaced(this.shop, id)) {
+        light.intensity = 0;
+        continue;
+      }
+      const bulb = lamp.getChildMeshes().find(mesh => mesh.name === "lamp-bulb");
+      light.position.copyFrom(bulb ? bulb.getAbsolutePosition() : lamp.position);
+      light.intensity = (this.night ? 1.15 : 0.55) + this.warm * 0.25;
     }
-    const bulb = lamp.getChildMeshes().find((mesh) => mesh.name === "lamp-bulb");
-    const pos = bulb ? bulb.getAbsolutePosition() : lamp.position.clone();
-    this.lampLight.position.copyFrom(pos);
-    this.lampLight.intensity = (this.night ? 1.15 : 0.55) + this.warm * 0.25;
   }
 
   private updateRing(): void {
@@ -364,7 +371,7 @@ export class Diorama {
 
   private positionShopkeeper(place = placeOf(this.shop, "counter")): void {
     if (!this.customer) return;
-    this.customer.setEnabled(this.shop.owned.includes("counter"));
+    this.customer.setEnabled(isPlaced(this.shop, "counter"));
     const center = floorCenter(UPGRADE_BY_ID.counter.size, place);
     const angle = place.rot * Math.PI / 2;
     this.customer.position.set(center.x - Math.sin(angle), 0, center.z - Math.cos(angle));
@@ -452,23 +459,28 @@ export class Diorama {
 
   // A 44 CSS-pixel-wide capsule follows the lamp from base to shade.
   // Lighting and device pixel ratio must not change its touch target.
-  private nearLamp(event: PointerEvent): boolean {
-    const lamp = this.visuals.items.lamp;
+  private nearLamp(event: PointerEvent): UpgradeId | undefined {
     const canvas = this.engine.getRenderingCanvas();
-    if (!lamp || !canvas || !this.shop.owned.includes("lamp")) return false;
+    if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const width = this.engine.getRenderWidth();
-    const height = this.engine.getRenderHeight();
+    const width = this.engine.getRenderWidth(), height = this.engine.getRenderHeight();
     const viewport = this.camera.viewport.toGlobal(width, height);
-    const project = (y: number) => {
-      const world = lamp.position.add(new Vector3(0, y, 0));
-      const p = Vector3.Project(world, Matrix.Identity(), this.scene.getTransformMatrix(), viewport);
-      return { x: rect.left + p.x * rect.width / width, y: rect.top + p.y * rect.height / height };
-    };
-    const a = project(0.05), b = project(1.45);
-    const dx = b.x - a.x, dy = b.y - a.y;
-    const t = Math.max(0, Math.min(1, ((event.clientX - a.x) * dx + (event.clientY - a.y) * dy) / Math.max(1, dx * dx + dy * dy)));
-    return Math.hypot(event.clientX - a.x - t * dx, event.clientY - a.y - t * dy) <= 22;
+    let nearest: UpgradeId | undefined;
+    let distance = 22;
+    for (const id of ["lamp", "lamp:2"] as const) {
+      const lamp = this.visuals.items[id];
+      if (!lamp || !isPlaced(this.shop, id)) continue;
+      const project = (y: number) => {
+        const point = Vector3.Project(lamp.position.add(new Vector3(0, y, 0)), Matrix.Identity(), this.scene.getTransformMatrix(), viewport);
+        return {x: rect.left + point.x * rect.width / width, y: rect.top + point.y * rect.height / height};
+      };
+      const a = project(0.05), b = project(1.45);
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const t = Math.max(0, Math.min(1, ((event.clientX-a.x)*dx + (event.clientY-a.y)*dy) / Math.max(1, dx*dx+dy*dy)));
+      const d = Math.hypot(event.clientX-a.x-t*dx, event.clientY-a.y-t*dy);
+      if (d <= distance) { nearest = id; distance = d; }
+    }
+    return nearest;
   }
 
   private pointerDown(event: PointerEvent): void {
@@ -477,7 +489,7 @@ export class Diorama {
     const pick = this.scene.pick(this.pointer.x, this.pointer.y, (mesh) => Boolean(mesh.isEnabled() && mesh.isVisible));
     let id = (pick?.hit && pick.pickedMesh?.metadata?.upgradeId) as UpgradeId | undefined;
     // Preserve direct hits on other furniture; the rug is a surface under it.
-    if (this.edit && (!id || id === "rug" || !UPGRADE_BY_ID[id]?.movable) && this.nearLamp(event)) id = "lamp";
+    if (this.edit && (!id || id === "rug" || !UPGRADE_BY_ID[id]?.movable)) id = this.nearLamp(event) ?? id;
     if (this.edit && id && UPGRADE_BY_ID[id]?.movable && this.shop.owned.includes(id)) {
       this.select(id);
       const point = UPGRADE_BY_ID[id].surface === "floor" ? this.pickSurface(id) : null;
@@ -586,7 +598,7 @@ export class Diorama {
     const { w, d } = def.size.w === def.size.d || place.rot % 2 === 0
       ? def.size
       : { w: def.size.d, d: def.size.w };
-    root.position.set(place.x + w / 2, id === "plant" && place.z === 0 && place.x >= 4 ? 1.16 : 0, place.z + d / 2);
+    root.position.set(place.x + w / 2, kindOf(id) === "plant" && place.z === 0 && place.x >= 4 ? 1.16 : 0, place.z + d / 2);
     root.rotation.y = place.rot * (Math.PI / 2);
     if (id === "counter") this.positionShopkeeper(place);
   }

@@ -6,7 +6,7 @@ This is the working delivery order, not a calendar promise. Priorities can chang
 
 ## Current baseline
 
-- Implemented: 20 sorting puzzles, stars, eight upgrades with styles, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.
+- Released: 20 sorting puzzles, stars, eleven decorations with styles, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.
 - Hosted preview: https://elbafo.github.io/tea-shop/preview/ automatically rebuilds from preview/shop-polish. The released game remains at https://elbafo.github.io/tea-shop/.
 - The simplified shop UI, showroom, touch picking, sign correction, and counter aisle were reviewed and merged in PR #2.
 - Mobile audio retry and clearer sound labels are implemented and checked with a mocked audio context; confirmed working by the owner in Safari.
@@ -199,3 +199,15 @@ A puzzle finishes only when every jar is empty or completely full of one type. A
 Update the solver's completion/pruning rule and individual-jar celebration checks together. Level 3 previously contained only three of each type in four-slot jars; add the missing items so each type can fill a jar. Recalculate all twenty par values under the new goal so three stars remain earnable. Maximum available rewards remain 60 stars. Preserve existing earned stars, unlocks, decoration ownership, and historical scores.
 
 Validation: explicit split-stack and five-slot regressions; every level has capacity-compatible item counts; all twenty solver paths are replayed to legal, fully completed boards; recalculated par/scoring checks and production build pass. Browser review checks that split stacks remain playable and that only the final consolidation shows the result. The owner approved merging this fix directly into main so his wife can test it from the normal live game URL.
+
+## Inventory and second copies — ready for preview review
+
+Proceed with personal expression through inventory and additional placements. Every owned movable decoration can be stored and placed again for free. Ownership, chosen style, and last position remain saved; storing never refunds stars or revokes completion. Paint remains a fixed wall finish. When restoring, use the previous position if available, otherwise find a legal space. If none fits, keep it safely stored and explain that space is needed.
+
+For this 6×6 room, plants, lamps, tables, prints, and baskets each support two copies. Buy the second for the original price, after owning the first. Copies have independent styles, positions, collision footprints, and lamp lights. Decorations shows eligible unpurchased copies; My decorations shows owned copies with In shop/Stored status. Every copy must be previewed and explicitly purchased with stars.
+
+Add ten static puzzles (21–30) to fund the collection. The original catalogue costs 56 stars; second copies cost 32 more. Total: 88 of 90 earnable stars, leaving two after everything is bought. The original eight required upgrades still cost 26 and control completion. Preserve all previous scores, ownership, styles, and layouts when extending saves. This supersedes the earlier 20-level/60-star economy for this preview.
+
+Verification: all 30 solver paths replay to fully completed jars; inventory, collision, paid-copy budget, and legacy-score migration checks pass. Browser checks cover phone purchase previews, independent second-lamp touch dragging, night lights turning off when stored, free restoration, reload persistence, and desktop layout. Physical Safari review remains required before release.
+
+Next after review: expand distinct decoration designs with matching earnable rewards, then release polish and Bakery design. Larger rooms/zoom, whole-game dark appearance, and cross-device progress retain their separate backlog/planning status.
