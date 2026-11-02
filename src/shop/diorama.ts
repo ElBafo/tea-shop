@@ -4,6 +4,7 @@ import { Camera } from "@babylonjs/core/Cameras/camera";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { DirectionalLight } from "@babylonjs/core/Lights/directionalLight";
+import { SpotLight } from "@babylonjs/core/Lights/spotLight";
 import { PointLight } from "@babylonjs/core/Lights/pointLight";
 import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
 import { Color3, Color4 } from "@babylonjs/core/Maths/math.color";
@@ -54,8 +55,11 @@ export class Diorama {
   private readonly camera: ArcRotateCamera;
   private readonly hemi: HemisphericLight;
   private readonly sun: DirectionalLight;
-  private readonly lampLights: Record<"lamp" | "lamp:2", PointLight>;
+  private readonly lampLights: Record<"lamp" | "lamp:2", SpotLight>;
   private readonly shadows: ShadowGenerator;
+  private readonly lampShadows: Record<"lamp" | "lamp:2", ShadowGenerator>;
+  private lampShadowsDirty = true;
+  private readonly shadowPreviewKeys = new WeakMap<TransformNode, string>();
   private readonly visuals: ShopVisuals;
   private readonly ring: ReturnType<typeof selectionRing>;
   private readonly sparkTex;
@@ -124,13 +128,27 @@ export class Diorama {
     this.sun.diffuse = new Color3(1, 0.93, 0.78);
 
     this.lampLights = {
-      lamp: new PointLight("lamp-light", Vector3.Zero(), this.scene),
-      "lamp:2": new PointLight("lamp:2-light", Vector3.Zero(), this.scene),
+      lamp: new SpotLight("lamp-light", Vector3.Zero(), Vector3.Down(), Math.PI * 0.8, 1, this.scene),
+      "lamp:2": new SpotLight("lamp:2-light", Vector3.Zero(), Vector3.Down(), Math.PI * 0.8, 1, this.scene),
     };
     for (const light of Object.values(this.lampLights)) {
       light.intensity = 0;
       light.diffuse = new Color3(1, 0.8, 0.55);
-      light.range = 7;
+      light.range = 4;
+      light.shadowMinZ = 0.08;
+      light.shadowMaxZ = 4;
+    }
+    this.lampShadows = {
+      lamp: new ShadowGenerator(512, this.lampLights.lamp),
+      "lamp:2": new ShadowGenerator(512, this.lampLights["lamp:2"]),
+    };
+    for (const shadow of Object.values(this.lampShadows)) {
+      shadow.usePercentageCloserFiltering = true;
+      shadow.filteringQuality = ShadowGenerator.QUALITY_LOW;
+      shadow.setDarkness(0.45);
+      shadow.bias = 0.001;
+      shadow.normalBias = 0.02;
+      shadow.getShadowMap()!.refreshRate = 0; // Cache until a lamp or caster moves.
     }
     this.windowLight = new PointLight("window-light", new Vector3(4.85, 2, 0.65), this.scene);
     this.windowLight.diffuse = Color3.FromHexString("#ffce8c");
@@ -174,6 +192,7 @@ export class Diorama {
 
   setNight(night: boolean): void {
     this.night = night;
+    this.lampShadowsDirty = true;
     this.scene.clearColor = Color4.FromColor3(Color3.FromHexString(night ? "#192333" : C.cream), 1);
     this.scene.ambientColor = night ? new Color3(0.28, 0.33, 0.45) : new Color3(0.55, 0.48, 0.42);
     const sky = this.scene.getMeshByName("sky")?.material;
@@ -256,6 +275,7 @@ export class Diorama {
 
   sync(shop: ShopState, opts: { animate?: UpgradeId; quiet?: boolean } = {}): void {
     this.shop = shop;
+    this.lampShadowsDirty = true;
     applyRoomStyle(this.visuals, shop, this.scene);
     const unique: UpgradeId[] = [];
     for (const id of shop.owned) {
@@ -335,7 +355,13 @@ export class Diorama {
     const casts = !id || (UPGRADE_BY_ID[id].surface === "floor" && root.position.y < 0.1);
     collectMeshes(root).forEach((mesh) => {
       if (mesh.metadata?.steam) return;
-      if (casts) this.shadows.addShadowCaster(mesh);
+      if (casts) {
+        this.shadows.addShadowCaster(mesh);
+        // The light sits inside the shade: lamp meshes must not block their own light.
+        if (!id || kindOf(id) !== "lamp") {
+          for (const shadow of Object.values(this.lampShadows)) shadow.addShadowCaster(mesh);
+        }
+      }
       mesh.receiveShadows = true;
     });
   }
@@ -383,12 +409,20 @@ export class Diorama {
       const lamp = this.visuals.items[id];
       if (!lamp || !isPlaced(this.shop, id)) {
         light.intensity = 0;
+        light.shadowEnabled = false;
         continue;
       }
       const bulb = lamp.getChildMeshes().find(mesh => mesh.name === "lamp-bulb");
-      light.position.copyFrom(bulb ? bulb.getAbsolutePosition() : lamp.position);
+      lamp.computeWorldMatrix(true);
+      bulb?.computeWorldMatrix(true);
+      const position = bulb ? bulb.getAbsolutePosition() : lamp.position;
+      const moved = !light.position.equalsWithEpsilon(position, 0.0001);
+      light.position.copyFrom(position);
+      light.shadowEnabled = this.night;
+      if (this.night && (moved || this.lampShadowsDirty)) this.lampShadows[id].getShadowMap()!.resetRefreshCounter();
       light.intensity = (this.night ? 1.0 : 0.28) + this.warm * 0.18;
     }
+    this.lampShadowsDirty = false;
   }
 
   private updateRing(): void {
@@ -424,6 +458,7 @@ export class Diorama {
 
   private tick(): void {
     const dt = Math.min(0.1, this.engine.getDeltaTime() / 1000);
+    if (this.tweens.length || this.walk) this.lampShadowsDirty = true;
     this.elapsed += dt;
     for (const mesh of this.steam) {
       mesh.setEnabled(!this.reducedMotion.matches);
@@ -675,6 +710,11 @@ export class Diorama {
   }
 
   private previewPlace(id: UpgradeId, root: TransformNode, place: Placement): void {
+    const previewKey = `${place.x}:${place.z}:${place.rot}:${place.wall ?? ""}`;
+    if (this.shadowPreviewKeys.get(root) !== previewKey) {
+      this.lampShadowsDirty = true;
+      this.shadowPreviewKeys.set(root, previewKey);
+    }
     const def = UPGRADE_BY_ID[id];
     if (def.surface === "wall") {
       const along = place.x + def.size.w / 2;

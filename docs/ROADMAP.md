@@ -245,3 +245,11 @@ Cozy/zoom validation: 30 long and repeated lamp drags pass across three styles a
 The owner reported a detached window-pot shadow on the floor and an oversized clock shadow across the wall. Use a steeper light directed into the room for shorter furniture shadows, soften their contrast/filtering, and exclude wall ornaments and elevated windowsill plants from casting room-wide shadows. Floor-standing plants still cast grounding shadows; moving a plant between floor and sill updates that rule. Apply the same geometry rules in both day and night. Preserve placement, ownership, zoom, and inventory behavior. Review phone screenshots before merging PR #6.
 
 Validation: day/night caster checks, floor-to-sill and sill-to-floor plant transitions, phone/zoom/desktop screenshot review, all 38 level solutions, and production build pass. The clock and window pot no longer project shadows across the wall or floor. Changes remain in PR #6 preview.
+
+## Lamp-driven shadows — next lighting preview
+
+After noticing that lamp movement did not affect shadows, the owner approved continuing the lighting work. At night each placed lamp uses a downward light pool with one 512px shadow map, rather than a six-face omnidirectional map. Both purchased lamps can cast nearby furniture shadows independently. Cache maps while idle and refresh when lamps, furniture, or purchase animations move. Daytime retains the subtle fixed-light shadows. Stored lamps stop lighting and shadow rendering.
+
+Keep clock/wall ornaments and windowsill plants excluded from large projected shadows, and prevent lamp shades from blocking their own bulbs. Preserve continuous touch dragging and inventory behavior. Validate both lamps, map caching, moving other furniture, floor/sill transitions, and physical iPhone performance before release; desktop emulation cannot establish iPhone frame rate. This continues PR #6 preview without merging new lighting into main.
+
+Lamp-shadow validation: browser checks pass for two independent non-cubemap 512px maps, no idle redraws, light and furniture movement invalidation, storage, day/night switching, and retained wall/sill shadow exclusions. Shadow refreshes during drags are limited to snapped grid changes. Production build and all 38 puzzles pass; physical iPhone performance still requires owner review.
