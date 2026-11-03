@@ -2,7 +2,7 @@
 
 ## Runtime
 
-Tea Shop is a static, client-side TypeScript application built with Vite. Babylon.js renders the shop. The puzzle screens and shop controls use HTML templates, CSS, and DOM event listeners rather than a UI framework. There is no backend or account service.
+Decopu is a static, client-side TypeScript application built with Vite. Babylon.js renders the shop. The puzzle screens and shop controls use HTML templates, CSS, and DOM event listeners rather than a UI framework. There is no backend or account service.
 
 `index.html` loads `src/main.ts`, which mounts the app and registers the service worker. `src/ui/app.ts` owns the screen state (`shop`, `levels`, `play`), current progress, active puzzle, and undo history. Screen navigation is internal state rather than URL routing.
 
@@ -93,3 +93,5 @@ The shop uses one stable render-loop callback. Visibility changes cancel unfinis
 `src/ui/motion.ts` owns temporary Web Animation API transfer effects, cancellation, and reduced-motion behavior. Puzzle rules remain in the engine; the UI saves completed-level rewards before starting its celebration. Navigation cancels transient visuals and guards delayed callbacks against replacing a newer puzzle.
 
 The UI refinement keeps editor tray expansion as transient screen state. Collapsing it changes layout only; the existing canvas ResizeObserver refits the room, while selection and temporary purchase previews remain intact. Variant illustrations in `src/shop/icons.ts` are inline SVGs rather than extra WebGL scenes. Native details/summary elements group secondary settings; app-root handlers dismiss them on Escape and outside clicks.
+
+`index.html` paints the Decopu splash before the application bundle arrives. Start stays disabled until `mountApp` has prepared the Babylon scene; it unlocks audio through a user gesture and reveals the app. Loading failure and slow-loading recovery keep Reload available without altering saves. `src/game/guide.ts` stores a small onboarding stage under a key derived from the existing progress key. Existing saves skip first-time onboarding. The preview-only `?tour=1` mode uses in-memory progress and guidance and does not save scores, purchases, guide state, or appearance changes.

@@ -1,4 +1,4 @@
-# Tea Shop
+# Decopu
 
 A cozy little sort puzzle. Line up the tea tins, cups, and treats — there is no clock and no fail state. Stars you earn dress up a tiny 3D tea shop.
 
@@ -67,3 +67,5 @@ CDP_PORT=9225 node scripts/verify-offline.mjs
 CDP_PORT=9225 node scripts/verify-game-ui.mjs
 CDP_PORT=9225 node scripts/verify-jar-motion.mjs
 ```
+
+The Decopu start screen prepares the shop before enabling **Start**. New players can follow a skippable first-puzzle and decorating guide; existing saves bypass the introduction. Review the full first-time flow at [Tour preview](https://elbafo.github.io/tea-shop/preview/?tour=1), which uses temporary progress and never overwrites your preview shop.

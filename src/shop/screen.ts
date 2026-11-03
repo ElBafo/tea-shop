@@ -1,10 +1,11 @@
+import { guideStage, setGuide, guideCard } from "../game/guide";
 import { audioToggle, themeToggle, updateAudioToggle, updateThemeToggle } from "../ui/toggles";
 import { isOfflinePreview } from "../game/offline";
 import { cloneInventory as clone, storeItem, placeItem } from "./inventory";
 import { decorationIcon, styleThumbnail } from "./icons";
 import { imageFile, saveImage } from "./share";
 import { loadNight, saveNight } from "../game/appearance";
-import { isPreview, isShowroom } from "../game/preview";
+import { isGuidePreview, isPreview, isShowroom } from "../game/preview";
 import { playChime, playClick, playFinale } from "../game/audio";
 import { isBakeryOpen, saveShop, spendableStars } from "../game/storage";
 import type { Placement, Progress, ShopState, UpgradeId } from "../game/types";
@@ -33,6 +34,7 @@ export interface ShopHost {
 }
 
 export interface ShopScreen {
+  ready(): Promise<void>;
   refresh(): void;
   dispose(): void;
 }
@@ -55,7 +57,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
           <button id="edit-toggle" class="icon-btn" type="button">Edit</button>
         </div>
       </header>
-      ${isPreview ? `<aside class="preview-bar"><span>${isShowroom ? "Showroom · temporary" : isOfflinePreview ? "Offline preview" : "Preview"}</span><a href="${import.meta.env.BASE_URL}${isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
+      ${isPreview ? `<aside class="preview-bar"><span>${isGuidePreview ? "Tour · temporary" : isShowroom ? "Showroom · temporary" : isOfflinePreview ? "Offline preview" : "Preview"}</span><a href="${import.meta.env.BASE_URL}${isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
+      <div id="shop-guide"></div>
       <div class="shop-stage">
         <canvas id="shop-canvas" aria-label="The tea shop room. Pinch to zoom."></canvas>
         <div class="shop-zoom" role="group" aria-label="Shop view">
@@ -169,6 +172,14 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector("#share-status")?.classList.toggle("hidden", !showcasing);
     root.querySelector("#showcase-toggle")?.classList.toggle("hidden", edit);
     const progress = host.progress;
+    if (guideStage() === 'decorate' && progress.shop.owned.length) setGuide('arrange');
+    const guide = root.querySelector<HTMLElement>('#shop-guide')!;
+    const stage = guideStage();
+    guide.innerHTML = stage === 'puzzle' ? guideCard('1 · Sort a shelf', 'Play the first puzzle to earn stars for your shop.', '<button type="button" data-guide-play>Play puzzles →</button>')
+      : stage === 'decorate' ? guideCard('2 · Make it yours', edit ? 'Pick a decoration, try a style, then buy it with your stars. A counter costs 2 stars.' : 'Your stars buy decorations. Open Edit to choose your first piece.', edit ? '' : '<button type="button" data-guide-edit>Decorate →</button>')
+      : stage === 'arrange' ? guideCard('3 · Find its place', 'In Edit, drag your furniture to move it. Try another style or rotate it. Changes save automatically.', '<button type="button" data-guide-done>Got it — my shop, my way</button>') : '';
+    guide.classList.toggle('hidden', !guide.innerHTML);
+    root.querySelector('.shop-room')?.classList.toggle('has-guide', Boolean(guide.innerHTML));
     const spendable = spendableStars(progress);
     const available = DECORATIONS.filter((item) => !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
     updateAudioToggle(root.querySelector("#mute"), progress.muted);
@@ -250,7 +261,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     try {
       const file = imageFile(diorama.captureImage());
       if (share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: "My Tea Shop" });
+        await navigator.share({ files: [file], title: "My Decopu tea shop" });
       } else {
         saveImage(file);
         if (status) status.textContent = "Image ready to save.";
@@ -285,7 +296,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector("#save-shop")?.addEventListener("click", () => { void exportImage(false); });
     root.querySelector("#theme-toggle")?.addEventListener("click", () => {
       night = !night;
-      if (!isShowroom) saveNight(appearanceKey, night);
+      if (!isShowroom && !isGuidePreview) saveNight(appearanceKey, night);
       diorama.setNight(night);
       playClick(host.progress.muted);
       paintChrome();
@@ -475,11 +486,18 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     commit(shop);
   };
 
+  root.querySelector('#shop-guide')!.addEventListener('click', event => {
+    const target = event.target as Element;
+    if (target.closest('[data-guide-skip], [data-guide-done]')) { setGuide('done'); paintChrome(); }
+    if (target.closest('[data-guide-play]')) host.goLevels();
+    if (target.closest('[data-guide-edit]')) root.querySelector<HTMLButtonElement>('#edit-toggle')?.click();
+  });
   bind();
   diorama.setEditMode(edit);
   paintChrome();
 
   return {
+    ready: () => diorama.ready(),
     refresh: () => paintChrome(),
     dispose: () => diorama.dispose(),
   };

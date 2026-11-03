@@ -1,3 +1,5 @@
+let clearReturningStart = async () => {};
+import { installReturningPlayerStart } from './browser-start.mjs';
 // Browser regression check. Requires Vite at 127.0.0.1:5174 with base /tea-shop/preview/
 // and Chromium remote debugging on 127.0.0.1:9223. Run with Node 22 or newer.
 import fs from 'node:fs/promises';
@@ -16,7 +18,7 @@ const touch = async p => {
  await send('Input.dispatchTouchEvent',{type,touchPoints:touching?[{x:p.x,y:p.y,id:1}]:[]});
 };
 await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
-await send('Runtime.enable');await send('Page.enable');
+await send('Runtime.enable');await send('Page.enable');clearReturningStart = await installReturningPlayerStart(send);
 await send('Storage.clearDataForOrigin',{origin:'http://127.0.0.1:5174',storageTypes:'service_workers,cache_storage'});
 await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});
 
@@ -41,4 +43,4 @@ for (const dpr of [1,2]) for (const night of [false,true]) for (const style of [
  results.push({dpr,night,style});
 }
 await fs.writeFile('work/lamp-touch-night.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
-console.log({passed:results.length,cases:results,errors});ws.close();
+console.log({passed:results.length,cases:results,errors});await clearReturningStart();ws.close();

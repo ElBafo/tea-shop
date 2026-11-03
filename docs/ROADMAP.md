@@ -338,7 +338,7 @@ The splash appears immediately while assets load. Start becomes available when t
 
 For new players, introduce the loop through playing: sort the first jars, fill every nonempty jar completely with one kind, earn stars, then preview and buy a decoration. Keep guidance short, skippable, and separate from puzzle rules. Preserve undo, scoring, styles-before-buying, and normal decorating. Save onboarding progress separately; do not force the introduction on existing players or repeat completed guidance.
 
-Status: scope recorded and branding metadata prepared on the feature branch. The execution workspace is offline; splash/guide implementation, browser validation, and preview publication remain pending. Main is unchanged.
+Initial status: branding and scope were recorded while the workspace was offline. Implementation resumed once the workspace became available; see the delivery notes below. Main remains unchanged until approval.
 
 
 ## Collection choice and aspirational decorations — product direction
@@ -356,3 +356,14 @@ Proposed design for balancing, not yet approved prices or implementation:
 - Add new earnable content with progression. Do not promise repeat-star farming, random drops, paid currency, or artificial player-count exclusivity; those are not agreed mechanics.
 
 Next step: model the first two rooms, essential costs, optional catalogue, and reward budget before implementing this economy. The Decopu rename, Start splash, and first-time guide remain the active unfinished milestone; this discussion adds roadmap direction rather than replacing that work.
+
+
+## Decopu start and guided first visit — implementation for review
+
+The Decopu splash now paints before the bundle loads and waits for scene readiness. Start explicitly opens the app and unlocks audio through that gesture. Existing sound preferences are preserved. Slow loading exposes Reload; initialization failures retain a recoverable loading screen. No artificial wait or percentage is shown.
+
+New players can choose Show me how or Explore on my own. Guidance highlights a possible first-puzzle move, explains the full-jar goal, saves the real first win, introduces spending stars, then explains arranging the first purchased piece. Every contextual guide has Skip; completed/skipped guidance stays dismissed. Existing saves skip the introduction. Guide progress uses a separate versioned key derived from the existing save key, leaving scores and inventory untouched.
+
+Review the whole first-time flow at `/tea-shop/preview/?tour=1`. This preview-only tour starts with temporary empty progress and never writes scores, purchases, guide state, or appearance changes to the saved preview shop. Normal preview and main retain their established save keys and URLs. Tea Shop remains the first room within Decopu. Installed-app names and browser metadata use Decopu; iPhone shortcuts may retain a cached old label until re-added.
+
+Validation: all 38 solver/full-jar/economy checks, production and hosted-preview builds, real-touch first win/purchase, onboarding skip/completion persistence, existing-save migration, temporary tour isolation, phone/320px/landscape/desktop layouts, and offline-update/reopen checks. Physical phone review remains required before merge. Future collection scarcity and room-economy changes remain roadmap proposals, outside this release.

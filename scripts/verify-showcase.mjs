@@ -1,3 +1,5 @@
+let clearReturningStart = async () => {};
+import { installReturningPlayerStart } from './browser-start.mjs';
 // Browser regression check. Requires Vite at 127.0.0.1:5174 with base /tea-shop/preview/
 // and Chromium remote debugging on 127.0.0.1:9223. Run with Node 22 or newer.
 import fs from 'node:fs/promises';
@@ -16,7 +18,7 @@ const touch = async p => {
  await send('Input.dispatchTouchEvent',{type,touchPoints:touching?[{x:p.x,y:p.y,id:1}]:[]});
 };
 await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
-await send('Runtime.enable');await send('Page.enable');
+await send('Runtime.enable');await send('Page.enable');clearReturningStart = await installReturningPlayerStart(send);
 await send('Storage.clearDataForOrigin',{origin:'http://127.0.0.1:5174',storageTypes:'service_workers,cache_storage'});
 await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});
 
@@ -56,4 +58,4 @@ await fs.writeFile('work/showcase-desktop.png',Buffer.from((await send('Page.cap
 await evaluate(`document.querySelector('#showcase-back').click()`);
 if(await evaluate(`getComputedStyle(document.querySelector('.shop-overlay')).display`)==='none')throw Error('Back did not restore controls');
 if(errors.length)throw Error(JSON.stringify(errors));
-console.log({sharingAndDownloadFallback:true,cancelHandled:true,progressUnchanged:true,desktop:true,errors});ws.close();
+console.log({sharingAndDownloadFallback:true,cancelHandled:true,progressUnchanged:true,desktop:true,errors});await clearReturningStart();ws.close();

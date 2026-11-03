@@ -1,3 +1,5 @@
+let clearReturningStart = async () => {};
+import { installReturningPlayerStart } from './browser-start.mjs';
 // Production-browser test. Build work/offline-a with base /tea-shop/preview/ first.
 // Requires Chromium CDP; serves two versions on a temporary local HTTP server.
 import fs from 'node:fs/promises';
@@ -33,10 +35,11 @@ const ev=async expression=>{const r=await send('Runtime.evaluate',{expression,aw
 const wait=async expr=>{for(let i=0;i<160;i++){if(await ev(expr))return;await new Promise(r=>setTimeout(r,150));}throw Error('Timed out: '+expr);};
 try{
  await send('Page.enable');await send('Runtime.enable');await send('Network.enable');
+ clearReturningStart = await installReturningPlayerStart(send);
  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
  await send('Storage.clearDataForOrigin',{origin:'http://127.0.0.1:5180',storageTypes:'all'});
  await send('Page.navigate',{url:'http://127.0.0.1:5180/tea-shop/preview/offline/'});
- await wait(`!!document.querySelector('#play-tea') && !!navigator.serviceWorker.controller`);
+ await wait(`!document.querySelector('#launch-screen') && !!document.querySelector('#play-tea') && !!navigator.serviceWorker.controller`);
  assert.equal(await ev(`document.querySelector('[name="test-build"]').content`),'a');
  const scope=await ev(`navigator.serviceWorker.getRegistration().then(r=>r.scope)`);
  assert.ok(scope.endsWith('/preview/offline/'));
@@ -55,19 +58,24 @@ try{
  await wait(`!!document.querySelector('.result-overlay') && !!document.querySelector('[data-update]')`);
  await fs.writeFile('work/jars-celebration.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
  await ev(`document.querySelector('[data-update]').click()`);
- await wait(`document.querySelector('[name="test-build"]')?.content==='b' && !!document.querySelector('#play-tea')`);
+ await wait(`document.querySelector('[name="test-build"]')?.content==='b' && !document.querySelector('#launch-screen') && !!document.querySelector('#play-tea')`);
  assert.equal(await ev(`JSON.parse(localStorage.getItem('${saveKey}')).bestStars[0]`),3);
  assert.equal(await ev(`caches.has('unrelated-app')`),true);
  await send('Network.emulateNetworkConditions',{offline:true,latency:0,downloadThroughput:0,uploadThroughput:0});
  await send('Page.reload');
- await wait(`!!document.querySelector('#play-tea')`);
+ await wait(`!document.querySelector('#launch-screen') && !!document.querySelector('#play-tea')`);
  assert.equal(await ev(`document.querySelector('[name="test-build"]').content`),'b');
  await ev(`document.querySelector('#play-tea').click();document.querySelector('.continue-card').click()`);
  await wait(`!!document.querySelector('.shelves')`);
  assert.equal(await ev(`JSON.parse(localStorage.getItem('${saveKey}')).bestStars[0]`),3);
  await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
  await send('Page.navigate',{url:'http://127.0.0.1:5180/tea-shop/preview/'});
- await wait(`!!document.querySelector('#play-tea')`);
+ await wait(`!document.querySelector('#launch-screen') && !!document.querySelector('#play-tea')`);
  assert.equal(await ev(`!!navigator.serviceWorker.controller`),false,'Ordinary preview stays uncontrolled');
+ await send('Network.setBlockedURLs',{urls:['*/assets/index-*.js']});
+ await send('Page.reload');
+ await wait(`document.querySelector('#launch-status')?.textContent.includes('couldn’t open')`);
+ assert.equal(await ev(`document.querySelector('#launch-start').disabled && !document.querySelector('#launch-retry').hidden`),true,'Failed module keeps Reload available');
+ await send('Network.setBlockedURLs',{urls:[]});
  console.log('PASS: coherent offline shell, scoped preview, deferred update, immediate saved reward, explicit upgrade, offline reopen, unrelated cache preservation.');
-}finally{await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1}).catch(()=>{});ws.close();server.close();}
+}finally{await send('Network.setBlockedURLs',{urls:[]}).catch(()=>{});await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1}).catch(()=>{});await clearReturningStart();ws.close();server.close();}

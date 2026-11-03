@@ -2,6 +2,7 @@ import { LEVEL_COUNT, type Progress } from "./types";
 import { DECORATIONS } from "../shop/upgrades";
 
 export const isPreview = import.meta.env.BASE_URL === "/tea-shop/preview/";
+export const isGuidePreview = isPreview && new URLSearchParams(location.search).get("tour") === "1";
 export const isShowroom = isPreview && new URLSearchParams(location.search).get("showroom") === "1";
 
 export function showroomProgress(): Progress {

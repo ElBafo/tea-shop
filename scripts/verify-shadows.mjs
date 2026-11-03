@@ -1,3 +1,5 @@
+let clearReturningStart = async () => {};
+import { installReturningPlayerStart } from './browser-start.mjs';
 // Browser regression check. Requires Vite at 127.0.0.1:5174 with base /tea-shop/preview/
 // and Chromium remote debugging on 127.0.0.1:9224. Run with Node 22 or newer.
 import fs from 'node:fs/promises';
@@ -16,7 +18,7 @@ const touch = async p => {
  await send('Input.dispatchTouchEvent',{type,touchPoints:touching?[{x:p.x,y:p.y,id:1}]:[]});
 };
 await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:2});
-await send('Runtime.enable');await send('Page.enable');await send('Page.bringToFront');
+await send('Runtime.enable');await send('Page.enable');clearReturningStart = await installReturningPlayerStart(send);await send('Page.bringToFront');
 await send('Storage.clearDataForOrigin',{origin:'http://127.0.0.1:5174',storageTypes:'service_workers,cache_storage'});
 await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});
 
@@ -58,4 +60,4 @@ await click('#edit-toggle');await click('[data-zoom="in"]');
 await fs.writeFile('work/shadows-night-zoom.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
 await click('[data-zoom="fit"]');await send('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});await new Promise(r=>setTimeout(r,300));
 await fs.writeFile('work/shadows-desktop.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
-assert(!errors.length,JSON.stringify(errors));console.log('Day/night shadow eligibility, floor/sill transitions, zoom and desktop passed.');ws.close();
+assert(!errors.length,JSON.stringify(errors));console.log('Day/night shadow eligibility, floor/sill transitions, zoom and desktop passed.');await clearReturningStart();ws.close();

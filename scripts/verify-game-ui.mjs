@@ -1,3 +1,5 @@
+let clearReturningStart = async () => {};
+import { installReturningPlayerStart } from './browser-start.mjs';
 // Browser regression check. Requires Vite at 127.0.0.1:5174 with base /tea-shop/preview/
 // and Chromium remote debugging on 127.0.0.1:9224. Run with Node 22 or newer.
 import fs from 'node:fs/promises';
@@ -17,6 +19,7 @@ const touch = async p => {
 };
 await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
 await send('Runtime.enable');await send('Page.enable');await send('Page.bringToFront');
+clearReturningStart = await installReturningPlayerStart(send);
 await send('Storage.clearDataForOrigin',{origin:'http://127.0.0.1:5174',storageTypes:'service_workers,cache_storage'});
 await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});
 
@@ -82,4 +85,4 @@ await tap('[data-go="levels"]');await shot('ui-levels-desktop');
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/?showroom=1'});await new Promise(r=>setTimeout(r,1600));await shot('ui-home-phone');
 if(errors.length)throw Error(JSON.stringify(errors));
-console.log({navigation:true,lockedLevels:true,realTouchPuzzle:true,undoRestart:true,winAndReplayRewards:true,dialogFocus:true,continueProgress:true,tallJarLayouts:true,errors});ws.close();
+console.log({navigation:true,lockedLevels:true,realTouchPuzzle:true,undoRestart:true,winAndReplayRewards:true,dialogFocus:true,continueProgress:true,tallJarLayouts:true,errors});await clearReturningStart();ws.close();

@@ -312,6 +312,8 @@ export class Diorama {
     this.spawnCustomer(false);
   }
 
+  ready(): Promise<void> { return this.scene.whenReadyAsync(); }
+
   resize(): void {
     if (this.disposed) return;
     this.engine.resize();
