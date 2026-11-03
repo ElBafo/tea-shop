@@ -109,3 +109,6 @@ The Conservatory adds three designs, each with three included styles, priced at 
 
 
 Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 154-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle scoring itself is unchanged.
+
+
+The focused editor keeps collection tabs accessible during selection and places Browse/Hide panel in a persistent navigation row. Item names and purchase/inventory actions sit outside the scrolling styles area. Browse clears a temporary preview, preserves paid placements and reopens the panel. Placement markers appear only after an item drag crosses the movement threshold; release, cancellation, scene synchronization and disposal remove them. Venue/story chapters are distinct from tea-shop puzzle milestone groups; UI rewards now say milestone stars.

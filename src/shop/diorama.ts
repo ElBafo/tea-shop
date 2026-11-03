@@ -231,7 +231,7 @@ export class Diorama {
 
   private updateMarkers(): void {
     this.markers?.dispose();this.markers=null;
-    if(this.edit && this.selected && isPlaced(this.shop,this.selected)) this.markers=placementMarkers(this.scene,this.selected,this.shop);
+    if(this.edit && this.drag?.kind === "item" && this.drag.moved && this.selected && isPlaced(this.shop,this.selected)) this.markers=placementMarkers(this.scene,this.selected,this.shop);
   }
 
   captureImage(): string {
@@ -676,7 +676,7 @@ export class Diorama {
       return;
     }
     if (!this.drag.moved && Math.hypot(event.clientX - this.drag.lastX, event.clientY - this.drag.lastY) < 8) return;
-    this.drag.moved = true;
+    if (!this.drag.moved) { this.drag.moved = true; this.updateMarkers(); }
     const id = this.drag.id;
     if (!id) return;
     const point = this.pickSurface(id);
@@ -702,6 +702,7 @@ export class Diorama {
     if (!this.drag || event.pointerId !== this.drag.pointerId) return;
     const drag = this.drag;
     this.drag = null;
+    this.updateMarkers();
     if (drag.kind !== "item" || !drag.id || !drag.start || !drag.moved) return;
     const id = drag.id;
     const root = this.visuals.items[id];

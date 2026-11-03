@@ -83,7 +83,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       <button id="upgrade-notice" class="upgrade-notice hidden" type="button"></button>
       <div class="shop-dock">
         <section id="decorate-panel" class="hidden" aria-label="Decorations">
-        <button id="tray-toggle" class="tray-toggle" type="button" aria-expanded="true" aria-controls="editor-body">More room <span aria-hidden="true">⌄</span></button>
+        <div class="editor-nav"><button id="editor-back" class="collection-back hidden" data-act="browse" type="button">← Browse</button><button id="tray-toggle" class="tray-toggle" type="button" aria-expanded="true" aria-controls="editor-body">Hide panel <span aria-hidden="true">⌄</span></button></div>
         <div id="editor-body">
         <div class="catalog-tabs" role="group" aria-label="Decoration collection">
           <button data-filter="all" type="button">Decorations</button>
@@ -177,7 +177,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector(".shop-room")?.classList.toggle("tray-collapsed", edit && trayCollapsed);
     const tray = root.querySelector<HTMLButtonElement>("#tray-toggle")!;
     tray.setAttribute("aria-expanded", String(!trayCollapsed));
-    tray.innerHTML = trayCollapsed ? 'Show decorations <span aria-hidden="true">⌃</span>' : 'More room <span aria-hidden="true">⌄</span>';
+    tray.innerHTML = trayCollapsed ? 'Show panel <span aria-hidden="true">⌃</span>' : 'Hide panel <span aria-hidden="true">⌄</span>';
     root.querySelector<HTMLElement>("#editor-body")!.inert = trayCollapsed;
     updateThemeToggle(root.querySelector("#theme-toggle"), night);
     root.querySelector(".settings-menu")?.classList.toggle("hidden", edit);
@@ -217,6 +217,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     if (!edit) root.querySelector("#placement-status")?.classList.add("hidden");
 
     root.querySelector('.shop-room')?.classList.toggle('has-selection',Boolean(focus));
+    root.querySelector('#editor-back')?.classList.toggle('hidden',!focus);
     const rail = root.querySelector("#upgrade-rail");
     root.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(button => {
       button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
@@ -236,17 +237,17 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     if (rail && !collection.length) rail.innerHTML = `<p class="editor-empty">${filter === "owned" ? "Your collection starts here. Explore Decorations to try something for your shop." : "You have every decoration in this collection. Arrange them in My decorations."}</p>`;
     const detail = root.querySelector("#upgrade-detail");
     detail?.classList.toggle("hidden", !focus);
-    if (detail) detail.innerHTML = focus ? `<button class="collection-back" data-act="browse" type="button">← Back to decorations</button>${draft ? taskDetail(progress, focus, draft) : isOwned(progress.shop, focus) ? editDetail(progress.shop, focus) : taskDetail(progress, focus, null)}` : "";
+    if (detail) detail.innerHTML = focus ? `${draft ? taskDetail(progress, focus, draft) : isOwned(progress.shop, focus) ? editDetail(progress.shop, focus) : taskDetail(progress, focus, null)}` : "";
 
     if (detail && focus) {
-      const back = detail.querySelector(".collection-back")!;
+      const title = detail.querySelector(".detail-copy")!;
       const purchase = detail.querySelector(".purchase-row, .inventory-actions");
       const scroll = document.createElement("div");
       scroll.className = "detail-scroll";
       for (const child of Array.from(detail.childNodes)) {
-        if (child !== purchase && child !== back) scroll.append(child);
+        if (child !== purchase && child !== title) scroll.append(child);
       }
-      back.after(scroll);
+      title.after(scroll);
     }
 
     const bakery = root.querySelector<HTMLButtonElement>("#bakery");
@@ -328,6 +329,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       host.toggleMute();
       paintChrome();
     });
+    root.querySelector("#editor-back")?.addEventListener("click",()=>browse(filter));
     root.querySelector("#tray-toggle")?.addEventListener("click", () => {
       trayCollapsed = !trayCollapsed;
       paintChrome();
@@ -427,6 +429,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   };
 
   const browse = (tab: "all" | "owned") => {
+    trayCollapsed = false;
     clearPreview();
     filter = tab;
     focus = null;
@@ -576,7 +579,7 @@ function editDetail(shop: ShopState, selected: UpgradeId | null): string {
     <p class="section-label">Style · Free to change</p>
     <div class="style-row">${styles}</div>
     <div class="inventory-actions">${rotate}${def.movable ? `<button class="style-chip" data-act="${stored ? "place" : "store"}" type="button" ${stored && !canRestore ? "disabled" : ""}>${stored ? "Place in shop" : "Store item"}</button>` : ""}</div>
-    <p class="editor-saved" role="status">${stored ? canRestore ? "Stored · Place it again for free" : "Stored · Make room to place it again" : "Drag to a green marker · Saved automatically"}</p>`;
+    <p class="editor-saved" role="status">${stored ? canRestore ? "Stored · Place it again for free" : "Stored · Make room to place it again" : "Drag in the room to move · Saved automatically"}</p>`;
 }
 
 function finaleModal(): string {

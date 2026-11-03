@@ -38,3 +38,9 @@ The next review adds a room-first editor with compact variant illustrations and 
 
 
 Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 154-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle scoring itself is unchanged.
+
+
+Collections should be compatible across styles: coherent scale, materials and complementary colours support personal taste without mandatory matching sets. Completing the future Bakery (second venue/story chapter) should unlock star-bought special pieces usable in the original tea shop. This is separate from tea-shop puzzle-group milestones. Sorting remains the core; long-term retention needs player evidence before adding another game mode.
+
+
+Immediate priority is a strong single-shop experience for player testing. Monetisation is deferred to a later roadmap phase; no business model is selected. Earned-star progression is separate from future real-money decisions.
