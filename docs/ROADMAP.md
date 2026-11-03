@@ -326,3 +326,16 @@ Audio is on by default for new players (the existing `muted: false` default); re
 Implement on `preview/top-bar-icons`, mirror to hosted preview, and await review before merging.
 
 Direct-control validation: production build, all 38 puzzles, inventory/full-jar checks, and audio unlock/interruption/mute checks pass. Browser checks verify new-player audio-on default, persisted mute and night preferences, correct visible icon states, direct audio on all game screens, sound toggling during a pour without rebuilding jars, 44px touch targets at 320px width, and reduced-motion transitions. Phone/day/night/desktop screenshots reviewed. Await phone preview acceptance before merge.
+
+
+## Decopu identity, start screen, and first-time guidance — approved scope
+
+The owner renamed the game **Decopu** and requested a splash/loading screen with an explicit **Start** button, plus a guided introduction for new users. Work belongs on `preview/decopu-onboarding` and must be reviewed in preview before merging.
+
+Use Decopu in the game title, splash, browser metadata, and installed-app names. Retain existing URL paths, service-worker scopes, save keys, earned stars, purchases, and layouts so current players keep their progress and shortcuts. Tea Shop remains the first venue; the overall game is Decopu. Existing iPhone shortcut labels may require re-adding the shortcut to reflect the renamed app.
+
+The splash appears immediately while assets load. Start becomes available when the first screen is ready; do not add artificial waiting or fake percentage progress. Starting uses the user's gesture to unlock mobile audio, respecting the saved mute choice. Include a useful loading failure/retry state and reduced-motion support.
+
+For new players, introduce the loop through playing: sort the first jars, fill every nonempty jar completely with one kind, earn stars, then preview and buy a decoration. Keep guidance short, skippable, and separate from puzzle rules. Preserve undo, scoring, styles-before-buying, and normal decorating. Save onboarding progress separately; do not force the introduction on existing players or repeat completed guidance.
+
+Status: scope recorded and branding metadata prepared on the feature branch. The execution workspace is offline; splash/guide implementation, browser validation, and preview publication remain pending. Main is unchanged.

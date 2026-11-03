@@ -7,14 +7,15 @@ export async function buildOffline(outDir, base) {
   const rootManifest = JSON.parse(await readFile(join(outDir, 'manifest.webmanifest'), 'utf8'));
   rootManifest.start_url = rootManifest.scope = base;
   for (const icon of rootManifest.icons) icon.src = base + 'icons/' + icon.src.split('/').pop();
-  if (base === '/tea-shop/preview/') rootManifest.name = 'Tea Shop Preview';
+  rootManifest.name = base === '/tea-shop/preview/' ? 'Decopu Preview' : 'Decopu';
+  rootManifest.short_name = rootManifest.name;
   await writeFile(join(outDir, 'manifest.webmanifest'), JSON.stringify(rootManifest));
   const html = await readFile(join(outDir, 'index.html'), 'utf8');
   if (base === '/tea-shop/preview/') {
     await mkdir(join(outDir, 'offline'), {recursive:true});
     const manifest = JSON.parse(await readFile(join(outDir, 'manifest.webmanifest'), 'utf8'));
-    manifest.name = 'Tea Shop Offline Preview';
-    manifest.short_name = 'Tea Preview';
+    manifest.name = 'Decopu Offline Preview';
+    manifest.short_name = 'Decopu Preview';
     manifest.start_url = manifest.scope = base + 'offline/';
     await writeFile(join(outDir, 'offline/manifest.webmanifest'), JSON.stringify(manifest));
     await writeFile(join(outDir, 'offline/index.html'), html.replace(/href="[^"]*manifest\.webmanifest"/, 'href="./manifest.webmanifest"'));
