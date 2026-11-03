@@ -339,3 +339,20 @@ The splash appears immediately while assets load. Start becomes available when t
 For new players, introduce the loop through playing: sort the first jars, fill every nonempty jar completely with one kind, earn stars, then preview and buy a decoration. Keep guidance short, skippable, and separate from puzzle rules. Preserve undo, scoring, styles-before-buying, and normal decorating. Save onboarding progress separately; do not force the introduction on existing players or repeat completed guidance.
 
 Status: scope recorded and branding metadata prepared on the feature branch. The execution workspace is offline; splash/guide implementation, browser validation, and preview publication remain pending. Main is unchanged.
+
+
+## Collection choice and aspirational decorations — product direction
+
+The owner wants showcasing to express meaningful differences between players: a wider selection of items and styles, expensive decorations that require saving across levels, and later rooms/content that let players return to personalize their original tea shop with less-common pieces.
+
+Current economy: 38 puzzles provide 114 stars and all purchases cost 112. Several items already cost more than one level's maximum three-star reward, but the full catalogue is deliberately affordable. Future optional collection expansion should offer more choices than a player can afford at once, with enough rewards for core progression. This revises the earlier blanket goal of funding every optional purchase immediately; it does not change the live economy or revoke existing purchases.
+
+Proposed design for balancing, not yet approved prices or implementation:
+- Accessible essentials, more distinctive optional designs, and aspirational statement pieces. Illustrative future price bands: 2–6, 8–15, and 20–35 stars respectively; calculate actual prices against the level/room budget before shipping.
+- Add separately star-priced new premium variants where their appearance merits a separate purchase. Preserve all existing included/free style options for current owners; do not charge again for styles already granted.
+- Some special items require both a progress/mastery milestone and stars, making their acquisition a visible accomplishment. Keep them optional and preserve the game's no-timer/no-failure character.
+- Later rooms introduce puzzles and new designs usable when revisiting earlier shops. Exact inventory sharing/movement rules between rooms remain undecided.
+- Keep room progression achievable regardless of optional spending. Recommended approach: room eligibility based on lifetime stars earned, consistent with the earlier higher minimum-star unlock plan. The owner's suggestion of buying rooms with spendable stars needs an explicit budget/access design before implementation; do not silently choose a room fee or let a decoration purchase permanently block the only source of new stars.
+- Add new earnable content with progression. Do not promise repeat-star farming, random drops, paid currency, or artificial player-count exclusivity; those are not agreed mechanics.
+
+Next step: model the first two rooms, essential costs, optional catalogue, and reward budget before implementing this economy. The Decopu rename, Start splash, and first-time guide remain the active unfinished milestone; this discussion adds roadmap direction rather than replacing that work.
