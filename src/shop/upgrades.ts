@@ -203,6 +203,24 @@ export const UPGRADES: UpgradeDef[] = [
       { name: "Citrus", blurb: "A round blue pot and a tree full of golden fruit." },
     ],
   },
+  {
+    id: "terrarium", title: "Glass garden", moveName: "glass garden", cost: 10, optional: true,
+    unlockAfter: 8, collection: "Conservatory", blurb: "A miniature garden in a brass-framed glasshouse.",
+    movable: true, surface: "floor", layer: "furn", size: {w:1,d:1}, defaultPlace:{x:5,z:4,rot:0},
+    variants:[{name:"Fern house",blurb:"Brass, forest green and sculptural fern leaves."},{name:"Desert glass",blurb:"Ivory framing and a tiny cactus garden."},{name:"Rose garden",blurb:"Blush framing with generous pink blossoms."}],
+  },
+  {
+    id: "botanical", title: "Botanical triptych", moveName: "botanical triptych", cost: 14, optional: true,
+    unlockAfter: 16, collection: "Conservatory", blurb: "Three sculptural botanical panels, one statement.",
+    movable: true, surface: "wall", layer: "wall", size: {w:2,d:1}, defaultPlace:{x:3,z:0,rot:1,wall:"left"},
+    variants:[{name:"Ginkgo",blurb:"Golden fans on deep forest panels."},{name:"Magnolia",blurb:"Cream petals on midnight blue."},{name:"Wildflower",blurb:"Rose blooms on warm ivory."}],
+  },
+  {
+    id: "cabinet", title: "Collector’s cabinet", moveName: "collector’s cabinet", cost: 18, optional: true,
+    unlockAfter: 24, collection: "Conservatory", blurb: "An arched cabinet of precious tea ware.",
+    movable: true, surface: "floor", layer: "furn", size: {w:2,d:1}, defaultPlace:{x:3,z:4,rot:0},
+    variants:[{name:"Jade atelier",blurb:"Deep jade, brass edging and ivory porcelain."},{name:"Blue porcelain",blurb:"Midnight cabinetry with pale blue tea ware."},{name:"Rose salon",blurb:"Rose cabinetry, cream shelves and golden handles."}],
+  },
 ];
 
 export const REPEATABLE: readonly RepeatableKind[] = ["plant", "lamp", "table", "art", "basket"];
@@ -260,4 +278,8 @@ export function spentStars(shop: ShopState): number {
 
 export function bakeryUnlocked(shop: ShopState): boolean {
   return shopComplete(shop);
+}
+
+export function collectionUnlocked(id: UpgradeId, stars: number[]): boolean {
+  return stars.filter(value => value > 0).length >= (UPGRADE_BY_ID[id].unlockAfter ?? 0);
 }

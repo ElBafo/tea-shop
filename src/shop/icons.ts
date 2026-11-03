@@ -3,6 +3,9 @@ import type { UpgradeId, UpgradeKind } from "../game/types";
 
 // Small collection illustrations share one visual language, including in night mode.
 const shapes: Record<UpgradeKind, string> = {
+  terrarium: '<path d="M12 26l20-17 20 17v29H12zM12 26h40M32 9v46M20 47V34m0 5-5-5m5 8 5-6M41 47V32"/>',
+  botanical: '<path d="M5 15h16v35H5zM24 9h16v47H24zM43 15h16v35H43zM13 42V25m19 22V20m19 22V25"/><path d="m8 29 5 6 5-6m9-3 5 7 5-7m9 3 5 6 5-6"/>',
+  cabinet: '<path d="M12 55V25a20 20 0 0 1 40 0v30zM17 29h30M17 42h30M20 55v4m24-4v4M23 29v-8h7v8m7 13V32h7v10"/>',
   counter: '<path d="M8 21h48v7H8zM12 28v25h40V28M18 34h12v13H18zM35 34h12v13H35z"/><path d="M23 21v-9h12v9M35 14h5v5h-5"/>',
   sign: '<path d="M18 15V9m28 6V9M9 15h46v33H9z"/><text x="32" y="36" text-anchor="middle" font-size="15" fill="currentColor" stroke="none">TEA</text>',
   paint: '<path d="M13 10h33v16H13zM46 17h7v16H32v9m-4 0h8v14h-8z"/>',
@@ -27,6 +30,7 @@ export function decorationIcon(id: UpgradeId): string {
 export function styleThumbnail(id: UpgradeId, variant: number): string {
   const kind = kindOf(id);
   const palettes: Record<UpgradeKind, string[]> = {
+    terrarium:['#bda061','#eee3c9','#dba7aa'], botanical:['#c4a35b','#e9e1cc','#d89ea6'], cabinet:['#3f7164','#3a5771','#b77d89'],
     counter:['#ba8959','#e5e0d4','#d8aaa5'], sign:['#947052','#d8aaa5','#a9bc96'],
     paint:['#ead8bd','#acbba1','#d6aaa7'], shelves:['#bd925d','#eee9db','#816047'],
     plant:['#b27858','#d5c4a7','#b7c9a1'], rug:['#ba8868','#d6aaa7','#a8b99b'],

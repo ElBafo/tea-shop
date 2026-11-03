@@ -31,7 +31,7 @@ const seed={muted:true,bestStars:Array(20).fill(3),bestMoves:Array(20).fill(0),s
 await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1500));
 await evaluate(`(async()=>{const url=performance.getEntriesByType('resource').find(e=>e.name.includes('@babylonjs_core_Engines_engine.js')).name;const {Engine}=await import(url);window.__qaScene=Engine.Instances[0].scenes[0];await window.__qaScene.whenReadyAsync();})()`);
-const click=selector=>evaluate(`(()=>{const button=document.querySelector(${JSON.stringify(selector)});if(!button||button.getClientRects().length===0)throw Error('Button not visible: '+${JSON.stringify(selector)});button.click();})()`);
+const click=async selector=>{if(selector.startsWith('[data-filter') && await evaluate(`Boolean(document.querySelector('.has-selection'))`))await click('[data-act="browse"]');return evaluate(`(()=>{const button=document.querySelector(${JSON.stringify(selector)});if(!button||button.getClientRects().length===0)throw Error('Button not visible: '+${JSON.stringify(selector)});button.click();})()`);};
 const saved=()=>evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop`);
 const drag=async(name,y,dx,dz)=>{
  const points=await evaluate(`(()=>{const scene=window.__qaScene,e=scene.getEngine(),v=scene.getTransformNodeByName('${name}').position.clone();const rect=document.querySelector('canvas').getBoundingClientRect();const project=(x,z)=>{const p=v.constructor.Project(new v.constructor(x,${y},z),scene.getTransformMatrix().constructor.Identity(),scene.getTransformMatrix(),scene.activeCamera.viewport.toGlobal(e.getRenderWidth(),e.getRenderHeight()));return {x:rect.x+p.x*rect.width/e.getRenderWidth(),y:rect.y+p.y*rect.height/e.getRenderHeight()};};return {start:project(v.x,v.z),end:project(v.x+${dx},v.z+${dz})};})()`);
@@ -46,7 +46,7 @@ assert(!(await saved()).owned.includes('lamp:2'),'Preview saved ownership');
 await click('[data-act="buy"]');await new Promise(r=>setTimeout(r,1700));
 let shop=await saved();assert(shop.owned.includes('lamp:2')&&shop.style['lamp:2']===2,'Second lamp purchase');
 assert(shop.style.lamp===0,'Original lamp style changed');
-assert(await evaluate(`document.querySelector('#shop-stars').textContent.trim().endsWith('50')`),'Second copy must cost 4 stars');
+assert(await evaluate(`document.querySelector('#shop-stars').textContent.trim().endsWith('60')`),'Second copy must cost 4 stars');
 const first=JSON.stringify(shop.place.lamp);
 await drag('lamp:2',1.28,0,2);shop=await saved();
 assert(JSON.stringify(shop.place.lamp)===first,'Moving copy moved original');
@@ -63,7 +63,7 @@ await fs.writeFile('work/inventory-stored-phone.png',Buffer.from((await send('Pa
 await click('[data-act="place"]');
 assert(!(await saved()).stored.includes('lamp:2'),'Place failed');
 assert((await saved()).style['lamp:2']===2,'Restore lost style');
-assert(await evaluate(`document.querySelector('#shop-stars').textContent.trim().endsWith('50')`),'Store/place changed balance');
+assert(await evaluate(`document.querySelector('#shop-stars').textContent.trim().endsWith('60')`),'Store/place changed balance');
 const progress=await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1'))`);
 assert(progress.bestStars.length===38&&progress.bestStars.slice(0,20).every(s=>s===3)&&progress.bestStars.slice(20).every(s=>s===0),'Legacy score migration');
 await click('[data-act="browse"]');

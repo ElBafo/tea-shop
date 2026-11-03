@@ -1,6 +1,7 @@
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import type { Texture } from "@babylonjs/core/Materials/Textures/texture";
 import { Color3 } from "@babylonjs/core/Maths/math.color";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 import { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
@@ -16,7 +17,7 @@ import {
   signTexture,
   woodTexture,
 } from "./textures";
-import { floorCenter, wallCenter } from "./grid";
+import { canPlace, floorCenter, wallCenter } from "./grid";
 import { UPGRADE_BY_ID, placeOf, styleOf, kindOf } from "./upgrades";
 
 export interface ShopVisuals {
@@ -227,6 +228,7 @@ function buildItemMeshes(scene: Scene, id: UpgradeId, shop: ShopState): Transfor
     return root;
   }
   const style = styleOf(shop, id);
+  if (id === "terrarium" || id === "botanical" || id === "cabinet") return buildConservatory(scene, shop, id, style);
   if (id === "counter") return buildCounter(scene, shop, style);
   if (id === "sign") return buildSign(scene, shop, style);
   if (id === "shelves") return buildShelves(scene, shop, style);
@@ -489,6 +491,11 @@ function buildCustomerMeshes(scene: Scene): TransformNode {
   const eyes = paint(scene, "eyes", C.hair);
   sphere(scene, "eye-l", 0.018, root, eyes, -0.055, 1.09, 0.165);
   sphere(scene, "eye-r", 0.018, root, eyes, 0.055, 1.09, 0.165);
+  const blush=paint(scene,"cheeks","#d99785");
+  for(const x of [-.105,.105]) sphere(scene,"cheek",.028,root,blush,x,1.035,.16).scaling.z=.35;
+  box(scene,"apron-pocket",.12,.1,.012,root,coat,0,.62,.195);
+  for(const x of [-.22,.22]) sphere(scene,"hand",.065,root,skin,x,.49,.07);
+  sphere(scene,"hair-bun",.09,root,hair,0,1.25,-.12);
   root.scaling.setAll(1.22);
   return root;
 }
@@ -715,4 +722,83 @@ function addSteam(scene: Scene, root: TransformNode, x: number, y: number, z: nu
     wisp.receiveShadows = false;
     wisp.metadata = {steam:{x,y,phase:i/3}};
   }
+}
+
+function buildConservatory(scene: Scene, shop: ShopState, id: "terrarium" | "botanical" | "cabinet", style: number): TransformNode {
+  const root = new TransformNode(id, scene);
+  const brass = paint(scene, "conservatory-brass", "#c6a464", {spec:.35});
+  const frame = paint(scene, "conservatory-frame", ["#365e4e", "#334f6b", "#b77984"][style]);
+  const china = paint(scene, "conservatory-china", ["#eee5c9", "#aacbd5", "#f4d4ca"][style]);
+  const leaves = paint(scene, "conservatory-leaf", ["#73984b", "#709585", "#bc7188"][style]);
+  if (id === "terrarium") {
+    box(scene,"garden-plinth",.85,.15,.8,root,frame,0,.1,0);
+    box(scene,"garden-earth",.72,.08,.68,root,paint(scene,"earth","#735443"),0,.21,0);
+    for(const x of [-.4,.4]) for(const z of [-.35,.35]) {
+      box(scene,"glasshouse-post",.035,.78,.035,root,brass,x,.6,z);
+      const roof=box(scene,"roof-rib",.035,.6,.035,root,brass,x/2,1.12,z); roof.rotation.z=x>0?.7:-.7;
+    }
+    for(const y of [.24,.98]) for(const z of [-.35,.35]) box(scene,"glasshouse-rail",.85,.035,.035,root,brass,0,y,z);
+    const glass=paint(scene,"garden-glass","#c3d9ce",{alpha:.13,spec:.4});
+    for(const x of [-.4,.4]) box(scene,"glass-pane",.012,.7,.68,root,glass,x,.61,0);
+    for(const [i,x] of [-.22,0,.22].entries()) {
+      cyl(scene,"plant-stem",.35+i*.08,.025,root,leaves,x,.42,0);
+      for(const side of [-1,1]) {
+        const leaf=sphere(scene,"garden-leaf",style===1?.1:.14,root,leaves,x+side*.08,.5+i*.07,side*.07);
+        leaf.scaling.set(style===1?.8:1.1,style===1?1.9:.45,.65);leaf.rotation.z=side*.5;
+      }
+      if(style===2) sphere(scene,"garden-blossom",.11,root,china,x,.7+i*.04,0);
+    }
+  } else if (id === "botanical") {
+    for(const [i,x] of [-.62,0,.62].entries()) {
+      const h=i===1?1.05:.83;
+      box(scene,"triptych-frame",.56,h,.08,root,brass,x,0,0);
+      box(scene,"triptych-panel",.48,h-.08,.025,root,style===2?china:frame,x,0,.055);
+      box(scene,"botanical-stem",.025,.52,.025,root,brass,x,-.06,.09);
+      for(const side of [-1,1]) {
+        const leaf=sphere(scene,"sculpted-leaf",.13,root,style===0?brass:china,x+side*.085,.04,.12);
+        leaf.scaling.set(1,style===1?1.55:.65,.2);leaf.rotation.z=side*.6;
+      }
+      if(style===2) sphere(scene,"sculpted-flower",.1,root,leaves,x,.22,.13).scaling.z=.25;
+    }
+  } else {
+    box(scene,"cabinet-back",1.65,1.55,.13,root,frame,0,.95,-.32);
+    for(const x of [-.78,.78]) box(scene,"cabinet-pillar",.1,1.65,.7,root,frame,x,.9,0);
+    // Smooth open arches keep the crown readable without striped box segments.
+    for(const z of [-.32,.32]) {
+      const path=Array.from({length:25},(_,i)=>{const a=i*Math.PI/24;return new Vector3(Math.cos(a)*.76,1.7+Math.sin(a)*.35,z);});
+      const arch=MeshBuilder.CreateTube('cabinet-arch',{path,radius:.055,tessellation:8},scene);arch.parent=root;arch.material=brass;
+    }
+    for(const y of [.2,.75,1.3]) {
+      box(scene,"cabinet-shelf",1.65,.09,.72,root,china,0,y,0);
+      box(scene,"shelf-gold",1.65,.035,.025,root,brass,0,y,.37);
+    }
+    for(const y of [.36,.91,1.46]) for(const x of [-.45,0,.45]) {
+      cyl(scene,"porcelain-foot",.035,.12,root,brass,x,y-.07,.02);
+      const vase=sphere(scene,"porcelain-vase",.15,root,china,x,y+.04,.02);vase.scaling.y=1.35;
+      cyl(scene,"porcelain-neck",.09,.065,root,china,x,y+.24,.02);
+    }
+    for(const x of [-.66,.66]) cyl(scene,"cabinet-foot",.18,.06,root,brass,x,.09,0);
+  }
+  if(id === "botanical") placeWallItem(root,id,shop); else placeFloorItem(root,id,shop);
+  tag(root,id);return root;
+}
+
+export function placementMarkers(scene: Scene, id: UpgradeId, shop: ShopState): TransformNode {
+  return ownedVisual(scene,()=>{
+    const root=new TransformNode("placement-markers",scene);
+    const mat=paint(scene,"placement-marker","#9cc985",{emit:"#9cc985"});
+    const def=UPGRADE_BY_ID[id], rot=placeOf(shop,id).rot;
+    const add=(x:number,y:number,z:number,wall=false)=>{
+      const dot=box(scene,"legal-position",.12,wall?.12:.015,wall?.025:.12,root,mat,x,y,z);
+      dot.isPickable=false;dot.receiveShadows=false;return dot;
+    };
+    if(def.surface==='wall') for(const wall of ['back','left'] as const) for(let x=0;x<6;x++) {
+      const p={x,z:0,rot:wall==='left'?1:0,wall};
+      if(canPlace(id,p,shop)) {const c=wallCenter(p,def.size.w);const dot=add(c.x,id==='shelves'?1.85:c.y,c.z,true);if(wall==='left')dot.rotation.y=Math.PI/2;}
+    }
+    if(def.surface==='floor') for(let x=0;x<6;x++) for(let z=0;z<6;z++) {
+      const p={x,z,rot};if(canPlace(id,p,shop)){const c=floorCenter(def.size,p);add(c.x,.025,c.z);}
+    }
+    return root;
+  });
 }

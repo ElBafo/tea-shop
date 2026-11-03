@@ -20,7 +20,7 @@ From level 16, a few shelves use taller jars that can hold five treats.
 
 Each shelf has a par. Finish at or under par for three stars, a little over for two, and any finish for one. Your best stars are saved on this device.
 
-Spend those stars on the home screen to repair and decorate the tea shop: pick a style, then later move plants, rugs, lamps, and tables. When the room is finished, the bakery unlocks.
+Spend those stars on the home screen to repair and decorate the tea shop: pick a style, then later move plants, rugs, lamps, and tables. Finishing the core room celebrates your tea shop and offers a showcase. The Bakery is a clearly labelled future room.
 
 ## Develop
 
@@ -42,9 +42,9 @@ The GitHub Actions workflow on `main` verifies the levels, builds the site, and 
 
 The shop includes day/night lighting, touch editing, style previews, and image sharing. The Bakery remains a coming-soon destination.
 
-The inventory adds free storage and restoration for owned furniture, plus a paid second plant, lamp, table, print, and basket. Each copy has its own style and position. The complete collection costs 112 of the 114 stars available across 38 puzzles.
+The inventory adds free storage and restoration for owned furniture, plus a paid second plant, lamp, table, print, and basket. Each copy has its own style and position. The original collection still costs 112 stars. Puzzles award 114 stars, with 18 more from chapter milestones. The optional Conservatory collection adds 42 stars of choices; collecting everything is deliberately beyond the current budget.
 
-The Cozy corners collection adds a bench, tea trolley, and tall planter, each with three distinct styles. Eight more puzzles bring the total to 38 and the reward budget to 114 stars; all purchases together cost 112.
+The earlier Cozy corners collection added a bench, tea trolley, and tall planter, each with three distinct styles. Its eight puzzles brought the total to 38 and the original catalogue to 112 stars.
 
 The game also includes bounded pinch/wheel zoom and − / Fit / + controls. Daytime lighting is softer, with subtle teapot steam that respects reduced-motion preferences. Zoom changes your view without changing your saved shop.
 
@@ -52,7 +52,7 @@ The release-polish preview keeps resources stable during repeated editing, reuse
 
 The jar-polish review adds animated transfers, completed-jar checks, and a short star/confetti celebration. Reduced-motion preferences suppress movement; rules and rewards stay unchanged.
 
-Production builds precache the full game for offline reopening after an online visit. Available updates ask for Update or Later outside active puzzles. This preserves local scores and purchases, but does not add cloud backup or save an unfinished puzzle.
+Production builds precache the full game for offline reopening after an online visit. Available updates ask for Update or Later outside active puzzles. This preserves local scores and purchases, with manual backup files and unfinished-puzzle resuming. There is no account or automatic cloud sync.
 
 The ordinary [phone preview](https://elbafo.github.io/tea-shop/preview/) stays uncached. For installed/offline review, open the separate [offline rehearsal](https://elbafo.github.io/tea-shop/preview/offline/) online and wait for “Ready”, then add it to the Home Screen or reopen in airplane mode. It uses preview progress and never replaces the main installed game's save.
 
@@ -69,3 +69,16 @@ CDP_PORT=9225 node scripts/verify-jar-motion.mjs
 ```
 
 The Decopu start screen prepares the shop before enabling **Start**. New players can follow a skippable first-puzzle and decorating guide; existing saves bypass the introduction. Review the full first-time flow at [Tour preview](https://elbafo.github.io/tea-shop/preview/?tour=1), which uses temporary progress and never overwrites your preview shop.
+
+
+The depth preview groups 38 puzzles into five chapters. Completing 8, 16 and 24 puzzles unlocks the Glass garden (10 stars), Botanical triptych (14) and Collector’s cabinet (18). Each has three included styles. Preview before buying; all eight core shop pieces still total 26 stars. New optional pieces are not required for completion.
+
+Use **More → Progress & backups** to download a versioned JSON file to Files/iCloud Drive, or choose a backup to restore. Import shows a summary and requires confirmation before replacing progress; it offers a download of the current save first. Keep backups outside browser storage. A previous-save recovery slot helps with a damaged primary save, but clearing browser data removes both slots. Resume unfinished puzzles from the shop or puzzle list, including their undo history.
+
+```bash
+node --import tsx scripts/verify-backup.ts
+CDP_PORT=9225 node scripts/verify-depth.mjs
+```
+
+
+Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 154-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle scoring itself is unchanged.

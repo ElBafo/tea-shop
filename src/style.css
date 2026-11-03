@@ -1333,3 +1333,61 @@ body:has(.shop-room.is-night) {
   font-size: 12px;
   pointer-events: none;
 }
+
+/* Let arranging take priority over the catalogue on a phone. */
+.decorating:not(.has-guide) .shop-stage canvas { height: min(49dvh, 440px); }
+.decorating.has-selection .detail-copy .detail-note { display: none; }
+.decorating.has-selection .detail-copy strong { font-size: 15px; }
+.decorating.has-selection .collection-back { padding: 4px 0; margin-bottom: 3px; }
+.decorating.has-selection .style-row { gap: 6px; margin: 5px 0; }
+.decorating.has-selection .style-chip { padding: 7px 8px; font-size: 11px; }
+.decorating.has-selection .style-chip svg { height: 42px; }
+.decorating.has-selection .section-label { margin: 5px 0; font-size: 10px; }
+.decorating.has-selection .editor-saved { font-size: 10px; margin: 5px 0; }
+.decorating .upgrade-chip { padding: 8px; min-height: 102px; }
+.decorating .upgrade-chip .deco-icon svg { width: 66px; height: 54px; }
+.decorating .upgrade-chip strong { font-size: 12px; }
+.decorating .upgrade-chip > span:last-child { font-size: 10px; }
+.journey-goal { font-size: 12px; line-height: 1.5; color: var(--muted, #806c5c); margin: 12px 5px; }
+.is-night .journey-goal { color: #c5d2c9; }
+.chapter-list { overflow: auto; min-height: 0; padding-bottom: 12px; }
+.puzzle-chapter { background: #fff8eea8; border-radius: 18px; margin: 0 0 9px; }
+.puzzle-chapter summary { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px; }
+.puzzle-chapter summary strong { font-size: 14px; }
+.puzzle-chapter summary small { display: block; font-size: 11px; line-height: 1.5; margin-top: 5px; }
+.puzzle-chapter summary > span:last-child { font-size: 12px; white-space: nowrap; }
+.puzzle-chapter[open] summary { border-bottom: 1px solid #a78a6222; }
+.puzzle-chapter .level-grid { overflow: visible; max-height: none; padding: 9px; }
+.resume-card { width: 100%; text-align: left; padding: 12px 15px; margin-bottom: 8px; background: #e1ebd3; border: 1px solid #9cac83; border-radius: 16px; color: #3f543b; }
+.resume-card small { display: block; margin-top: 4px; font-size: 11px; font-weight: normal; }
+.milestone-reward { background: #e4edd6; color: #3f543b; padding: 12px; border-radius: 13px; font-size: 13px; line-height: 1.5; }
+.backup-dialog { width: min(420px, calc(100vw - 32px)); max-height: 85dvh; overflow: auto; border: none; border-radius: 22px; padding: 22px; color: #614739; background: #fff8ee; box-shadow: 0 12px 60px #0004; }
+.backup-dialog::backdrop { background: #251f1999; }
+.backup-dialog p { font-size: 13px; line-height: 1.55; }
+.backup-close { float: right; }
+.backup-dialog > button, .backup-dialog section button { margin: 6px 0; width: 100%; }
+.backup-picker { display: block; margin-top: 20px; font-size: 13px; font-weight: bold; }
+.backup-picker input { display: block; width: 100%; margin-top: 8px; font-size: 12px; }
+.save-warning { position: fixed; bottom: 8px; left: 8px; right: 8px; z-index: 1000; padding: 12px; border-radius: 12px; background: #fff2ca; color: #573e28; font-size: 12px; }
+.save-warning button { padding: 6px; font-size: 12px; }
+@media (max-height: 560px) and (orientation: landscape) {
+ .decorating:not(.has-guide) .shop-stage canvas { height: 0; }
+ .decorating.has-selection .style-chip svg { height: 32px; }
+}
+@media (min-width: 900px) {
+ .decorating:not(.has-guide) .shop-stage canvas { height: 0; }
+}
+.decorating.has-selection .style-row .style-chip { min-height: 72px; }
+.decorating.has-selection .detail-scroll { gap: 6px; }
+.chapter-list { flex: 1; }
+.decorating.tray-collapsed .shop-stage canvas { height: 0; }
+.decorating.has-selection .catalog-tabs { display: none; }
+.backup-dialog button { min-height: 44px; border: none; border-radius: 12px; padding: 10px 14px; background: #e1ebd3; color: #3f543b; font: inherit; font-size: 13px; cursor: pointer; }
+.backup-dialog .backup-close { width: 44px; background: #f0e5d7; }
+.backup-dialog [data-cancel] { background: #f0e5d7; }
+.backup-picker input::file-selector-button { min-height: 44px; border: none; border-radius: 10px; padding: 8px 12px; background: #f0e5d7; color: #614739; }
+.upgrade-detail > .inventory-actions { flex-shrink: 0; display: flex; gap: 8px; margin: 0; padding-top: 6px; }
+.upgrade-detail > .inventory-actions button { min-height: 44px; flex: 1; }
+@media (max-height: 780px) and (orientation: portrait) {
+ .decorating:not(.has-guide):not(.tray-collapsed) .shop-stage canvas { height: 40dvh; }
+}

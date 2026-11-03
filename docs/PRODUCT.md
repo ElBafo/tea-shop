@@ -30,3 +30,11 @@ The approved cozy release includes softer lighting, reduced-motion-aware steam, 
 ## Delivery
 
 Review changes on the hosted phone preview before merging to main. Preview and release saves are separate. Include screenshots and relevant verification in review PRs; merge only after approval. Larger shops, full-game dark appearance, cloud progress, and a playable Bakery remain roadmap work.
+
+
+## Approved depth preview
+
+The next review adds a room-first editor with compact variant illustrations and legal placement markers, five puzzle chapters, milestone-unlocked Conservatory pieces and a clear tea-shop completion/showcase action. The Bakery stays explicitly future content. All previous purchases/styles are preserved. New optional collections introduce choice beyond the current star budget; the core shop still costs 26 stars. Local progress gains manual file backup/restore, a previous-save recovery slot and unfinished-puzzle resuming with Undo. Accounts and automatic cloud sync remain future work.
+
+
+Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 154-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle scoring itself is unchanged.

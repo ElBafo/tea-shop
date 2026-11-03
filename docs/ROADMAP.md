@@ -6,7 +6,7 @@ This is the working delivery order, not a calendar promise. Priorities can chang
 
 ## Current priority
 
-Review the isolated reliability and jar-animation preview: installed/Home Screen updates, offline reopening, saved rewards, smoother transfers, and level celebrations. Preserve gameplay and shop progress; merge only after owner acceptance. Larger rooms remain backlog consideration.
+Deliver the approved depth and ownership pass in a new preview: room-first decorating, distinctive collection milestones, puzzle chapters, a satisfying tea-shop endpoint, art refinement and save recovery. PR #11 (Decopu splash, guide and wall dragging) was accepted and merged. Preserve existing gameplay, purchases and saves; merge this next pass only after owner review.
 
 ## Current baseline
 
@@ -374,3 +374,23 @@ Validation: all 38 solver/full-jar/economy checks, production and hosted-preview
 - Wall decorations dragged toward the other wall now snap to the nearest available slot on that wall, including when the finger is over the window or an occupied slot.
 - A full wall keeps the original placement and shows a brief explanation to move or store another decoration. Window clearance and paid ownership remain intact.
 - Check: real touch drags in both directions at phone and desktop sizes, window snapping, crowded-wall rejection and saved placement. Included in PR #11 for phone review before merging.
+
+## Approved depth and ownership pass — in development
+
+The owner accepted the full candid review after merging PR #11. Deliver on a separate preview branch and wait for phone review before merging.
+
+- Give the room more space while editing; use variant illustrations in the catalogue, compact contextual controls, and visible legal placement guidance.
+- Add a distinctive Conservatory collection: three separately star-priced statement pieces with puzzle-completion milestones. Preserve every existing purchase, price and included style. Optional collecting offers choices beyond the immediately available star budget; core shop completion remains affordable.
+- Group the existing 38 puzzles into chapters, show the next collection milestone and acknowledge milestones in results. Preserve rules, scoring and unlimited undo.
+- Celebrate the tea shop as a finished destination. Do not promise a playable Bakery; it remains explicitly future content.
+- Improve the new pieces' silhouettes and the shopkeeper's readability; prioritize recognizable shapes over extra particle effects.
+- Provide versioned downloadable progress backups, validated import with an explicit replacement confirmation, recovery from a damaged primary save, and persisted unfinished puzzles with undo. This is device/file recovery, not accounts or automatic cloud sync.
+- Include migration, economy, import failure, resume, real-touch editor/gameplay, phone/desktop and resource checks. Record limitations honestly.
+
+
+Implementation choices for the depth preview: Conservatory prices are 10/14/18 stars with unlocks at 8/16/24 completed puzzles, three included styles each. Total catalogue is 154 stars against 132 earnable; the original 112-star catalogue and 26-star core retain their prices. Milestones unlock the right to buy, not free furniture. The 38 puzzles are grouped into five chapters without new rules. A single unfinished puzzle is saved; starting a different puzzle replaces that slot. Backups are manually transferred files, with validated import and replacement confirmation. Cloud accounts, larger rooms and a playable Bakery remain separate future work.
+
+Depth preview validation: all 38 solvability checks, full-jar rules, legacy inventory/currency, placement, backup round-trip/rejection/recovery/storage failure, and resume replay pass. Browser checks cover real-touch purchases, all nine new styles, milestone locks, reload/Undo, import confirmation, chapter-eight unlock, completion-to-showcase, 320px/390px/landscape/desktop layouts and pinned action controls. Existing gameplay/editor checks pass. Repeated editing/marker selection returns to baseline resource counts; hidden rendering pauses and scene disposal pass. Production offline/update/reopen checks pass. Physical iPhone review is still pending; main remains on the accepted PR #11 release.
+
+
+Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 154-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle scoring itself is unchanged.

@@ -31,7 +31,7 @@ const seed={muted:true,bestStars:Array(20).fill(3),bestMoves:Array(20).fill(0),s
 await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1500));
 await evaluate(`(async()=>{const url=performance.getEntriesByType('resource').find(e=>e.name.includes('@babylonjs_core_Engines_engine.js')).name;const {Engine}=await import(url);window.__qaScene=Engine.Instances[0].scenes[0];await window.__qaScene.whenReadyAsync();})()`);
-const click=selector=>evaluate(`(()=>{const button=document.querySelector(${JSON.stringify(selector)});if(!button||button.getClientRects().length===0)throw Error('Button not visible: '+${JSON.stringify(selector)});button.click();})()`);
+const click=async selector=>{if(selector.startsWith('[data-filter') && await evaluate(`Boolean(document.querySelector('.has-selection'))`))await click('[data-act="browse"]');return evaluate(`(()=>{const button=document.querySelector(${JSON.stringify(selector)});if(!button||button.getClientRects().length===0)throw Error('Button not visible: '+${JSON.stringify(selector)});button.click();})()`);};
 const saved=()=>evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop`);
 const drag=async(name,y,dx,dz)=>{
  const points=await evaluate(`(()=>{const scene=window.__qaScene,e=scene.getEngine(),v=scene.getTransformNodeByName('${name}').position.clone();const rect=document.querySelector('canvas').getBoundingClientRect();const project=(x,z)=>{const p=v.constructor.Project(new v.constructor(x,${y},z),scene.getTransformMatrix().constructor.Identity(),scene.getTransformMatrix(),scene.activeCamera.viewport.toGlobal(e.getRenderWidth(),e.getRenderHeight()));return {x:rect.x+p.x*rect.width/e.getRenderWidth(),y:rect.y+p.y*rect.height/e.getRenderHeight()};};return {start:project(v.x,v.z),end:project(v.x+${dx},v.z+${dz})};})()`);
@@ -51,6 +51,7 @@ for(const id of ['bench','art','rug','lamp']) {
  await click('[data-filter="owned"]');await click(`[data-upgrade="${id}"]`);
  for(let i=0;i<30;i++)await click(`[data-act="style"][data-style="${(i+1)%3}"]`);
 }
+await click('[data-filter="owned"]');
 assert(JSON.stringify(await counts())===JSON.stringify(before),'Style cycles leaked resources '+JSON.stringify({before,after:await counts()}));
 assert(await evaluate(`window.__qaScene.getMeshByName('back-wall').material.uniqueId`)===wallId,'Unchanged walls rebuilt');
 assert(await evaluate(`window.__qaScene.getTransformNodeByName('lamp:2').getChildMeshes()[0].material.uniqueId`)===copyMaterial,'Restyling one copy disposed another');
@@ -69,7 +70,13 @@ for(let i=0;i<2;i++){
  await pause(1600);
  assert(await evaluate(`window.__qaScene.particleSystems.length===0`),'Completed sparkle retained');
 }
+await click('[data-filter="owned"]');
 assert(JSON.stringify(await counts())===JSON.stringify(before),'Placement effects leaked resources');
+await click('[data-upgrade="lamp"]');
+const markerBaseline=await counts();
+for(let i=0;i<30;i++){await click('[data-filter="owned"]');await click('[data-upgrade="lamp"]');}
+assert(JSON.stringify(await counts())===JSON.stringify(markerBaseline),'Repeated selection leaked placement markers');
+await click('[data-filter="owned"]');
 const saveBefore=JSON.stringify(await saved());
 await evaluate(`window.__frames=0;window.__qaScene.onBeforeRenderObservable.add(()=>window.__frames++);Object.defineProperty(document,'hidden',{configurable:true,get:()=>window.__hiddenForTest??false});`);
 for(let i=0;i<3;i++){

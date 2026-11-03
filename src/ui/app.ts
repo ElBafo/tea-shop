@@ -1,3 +1,6 @@
+import { openBackups } from './backup';
+import { readPuzzle, writePuzzle } from '../game/resume';
+import { CHAPTERS, nextGoal, milestoneAt, chapterBonus } from '../game/journey';
 import { initGuide, guideStage, setGuide, guideCard, suggestedJar } from "../game/guide";
 import { audioToggle, updateAudioToggle } from "./toggles";
 import { animatePour, pourOrigins, reducedMotion } from "./motion";
@@ -43,6 +46,8 @@ interface PlayState {
   hint: boolean;
   earnedStars: number;
   celebrating: boolean;
+  actions: [number,number][];
+  milestone: string | null;
 }
 
 const STAR = "✦";
@@ -57,6 +62,12 @@ export function mountApp(root: HTMLElement): Promise<void> {
   let shop: ShopScreen | null = null;
   let stopMotion = () => {};
 
+  window.addEventListener('decopu-save-failed',()=>{
+    if(document.querySelector('.save-warning'))return;
+    const warning=document.createElement('aside');warning.className='save-warning';warning.setAttribute('role','alert');
+    warning.innerHTML='Progress cannot be saved on this device. <button type="button">Back up now</button>';
+    warning.querySelector('button')!.onclick=()=>openBackups(progress,next=>{progress=next;play=null;leaveShop();screen='shop';render();});document.body.append(warning);
+  });
   const unlockOnGesture = () => {
     void unlockAudio();
   };
@@ -100,6 +111,8 @@ export function mountApp(root: HTMLElement): Promise<void> {
           play = null;
           render();
         },
+        resumePuzzle() { resumePuzzle(); },
+        backups() { openBackups(progress,next=>{progress=next;play=null;leaveShop();render();}); },
         toggleMute() {
           progress = setMuted(progress, !progress.muted);
           if (!progress.muted) playClick(false);
@@ -139,6 +152,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
   };
 
   const bind = (node: HTMLElement) => {
+    node.querySelector('[data-resume]')?.addEventListener('click',resumePuzzle);
     node.querySelectorAll('[data-guide-skip]').forEach(button=>button.addEventListener('click',()=>{setGuide('done');render();}));
     const dialog = node.querySelector<HTMLElement>(".result-overlay");
     if (dialog) {
@@ -189,6 +203,8 @@ export function mountApp(root: HTMLElement): Promise<void> {
       play.board = previous;
       play.selected = null;
       play.moves = Math.max(0, play.moves - 1);
+      play.actions.pop();
+      persistPuzzle();
       play.hint = false;
       render();
     });
@@ -235,9 +251,22 @@ export function mountApp(root: HTMLElement): Promise<void> {
       hint: level.id === 1,
       earnedStars: 0,
       celebrating: false,
+      actions: [],
+      milestone: null,
     };
+    persistPuzzle();
     render();
   };
+
+  function persistPuzzle() {
+    if(play && !play.won) writePuzzle({version:1,levelId:play.level.id,actions:play.actions});
+  }
+  function resumePuzzle() {
+    const resumed=readPuzzle(progress);if(!resumed)return;
+    screen='play';pendingComplete=[];landed=null;
+    play={level:LEVELS[resumed.save.levelId-1],board:resumed.board,history:resumed.history,actions:resumed.save.actions,moves:resumed.save.actions.length,selected:null,busy:false,won:false,hint:false,earnedStars:0,celebrating:false,milestone:null};
+    render();
+  }
 
   const onJar = (index: number) => {
     if (!play) return;
@@ -281,6 +310,8 @@ export function mountApp(root: HTMLElement): Promise<void> {
 
     play.history.push(snapshot);
     play.moves += 1;
+    play.actions.push([from,index]);
+    persistPuzzle();
     play.selected = null;
     play.hint = false;
     play.busy = true;
@@ -299,7 +330,12 @@ export function mountApp(root: HTMLElement): Promise<void> {
       play.won = true;
       const stars = starsForMoves(play.moves, play.level.par);
       play.earnedStars = Math.max(0, stars - progress.bestStars[play.level.id - 1]);
+      const firstWin=progress.bestStars[play.level.id-1]===0;
+      const previousBonus=chapterBonus(progress);
       progress = recordWin(progress, play.level.id - 1, stars, play.moves);
+      play.earnedStars += chapterBonus(progress)-previousBonus;
+      writePuzzle(null);
+      if(firstWin) play.milestone=milestoneAt(progress.bestStars.filter(n=>n>0).length);
       if (guideStage() === 'puzzle') setGuide('decorate');
     }
     render();
@@ -357,14 +393,22 @@ function levelsMarkup(progress: Progress): string {
       <span class="level-name">${level.name}</span>
       <span class="mini-stars" aria-hidden="true">${open ? starText(stars) : "Locked"}</span>
     </button>`;
-  }).join("");
+  });
+  const resume=readPuzzle(progress);
+  const chapters=CHAPTERS.map((chapter,i)=>{
+    const count=progress.bestStars.slice(chapter.start-1,chapter.end).filter(n=>n>0).length;
+    const current=recommended.id>=chapter.start&&recommended.id<=chapter.end;
+    return `<details class="puzzle-chapter" ${current?'open':''}><summary><span><strong>${i+1} · ${chapter.name}</strong><small>${chapter.copy}</small></span><span>${count}/${chapter.end-chapter.start+1}</span></summary><div class="level-grid">${buttons.slice(chapter.start-1,chapter.end).join('')}</div></details>`;
+  }).join('');
   return `<div class="frame levels">
     ${topBar("Puzzles", progress, "shop", true)}
+    ${resume?`<button class="resume-card" data-resume type="button">Resume ${LEVELS[resume.save.levelId-1].name}<small>${resume.save.actions.length} moves · Undo history saved</small></button>`:''}
     <button class="continue-card" data-level="${recommended.id}" type="button">
       <span><strong>${nextIndex >= 0 ? completed ? "Continue" : "Start playing" : "Play again"}</strong><small>${recommended.id} · ${recommended.name}</small></span><span aria-hidden="true">→</span>
     </button>
     <p class="collection-summary">All puzzles <span>${completed} / ${LEVELS.length} completed</span></p>
-    <div class="level-grid">${buttons}</div>
+    <p class="journey-goal">${nextGoal(progress)}</p>
+    <div class="chapter-list">${chapters}</div>
   </div>`;
 }
 
@@ -471,6 +515,7 @@ function winOverlay(play: PlayState, progress: Progress): string {
       <p class="big-stars" aria-label="${stars} of 3 stars">${starText(stars)}</p>
       <p class="result-reward">${play.earnedStars ? `+${play.earnedStars} ${STAR} for your shop` : "Best stars already collected"}</p>
       ${guideStage() === 'decorate' ? '<p class="guide-reward">These stars are yours to spend. Try Decorate shop to choose your first piece.</p>' : ''}
+      ${play.milestone?`<p class="milestone-reward">${play.milestone}</p>`:""}
       <p class="result-stats">${play.moves} moves · Best ${best}</p>
       <div class="modal-actions">
         <button class="primary-action" data-next type="button">${next ? "Next puzzle →" : "All puzzles"}</button>

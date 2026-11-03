@@ -33,13 +33,14 @@ await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSO
 await evaluate(`localStorage.setItem('tea-shop-preview-appearance-v1','day')`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 const tap=async(selector)=>{
+ if(selector.startsWith('[data-filter') && await evaluate(`Boolean(document.querySelector('.has-selection'))`)) await tap('[data-act="browse"]');
  const p=await evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});if(!el||el.disabled||el.closest('[inert]'))throw Error('Unavailable control '+${JSON.stringify(selector)});el.scrollIntoView({block:'nearest'});const r=el.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...p,id:1}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,120));
 };
 const shot=async(name)=>fs.writeFile('work/'+name+'.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
 
 await shot('refine-home-phone');
-if(!await evaluate(`document.querySelector('#shop-stars strong').textContent==='114'`))throw Error('Balance not prominent');
+if(!await evaluate(`document.querySelector('#shop-stars strong').textContent==='132'`))throw Error('Balance not prominent');
 await tap('.settings-menu summary');await shot('refine-settings-phone');
 await tap('#theme-toggle');
 if(!await evaluate(`document.querySelector('.shop-room').classList.contains('is-night')`))throw Error('Theme menu failed');
