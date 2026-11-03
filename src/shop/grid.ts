@@ -117,6 +117,18 @@ export function snapWall(worldX: number, worldZ: number, width: number): Placeme
   return { x, z: 0, rot: wall === "left" ? 1 : 0, wall };
 }
 
+// Stay on the wall under the finger, but help touch drops find a legal gap.
+export function nearestWallPlacement(id: UpgradeId, target: Placement, shop: ShopState): Placement | null {
+  const width = UPGRADE_BY_ID[id].size.w;
+  const positions = Array.from({ length: ROOM - width + 1 }, (_, x) => x)
+    .sort((a, b) => Math.abs(a - target.x) - Math.abs(b - target.x));
+  for (const x of positions) {
+    const candidate = { ...target, x };
+    if (canPlaceWall(id, candidate, shop)) return candidate;
+  }
+  return null;
+}
+
 export function floorCenter(size: { w: number; d: number }, place: Placement): { x: number; z: number } {
   const { w, d } = rotatedSize(size, place.rot);
   return {

@@ -367,3 +367,10 @@ New players can choose Show me how or Explore on my own. Guidance highlights a p
 Review the whole first-time flow at `/tea-shop/preview/?tour=1`. This preview-only tour starts with temporary empty progress and never writes scores, purchases, guide state, or appearance changes to the saved preview shop. Normal preview and main retain their established save keys and URLs. Tea Shop remains the first room within Decopu. Installed-app names and browser metadata use Decopu; iPhone shortcuts may retain a cached old label until re-added.
 
 Validation: all 38 solver/full-jar/economy checks, production and hosted-preview builds, real-touch first win/purchase, onboarding skip/completion persistence, existing-save migration, temporary tour isolation, phone/320px/landscape/desktop layouts, and offline-update/reopen checks. Physical phone review remains required before merge. Future collection scarcity and room-economy changes remain roadmap proposals, outside this release.
+
+
+### Wall-to-wall dragging — preview review
+
+- Wall decorations dragged toward the other wall now snap to the nearest available slot on that wall, including when the finger is over the window or an occupied slot.
+- A full wall keeps the original placement and shows a brief explanation to move or store another decoration. Window clearance and paid ownership remain intact.
+- Check: real touch drags in both directions at phone and desktop sizes, window snapping, crowded-wall rejection and saved placement. Included in PR #11 for phone review before merging.

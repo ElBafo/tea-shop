@@ -1317,3 +1317,19 @@ body:has(.shop-room.is-night) {
 .welcome-card { max-height: calc(100dvh - 36px); overflow-y: auto; }
 .welcome-card button { border: 0; border-radius: 15px; font: 700 .9rem system-ui, sans-serif; cursor: pointer; }
 .welcome-card button:focus-visible, .guide-card button:focus-visible { outline: 3px solid #b88a36; outline-offset: 2px; }
+
+.placement-status {
+  position: absolute;
+  bottom: 52px;
+  left: 12px;
+  right: 12px;
+  z-index: 5;
+  margin: 0;
+  padding: 9px 12px;
+  border-radius: 14px;
+  background: #fff8ee;
+  color: #654838;
+  box-shadow: 0 3px 14px #30201722;
+  font-size: 12px;
+  pointer-events: none;
+}

@@ -61,6 +61,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       <div id="shop-guide"></div>
       <div class="shop-stage">
         <canvas id="shop-canvas" aria-label="The tea shop room. Pinch to zoom."></canvas>
+      <p id="placement-status" class="placement-status hidden" role="status" aria-live="polite"></p>
         <div class="shop-zoom" role="group" aria-label="Shop view">
           <button data-zoom="out" type="button" aria-label="Zoom out">−</button>
           <button data-zoom="fit" type="button" aria-label="Reset shop view">Fit</button>
@@ -130,7 +131,13 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       root.querySelector<HTMLButtonElement>('[data-zoom="out"]')!.disabled = zoom <= 0.85;
       root.querySelector<HTMLButtonElement>('[data-zoom="in"]')!.disabled = zoom >= 1.9;
     },
+    onPlacementBlocked: () => {
+      const status = root.querySelector<HTMLElement>("#placement-status")!;
+      status.textContent = "No room on that wall. Move or store another decoration first.";
+      status.classList.remove("hidden");
+    },
     onSelect: (id) => {
+      root.querySelector("#placement-status")?.classList.add("hidden");
       selected = id;
       if (id) {
         if (draft?.id !== id) clearPreview();
@@ -140,6 +147,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       paintChrome();
     },
     onMove: (id, place) => {
+      root.querySelector("#placement-status")?.classList.add("hidden");
       if (draft?.id === id) {
         draft.place = place;
         diorama.sync(previewShop());
@@ -200,6 +208,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     notice?.classList.toggle("hidden", edit || available === 0);
     if (notice) notice.textContent = `${available} ${available === 1 ? "decoration" : "decorations"} available · Browse`;
     root.querySelector(".shop-room")?.classList.toggle("decorating", edit);
+    if (!edit) root.querySelector("#placement-status")?.classList.add("hidden");
 
     const rail = root.querySelector("#upgrade-rail");
     root.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(button => {
