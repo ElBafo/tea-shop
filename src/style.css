@@ -1391,3 +1391,22 @@ body:has(.shop-room.is-night) {
 @media (max-height: 780px) and (orientation: portrait) {
  .decorating:not(.has-guide):not(.tray-collapsed) .shop-stage canvas { height: 40dvh; }
 }
+
+/* Selection navigation stays outside the scrolling style/details area. */
+.decorating.has-selection .upgrade-detail > .collection-back {
+  flex-shrink: 0;
+  align-self: stretch;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #e1ebd3;
+  color: #3f543b;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+}
+.is-night.decorating.has-selection .upgrade-detail > .collection-back {
+  background: #3d5148;
+  color: #f2f5e9;
+}

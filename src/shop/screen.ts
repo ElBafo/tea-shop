@@ -236,16 +236,17 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     if (rail && !collection.length) rail.innerHTML = `<p class="editor-empty">${filter === "owned" ? "Your collection starts here. Explore Decorations to try something for your shop." : "You have every decoration in this collection. Arrange them in My decorations."}</p>`;
     const detail = root.querySelector("#upgrade-detail");
     detail?.classList.toggle("hidden", !focus);
-    if (detail) detail.innerHTML = focus ? `<button class="collection-back" data-act="browse" type="button">← ${filter === "owned" ? "My decorations" : "Decorations"}</button>${draft ? taskDetail(progress, focus, draft) : isOwned(progress.shop, focus) ? editDetail(progress.shop, focus) : taskDetail(progress, focus, null)}` : "";
+    if (detail) detail.innerHTML = focus ? `<button class="collection-back" data-act="browse" type="button">← Back to decorations</button>${draft ? taskDetail(progress, focus, draft) : isOwned(progress.shop, focus) ? editDetail(progress.shop, focus) : taskDetail(progress, focus, null)}` : "";
 
     if (detail && focus) {
+      const back = detail.querySelector(".collection-back")!;
       const purchase = detail.querySelector(".purchase-row, .inventory-actions");
       const scroll = document.createElement("div");
       scroll.className = "detail-scroll";
       for (const child of Array.from(detail.childNodes)) {
-        if (child !== purchase) scroll.append(child);
+        if (child !== purchase && child !== back) scroll.append(child);
       }
-      detail.prepend(scroll);
+      back.after(scroll);
     }
 
     const bakery = root.querySelector<HTMLButtonElement>("#bakery");

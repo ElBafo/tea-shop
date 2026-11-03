@@ -394,3 +394,8 @@ Depth preview validation: all 38 solvability checks, full-jar rules, legacy inve
 
 
 Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 154-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle scoring itself is unchanged.
+
+
+### Selection navigation fix — depth preview
+
+Phone review found the return link easy to miss or lose while scrolling selected-item details. Keep a clearly labelled, 44px-high **Back to decorations** button fixed above the scroll area for owned selections and unpurchased previews. Returning restores the list and both collection tabs without leaving Edit, purchasing an item or changing the saved layout.
