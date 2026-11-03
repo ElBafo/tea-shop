@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { canPlace, sanitizeShop, counterCells, inRoom } from '../src/shop/grid';
+import { nearestWallPlacement, canPlace, sanitizeShop, counterCells, inRoom } from '../src/shop/grid';
 import { emptyShop, placeOf } from '../src/shop/upgrades';
 const shop = emptyShop();
 shop.owned = ['counter', 'lamp'];
@@ -26,3 +26,15 @@ wallShop.place.shelves={x:1,z:0,wall:'left',rot:1};
 assert.equal(canPlace('clock',{x:1,z:0,wall:'left',rot:1},wallShop),false);
 assert.equal(canPlace('clock',{x:1,z:0,wall:'back',rot:0},wallShop),true);
 console.log('Movable counter/aisle, legacy saves, shelf walls and collision checks passed.');
+
+assert.deepEqual(nearestWallPlacement('clock', {x:5,z:0,rot:0,wall:'back'}, wallShop),
+  {x:2,z:0,rot:0,wall:'back'}, 'a drop over the window finds the closest legal wall slot');
+assert.deepEqual(nearestWallPlacement('clock', {x:2,z:0,rot:1,wall:'left'}, wallShop),
+  {x:0,z:0,rot:1,wall:'left'}, 'occupied slots find the nearest free gap');
+wallShop.place.shelves={x:0,z:0,rot:0,wall:'back'};
+assert.equal(nearestWallPlacement('clock', {x:1,z:0,rot:0,wall:'back'}, wallShop),null,
+  'a full destination cannot overlap shelves or move to the wrong wall');
+wallShop.stored=['shelves'];
+assert.equal(nearestWallPlacement('clock', {x:1,z:0,rot:0,wall:'back'}, wallShop)?.x,1,
+  'stored decorations free wall space');
+console.log('Cross-wall gap snapping, window exclusion and full-wall checks passed.');

@@ -1,10 +1,11 @@
+import { guideStage, setGuide, guideCard } from "../game/guide";
 import { audioToggle, themeToggle, updateAudioToggle, updateThemeToggle } from "../ui/toggles";
 import { isOfflinePreview } from "../game/offline";
 import { cloneInventory as clone, storeItem, placeItem } from "./inventory";
 import { decorationIcon, styleThumbnail } from "./icons";
 import { imageFile, saveImage } from "./share";
 import { loadNight, saveNight } from "../game/appearance";
-import { isPreview, isShowroom } from "../game/preview";
+import { isGuidePreview, isPreview, isShowroom } from "../game/preview";
 import { playChime, playClick, playFinale } from "../game/audio";
 import { isBakeryOpen, saveShop, spendableStars } from "../game/storage";
 import type { Placement, Progress, ShopState, UpgradeId } from "../game/types";
@@ -33,6 +34,7 @@ export interface ShopHost {
 }
 
 export interface ShopScreen {
+  ready(): Promise<void>;
   refresh(): void;
   dispose(): void;
 }
@@ -55,9 +57,11 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
           <button id="edit-toggle" class="icon-btn" type="button">Edit</button>
         </div>
       </header>
-      ${isPreview ? `<aside class="preview-bar"><span>${isShowroom ? "Showroom · temporary" : isOfflinePreview ? "Offline preview" : "Preview"}</span><a href="${import.meta.env.BASE_URL}${isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
+      ${isPreview ? `<aside class="preview-bar"><span>${isGuidePreview ? "Tour · temporary" : isShowroom ? "Showroom · temporary" : isOfflinePreview ? "Offline preview" : "Preview"}</span><a href="${import.meta.env.BASE_URL}${isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
+      <div id="shop-guide"></div>
       <div class="shop-stage">
         <canvas id="shop-canvas" aria-label="The tea shop room. Pinch to zoom."></canvas>
+      <p id="placement-status" class="placement-status hidden" role="status" aria-live="polite"></p>
         <div class="shop-zoom" role="group" aria-label="Shop view">
           <button data-zoom="out" type="button" aria-label="Zoom out">−</button>
           <button data-zoom="fit" type="button" aria-label="Reset shop view">Fit</button>
@@ -127,7 +131,13 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       root.querySelector<HTMLButtonElement>('[data-zoom="out"]')!.disabled = zoom <= 0.85;
       root.querySelector<HTMLButtonElement>('[data-zoom="in"]')!.disabled = zoom >= 1.9;
     },
+    onPlacementBlocked: () => {
+      const status = root.querySelector<HTMLElement>("#placement-status")!;
+      status.textContent = "No room on that wall. Move or store another decoration first.";
+      status.classList.remove("hidden");
+    },
     onSelect: (id) => {
+      root.querySelector("#placement-status")?.classList.add("hidden");
       selected = id;
       if (id) {
         if (draft?.id !== id) clearPreview();
@@ -137,6 +147,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       paintChrome();
     },
     onMove: (id, place) => {
+      root.querySelector("#placement-status")?.classList.add("hidden");
       if (draft?.id === id) {
         draft.place = place;
         diorama.sync(previewShop());
@@ -169,6 +180,15 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector("#share-status")?.classList.toggle("hidden", !showcasing);
     root.querySelector("#showcase-toggle")?.classList.toggle("hidden", edit);
     const progress = host.progress;
+    if (guideStage() === 'decorate' && progress.shop.owned.length) setGuide('arrange');
+    const guide = root.querySelector<HTMLElement>('#shop-guide')!;
+    const stage = guideStage();
+    guide.innerHTML = stage === 'puzzle' ? guideCard('1 · Sort a shelf', 'Play the first puzzle to earn stars for your shop.', '<button type="button" data-guide-play>Play puzzles →</button>')
+      : stage === 'decorate' && spendableStars(progress) < 2 ? guideCard('2 · Save for your first piece', 'Decorations start at 2 stars. Play another puzzle or improve your best score to earn more.', '<button type="button" data-guide-play>Play puzzles →</button>')
+      : stage === 'decorate' ? guideCard('2 · Make it yours', edit ? 'Pick a decoration, try a style, then buy it with your stars. A counter costs 2 stars.' : 'Your stars buy decorations. Open Edit to choose your first piece.', edit ? '' : '<button type="button" data-guide-edit>Decorate →</button>')
+      : stage === 'arrange' ? guideCard('3 · Make it personal', progress.shop.owned.some(id => UPGRADE_BY_ID[id].movable) ? 'In Edit, drag your furniture to move it. Try another style or rotate it. Changes save automatically.' : 'Try a different wall style. When you add furniture, you can drag and rotate it in Edit. Changes save automatically.', '<button type="button" data-guide-done>Got it — my shop, my way</button>') : '';
+    guide.classList.toggle('hidden', !guide.innerHTML);
+    root.querySelector('.shop-room')?.classList.toggle('has-guide', Boolean(guide.innerHTML));
     const spendable = spendableStars(progress);
     const available = DECORATIONS.filter((item) => !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
     updateAudioToggle(root.querySelector("#mute"), progress.muted);
@@ -188,6 +208,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     notice?.classList.toggle("hidden", edit || available === 0);
     if (notice) notice.textContent = `${available} ${available === 1 ? "decoration" : "decorations"} available · Browse`;
     root.querySelector(".shop-room")?.classList.toggle("decorating", edit);
+    if (!edit) root.querySelector("#placement-status")?.classList.add("hidden");
 
     const rail = root.querySelector("#upgrade-rail");
     root.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(button => {
@@ -250,7 +271,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     try {
       const file = imageFile(diorama.captureImage());
       if (share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: "My Tea Shop" });
+        await navigator.share({ files: [file], title: "My Decopu tea shop" });
       } else {
         saveImage(file);
         if (status) status.textContent = "Image ready to save.";
@@ -285,7 +306,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector("#save-shop")?.addEventListener("click", () => { void exportImage(false); });
     root.querySelector("#theme-toggle")?.addEventListener("click", () => {
       night = !night;
-      if (!isShowroom) saveNight(appearanceKey, night);
+      if (!isShowroom && !isGuidePreview) saveNight(appearanceKey, night);
       diorama.setNight(night);
       playClick(host.progress.muted);
       paintChrome();
@@ -475,11 +496,18 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     commit(shop);
   };
 
+  root.querySelector('#shop-guide')!.addEventListener('click', event => {
+    const target = event.target as Element;
+    if (target.closest('[data-guide-skip], [data-guide-done]')) { setGuide('done'); paintChrome(); }
+    if (target.closest('[data-guide-play]')) host.goLevels();
+    if (target.closest('[data-guide-edit]')) root.querySelector<HTMLButtonElement>('#edit-toggle')?.click();
+  });
   bind();
   diorama.setEditMode(edit);
   paintChrome();
 
   return {
+    ready: () => diorama.ready(),
     refresh: () => paintChrome(),
     dispose: () => diorama.dispose(),
   };

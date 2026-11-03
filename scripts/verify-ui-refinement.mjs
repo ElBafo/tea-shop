@@ -1,3 +1,5 @@
+let clearReturningStart = async () => {};
+import { installReturningPlayerStart } from './browser-start.mjs';
 // Browser regression check. Requires Vite at 127.0.0.1:5174 with base /tea-shop/preview/
 // and Chromium remote debugging on 127.0.0.1:9224. Run with Node 22 or newer.
 import fs from 'node:fs/promises';
@@ -16,7 +18,7 @@ const touch = async p => {
  await send('Input.dispatchTouchEvent',{type,touchPoints:touching?[{x:p.x,y:p.y,id:1}]:[]});
 };
 await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
-await send('Runtime.enable');await send('Page.enable');await send('Page.bringToFront');
+await send('Runtime.enable');await send('Page.enable');clearReturningStart = await installReturningPlayerStart(send);await send('Page.bringToFront');
 await send('Storage.clearDataForOrigin',{origin:'http://127.0.0.1:5174',storageTypes:'service_workers,cache_storage'});
 await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});
 
@@ -71,4 +73,4 @@ await tap('#edit-toggle');await tap('.settings-menu summary');await tap('#showca
 if(!await evaluate(`document.querySelector('.shop-room').classList.contains('showcasing')`))throw Error('Showcase menu failed');
 await tap('#showcase-back');
 if(errors.length)throw Error(JSON.stringify(errors));
-console.log('PASS: prominent balance, settings/theme/Escape/showcase, variant thumbnails, larger room, preserved preview/save, purchase/restyle/store/restore and responsive editor.');ws.close();
+console.log('PASS: prominent balance, settings/theme/Escape/showcase, variant thumbnails, larger room, preserved preview/save, purchase/restyle/store/restore and responsive editor.');await clearReturningStart();ws.close();

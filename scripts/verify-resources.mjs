@@ -1,3 +1,5 @@
+let clearReturningStart = async () => {};
+import { installReturningPlayerStart } from './browser-start.mjs';
 // Browser regression check. Requires Vite at 127.0.0.1:5174 with base /tea-shop/preview/
 // and Chromium remote debugging on 127.0.0.1:9224. Run with Node 22 or newer.
 import fs from 'node:fs/promises';
@@ -16,7 +18,7 @@ const touch = async p => {
  await send('Input.dispatchTouchEvent',{type,touchPoints:touching?[{x:p.x,y:p.y,id:1}]:[]});
 };
 await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:2});
-await send('Runtime.enable');await send('Page.enable');await send('Page.bringToFront');
+await send('Runtime.enable');await send('Page.enable');clearReturningStart = await installReturningPlayerStart(send);await send('Page.bringToFront');
 await send('Storage.clearDataForOrigin',{origin:'http://127.0.0.1:5174',storageTypes:'service_workers,cache_storage'});
 await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});
 
@@ -89,4 +91,4 @@ for(let i=0;i<3;i++){
  await evaluate(`(async()=>{const url=performance.getEntriesByType('resource').find(e=>e.name.includes('@babylonjs_core_Engines_engine.js')).name;const {Engine}=await import(url);if(Engine.Instances.length!==1)throw Error('Engine retained');window.__qaScene=Engine.Instances[0].scenes[0];await window.__qaScene.whenReadyAsync();})()`);
 }
 assert(!errors.length,JSON.stringify(errors));
-console.log({styleChanges:120,storeRestoreCycles:12,previewCancelCycles:12,countsBefore:before,countsAfter:await counts(),hiddenPauseResume:true,repeatedSparkles:true,sceneReentry:true,errors});ws.close();
+console.log({styleChanges:120,storeRestoreCycles:12,previewCancelCycles:12,countsBefore:before,countsAfter:await counts(),hiddenPauseResume:true,repeatedSparkles:true,sceneReentry:true,errors});await clearReturningStart();ws.close();

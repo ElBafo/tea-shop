@@ -30,7 +30,7 @@ import {
   setItemTint,
   type ShopVisuals,
 } from "./meshes";
-import { canPlace, floorCenter, snapFloor, snapWall } from "./grid";
+import { canPlace, floorCenter, nearestWallPlacement, snapFloor, snapWall } from "./grid";
 import { UPGRADE_BY_ID, placeOf, shopComplete, isPlaced, kindOf } from "./upgrades";
 
 export interface DioramaHooks {
@@ -38,6 +38,7 @@ export interface DioramaHooks {
   onMove(id: UpgradeId, place: Placement): void;
   onPlaced(id: UpgradeId): void;
   onZoom?(zoom: number): void;
+  onPlacementBlocked?(): void;
 }
 
 interface Tween {
@@ -311,6 +312,8 @@ export class Diorama {
   playFinale(): void {
     this.spawnCustomer(false);
   }
+
+  ready(): Promise<void> { return this.scene.whenReadyAsync(); }
 
   resize(): void {
     if (this.disposed) return;
@@ -674,7 +677,7 @@ export class Diorama {
     const current = placeOf(this.shop, id);
     const next =
       def.surface === "wall"
-        ? snapWall(point.x, point.z, def.size.w)
+        ? this.wallDrop(id, point)
         : snapFloor(point.x, point.z, def.size, current.rot);
     if (def.surface === "wall") next.rot = next.wall === "left" ? 1 : 0;
     else next.rot = current.rot;
@@ -701,7 +704,7 @@ export class Diorama {
     const current = placeOf(this.shop, id);
     const next = point
       ? def.surface === "wall"
-        ? snapWall(point.x, point.z, def.size.w)
+        ? this.wallDrop(id, point)
         : snapFloor(point.x, point.z, def.size, current.rot)
       : drag.start;
     if (def.surface !== "wall") next.rot = current.rot;
@@ -712,7 +715,13 @@ export class Diorama {
     } else {
       this.keys[id] = "";
       this.sync(this.shop);
+      if (def.surface === "wall") this.hooks.onPlacementBlocked?.();
     }
+  }
+
+  private wallDrop(id: UpgradeId, point: Vector3): Placement {
+    const target = snapWall(point.x, point.z, UPGRADE_BY_ID[id].size.w);
+    return nearestWallPlacement(id, target, this.shop) ?? target;
   }
 
   private previewPlace(id: UpgradeId, root: TransformNode, place: Placement): void {

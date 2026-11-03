@@ -1,3 +1,4 @@
+import { initGuide, guideStage, setGuide, guideCard, suggestedJar } from "../game/guide";
 import { audioToggle, updateAudioToggle } from "./toggles";
 import { animatePour, pourOrigins, reducedMotion } from "./motion";
 import {
@@ -46,7 +47,8 @@ interface PlayState {
 
 const STAR = "✦";
 
-export function mountApp(root: HTMLElement): void {
+export function mountApp(root: HTMLElement): Promise<void> {
+  initGuide();
   let progress = loadProgress();
   let screen: Screen = "shop";
   let play: PlayState | null = null;
@@ -103,6 +105,19 @@ export function mountApp(root: HTMLElement): void {
           if (!progress.muted) playClick(false);
         },
       }, editShop);
+      if (guideStage() === 'welcome') {
+        root.querySelector<HTMLElement>('.shop-room')!.inert = true;
+        root.insertAdjacentHTML('beforeend', `<div class="overlay welcome-overlay" role="dialog" aria-modal="true" aria-labelledby="welcome-title"><section class="modal welcome-card"><p class="kicker">Welcome to Decopu</p><h3 id="welcome-title">A little shop of your own</h3><div class="welcome-path" aria-hidden="true"><span>▤</span><b>→</b><span>✦</span><b>→</b><span>⌂</span></div><p>Sort treats, earn stars, and turn this quiet corner into your favourite place.</p><p class="welcome-note">No timer. No rush. Undo whenever you like.</p><button type="button" data-guide-start>Show me how</button><button type="button" class="ghost-btn" data-welcome-skip>Explore on my own</button></section></div>`);
+        const welcome = root.querySelector<HTMLElement>('.welcome-overlay')!;
+        welcome.querySelector('[data-guide-start]')!.addEventListener('click',()=>{ setGuide('puzzle'); startLevel(LEVELS[0]); });
+        welcome.querySelector('[data-welcome-skip]')!.addEventListener('click',()=>{ setGuide('done'); welcome.remove(); root.querySelector<HTMLElement>('.shop-room')!.inert=false; root.querySelector<HTMLElement>('#play-tea')?.focus(); });
+        welcome.addEventListener('keydown', event=>{
+          if(event.key!=='Tab')return;
+          const buttons=[...welcome.querySelectorAll<HTMLButtonElement>('button')];
+          const index=buttons.indexOf(document.activeElement as HTMLButtonElement);
+          event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length]?.focus();
+        });
+      }
       return;
     }
     leaveShop();
@@ -111,6 +126,7 @@ export function mountApp(root: HTMLElement): void {
     } else if (play) {
       root.innerHTML = playMarkup(play, progress, pendingComplete, landed);
     }
+    if (screen === 'levels' && guideStage() === 'decorate') root.querySelector('.level-grid')?.insertAdjacentHTML('beforebegin', guideCard('Your stars are ready', 'Try your first decoration, or keep playing to save up.', '<button type="button" data-go="shop" data-edit>Decorate shop →</button>'));
     bind(root);
     if (focusedJar !== undefined && !root.querySelector('.result-overlay')) {
       root.querySelector<HTMLElement>(`[data-jar="${focusedJar}"]`)?.focus({preventScroll:true});
@@ -123,6 +139,7 @@ export function mountApp(root: HTMLElement): void {
   };
 
   const bind = (node: HTMLElement) => {
+    node.querySelectorAll('[data-guide-skip]').forEach(button=>button.addEventListener('click',()=>{setGuide('done');render();}));
     const dialog = node.querySelector<HTMLElement>(".result-overlay");
     if (dialog) {
       node.querySelectorAll<HTMLElement>(".play > :not(.result-overlay)").forEach(element => { element.inert = true; });
@@ -283,6 +300,7 @@ export function mountApp(root: HTMLElement): void {
       const stars = starsForMoves(play.moves, play.level.par);
       play.earnedStars = Math.max(0, stars - progress.bestStars[play.level.id - 1]);
       progress = recordWin(progress, play.level.id - 1, stars, play.moves);
+      if (guideStage() === 'puzzle') setGuide('decorate');
     }
     render();
     const activePlay = play;
@@ -322,6 +340,8 @@ export function mountApp(root: HTMLElement): void {
   };
 
   render();
+  const initialShop = shop as ShopScreen | null;
+  return initialShop ? initialShop.ready() : Promise.resolve();
 }
 
 function levelsMarkup(progress: Progress): string {
@@ -388,7 +408,7 @@ function playMarkup(
         ? `<span class="puff" aria-hidden="true">${sparkles()}</span>`
         : "";
       return `
-        <button class="jar ${lifted ? "selected" : ""} ${done ? "done" : ""} ${validTarget ? "valid-target" : ""} ${celebrate ? "just-completed" : ""}" style="--jar-order:${index}" data-jar="${index}" type="button" aria-pressed="${lifted}" aria-label="Jar ${index + 1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}">
+        <button class="jar ${lifted ? "selected" : ""} ${done ? "done" : ""} ${validTarget ? "valid-target" : ""} ${celebrate ? "just-completed" : ""} ${guideStage() === 'puzzle' && !play.busy && suggestedJar(board, selected) === index ? 'guide-target' : ''}" style="--jar-order:${index}" data-jar="${index}" type="button" aria-pressed="${lifted}" aria-label="Jar ${index + 1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}">
           <span class="jar-neck"></span>
           <span class="jar-glass">
             ${lid}
@@ -400,7 +420,9 @@ function playMarkup(
     })
     .join("");
 
-  const hint = play.hint
+  const hint = guideStage() === 'puzzle'
+    ? guideCard('1 · Fill each jar with one kind', selected === null ? 'Tap a jar to lift its top treats. Each finished jar must be full.' : suggestedJar(board, selected) === -1 ? 'That jar has no matching space. Tap another jar to try a different move.' : 'Tap a matching or empty jar to move the treats. The highlighted jar is one option.')
+    : play.hint
     ? `<p class="hint">Fill each jar with one kind. Tap two jars to move treats.</p>`
     : "";
 
@@ -448,6 +470,7 @@ function winOverlay(play: PlayState, progress: Progress): string {
       <h3 id="result-title">All tidy</h3>
       <p class="big-stars" aria-label="${stars} of 3 stars">${starText(stars)}</p>
       <p class="result-reward">${play.earnedStars ? `+${play.earnedStars} ${STAR} for your shop` : "Best stars already collected"}</p>
+      ${guideStage() === 'decorate' ? '<p class="guide-reward">These stars are yours to spend. Try Decorate shop to choose your first piece.</p>' : ''}
       <p class="result-stats">${play.moves} moves · Best ${best}</p>
       <div class="modal-actions">
         <button class="primary-action" data-next type="button">${next ? "Next puzzle →" : "All puzzles"}</button>

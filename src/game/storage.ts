@@ -1,5 +1,5 @@
 import { cloneInventory } from "../shop/inventory";
-import { isShowroom, showroomProgress } from "./preview";
+import { isGuidePreview, isShowroom, showroomProgress } from "./preview";
 import { sanitizeShop } from "../shop/grid";
 import { bakeryUnlocked, emptyShop, spentStars, UPGRADE_IDS, UPGRADE_BY_ID } from "../shop/upgrades";
 import { LEVEL_COUNT, STORAGE_KEY, type Placement, type Progress, type ShopState, type UpgradeId, type WallFace } from "./types";
@@ -14,6 +14,7 @@ function emptyProgress(): Progress {
 }
 
 export function loadProgress(): Progress {
+  if (isGuidePreview) return emptyProgress();
   if (isShowroom) {
     const demo = showroomProgress();
     demo.shop = sanitizeShop(demo.shop);
@@ -49,7 +50,7 @@ export function loadProgress(): Progress {
 }
 
 export function saveProgress(progress: Progress): void {
-  if (isShowroom) return;
+  if (isShowroom || isGuidePreview) return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
 

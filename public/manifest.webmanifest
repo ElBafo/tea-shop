@@ -1,7 +1,7 @@
 {
-  "name": "Tea Shop",
-  "short_name": "Tea Shop",
-  "description": "A cozy tea-shop sort puzzle. Tidy the jars at your own pace.",
+  "name": "Decopu",
+  "short_name": "Decopu",
+  "description": "Cozy puzzles and little shops to make your own.",
   "start_url": "/tea-shop/",
   "scope": "/tea-shop/",
   "display": "standalone",

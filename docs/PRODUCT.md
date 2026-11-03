@@ -1,8 +1,8 @@
-# Tea Shop: product direction
+# Decopu: product direction
 
 ## Experience
 
-Tea Shop is a cozy, phone-first sorting puzzle that funds the restoration of a tiny isometric 3D tea shop. It should feel like a quiet moment: no clock, no fail state, unlimited undo, and a welcoming room that becomes more personal through play.
+Decopu is a cozy, phone-first sorting puzzle that funds the restoration of a tiny isometric 3D tea shop. It should feel like a quiet moment: no clock, no fail state, unlimited undo, and a welcoming room that becomes more personal through play.
 
 The core loop is: solve a shelf → earn stars → repair or decorate the shop → rearrange it → return to puzzles. Stars reward efficient solutions rather than speed. Replaying a level improves its best score; it does not farm repeat rewards.
 

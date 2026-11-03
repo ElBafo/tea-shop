@@ -326,3 +326,51 @@ Audio is on by default for new players (the existing `muted: false` default); re
 Implement on `preview/top-bar-icons`, mirror to hosted preview, and await review before merging.
 
 Direct-control validation: production build, all 38 puzzles, inventory/full-jar checks, and audio unlock/interruption/mute checks pass. Browser checks verify new-player audio-on default, persisted mute and night preferences, correct visible icon states, direct audio on all game screens, sound toggling during a pour without rebuilding jars, 44px touch targets at 320px width, and reduced-motion transitions. Phone/day/night/desktop screenshots reviewed. Await phone preview acceptance before merge.
+
+
+## Decopu identity, start screen, and first-time guidance — approved scope
+
+The owner renamed the game **Decopu** and requested a splash/loading screen with an explicit **Start** button, plus a guided introduction for new users. Work belongs on `preview/decopu-onboarding` and must be reviewed in preview before merging.
+
+Use Decopu in the game title, splash, browser metadata, and installed-app names. Retain existing URL paths, service-worker scopes, save keys, earned stars, purchases, and layouts so current players keep their progress and shortcuts. Tea Shop remains the first venue; the overall game is Decopu. Existing iPhone shortcut labels may require re-adding the shortcut to reflect the renamed app.
+
+The splash appears immediately while assets load. Start becomes available when the first screen is ready; do not add artificial waiting or fake percentage progress. Starting uses the user's gesture to unlock mobile audio, respecting the saved mute choice. Include a useful loading failure/retry state and reduced-motion support.
+
+For new players, introduce the loop through playing: sort the first jars, fill every nonempty jar completely with one kind, earn stars, then preview and buy a decoration. Keep guidance short, skippable, and separate from puzzle rules. Preserve undo, scoring, styles-before-buying, and normal decorating. Save onboarding progress separately; do not force the introduction on existing players or repeat completed guidance.
+
+Initial status: branding and scope were recorded while the workspace was offline. Implementation resumed once the workspace became available; see the delivery notes below. Main remains unchanged until approval.
+
+
+## Collection choice and aspirational decorations — product direction
+
+The owner wants showcasing to express meaningful differences between players: a wider selection of items and styles, expensive decorations that require saving across levels, and later rooms/content that let players return to personalize their original tea shop with less-common pieces.
+
+Current economy: 38 puzzles provide 114 stars and all purchases cost 112. Several items already cost more than one level's maximum three-star reward, but the full catalogue is deliberately affordable. Future optional collection expansion should offer more choices than a player can afford at once, with enough rewards for core progression. This revises the earlier blanket goal of funding every optional purchase immediately; it does not change the live economy or revoke existing purchases.
+
+Proposed design for balancing, not yet approved prices or implementation:
+- Accessible essentials, more distinctive optional designs, and aspirational statement pieces. Illustrative future price bands: 2–6, 8–15, and 20–35 stars respectively; calculate actual prices against the level/room budget before shipping.
+- Add separately star-priced new premium variants where their appearance merits a separate purchase. Preserve all existing included/free style options for current owners; do not charge again for styles already granted.
+- Some special items require both a progress/mastery milestone and stars, making their acquisition a visible accomplishment. Keep them optional and preserve the game's no-timer/no-failure character.
+- Later rooms introduce puzzles and new designs usable when revisiting earlier shops. Exact inventory sharing/movement rules between rooms remain undecided.
+- Keep room progression achievable regardless of optional spending. Recommended approach: room eligibility based on lifetime stars earned, consistent with the earlier higher minimum-star unlock plan. The owner's suggestion of buying rooms with spendable stars needs an explicit budget/access design before implementation; do not silently choose a room fee or let a decoration purchase permanently block the only source of new stars.
+- Add new earnable content with progression. Do not promise repeat-star farming, random drops, paid currency, or artificial player-count exclusivity; those are not agreed mechanics.
+
+Next step: model the first two rooms, essential costs, optional catalogue, and reward budget before implementing this economy. The Decopu rename, Start splash, and first-time guide remain the active unfinished milestone; this discussion adds roadmap direction rather than replacing that work.
+
+
+## Decopu start and guided first visit — implementation for review
+
+The Decopu splash now paints before the bundle loads and waits for scene readiness. Start explicitly opens the app and unlocks audio through that gesture. Existing sound preferences are preserved. Slow loading exposes Reload; initialization failures retain a recoverable loading screen. No artificial wait or percentage is shown.
+
+New players can choose Show me how or Explore on my own. Guidance highlights a possible first-puzzle move, explains the full-jar goal, saves the real first win, introduces spending stars, then explains arranging the first purchased piece. Every contextual guide has Skip; completed/skipped guidance stays dismissed. Existing saves skip the introduction. Guide progress uses a separate versioned key derived from the existing save key, leaving scores and inventory untouched.
+
+Review the whole first-time flow at `/tea-shop/preview/?tour=1`. This preview-only tour starts with temporary empty progress and never writes scores, purchases, guide state, or appearance changes to the saved preview shop. Normal preview and main retain their established save keys and URLs. Tea Shop remains the first room within Decopu. Installed-app names and browser metadata use Decopu; iPhone shortcuts may retain a cached old label until re-added.
+
+Validation: all 38 solver/full-jar/economy checks, production and hosted-preview builds, real-touch first win/purchase, onboarding skip/completion persistence, existing-save migration, temporary tour isolation, phone/320px/landscape/desktop layouts, and offline-update/reopen checks. Physical phone review remains required before merge. Future collection scarcity and room-economy changes remain roadmap proposals, outside this release.
+
+
+### Wall-to-wall dragging — preview review
+
+- Wall decorations dragged toward the other wall now snap to the nearest available slot on that wall, including when the finger is over the window or an occupied slot.
+- A full wall keeps the original placement and shows a brief explanation to move or store another decoration. Window clearance and paid ownership remain intact.
+- Check: real touch drags in both directions at phone and desktop sizes, window snapping, crowded-wall rejection and saved placement. Included in PR #11 for phone review before merging.
