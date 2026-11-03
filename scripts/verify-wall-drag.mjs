@@ -29,13 +29,13 @@ await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisable
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await new Promise(r=>setTimeout(r,1200));
 const seed={muted:true,bestStars:Array(38).fill(3),bestMoves:Array(38).fill(0),shop:{owned:['clock'],style:{},place:{clock:{x:0,z:0,rot:0,wall:'back'}},finaleSeen:true}};
-await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))});localStorage.setItem('tea-shop-progress-v1:guide-v1','done')`);
+await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',${JSON.stringify(JSON.stringify(seed))});localStorage.setItem('tea-shop-preview-progress-v1:guide-v1','done')`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1800));
 await evaluate(`(async()=>{const url=performance.getEntriesByType('resource').find(e=>e.name.includes('@babylonjs_core_Engines_engine.js')).name;const {Engine}=await import(url);window.__qaScene=Engine.Instances[0].scenes[0];await window.__qaScene.whenReadyAsync();document.querySelector('#edit-toggle').click();})()`);
 const project=async (x,y,z)=>evaluate(`(()=>{const scene=window.__qaScene,e=scene.getEngine(),v=scene.activeCamera.position,rect=document.querySelector('canvas').getBoundingClientRect();const p=v.constructor.Project(new v.constructor(${x},${y},${z}),scene.getTransformMatrix().constructor.Identity(),scene.getTransformMatrix(),scene.activeCamera.viewport.toGlobal(e.getRenderWidth(),e.getRenderHeight()));return {x:rect.x+p.x*rect.width/e.getRenderWidth(),y:rect.y+p.y*rect.height/e.getRenderHeight()};})()`);
 const drag=async(a,b)=>{await touch({type:'mousePressed',...a});for(let i=1;i<=20;i++){await touch({type:'mouseMoved',x:a.x+(b.x-a.x)*i/20,y:a.y+(b.y-a.y)*i/20});await new Promise(r=>setTimeout(r,25));}await touch({type:'mouseReleased',...b});await new Promise(r=>setTimeout(r,250));};
 
-const saved=()=>evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop.place.clock`);
+const saved=()=>evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1')).shop.place.clock`);
 for (const width of [390, 1200]) {
  await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:width<500});
  await new Promise(r=>setTimeout(r,350));
@@ -50,7 +50,7 @@ for (const width of [390, 1200]) {
 }
 // A full wall gives feedback and retains the existing placement.
 seed.shop.owned=['shelves','clock'];seed.shop.place={shelves:{x:0,z:0,rot:0,wall:'back'},clock:{x:4,z:0,rot:1,wall:'left'}};
-await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
+await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.reload');await new Promise(r=>setTimeout(r,1800));
 await evaluate(`(async()=>{const url=performance.getEntriesByType('resource').find(e=>e.name.includes('@babylonjs_core_Engines_engine.js')).name;const {Engine}=await import(url);window.__qaScene=Engine.Instances[0].scenes[0];await window.__qaScene.whenReadyAsync();document.querySelector('#edit-toggle').click();})()`);

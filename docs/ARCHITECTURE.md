@@ -121,3 +121,6 @@ The focused editor keeps collection tabs accessible during selection and places 
 `inventory.returnValue` and `returnItem` permit owned optional items only. Removing ownership releases its catalogue cost from derived spent stars; no independent refund counter exists. Confirmation uses a native modal dialog. Returns remove only the selected ID, style, placement and stored marker; other copy IDs survive unchanged. Core completion pieces and milestone scores are untouched. New armchair/fountain kinds use the existing grid, preview, material ownership and persistence paths.
 
 Hidden-jar pars include one exploration move per initial lid. The solver verifier checks optimum plus this allowance; `verify-pacing` fingerprints boards/IDs/hidden flags/capacities to protect saved move logs. Scores already stored are never reduced.
+
+
+Preview storage keys are selected from the Vite base in `game/types.ts`, so local previews share the hosted preview isolation. Runtime preview controls additionally require the preview URL path. `resetPreviewProgress` uses an explicit allowlist for primary, recovery, unfinished puzzle, guide and appearance keys; it never clears origin storage. The preview-only More menu confirms before clearing and navigating to the clean preview URL. Main ignores demo query flags and renders no showroom/reset controls.

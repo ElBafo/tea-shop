@@ -37,7 +37,7 @@ const ready=async()=>{for(let i=0;i<100;i++){if(await evaluate(`!!document.query
 const shot=async name=>fs.writeFile('work/visual-'+name+'.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await pause(1400);await ready();
-await evaluate(`localStorage.setItem('tea-shop-progress-v1',JSON.stringify({muted:true,bestStars:Array(38).fill(3),bestMoves:Array(38).fill(0),shop:{owned:[],stored:[],style:{},place:{},finaleSeen:true}}));localStorage.setItem('tea-shop-progress-v1:guide-v1','done');localStorage.removeItem('tea-shop-progress-v1:puzzle-v1');localStorage.setItem('tea-shop-preview-appearance-v1','day')`);
+await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',JSON.stringify({muted:true,bestStars:Array(38).fill(3),bestMoves:Array(38).fill(0),shop:{owned:[],stored:[],style:{},place:{},finaleSeen:true}}));localStorage.setItem('tea-shop-preview-progress-v1:guide-v1','done');localStorage.removeItem('tea-shop-preview-progress-v1:puzzle-v1');localStorage.setItem('tea-shop-preview-appearance-v1','day')`);
 await send('Page.reload');await pause(1400);await ready();await tap('#edit-toggle');await tap('[data-upgrade="counter"]');
 for(const night of [false,true]){
  if(night)await tap('#theme-toggle');
