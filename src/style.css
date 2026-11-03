@@ -546,10 +546,15 @@ h1,
   background: #fff3ea;
 }
 
+.mystery {
+  display: grid;
+  place-items: center;
+}
+
 .mystery .fog {
   display: block;
-  width: 40px;
-  height: 22px;
+  width: 76%;
+  height: 66%;
   border-radius: 999px;
   background: repeating-linear-gradient(
     90deg,
@@ -1394,8 +1399,10 @@ body:has(.shop-room.is-night) {
 /* Stable navigation: collection tabs and a Browse action survive item selection. */
 .editor-nav { display: flex; flex-shrink: 0; align-items: center; gap: 8px; padding: 0 10px; border-bottom: 1px solid #a78a6222; }
 .editor-nav .tray-toggle { flex: 1; width: auto; text-align: right; border-bottom: 0; min-height: 44px; padding: 10px; }
-.editor-nav .collection-back { flex: 1; align-self: auto; min-height: 44px; margin: 0; padding: 10px; border-radius: 12px; color: #3f543b; background: #e1ebd3; font-size: 13px; font-weight: 700; text-align: left; }
-.is-night .editor-nav .collection-back { color: #f2f5e9; background: #3d5148; }
+.editor-nav .collection-back { flex: 0 0 auto; align-self: auto; min-height: 44px; margin: 0; padding: 10px; border-radius: 6px; color: #695044; background: transparent; box-shadow: none; font-size: 13px; font-weight: 600; text-align: left; }
+.is-night .editor-nav .collection-back { color: #eee2d2; background: transparent; }
+.editor-nav .collection-back:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
+@media (hover: hover) { .editor-nav .collection-back:hover { text-decoration: underline; text-underline-offset: 3px; } }
 .decorating.has-selection .catalog-tabs { display: flex; flex-shrink: 0; }
 .decorating .upgrade-detail > .detail-copy { flex-shrink: 0; }
 .decorating .upgrade-detail > .detail-copy strong { display: block; }
