@@ -61,6 +61,12 @@ for(const [width,height,name] of [[320,568,'small-phone'],[844,390,'landscape'],
 }
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await fresh();await start();await tap('[data-welcome-skip]');await open();await start();
 if(await evaluate(`!!document.querySelector('.welcome-overlay, .guide-card')`))throw Error('Skipped guide repeated');
+// A one-star first win still has a clear path to the first purchase.
+await evaluate(`localStorage.setItem('tea-shop-progress-v1',JSON.stringify({muted:true,bestStars:[1],bestMoves:[20],shop:{owned:[],style:{},place:{},finaleSeen:false}}));localStorage.setItem('tea-shop-progress-v1:guide-v1','decorate')`);
+await open();await start();
+if(!await evaluate(`document.querySelector('#shop-guide').textContent.includes('Decorations start at 2 stars')`))throw Error('Missing low-star guidance');
+await tap('[data-guide-play]');
+if(!await evaluate(`!!document.querySelector('.level-grid')`))throw Error('Low-star guide did not lead to puzzles');
 // Exercise an actual unavailable WebGL context, caught by bootstrap.
 const brokenGL=await send('Page.addScriptToEvaluateOnNewDocument',{source:`const originalContext=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){if(String(type).includes('webgl'))return null;return originalContext.call(this,type,...args);};`});
 await send('Page.navigate',{url});await wait(`!!document.querySelector('#launch-retry') && !document.querySelector('#launch-retry').hidden`);

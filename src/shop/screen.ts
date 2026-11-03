@@ -176,8 +176,9 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     const guide = root.querySelector<HTMLElement>('#shop-guide')!;
     const stage = guideStage();
     guide.innerHTML = stage === 'puzzle' ? guideCard('1 · Sort a shelf', 'Play the first puzzle to earn stars for your shop.', '<button type="button" data-guide-play>Play puzzles →</button>')
+      : stage === 'decorate' && spendableStars(progress) < 2 ? guideCard('2 · Save for your first piece', 'Decorations start at 2 stars. Play another puzzle or improve your best score to earn more.', '<button type="button" data-guide-play>Play puzzles →</button>')
       : stage === 'decorate' ? guideCard('2 · Make it yours', edit ? 'Pick a decoration, try a style, then buy it with your stars. A counter costs 2 stars.' : 'Your stars buy decorations. Open Edit to choose your first piece.', edit ? '' : '<button type="button" data-guide-edit>Decorate →</button>')
-      : stage === 'arrange' ? guideCard('3 · Find its place', 'In Edit, drag your furniture to move it. Try another style or rotate it. Changes save automatically.', '<button type="button" data-guide-done>Got it — my shop, my way</button>') : '';
+      : stage === 'arrange' ? guideCard('3 · Make it personal', progress.shop.owned.some(id => UPGRADE_BY_ID[id].movable) ? 'In Edit, drag your furniture to move it. Try another style or rotate it. Changes save automatically.' : 'Try a different wall style. When you add furniture, you can drag and rotate it in Edit. Changes save automatically.', '<button type="button" data-guide-done>Got it — my shop, my way</button>') : '';
     guide.classList.toggle('hidden', !guide.innerHTML);
     root.querySelector('.shop-room')?.classList.toggle('has-guide', Boolean(guide.innerHTML));
     const spendable = spendableStars(progress);
