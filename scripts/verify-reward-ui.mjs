@@ -39,7 +39,7 @@ const seed = count => ({muted:true,bestStars:Array.from({length:38},(_,i)=>i<cou
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await pause(1800);
 const reload=async value=>{
- if(value)await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(value))});localStorage.setItem('tea-shop-progress-v1:guide-v1','done');localStorage.removeItem('tea-shop-progress-v1:puzzle-v1')`);
+ if(value)await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',${JSON.stringify(JSON.stringify(value))});localStorage.setItem('tea-shop-preview-progress-v1:guide-v1','done');localStorage.removeItem('tea-shop-preview-progress-v1:puzzle-v1')`);
  await send('Page.reload');await pause(500);
  for(let attempt=0;attempt<80;attempt++){
   if(await evaluate(`Boolean(document.querySelector('#shop-stars strong')) && !document.querySelector('#launch-screen')`))return;
@@ -47,7 +47,7 @@ const reload=async value=>{
  }
  throw Error('Shop did not become ready after reload');
 };
-const snapshot=()=>evaluate(`localStorage.getItem('tea-shop-progress-v1')`);
+const snapshot=()=>evaluate(`localStorage.getItem('tea-shop-preview-progress-v1')`);
 const balance=()=>evaluate(`Number(document.querySelector('#shop-stars strong').textContent)`);
 const preview=async(id)=>{
  assert.equal(await evaluate(`document.querySelector('.shop-room').classList.contains('decorating')`),true);
@@ -84,7 +84,7 @@ await tap('#edit-toggle');
 for(const id of ['armchair','fountain']){
  await tap('[data-filter="all"]');await tap(`[data-upgrade="${id}"]`);
  await tap('[data-act="preview"][data-style="1"]');await tap('[data-act="buy"]');
- assert.equal(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop.style[${JSON.stringify(id)}]`),1);
+ assert.equal(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1')).shop.style[${JSON.stringify(id)}]`),1);
 }
 assert.equal(await balance(),96,'both late rewards cost36');
 await shot('owned-fountain');
@@ -94,7 +94,7 @@ assert.equal(await evaluate(`document.activeElement.matches('[data-cancel-return
 await tap('[data-cancel-return]');assert.equal(await snapshot(),before,'cancel leaves progress exactly intact');
 await tap('[data-act="return"]');await tap('[data-confirm-return]');
 assert.equal(await balance(),116,'fountain full refund');
-assert.deepEqual(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop.owned`),['armchair']);
+assert.deepEqual(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1')).shop.owned`),['armchair']);
 assert.equal(await evaluate(`document.querySelector('.return-dialog')`),null);
 await reload();assert.equal(await balance(),116,'refund survives reload');
 await tap('#edit-toggle');await tap('[data-filter="owned"]');await tap('[data-upgrade="armchair"]');
@@ -104,7 +104,7 @@ await tap('[data-upgrade="counter"]');await tap('[data-act="preview"][data-style
 assert.equal(await balance(),130);
 assert.equal(await evaluate(`Boolean(document.querySelector('[data-act="return"]'))`),false,'core pieces expose no return action');
 await reload();assert.equal(await balance(),130);
-assert.deepEqual(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop.owned`),['counter']);
+assert.deepEqual(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1')).shop.owned`),['counter']);
 assert.deepEqual(errors,[],'no runtime exceptions');
 console.log('PASS: home/levels reward previews preserve saves;32/38 gates guard purchases; paid style previews, confirm/cancel returns, exact balances, reload persistence and core protection.');
 await clearReturningStart();ws.close();

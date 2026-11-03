@@ -10,9 +10,9 @@ Deliver the approved depth and ownership pass in a new preview: room-first decor
 
 - Preview fix: synchronize Safari theme colour and the root safe-area background with shop day/night; reset on puzzle navigation. Update the installed-app status-bar hint too; physical iPhone/Home Screen behavior remains a device-review check.
 
-## Approved reward and experimentation pass — preview, awaiting review
+## Approved reward and experimentation pass — merged in PR #12
 
-The owner approved all six review recommendations before wife testing. Main remains unchanged.
+The owner approved all six review recommendations before wife testing, then approved merging PR #12. These changes are now on main.
 
 - Improve the Glass garden and Botanical triptych with fuller, phone-readable geometry and meaningful style differences. Keep wood, brass, cream and complementary colours compatible across collections.
 - Replace accounting-heavy goal text with a reward illustration, puzzle progress, a separate star price and a tap directly into a free room preview. Unlocks mean available to buy, never automatically granted furniture.
@@ -436,3 +436,15 @@ The owner explicitly deferred monetisation. First validate a satisfying, underst
 
 
 Phone feedback requests tighter vertical spacing across tabs and pills. Reduce collection tabs to 36px plus container spacing, secondary toolbar/navigation controls to 40px, the noninteractive star pill to 36px and style-card padding. Keep Buy/Rotate/Store actions at least 44px. Check wrapping, touch navigation and small-screen clipping in the same editor pass.
+
+
+## Post-review visual corrections — next preview
+
+PR #12 was approved and merged. The owner requested two follow-up refinements: remove the light-green filled Browse pill when a decoration is selected, and fix hidden-piece alignment inside puzzle jars. Browse remains a clearly labelled, transparent text control with the same tap target and keyboard focus. Hidden-piece artwork is centered within its treat container and sized proportionally so four-slot/five-slot and narrow/wide jar layouts agree. The owner clarified that the issue is horizontal and vertical alignment of concealed pieces, not the lid artwork; preserve their neutral appearance, concealment/reveal rules, jar lids, scoring and saves. Review this visual-only follow-up in a new preview before merging.
+
+Phone follow-up: right-align Hide/Show panel. The wooden concealment strip must sit in the gap below the visible top piece, rather than at a fixed percentage of jar height that covers hidden artwork. Tie its position to the first hidden slot and use a thin divider; preserve reveal and Undo behavior.
+
+
+## Development-only showroom and onboarding reset
+
+The owner requires the finished-shop demo and reset controls only in the development preview. Main renders neither, and ignores showroom/tour query flags. Preview detection requires both its build base and preview path. Preview save-key isolation now lives in source as well as the hosted build. More → Reset preview progress opens a confirmation, clears only the preview primary/recovery/puzzle/onboarding/appearance keys, and reloads the normal preview at Start with new-player guidance. Main progress and unrelated browser storage are preserved. The player's own Showcase remains a normal game feature; it does not grant the finished demo room.

@@ -34,18 +34,18 @@ await shot('decopu-start-phone');await start();if(!await evaluate(`document.acti
 await tap('[data-guide-start]');
 if(await evaluate(`document.querySelector('.guide-target').dataset.jar`)!=='0')throw Error('First source guidance missing');
 await shot('decopu-first-puzzle-phone');await win();await shot('decopu-first-stars-phone');
-if(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).bestStars[0]`)!==3)throw Error('Guided win reward changed');
+if(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1')).bestStars[0]`)!==3)throw Error('Guided win reward changed');
 await tap('.result-overlay [data-go="shop"]');
 await wait(`!!document.querySelector('[data-upgrade="counter"]')`);
 await tap('[data-upgrade="counter"]');await tap('[data-act="preview"][data-style="1"]');await shot('decopu-first-decoration-phone');
 await tap('[data-act="buy"]');await wait(`!!document.querySelector('[data-guide-done]')`);
-if(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop.style.counter`)!==1)throw Error('First purchase wrong');
+if(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1')).shop.style.counter`)!==1)throw Error('First purchase wrong');
 await tap('[data-guide-done]');await open();await start();
 if(await evaluate(`!!document.querySelector('.welcome-overlay, .guide-card')`))throw Error('Finished guide repeats');
-const saved=await evaluate(`localStorage.getItem('tea-shop-progress-v1')`);
-await evaluate(`localStorage.removeItem('tea-shop-progress-v1:guide-v1')`);await open();await start();
+const saved=await evaluate(`localStorage.getItem('tea-shop-preview-progress-v1')`);
+await evaluate(`localStorage.removeItem('tea-shop-preview-progress-v1:guide-v1')`);await open();await start();
 if(await evaluate(`!!document.querySelector('.welcome-overlay')`))throw Error('Existing player forced into tour');
-if(await evaluate(`localStorage.getItem('tea-shop-progress-v1')`)!==saved)throw Error('Legacy save changed');
+if(await evaluate(`localStorage.getItem('tea-shop-preview-progress-v1')`)!==saved)throw Error('Legacy save changed');
 const allSaved=await evaluate(`JSON.stringify(Object.fromEntries(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)])))`);
 await open('?tour=1');await start();await tap('[data-guide-start]');await win();await tap('.result-overlay [data-go="shop"]');await wait(`!!document.querySelector('[data-upgrade="counter"]')`);await tap('[data-upgrade="counter"]');await tap('[data-act="buy"]');await tap('[data-guide-done]');
 if(await evaluate(`JSON.stringify(Object.fromEntries(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)])))`)!==allSaved)throw Error('Demo changed real preview progress');
@@ -62,7 +62,7 @@ for(const [width,height,name] of [[320,568,'small-phone'],[844,390,'landscape'],
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await fresh();await start();await tap('[data-welcome-skip]');await open();await start();
 if(await evaluate(`!!document.querySelector('.welcome-overlay, .guide-card')`))throw Error('Skipped guide repeated');
 // A one-star first win still has a clear path to the first purchase.
-await evaluate(`localStorage.setItem('tea-shop-progress-v1',JSON.stringify({muted:true,bestStars:[1],bestMoves:[20],shop:{owned:[],style:{},place:{},finaleSeen:false}}));localStorage.setItem('tea-shop-progress-v1:guide-v1','decorate')`);
+await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',JSON.stringify({muted:true,bestStars:[1],bestMoves:[20],shop:{owned:[],style:{},place:{},finaleSeen:false}}));localStorage.setItem('tea-shop-preview-progress-v1:guide-v1','decorate')`);
 await open();await start();
 if(!await evaluate(`document.querySelector('#shop-guide').textContent.includes('Decorations start at 2 stars')`))throw Error('Missing low-star guidance');
 await tap('[data-guide-play]');

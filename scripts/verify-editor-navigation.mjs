@@ -38,7 +38,7 @@ const seed={muted:true,bestStars:Array(38).fill(3),bestMoves:Array(38).fill(0),s
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await pause(1800);
 const reload=async value=>{
- await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(value))});localStorage.setItem('tea-shop-progress-v1:guide-v1','done');localStorage.removeItem('tea-shop-progress-v1:puzzle-v1')`);
+ await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',${JSON.stringify(JSON.stringify(value))});localStorage.setItem('tea-shop-preview-progress-v1:guide-v1','done');localStorage.removeItem('tea-shop-preview-progress-v1:puzzle-v1')`);
  await send('Page.reload');await pause(1800);
 };
 await reload(seed);await tap('#edit-toggle');
@@ -46,7 +46,7 @@ await reload(seed);await tap('#edit-toggle');
 const visible=selector=>evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),r=e.getBoundingClientRect();return r.height>=36&&r.top>=0&&r.bottom<=innerHeight;})()`);
 await tap('[data-upgrade="cabinet"]');
 assert.equal(await visible('[data-filter="owned"]'),true);
-await tap('[data-filter="owned"]');assert.equal(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop.owned.length`),0,'tab switching cancels preview without buying');
+await tap('[data-filter="owned"]');assert.equal(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1')).shop.owned.length`),0,'tab switching cancels preview without buying');
 await tap('[data-filter="all"]');await tap('[data-upgrade="cabinet"]');await tap('[data-act="buy"]');
 for(const [width,height,name] of [[320,568,'small'],[390,844,'phone'],[844,390,'landscape'],[1200,900,'desktop']]){
  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<900});await pause(400);
@@ -67,9 +67,9 @@ assert.equal(await count(),0,'selection alone does not cover the room in markers
 const points=await evaluate(`(()=>{const scene=window.__qaScene,e=scene.getEngine(),v=scene.getTransformNodeByName('cabinet').position,rect=document.querySelector('canvas').getBoundingClientRect();const project=x=>{const p=v.constructor.Project(new v.constructor(x,.75,v.z+.37),scene.getTransformMatrix().constructor.Identity(),scene.getTransformMatrix(),scene.activeCamera.viewport.toGlobal(e.getRenderWidth(),e.getRenderHeight()));return{x:rect.x+p.x*rect.width/e.getRenderWidth(),y:rect.y+p.y*rect.height/e.getRenderHeight()};};return{a:project(v.x),b:project(v.x-1)};})()`);
 await touch({type:'mousePressed',...points.a});await touch({type:'mouseMoved',...points.b});assert.ok(await count()>0,'markers appear during a drag');
 await touch({type:'mouseReleased',...points.b});assert.equal(await count(),0,'release removes markers');
-const savedBeforeCancel=await evaluate(`localStorage.getItem('tea-shop-progress-v1')`);
+const savedBeforeCancel=await evaluate(`localStorage.getItem('tea-shop-preview-progress-v1')`);
 await touch({type:'mousePressed',...points.b});await touch({type:'mouseMoved',...points.a});assert.ok(await count()>0);
 await send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});touching=false;
-assert.equal(await count(),0,'cancel removes markers');assert.equal(await evaluate(`localStorage.getItem('tea-shop-progress-v1')`),savedBeforeCancel,'cancel preserves the saved layout');
+assert.equal(await count(),0,'cancel removes markers');assert.equal(await evaluate(`localStorage.getItem('tea-shop-preview-progress-v1')`),savedBeforeCancel,'cancel preserves the saved layout');
 assert.deepEqual(errors,[]);console.log('PASS: direct tabs, preview cancellation, pinned title/actions, Browse from collapsed panel, phone/desktop layouts and drag-only markers.');
 await clearReturningStart();ws.close();

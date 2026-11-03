@@ -28,7 +28,7 @@ await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisable
 
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await new Promise(r=>setTimeout(r,1400));
-await evaluate(`Object.keys(localStorage).filter(k=>k.startsWith('tea-shop-progress-v1')).forEach(k=>localStorage.removeItem(k));localStorage.setItem('tea-shop-preview-appearance-v1','day')`);
+await evaluate(`Object.keys(localStorage).filter(k=>k.startsWith('tea-shop-preview-progress-v1')).forEach(k=>localStorage.removeItem(k));localStorage.setItem('tea-shop-preview-appearance-v1','day')`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 const tap=async(selector)=>{
  const p=await evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});if(!el||el.disabled||el.closest('[inert]'))throw Error('Unavailable control '+${JSON.stringify(selector)});el.scrollIntoView({block:'nearest'});const r=el.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
@@ -38,7 +38,7 @@ const shot=async(name)=>fs.writeFile('work/'+name+'.png',Buffer.from((await send
 
 if(await evaluate(`document.querySelector('#mute').getAttribute('data-state')`)!=='on')throw Error('Fresh audio not on');
 await tap('#mute');
-if(!await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).muted`))throw Error('Mute not saved');
+if(!await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1')).muted`))throw Error('Mute not saved');
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 if(await evaluate(`document.querySelector('#mute').getAttribute('aria-label')`)!=='Turn sound on')throw Error('Mute preference lost');
 await tap('#mute');await tap('#theme-toggle');await new Promise(r=>setTimeout(r,350));
@@ -64,7 +64,7 @@ await new Promise(r=>setTimeout(r,450));
 if(await evaluate(`document.querySelector('.moves').textContent`)!=='1 move')throw Error('Audio interrupted move');
 await shot('top-icons-puzzle-phone');
 await tap('[data-go="levels"]');await tap('[data-go="shop"]');
-await evaluate(`const p=JSON.parse(localStorage.getItem('tea-shop-progress-v1'));p.bestStars=Array(38).fill(3);localStorage.setItem('tea-shop-progress-v1',JSON.stringify(p))`);
+await evaluate(`const p=JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1'));p.bestStars=Array(38).fill(3);localStorage.setItem('tea-shop-preview-progress-v1',JSON.stringify(p))`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 for(const [width,height,name] of [[390,844,'phone'],[320,568,'small-phone'],[844,390,'landscape'],[1280,900,'desktop']]){
  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});await new Promise(r=>setTimeout(r,250));
