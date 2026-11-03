@@ -443,15 +443,12 @@ function playMarkup(
             slot >= tube.length - landed.count,
         );
         slots.push(
-          `<div class="slot ${held ? "held" : ""} ${justLanded ? "landed" : ""}">${treatMarkup(item, hidden)}</div>`,
+          `<div class="slot ${held ? "held" : ""} ${justLanded ? "landed" : ""}">${treatMarkup(item, hidden)}${board.sealed[index] && slot === tube.length - 2 ? '<span class="lid" aria-hidden="true"></span>' : ""}</div>`,
         );
       }
       const done = isCompleteTube(tube, board.capacity);
       const celebrate = pendingComplete.includes(index) || play.celebrating;
       const validTarget = selected !== null && selected !== index && canPour(board, selected, index) > 0;
-      const lid = board.sealed[index]
-        ? `<span class="lid" aria-hidden="true"></span>`
-        : "";
       const puff = done && celebrate
         ? `<span class="puff" aria-hidden="true">${sparkles()}</span>`
         : "";
@@ -459,7 +456,6 @@ function playMarkup(
         <button class="jar ${lifted ? "selected" : ""} ${done ? "done" : ""} ${validTarget ? "valid-target" : ""} ${celebrate ? "just-completed" : ""} ${guideStage() === 'puzzle' && !play.busy && suggestedJar(board, selected) === index ? 'guide-target' : ''}" style="--jar-order:${index}" data-jar="${index}" type="button" aria-pressed="${lifted}" aria-label="Jar ${index + 1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}">
           <span class="jar-neck"></span>
           <span class="jar-glass">
-            ${lid}
             <span class="stack" style="--slots:${board.capacity}">${slots.join("")}</span>
           </span>
           ${done ? '<span class="jar-check" aria-hidden="true">✓</span>' : ''}
