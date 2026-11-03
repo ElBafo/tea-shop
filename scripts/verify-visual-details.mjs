@@ -43,6 +43,7 @@ for(const night of [false,true]){
  if(night)await tap('#theme-toggle');
  assert.equal(await evaluate(`getComputedStyle(document.querySelector('#editor-back')).backgroundColor`),'rgba(0, 0, 0, 0)');
  assert.ok(await evaluate(`document.querySelector('#editor-back').getBoundingClientRect().height>=40`));
+ assert.equal(await evaluate(`getComputedStyle(document.querySelector('#tray-toggle')).justifyContent`),'flex-end');
  await shot('browse-'+(night?'night':'day'));
 }
 await tap('#editor-back');assert.ok(await evaluate(`!document.querySelector('#upgrade-rail').classList.contains('hidden')`));await tap('#edit-toggle');await tap('#play-tea');
@@ -52,6 +53,7 @@ for(const level of [6,16,38]){
  for(const [width,height,name] of [[320,568,'small'],[390,844,'phone'],[844,390,'landscape'],[1280,900,'desktop']]){
   await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<900});await pause();
   const geometry=await evaluate(`Array.from(document.querySelectorAll('.mystery .fog')).map(e=>{const r=e.getBoundingClientRect(),s=e.closest('.slot').getBoundingClientRect();return {dx:Math.abs((r.left+r.right-s.left-s.right)/2),dy:Math.abs((r.top+r.bottom-s.top-s.bottom)/2),fits:r.width<=s.width&&r.height<=s.height};})`);
+  assert.ok(await evaluate(`Array.from(document.querySelectorAll('.slot .lid')).every(e=>{const r=e.getBoundingClientRect(),f=e.parentElement.querySelector('.fog').getBoundingClientRect();return r.bottom<=f.top;})`),'divider does not cover hidden artwork');
   assert.ok(geometry.length,'has hidden pieces');for(const g of geometry){assert.ok(g.dx<.75&&g.dy<.75&&g.fits,JSON.stringify({level,name,g}));}
   if((level===6||level===38)&&(name==='phone'||name==='desktop'))await shot(`jars-${level}-${name}`);
  }

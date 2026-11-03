@@ -1451,3 +1451,8 @@ body:has(.shop-room.is-night) {
  .decorating.has-selection:not(.has-guide):not(.tray-collapsed) .shop-dock { flex: 0 1 306px; }
  .decorating.has-selection:not(.has-guide) .editor-content { padding: 9px 10px; }
 }
+
+/* Keep secondary navigation at the right and the concealment divider in a slot gap. */
+.editor-nav .tray-toggle { justify-content: flex-end; gap: 12px; text-align: right; }
+.slot { position: relative; }
+.slot .lid { top: -2px; height: 2px; box-shadow: none; pointer-events: none; }

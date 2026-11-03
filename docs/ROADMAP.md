@@ -441,3 +441,5 @@ Phone feedback requests tighter vertical spacing across tabs and pills. Reduce c
 ## Post-review visual corrections — next preview
 
 PR #12 was approved and merged. The owner requested two follow-up refinements: remove the light-green filled Browse pill when a decoration is selected, and fix hidden-piece alignment inside puzzle jars. Browse remains a clearly labelled, transparent text control with the same tap target and keyboard focus. Hidden-piece artwork is centered within its treat container and sized proportionally so four-slot/five-slot and narrow/wide jar layouts agree. The owner clarified that the issue is horizontal and vertical alignment of concealed pieces, not the lid artwork; preserve their neutral appearance, concealment/reveal rules, jar lids, scoring and saves. Review this visual-only follow-up in a new preview before merging.
+
+Phone follow-up: right-align Hide/Show panel. The wooden concealment strip must sit in the gap below the visible top piece, rather than at a fixed percentage of jar height that covers hidden artwork. Tie its position to the first hidden slot and use a thin divider; preserve reveal and Undo behavior.
