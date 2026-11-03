@@ -27,6 +27,7 @@ import {
   createShopVisuals,
   itemKey,
   selectionRing,
+  placementMarkers,
   setItemTint,
   type ShopVisuals,
 } from "./meshes";
@@ -75,6 +76,7 @@ export class Diorama {
   private elapsed = 0;
   private readonly reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   private selected: UpgradeId | null = null;
+  private markers: TransformNode | null = null;
   private pointer = { x: 0, y: 0 };
   private drag: {
     kind: "camera" | "item";
@@ -223,7 +225,13 @@ export class Diorama {
   select(id: UpgradeId | null): void {
     this.selected = id;
     this.updateRing();
+    this.updateMarkers();
     this.hooks.onSelect(id);
+  }
+
+  private updateMarkers(): void {
+    this.markers?.dispose();this.markers=null;
+    if(this.edit && this.drag?.kind === "item" && this.drag.moved && this.selected && isPlaced(this.shop,this.selected)) this.markers=placementMarkers(this.scene,this.selected,this.shop);
   }
 
   captureImage(): string {
@@ -305,6 +313,7 @@ export class Diorama {
     this.positionShopkeeper();
     this.setNight(this.night);
     this.updateRing();
+    this.updateMarkers();
     if (shop.owned.includes("lamp")) this.warm = Math.max(this.warm, 0.25);
     if (opts.animate === "paint") this.sparkleAt(new Vector3(2.8, 1.7, 1.1));
   }
@@ -667,7 +676,7 @@ export class Diorama {
       return;
     }
     if (!this.drag.moved && Math.hypot(event.clientX - this.drag.lastX, event.clientY - this.drag.lastY) < 8) return;
-    this.drag.moved = true;
+    if (!this.drag.moved) { this.drag.moved = true; this.updateMarkers(); }
     const id = this.drag.id;
     if (!id) return;
     const point = this.pickSurface(id);
@@ -693,6 +702,7 @@ export class Diorama {
     if (!this.drag || event.pointerId !== this.drag.pointerId) return;
     const drag = this.drag;
     this.drag = null;
+    this.updateMarkers();
     if (drag.kind !== "item" || !drag.id || !drag.start || !drag.moved) return;
     const id = drag.id;
     const root = this.visuals.items[id];

@@ -1,6 +1,7 @@
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import type { Texture } from "@babylonjs/core/Materials/Textures/texture";
 import { Color3 } from "@babylonjs/core/Maths/math.color";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 import { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
@@ -16,7 +17,7 @@ import {
   signTexture,
   woodTexture,
 } from "./textures";
-import { floorCenter, wallCenter } from "./grid";
+import { canPlace, floorCenter, wallCenter } from "./grid";
 import { UPGRADE_BY_ID, placeOf, styleOf, kindOf } from "./upgrades";
 
 export interface ShopVisuals {
@@ -227,6 +228,8 @@ function buildItemMeshes(scene: Scene, id: UpgradeId, shop: ShopState): Transfor
     return root;
   }
   const style = styleOf(shop, id);
+  if (id === "terrarium" || id === "botanical" || id === "cabinet") return buildConservatory(scene, shop, id, style);
+  if (id === "armchair" || id === "fountain") return buildSignature(scene, shop, id, style);
   if (id === "counter") return buildCounter(scene, shop, style);
   if (id === "sign") return buildSign(scene, shop, style);
   if (id === "shelves") return buildShelves(scene, shop, style);
@@ -489,6 +492,11 @@ function buildCustomerMeshes(scene: Scene): TransformNode {
   const eyes = paint(scene, "eyes", C.hair);
   sphere(scene, "eye-l", 0.018, root, eyes, -0.055, 1.09, 0.165);
   sphere(scene, "eye-r", 0.018, root, eyes, 0.055, 1.09, 0.165);
+  const blush=paint(scene,"cheeks","#d99785");
+  for(const x of [-.105,.105]) sphere(scene,"cheek",.028,root,blush,x,1.035,.16).scaling.z=.35;
+  box(scene,"apron-pocket",.12,.1,.012,root,coat,0,.62,.195);
+  for(const x of [-.22,.22]) sphere(scene,"hand",.065,root,skin,x,.49,.07);
+  sphere(scene,"hair-bun",.09,root,hair,0,1.25,-.12);
   root.scaling.setAll(1.22);
   return root;
 }
@@ -715,4 +723,187 @@ function addSteam(scene: Scene, root: TransformNode, x: number, y: number, z: nu
     wisp.receiveShadows = false;
     wisp.metadata = {steam:{x,y,phase:i/3}};
   }
+}
+
+function buildConservatory(scene: Scene, shop: ShopState, id: "terrarium" | "botanical" | "cabinet", style: number): TransformNode {
+  const root = new TransformNode(id, scene);
+  const brass = paint(scene, "conservatory-brass", "#c6a464", {spec:.35});
+  const frame = paint(scene, "conservatory-frame", ["#365e4e", "#334f6b", "#b77984"][style]);
+  const china = paint(scene, "conservatory-china", ["#eee5c9", "#aacbd5", "#f4d4ca"][style]);
+  if (id === "terrarium") {
+    const gardenFrame = style === 0 ? brass : style === 1 ? china : frame;
+    const foliage = paint(scene,"garden-foliage",style===1?"#71998a":"#63814b");
+    const flower = paint(scene,"garden-flower","#e7a6b4");
+    box(scene,"garden-plinth",.92,.18,.88,root,frame,0,.12,0);
+    box(scene,"garden-earth",.82,.08,.76,root,paint(scene,"earth",style===1?"#dfc9a1":"#735443"),0,.25,0);
+    for(const x of [-.43,.43]) for(const z of [-.39,.39]) {
+      box(scene,"glasshouse-post",.045,.88,.045,root,gardenFrame,x,.69,z);
+      const roof=box(scene,"roof-rib",.045,.64,.045,root,gardenFrame,x/2,1.27,z); roof.rotation.z=x>0?.74:-.74;
+    }
+    for(const y of [.27,1.12]) for(const z of [-.39,.39]) box(scene,"glasshouse-rail",.9,.045,.045,root,gardenFrame,0,y,z);
+    box(scene,"glasshouse-ridge",.045,.045,.82,root,gardenFrame,0,1.5,0);
+    const glass=paint(scene,"garden-glass","#c3d9ce",{alpha:.1,spec:.4});
+    for(const x of [-.43,.43]) box(scene,"glass-pane",.012,.8,.76,root,glass,x,.7,0);
+    if(style===1) {
+      // A column cactus and a low round cactus read differently from leafy styles.
+      const stem=sphere(scene,"column-cactus",.15,root,foliage,-.14,.69,0);stem.scaling.y=2.5;
+      for(const side of [-1,1]) {
+        const arm=sphere(scene,"cactus-arm",.09,root,foliage,-.14+side*.19,.64+side*.09,0);arm.scaling.y=1.7;
+        box(scene,"cactus-join",.16,.1,.1,root,foliage,-.14+side*.1,.54+side*.09,0);
+      }
+      sphere(scene,"round-cactus",.19,root,foliage,.19,.46,.17);
+      sphere(scene,"cactus-flower",.07,root,flower,.19,.66,.17);
+      for(const x of [-.28,.25]) sphere(scene,"garden-pebble",.09,root,china,x,.33,-.23).scaling.y=.45;
+    } else if(style===0) {
+      for(const [i,x] of [-.2,.18].entries()) {
+        cyl(scene,"fern-stem",.55,.03,root,foliage,x,.57,i*.18-.1);
+        for(const side of [-1,1]) for(let tier=0;tier<3;tier++) {
+          const leaf=sphere(scene,"fern-frond",.19,root,foliage,x+side*.1,.52+tier*.15,i*.18-.1);
+          leaf.scaling.set(1,.3,.65);leaf.rotation.z=side*(.25+tier*.16);
+        }
+      }
+      sphere(scene,"moss-mound",.2,root,foliage,0,.32,.18).scaling.y=.25;
+    } else {
+      for(const [i,x] of [-.23,.02,.23].entries()) {
+        cyl(scene,"rose-stem",.43+i*.08,.035,root,foliage,x,.5,0);
+        for(const side of [-1,1]) {
+          const leaf=sphere(scene,"rose-leaf",.13,root,foliage,x+side*.07,.47,side*.13);leaf.scaling.set(1,.3,.7);
+        }
+        const bloom=sphere(scene,"rose-bloom",.17,root,flower,x,.74+i*.06,0);bloom.scaling.y=.8;
+        sphere(scene,"rose-centre",.09,root,china,x,.83+i*.06,.03);
+      }
+    }
+  } else if (id === "botanical") {
+    const petal=paint(scene,"triptych-petal",style===2?"#c57e91":"#f4e7c8");
+    for(const [i,x] of [-.62,0,.62].entries()) {
+      const h=i===1?1.17:.95;
+      box(scene,"triptych-frame",.58,h,.08,root,brass,x,0,0);
+      box(scene,"triptych-panel",.5,h-.08,.025,root,style===2?china:frame,x,0,.055);
+      box(scene,"botanical-stem",.035,.66,.035,root,brass,x,-.06,.095);
+      if(style===0) {
+        // Broad fan relief, instead of tiny repeated leaves.
+        for(const [tier,side] of [[-.16,-1],[.08,1],[.3,0]]) {
+          const leaf=sphere(scene,"ginkgo-fan",.2,root,brass,x+side*.065,tier,.13);
+          leaf.scaling.set(1,.68,.24);leaf.rotation.z=side*.4;
+        }
+      } else if(style===1) {
+        for(let n=0;n<5;n++) {
+          const angle=n*Math.PI*2/5;
+          const leaf=sphere(scene,"magnolia-petal",.15,root,petal,x+Math.sin(angle)*.1,.12+Math.cos(angle)*.12,.13);
+          leaf.scaling.set(.65,1.25,.25);leaf.rotation.z=-angle;
+        }
+        sphere(scene,"magnolia-centre",.075,root,brass,x,.12,.17).scaling.z=.3;
+      } else {
+        for(const [dx,dy] of [[-.12,.04],[.1,.27],[.06,-.19]]) {
+          const bloom=sphere(scene,"wildflower-head",.13,root,petal,x+dx,dy,.13);bloom.scaling.z=.3;
+          sphere(scene,"wildflower-centre",.045,root,brass,x+dx,dy,.17).scaling.z=.3;
+        }
+      }
+    }
+  } else {
+    box(scene,"cabinet-back",1.65,1.55,.13,root,frame,0,.95,-.32);
+    for(const x of [-.78,.78]) box(scene,"cabinet-pillar",.1,1.65,.7,root,frame,x,.9,0);
+    // Smooth open arches keep the crown readable without striped box segments.
+    for(const z of [-.32,.32]) {
+      const path=Array.from({length:25},(_,i)=>{const a=i*Math.PI/24;return new Vector3(Math.cos(a)*.76,1.7+Math.sin(a)*.35,z);});
+      const arch=MeshBuilder.CreateTube('cabinet-arch',{path,radius:.055,tessellation:8},scene);arch.parent=root;arch.material=brass;
+    }
+    for(const y of [.2,.75,1.3]) {
+      box(scene,"cabinet-shelf",1.65,.09,.72,root,china,0,y,0);
+      box(scene,"shelf-gold",1.65,.035,.025,root,brass,0,y,.37);
+    }
+    for(const y of [.36,.91,1.46]) for(const x of [-.45,0,.45]) {
+      cyl(scene,"porcelain-foot",.035,.12,root,brass,x,y-.07,.02);
+      const vase=sphere(scene,"porcelain-vase",.15,root,china,x,y+.04,.02);vase.scaling.y=1.35;
+      cyl(scene,"porcelain-neck",.09,.065,root,china,x,y+.24,.02);
+    }
+    for(const x of [-.66,.66]) cyl(scene,"cabinet-foot",.18,.06,root,brass,x,.09,0);
+  }
+  if(id === "botanical") placeWallItem(root,id,shop); else placeFloorItem(root,id,shop);
+  tag(root,id);return root;
+}
+
+function buildSignature(scene: Scene, shop: ShopState, id: "armchair" | "fountain", style: number): TransformNode {
+  const root = new TransformNode(id, scene);
+  const brass = paint(scene,"signature-brass","#c6a464",{spec:.3});
+  const oak = paint(scene,"signature-oak","#b88b60");
+  const cream = paint(scene,"signature-cream","#eee3cb");
+  if(id === "armchair") {
+    const cloth=paint(scene,"chair-cloth",["#9caf92","#617d91","#d2b07e"][style]);
+    const cushion=paint(scene,"chair-cushion",style===0?"#d6a5aa":"#eee3cb");
+    for(const x of [-.31,.31]) for(const z of [-.28,.28]) cyl(scene,"chair-foot",.24,.045,root,oak,x,.12,z);
+    box(scene,"chair-seat",.72,.2,.7,root,cloth,0,.38,0);
+    if(style===0) {
+      const back=sphere(scene,"cloud-back",.42,root,cloth,0,.8,-.26);back.scaling.set(1,1.1,.36);
+      for(const x of [-.34,.34]) {const arm=sphere(scene,"cloud-arm",.18,root,cloth,x,.59,.02);arm.scaling.set(.6,.7,1.9);}
+    } else if(style===1) {
+      box(scene,"wingback",.66,.83,.16,root,cloth,0,.84,-.29);
+      for(const x of [-.31,.31]) {
+        const wing=box(scene,"chair-wing",.14,.61,.24,root,cloth,x,.94,-.17);wing.rotation.z=x>0?.12:-.12;
+        box(scene,"chair-arm",.14,.13,.61,root,oak,x,.64,.04);
+      }
+    } else {
+      for(const x of [-.33,.33]) {
+        box(scene,"cane-upright",.07,.73,.07,root,oak,x,.64,-.3);
+        box(scene,"cane-arm",.08,.08,.67,root,oak,x,.64,0);
+      }
+      for(const y of [.56,.73,.9]) box(scene,"cane-slat",.7,.09,.055,root,cloth,0,y,-.3);
+      for(const x of [-.23,0,.23]) box(scene,"cane-weave",.055,.5,.055,root,cloth,x,.72,-.27);
+      box(scene,"folded-throw",.26,.07,.52,root,paint(scene,"throw","#b57f8d"),.18,.53,.07);
+    }
+    const pillow=sphere(scene,"chair-pillow",.25,root,cushion,-.07,.65,-.12);pillow.scaling.set(1,.8,.34);pillow.rotation.z=.12;
+  } else {
+    const stone=paint(scene,"fountain-stone",["#e7dcc5","#9faeaa","#d3aaa7"][style]);
+    const water=paint(scene,"fountain-water","#8bbdc2",{spec:.5});
+    const bowl=(y:number,r:number)=>{
+      cyl(scene,"basin-body",.15,r,root,stone,0,y,0,20);
+      cyl(scene,"still-water",.025,r-.05,root,water,0,y+.087,0,20);
+      const lip=MeshBuilder.CreateTorus("basin-rim",{diameter:r*2-.04,thickness:.07,tessellation:24},scene);lip.parent=root;lip.position.y=y+.09;lip.material=stone;
+    };
+    cyl(scene,"fountain-foot",.13,.3,root,stone,0,.075,0,16);
+    if(style===0) {
+      cyl(scene,"fountain-pedestal",.65,.1,root,stone,0,.43,0,12);
+      bowl(.41,.43);bowl(.94,.27);
+      cyl(scene,"fountain-neck",.43,.07,root,brass,0,.7,0);
+      sphere(scene,"fountain-finial",.09,root,brass,0,1.15,0);
+    } else if(style===1) {
+      bowl(.19,.44);
+      for(const [n,x] of [-.06,.08,-.03].entries()) {
+        const rock=sphere(scene,"river-stone",.25-n*.035,root,stone,x,.44+n*.24,0);rock.scaling.set(1.1,.6,.9);rock.rotation.y=n*.7;
+      }
+      // A small glazed water ribbon, without extra lights or an animation loop.
+      box(scene,"water-ribbon",.055,.56,.025,root,water,.12,.65,.17);
+    } else {
+      cyl(scene,"lotus-pedestal",.43,.12,root,brass,0,.32,0);
+      bowl(.54,.45);
+      const leaf=paint(scene,"lily-leaf","#789b7c");
+      for(const x of [-.19,.18]) cyl(scene,"lily-pad",.025,.14,root,leaf,x,.66,.04,12);
+      for(let n=0;n<6;n++) {
+        const a=n*Math.PI/3;
+        const petal=sphere(scene,"lotus-petal",.14,root,cream,Math.sin(a)*.09,.73,Math.cos(a)*.09-.11);petal.scaling.set(.65,.4,1.15);petal.rotation.y=a;
+      }
+      sphere(scene,"lotus-heart",.06,root,brass,0,.78,-.11);
+    }
+  }
+  placeFloorItem(root,id,shop);tag(root,id);return root;
+}
+
+export function placementMarkers(scene: Scene, id: UpgradeId, shop: ShopState): TransformNode {
+  return ownedVisual(scene,()=>{
+    const root=new TransformNode("placement-markers",scene);
+    const mat=paint(scene,"placement-marker","#9cc985",{emit:"#9cc985"});
+    const def=UPGRADE_BY_ID[id], rot=placeOf(shop,id).rot;
+    const add=(x:number,y:number,z:number,wall=false)=>{
+      const dot=box(scene,"legal-position",.12,wall?.12:.015,wall?.025:.12,root,mat,x,y,z);
+      dot.isPickable=false;dot.receiveShadows=false;return dot;
+    };
+    if(def.surface==='wall') for(const wall of ['back','left'] as const) for(let x=0;x<6;x++) {
+      const p={x,z:0,rot:wall==='left'?1:0,wall};
+      if(canPlace(id,p,shop)) {const c=wallCenter(p,def.size.w);const dot=add(c.x,id==='shelves'?1.85:c.y,c.z,true);if(wall==='left')dot.rotation.y=Math.PI/2;}
+    }
+    if(def.surface==='floor') for(let x=0;x<6;x++) for(let z=0;z<6;z++) {
+      const p={x,z,rot};if(canPlace(id,p,shop)){const c=floorCenter(def.size,p);add(c.x,.025,c.z);}
+    }
+    return root;
+  });
 }

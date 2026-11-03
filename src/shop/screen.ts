@@ -1,10 +1,13 @@
+import { readPuzzle } from '../game/resume';
+import { rewardCard } from '../ui/reward';
+import { collectionUnlocked } from './upgrades';
 import { guideStage, setGuide, guideCard } from "../game/guide";
 import { audioToggle, themeToggle, updateAudioToggle, updateThemeToggle } from "../ui/toggles";
 import { isOfflinePreview } from "../game/offline";
-import { cloneInventory as clone, storeItem, placeItem } from "./inventory";
-import { decorationIcon, styleThumbnail } from "./icons";
+import { cloneInventory as clone, storeItem, placeItem, returnValue, returnItem } from "./inventory";
+import { styleThumbnail } from "./icons";
 import { imageFile, saveImage } from "./share";
-import { loadNight, saveNight } from "../game/appearance";
+import { loadNight, saveNight, setBrowserNight } from "../game/appearance";
 import { isGuidePreview, isPreview, isShowroom } from "../game/preview";
 import { playChime, playClick, playFinale } from "../game/audio";
 import { isBakeryOpen, saveShop, spendableStars } from "../game/storage";
@@ -31,6 +34,8 @@ export interface ShopHost {
   save(next: Progress): void;
   goLevels(): void;
   toggleMute(): void;
+  resumePuzzle(): void;
+  backups(): void;
 }
 
 export interface ShopScreen {
@@ -39,7 +44,7 @@ export interface ShopScreen {
   dispose(): void;
 }
 
-export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false): ShopScreen {
+export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false, initialReward?: UpgradeId): ShopScreen {
   root.innerHTML = `
     <div class="frame shop-room">
       <header class="topbar shop-overlay shop-toolbar">
@@ -51,6 +56,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
           <details class="settings-menu">
             <summary aria-label="More shop options" title="More shop options"><span aria-hidden="true">⋯</span></summary>
             <div class="settings-popover">
+              ${!isShowroom && !isGuidePreview ? '<button id="backup-progress" type="button">Progress & backups</button>' : ''}
               <button id="showcase-toggle" class="icon-btn" type="button">Showcase</button>
             </div>
           </details>
@@ -77,7 +83,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       <button id="upgrade-notice" class="upgrade-notice hidden" type="button"></button>
       <div class="shop-dock">
         <section id="decorate-panel" class="hidden" aria-label="Decorations">
-        <button id="tray-toggle" class="tray-toggle" type="button" aria-expanded="true" aria-controls="editor-body">More room <span aria-hidden="true">⌄</span></button>
+        <div class="editor-nav"><button id="editor-back" class="collection-back hidden" data-act="browse" type="button">← Browse</button><button id="tray-toggle" class="tray-toggle" type="button" aria-expanded="true" aria-controls="editor-body">Hide panel <span aria-hidden="true">⌄</span></button></div>
         <div id="editor-body">
         <div class="catalog-tabs" role="group" aria-label="Decoration collection">
           <button data-filter="all" type="button">Decorations</button>
@@ -119,6 +125,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   let showcasing = false;
   let trayCollapsed = false;
   let sharing = false;
+  let returnDialog: HTMLDialogElement | null = null;
   let focus: UpgradeId | null = null;
   let selected: UpgradeId | null = null;
   let finaleOpen = false;
@@ -167,11 +174,12 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   diorama.setNight(night);
 
   const paintChrome = () => {
+    setBrowserNight(night);
     root.querySelector(".shop-room")?.classList.toggle("is-night", night);
     root.querySelector(".shop-room")?.classList.toggle("tray-collapsed", edit && trayCollapsed);
     const tray = root.querySelector<HTMLButtonElement>("#tray-toggle")!;
     tray.setAttribute("aria-expanded", String(!trayCollapsed));
-    tray.innerHTML = trayCollapsed ? 'Show decorations <span aria-hidden="true">⌃</span>' : 'More room <span aria-hidden="true">⌄</span>';
+    tray.innerHTML = trayCollapsed ? 'Show panel <span aria-hidden="true">⌃</span>' : 'Hide panel <span aria-hidden="true">⌄</span>';
     root.querySelector<HTMLElement>("#editor-body")!.inert = trayCollapsed;
     updateThemeToggle(root.querySelector("#theme-toggle"), night);
     root.querySelector(".settings-menu")?.classList.toggle("hidden", edit);
@@ -190,7 +198,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     guide.classList.toggle('hidden', !guide.innerHTML);
     root.querySelector('.shop-room')?.classList.toggle('has-guide', Boolean(guide.innerHTML));
     const spendable = spendableStars(progress);
-    const available = DECORATIONS.filter((item) => !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
+    const available = DECORATIONS.filter((item) => collectionUnlocked(item.id,progress.bestStars) && !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
     updateAudioToggle(root.querySelector("#mute"), progress.muted);
 
     const starLine = root.querySelector("#shop-stars");
@@ -210,6 +218,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector(".shop-room")?.classList.toggle("decorating", edit);
     if (!edit) root.querySelector("#placement-status")?.classList.add("hidden");
 
+    root.querySelector('.shop-room')?.classList.toggle('has-selection',Boolean(focus));
+    root.querySelector('#editor-back')?.classList.toggle('hidden',!focus);
     const rail = root.querySelector("#upgrade-rail");
     root.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(button => {
       button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
@@ -220,8 +230,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       const active = focus === upgrade.id;
       return `
         <button aria-pressed="${active}" class="upgrade-chip ${owned ? "owned" : ""} ${active ? "active" : ""}" data-upgrade="${upgrade.id}" type="button">
-          <span class="deco-icon" aria-hidden="true">${decorationIcon(upgrade.id)}</span><strong>${label(upgrade.id)}</strong>
-          <span>${owned ? `${isStored(progress.shop, upgrade.id) ? "Stored" : "In shop"} · ${UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name}` : `${upgrade.cost} ${STAR}`}</span>
+          <span class="deco-icon" aria-hidden="true">${styleThumbnail(upgrade.id,styleOf(progress.shop,upgrade.id))}</span><strong>${label(upgrade.id)}</strong>
+          <span>${owned ? `${isStored(progress.shop, upgrade.id) ? "Stored" : "In shop"} · ${UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name}` : `${upgrade.cost} ${STAR}${!collectionUnlocked(upgrade.id,progress.bestStars) ? ` · ${upgrade.unlockAfter} puzzles` : upgrade.collection ? ` · ${upgrade.collection}` : ""}`}</span>
         </button>`;
     }).join("");
 
@@ -229,32 +239,37 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     if (rail && !collection.length) rail.innerHTML = `<p class="editor-empty">${filter === "owned" ? "Your collection starts here. Explore Decorations to try something for your shop." : "You have every decoration in this collection. Arrange them in My decorations."}</p>`;
     const detail = root.querySelector("#upgrade-detail");
     detail?.classList.toggle("hidden", !focus);
-    if (detail) detail.innerHTML = focus ? `<button class="collection-back" data-act="browse" type="button">← ${filter === "owned" ? "My decorations" : "Decorations"}</button>${draft ? taskDetail(progress, focus, draft) : isOwned(progress.shop, focus) ? editDetail(progress.shop, focus) : taskDetail(progress, focus, null)}` : "";
+    if (detail) detail.innerHTML = focus ? `${draft ? taskDetail(progress, focus, draft) : isOwned(progress.shop, focus) ? editDetail(progress.shop, focus) : taskDetail(progress, focus, null)}` : "";
 
     if (detail && focus) {
-      const purchase = detail.querySelector(".purchase-row");
+      const title = detail.querySelector(".detail-copy")!;
+      const purchase = detail.querySelector(".purchase-row, .inventory-actions");
       const scroll = document.createElement("div");
       scroll.className = "detail-scroll";
       for (const child of Array.from(detail.childNodes)) {
-        if (child !== purchase) scroll.append(child);
+        if (child !== purchase && child !== title) scroll.append(child);
       }
-      detail.prepend(scroll);
+      title.after(scroll);
     }
 
     const bakery = root.querySelector<HTMLButtonElement>("#bakery");
     const bakeryCopy = root.querySelector("#bakery-copy");
     const bakeryLock = root.querySelector("#bakery-lock");
     const open = isBakeryOpen(progress);
-    if (bakery) bakery.disabled = !open;
+    if (bakery) bakery.disabled = true;
     bakery?.classList.toggle("locked", !open);
     bakery?.classList.toggle("open", open);
     if (bakeryCopy) {
-      bakeryCopy.textContent = open
-        ? "Coming soon"
-        : "Complete your shop to unlock";
+      bakeryCopy.textContent = "Future room · Not playable yet";
     }
-    if (bakeryLock) bakeryLock.classList.toggle("hidden", open);
+    if (bakeryLock) bakeryLock.classList.add("hidden");
 
+    const actions=root.querySelector('.shop-actions');
+    if(actions){
+      actions.querySelector('.journey-goal, .reward-card')?.remove();actions.insertAdjacentHTML('beforeend',rewardCard(progress));
+      actions.querySelector('[data-resume-shop]')?.remove();
+      if(readPuzzle(progress)) {const button=document.createElement('button');button.dataset.resumeShop='';button.className='resume-card';button.textContent='Resume unfinished puzzle →';button.onclick=()=>host.resumePuzzle();actions.prepend(button);}
+    }
     const modal = root.querySelector("#shop-modal");
     if (modal) {
       if (finaleOpen) modal.innerHTML = finaleModal();
@@ -285,11 +300,44 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     }
   };
 
+  const openDecoration = (id: UpgradeId) => {
+    clearPreview(); edit = true; showcasing = false; trayCollapsed = false;
+    focus = id; selected = isOwned(host.progress.shop, id) ? id : null;
+    filter = selected ? 'owned' : 'all';
+    diorama.setEditMode(true); diorama.select(selected);
+    if (!selected) preview(id, 0);
+    paintChrome();
+  };
+
+  const confirmReturn = (id: UpgradeId) => {
+    const value = returnValue(host.progress.shop, id);
+    if (!value || returnDialog) return;
+    const dialog = document.createElement('dialog'); returnDialog = dialog;
+    dialog.className = 'backup-dialog return-dialog';
+    dialog.setAttribute('aria-labelledby', 'return-title');
+    dialog.innerHTML = `<h3 id="return-title">Return ${label(id)}?</h3><p>Get all ${value} stars back. This piece leaves your room and collection. You can buy it again later; unlocks stay yours.</p><button data-confirm-return type="button">Return for ${value} ✦</button><button data-cancel-return type="button" autofocus>Keep decoration</button>`;
+    document.body.append(dialog);
+    const close = () => { dialog.close(); dialog.remove(); returnDialog = null; (root.querySelector<HTMLButtonElement>('[data-act="return"]') ?? root.querySelector<HTMLButtonElement>(`[data-upgrade="${id}"]`) ?? root.querySelector<HTMLButtonElement>('[data-filter="all"]'))?.focus({preventScroll:true}); };
+    dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
+    dialog.querySelector('[data-cancel-return]')!.addEventListener('click', close);
+    dialog.querySelector('[data-confirm-return]')!.addEventListener('click', () => {
+      const next = returnItem(host.progress.shop, id);
+      if (next) { clearPreview(); selected = null; focus = null; diorama.select(null); commit(next); browse('all'); }
+      close();
+    });
+    dialog.showModal();
+  };
+
   const bind = () => {
+    root.querySelector('.shop-actions')?.addEventListener('click', event => {
+      const button = (event.target as Element).closest<HTMLElement>('[data-reward]');
+      if (button) openDecoration(button.dataset.reward as UpgradeId);
+    });
     root.querySelectorAll<HTMLButtonElement>("[data-zoom]").forEach(button => button.addEventListener("click", () => {
       if (button.dataset.zoom === "fit") diorama.resetView();
       else diorama.zoomBy(button.dataset.zoom === "in" ? 1.2 : 1/1.2);
     }));
+    root.querySelector("#backup-progress")?.addEventListener("click",()=>host.backups());
     root.querySelector("#showcase-toggle")?.addEventListener("click", () => {
       root.querySelector(".settings-menu")?.removeAttribute("open");
       showcasing = true;
@@ -315,6 +363,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       host.toggleMute();
       paintChrome();
     });
+    root.querySelector("#editor-back")?.addEventListener("click",()=>browse(filter));
     root.querySelector("#tray-toggle")?.addEventListener("click", () => {
       trayCollapsed = !trayCollapsed;
       paintChrome();
@@ -378,6 +427,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
         const id = target.dataset.id as UpgradeId;
         const variant = Number(target.dataset.style ?? "0");
         restyle(id, variant);
+      } else if (act === "return" && selected) {
+        confirmReturn(selected);
       } else if (act === "rotate") {
         rotateSelected();
       } else if ((act === "store" || act === "place") && selected) {
@@ -391,6 +442,10 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       }
     });
     root.querySelector("#shop-modal")?.addEventListener("click", (event) => {
+      if((event.target as HTMLElement).closest('[data-finale-showcase]')) {
+        finaleOpen=false;edit=false;showcasing=true;clearPreview();diorama.setEditMode(false);paintChrome();
+        root.querySelector<HTMLButtonElement>('#showcase-back')?.focus();return;
+      }
       const button = (event.target as HTMLElement).closest("[data-dismiss]");
       if (!button) return;
       playClick(host.progress.muted);
@@ -410,6 +465,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   };
 
   const browse = (tab: "all" | "owned") => {
+    trayCollapsed = false;
     clearPreview();
     filter = tab;
     focus = null;
@@ -448,7 +504,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   const buy = (id: UpgradeId, variant: number) => {
     const progress = host.progress;
     const def = UPGRADE_BY_ID[id];
-    if (isOwned(progress.shop, id) || !canPurchaseCopy(progress.shop, id) || spendableStars(progress) < def.cost) return;
+    if (!collectionUnlocked(id,progress.bestStars) || isOwned(progress.shop, id) || !canPurchaseCopy(progress.shop, id) || spendableStars(progress) < def.cost) return;
     const shop = clone(progress.shop);
     const place = draft?.id === id ? draft.place : findOpenPlacement(id, shop);
     if (!place || !canPlace(id, place, shop)) return;
@@ -505,11 +561,12 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   bind();
   diorama.setEditMode(edit);
   paintChrome();
+  if (initialReward && UPGRADE_BY_ID[initialReward]) openDecoration(initialReward);
 
   return {
     ready: () => diorama.ready(),
     refresh: () => paintChrome(),
-    dispose: () => diorama.dispose(),
+    dispose: () => { returnDialog?.remove(); returnDialog = null; diorama.dispose(); setBrowserNight(false); },
   };
 }
 
@@ -523,13 +580,14 @@ function taskDetail(progress: Progress, focus: UpgradeId | null, draft: Decorati
   const def = UPGRADE_BY_ID[id];
   if (isOwned(progress.shop, id)) return editDetail(progress.shop, id);
   const chosen = draft?.id === id ? draft.style : null;
+  const unlocked = collectionUnlocked(id,progress.bestStars);
   const affordable = spendableStars(progress) >= def.cost;
   const fits = draft?.id === id && draft.place !== null;
   return `<div class="detail-copy"><strong>${label(id)}</strong>
     <p class="detail-note">${chosen === null ? "Choose a style to preview in your shop." : def.variants[chosen].blurb}</p></div>
     <div class="style-row">${def.variants.map((variant, index) => `<button class="style-chip ${chosen === index ? "active" : ""}" aria-pressed="${chosen === index}" data-act="preview" data-id="${id}" data-style="${index}" type="button">${styleThumbnail(id, index)}<span>${variant.name}</span></button>`).join("")}</div>
     ${draft?.place && def.movable ? `<button class="style-chip rotate-action" data-act="rotate" type="button">${def.surface === "wall" ? "Other wall" : "Rotate"}</button>` : ""}
-    ${chosen === null ? "" : `<p class="detail-note" role="status">${!fits ? "Make room by moving your decorations first." : !affordable ? `${def.cost - spendableStars(progress)} more stars needed · Preview is free` : "Not purchased · Styles included"}</p><div class="purchase-row"><button class="buy-decoration" data-act="buy" data-id="${id}" data-style="${chosen}" type="button" ${!affordable || !fits ? "disabled" : ""}>Buy ${def.variants[chosen].name} · ${def.cost} ✦</button><button class="style-chip" data-act="cancel-preview" type="button">Cancel</button></div>`}`;
+    ${chosen === null ? "" : `<p class="detail-note" role="status">${!unlocked ? `Complete ${def.unlockAfter} puzzles to unlock · Preview is free` : !fits ? "Make room by moving your decorations first." : !affordable ? `${def.cost - spendableStars(progress)} more stars needed · Preview is free` : "Styles included · Free to change"}</p><div class="purchase-row"><button class="buy-decoration" data-act="buy" data-id="${id}" data-style="${chosen}" type="button" ${!unlocked || !affordable || !fits ? "disabled" : ""}> ${!unlocked ? `Unlock at ${def.unlockAfter} puzzles` : !fits ? "Make room to buy" : !affordable ? `Need ${def.cost - spendableStars(progress)} more stars` : "Buy"} · ${def.cost} ✦</button></div>`}`;
 
 }
 
@@ -555,20 +613,21 @@ function editDetail(shop: ShopState, selected: UpgradeId | null): string {
       <strong>${label(selected)}</strong>
       <p class="detail-note">${def.variants[current]?.blurb ?? def.blurb}</p>
     </div>
-    <p class="section-label">Style · Free to change</p>
+
     <div class="style-row">${styles}</div>
-    <div class="inventory-actions">${rotate}${def.movable ? `<button class="style-chip" data-act="${stored ? "place" : "store"}" type="button" ${stored && !canRestore ? "disabled" : ""}>${stored ? "Place in shop" : "Store item"}</button>` : ""}</div>
-    <p class="editor-saved" role="status">${stored ? canRestore ? "Stored · Place it again for free" : "Stored · Make room to place it again" : "Changes saved automatically"}</p>`;
+    <div class="inventory-actions">${rotate}${def.movable ? `<button class="style-chip" data-act="${stored ? "place" : "store"}" type="button" ${stored && !canRestore ? "disabled" : ""}>${stored ? "Place" : "Store"}</button>` : ""}</div>
+    ${stored && !canRestore ? '<p class="editor-saved" role="status">Make room to place this item.</p>' : ''}
+    ${returnValue(shop, selected) ? `<button class="return-item" data-act="return" type="button">Return for ${returnValue(shop, selected)} ✦</button>` : ''}`;
 }
 
 function finaleModal(): string {
   return `
     <div class="modal">
       <p class="kicker">All tidy</p>
-      <h3>The tea shop is open</h3>
-      <p class="lede tight">The lamps warm up, the shopkeeper is ready to serve, and the bakery door is unlocked.</p>
+      <h3>Your tea shop is open</h3>
+      <p class="lede tight">The lamps warm up, the shopkeeper is ready to serve, and this little corner is yours. Keep collecting, try a new arrangement, or share your finished shop.</p>
       <div class="modal-actions">
-        <button data-dismiss type="button">Lovely</button>
+        <button data-finale-showcase type="button">Show my shop</button><button data-dismiss type="button">Keep decorating</button>
       </div>
     </div>`;
 }

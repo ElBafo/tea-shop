@@ -48,7 +48,12 @@ export type UpgradeKind =
   | "basket"
   | "bench"
   | "trolley"
-  | "planter";
+  | "planter"
+  | "terrarium"
+  | "botanical"
+  | "cabinet"
+  | "armchair"
+  | "fountain";
 
 export type RepeatableKind = "plant" | "lamp" | "table" | "art" | "basket";
 // Existing IDs identify copy one; additional copies have stable independent IDs.
@@ -77,6 +82,8 @@ export interface UpgradeDef {
   blurb: string;
   cost: number;
   optional?: boolean;
+  unlockAfter?: number;
+  collection?: string;
   movable: boolean;
   surface: ShopSurface;
   layer: ShopLayer;

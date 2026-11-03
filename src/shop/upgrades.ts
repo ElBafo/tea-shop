@@ -203,6 +203,36 @@ export const UPGRADES: UpgradeDef[] = [
       { name: "Citrus", blurb: "A round blue pot and a tree full of golden fruit." },
     ],
   },
+  {
+    id: "terrarium", title: "Glass garden", moveName: "glass garden", cost: 10, optional: true,
+    unlockAfter: 8, collection: "Conservatory", blurb: "A miniature garden in a brass-framed glasshouse.",
+    movable: true, surface: "floor", layer: "furn", size: {w:1,d:1}, defaultPlace:{x:5,z:4,rot:0},
+    variants:[{name:"Fern house",blurb:"Brass, forest green and sculptural fern leaves."},{name:"Desert glass",blurb:"Ivory framing and a tiny cactus garden."},{name:"Rose garden",blurb:"Blush framing with generous pink blossoms."}],
+  },
+  {
+    id: "botanical", title: "Botanical triptych", moveName: "botanical triptych", cost: 14, optional: true,
+    unlockAfter: 16, collection: "Conservatory", blurb: "Three sculptural botanical panels, one statement.",
+    movable: true, surface: "wall", layer: "wall", size: {w:2,d:1}, defaultPlace:{x:3,z:0,rot:1,wall:"left"},
+    variants:[{name:"Ginkgo",blurb:"Golden fans on deep forest panels."},{name:"Magnolia",blurb:"Cream petals on midnight blue."},{name:"Wildflower",blurb:"Rose blooms on warm ivory."}],
+  },
+  {
+    id: "cabinet", title: "Collector’s cabinet", moveName: "collector’s cabinet", cost: 18, optional: true,
+    unlockAfter: 24, collection: "Conservatory", blurb: "An arched cabinet of precious tea ware.",
+    movable: true, surface: "floor", layer: "furn", size: {w:2,d:1}, defaultPlace:{x:3,z:4,rot:0},
+    variants:[{name:"Jade atelier",blurb:"Deep jade, brass edging and ivory porcelain."},{name:"Blue porcelain",blurb:"Midnight cabinetry with pale blue tea ware."},{name:"Rose salon",blurb:"Rose cabinetry, cream shelves and golden handles."}],
+  },
+  {
+    id: "armchair", title: "Reading chair", moveName: "reading chair", cost: 16, optional: true,
+    unlockAfter: 32, collection: "Signature pieces", blurb: "Your favourite seat for one more chapter.",
+    movable: true, surface: "floor", layer: "furn", size: {w:1,d:1}, defaultPlace:{x:4,z:5,rot:0},
+    variants:[{name:"Cloud cushion",blurb:"A rounded sage chair with a generous rose cushion."},{name:"Library wing",blurb:"A tall blue wingback with warm oak legs."},{name:"Woven nest",blurb:"An open cane chair with a cream seat and folded blanket."}],
+  },
+  {
+    id: "fountain", title: "Tea garden fountain", moveName: "tea garden fountain", cost: 20, optional: true,
+    unlockAfter: 38, collection: "Signature pieces", blurb: "A sculptural water garden to celebrate your finished journey.",
+    movable: true, surface: "floor", layer: "furn", size: {w:1,d:1}, defaultPlace:{x:0,z:4,rot:0},
+    variants:[{name:"Petal bowls",blurb:"Two ivory basins with a brass finial and blue water."},{name:"River stones",blurb:"Smooth stacked stones above a quiet reflecting pool."},{name:"Lotus garden",blurb:"A broad blush bowl with lily leaves and an ivory bloom."}],
+  },
 ];
 
 export const REPEATABLE: readonly RepeatableKind[] = ["plant", "lamp", "table", "art", "basket"];
@@ -260,4 +290,8 @@ export function spentStars(shop: ShopState): number {
 
 export function bakeryUnlocked(shop: ShopState): boolean {
   return shopComplete(shop);
+}
+
+export function collectionUnlocked(id: UpgradeId, stars: number[]): boolean {
+  return stars.filter(value => value > 0).length >= (UPGRADE_BY_ID[id].unlockAfter ?? 0);
 }

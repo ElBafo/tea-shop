@@ -3,6 +3,11 @@ import type { UpgradeId, UpgradeKind } from "../game/types";
 
 // Small collection illustrations share one visual language, including in night mode.
 const shapes: Record<UpgradeKind, string> = {
+  armchair: '<path d="M16 35V20a16 16 0 0 1 32 0v15M12 31h8v15h24V31h8v23H12zM17 54v5m30-5v5M24 22h16v16H24z"/>',
+  fountain: '<path d="M10 39h44q-2 12-22 12T10 39ZM19 22h26q-2 10-13 10T19 22ZM32 11v11m0 10v7m0 12v7M23 58h18"/><circle cx="32" cy="9" r="4"/>',
+  terrarium: '<path d="M12 26l20-17 20 17v29H12zM12 26h40M32 9v46M20 47V34m0 5-5-5m5 8 5-6M41 47V32"/>',
+  botanical: '<path d="M5 15h16v35H5zM24 9h16v47H24zM43 15h16v35H43zM13 42V25m19 22V20m19 22V25"/><path d="m8 29 5 6 5-6m9-3 5 7 5-7m9 3 5 6 5-6"/>',
+  cabinet: '<path d="M12 55V25a20 20 0 0 1 40 0v30zM17 29h30M17 42h30M20 55v4m24-4v4M23 29v-8h7v8m7 13V32h7v10"/>',
   counter: '<path d="M8 21h48v7H8zM12 28v25h40V28M18 34h12v13H18zM35 34h12v13H35z"/><path d="M23 21v-9h12v9M35 14h5v5h-5"/>',
   sign: '<path d="M18 15V9m28 6V9M9 15h46v33H9z"/><text x="32" y="36" text-anchor="middle" font-size="15" fill="currentColor" stroke="none">TEA</text>',
   paint: '<path d="M13 10h33v16H13zM46 17h7v16H32v9m-4 0h8v14h-8z"/>',
@@ -27,6 +32,8 @@ export function decorationIcon(id: UpgradeId): string {
 export function styleThumbnail(id: UpgradeId, variant: number): string {
   const kind = kindOf(id);
   const palettes: Record<UpgradeKind, string[]> = {
+    armchair:['#9caf92','#617d91','#d2b07e'], fountain:['#e7dcc5','#9faeaa','#d3aaa7'],
+    terrarium:['#bda061','#eee3c9','#dba7aa'], botanical:['#c4a35b','#e9e1cc','#d89ea6'], cabinet:['#3f7164','#3a5771','#b77d89'],
     counter:['#ba8959','#e5e0d4','#d8aaa5'], sign:['#947052','#d8aaa5','#a9bc96'],
     paint:['#ead8bd','#acbba1','#d6aaa7'], shelves:['#bd925d','#eee9db','#816047'],
     plant:['#b27858','#d5c4a7','#b7c9a1'], rug:['#ba8868','#d6aaa7','#a8b99b'],
@@ -37,6 +44,26 @@ export function styleThumbnail(id: UpgradeId, variant: number): string {
   };
   const color = palettes[kind][variant] ?? palettes[kind][0];
   let drawing = shapes[kind];
+  if (kind === 'terrarium') drawing = '<path d="M10 25 32 7l22 18v30H10zM10 25h44M32 7v18" fill="none"/>' + [
+    '<path d="M25 50V24m14 26V28M25 31 14 26m11 14L13 35m12 11L14 43m25-9 11-7m-11 14 12-6m-12 11 12-4" stroke="#62814b" stroke-width="4" fill="none"/>',
+    '<path d="M25 49V29m0 12H17V34m8 4h9V26" stroke="#71998a" stroke-width="7" fill="none"/><circle cx="43" cy="45" r="8" fill="#71998a"/><circle cx="43" cy="36" r="3" fill="#d6a5aa"/>',
+    '<path d="M22 50V34m19 16V29" stroke="#63814b" stroke-width="4"/><g fill="#e7a6b4"><circle cx="21" cy="32" r="9"/><circle cx="40" cy="29" r="9"/></g><path d="m15 46 7-6 4 9m9-8 6 5 5-6" fill="#63814b"/>',
+  ][variant] + '<path d="M9 52h46v7H9z"/>';
+  if (kind === 'botanical') drawing = '<path d="M4 15h17v37H4zM23 8h18v49H23zM43 15h17v37H43z" fill="'+(['#365e4e','#334f6b','#f4d4ca'][variant])+'"/>' + [
+    '<g fill="#c6a464"><path d="M7 29q6-12 12 0l-6 6zM25 24q7-15 14 0l-7 7zM46 29q6-12 12 0l-6 6z"/></g><path d="M13 35v10m19-14v18m20-14v10" stroke="#c6a464"/>',
+    '<g fill="#f4e7c8"><ellipse cx="13" cy="31" rx="6" ry="11"/><ellipse cx="32" cy="29" rx="7" ry="14"/><ellipse cx="52" cy="31" rx="6" ry="11"/></g><path d="M7 32h12M25 29h14M46 32h12" stroke="#c6a464"/>',
+    '<g fill="#c57e91"><circle cx="12" cy="28" r="6"/><circle cx="16" cy="41" r="4"/><circle cx="31" cy="23" r="7"/><circle cx="34" cy="42" r="5"/><circle cx="52" cy="33" r="7"/></g>',
+  ][variant];
+  if (kind === 'armchair') drawing = [
+    '<path d="M13 38V24a19 19 0 0 1 38 0v14M10 33h10v12h24V33h10v22H10z"/><rect x="23" y="24" width="19" height="17" rx="6" fill="#d6a5aa"/>',
+    '<path d="M17 39V8h30v31M12 12h8v25h-8zM44 12h8v25h-8zM12 35h40v20H12z"/><rect x="23" y="25" width="18" height="16" rx="3" fill="#eee3cb"/>',
+    '<path d="M13 12v42h38V12M13 17h38M13 25h38M13 33h38M23 12v25m18-25v25" fill="none" stroke-width="4"/><rect x="16" y="39" width="32" height="11" rx="4" fill="#eee3cb"/><path d="M36 38h10v15H36z" fill="#b57f8d"/>',
+  ][variant] + '<path d="M17 54v6m30-6v6" stroke-width="3"/>';
+  if (kind === 'fountain') drawing = [
+    '<path d="M29 23h6v34h-6zM9 39h46q-3 14-23 14T9 39ZM18 21h28q-2 10-14 10T18 21Z"/><ellipse cx="32" cy="39" rx="20" ry="3" fill="#8bbdc2"/><ellipse cx="32" cy="21" rx="12" ry="2" fill="#8bbdc2"/><circle cx="32" cy="12" r="5" fill="#c6a464"/>',
+    '<path d="M8 46h48q-3 12-24 12T8 46Z"/><ellipse cx="32" cy="46" rx="20" ry="4" fill="#8bbdc2"/><ellipse cx="31" cy="37" rx="16" ry="7"/><ellipse cx="35" cy="25" rx="13" ry="7"/><ellipse cx="29" cy="14" rx="10" ry="6"/>',
+    '<path d="M28 40h8v17h-8zM8 32h48q-2 15-24 15T8 32Z"/><ellipse cx="32" cy="32" rx="21" ry="4" fill="#8bbdc2"/><path d="M20 32q-6-13 8-9 4-17 10 0 14-3 5 10z" fill="#eee3cb"/><circle cx="32" cy="29" r="4" fill="#c6a464"/>',
+  ][variant];
   if (kind === 'paint') drawing = '<rect x="9" y="10" width="46" height="44" rx="3"/><path d="M9 39h46M21 10v29M43 10v29" fill="none" opacity=".25"/>';
   if (kind === 'lamp') drawing = [
     '<path d="M31 28v27M20 56h24" fill="none"/><rect x="19" y="9" width="26" height="25" rx="2"/>',

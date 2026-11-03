@@ -28,7 +28,7 @@ await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisable
 
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await new Promise(r=>setTimeout(r,1400));
-await evaluate(`localStorage.removeItem('tea-shop-progress-v1');localStorage.setItem('tea-shop-preview-appearance-v1','day')`);
+await evaluate(`Object.keys(localStorage).filter(k=>k.startsWith('tea-shop-progress-v1')).forEach(k=>localStorage.removeItem(k));localStorage.setItem('tea-shop-preview-appearance-v1','day')`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 const tap=async(selector)=>{
  const p=await evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});if(!el||el.disabled||el.closest('[inert]'))throw Error('Unavailable control '+${JSON.stringify(selector)});el.scrollIntoView({block:'nearest'});const r=el.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
@@ -43,10 +43,18 @@ await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 if(await evaluate(`document.querySelector('#mute').getAttribute('aria-label')`)!=='Turn sound on')throw Error('Mute preference lost');
 await tap('#mute');await tap('#theme-toggle');await new Promise(r=>setTimeout(r,350));
 if(!await evaluate(`document.querySelector('#theme-toggle').getAttribute('data-state')==='night' && getComputedStyle(document.querySelector('.moon-icon')).opacity==='1' && getComputedStyle(document.querySelector('.sun-icon')).opacity==='0'`))throw Error('Theme icon failed');
+if(!await evaluate(`document.querySelector('meta[name="theme-color"]').content==='#111a28' && getComputedStyle(document.documentElement).backgroundColor==='rgb(17, 26, 40)' && document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content==='black-translucent'`))throw Error('Night browser chrome not synchronized');
 await shot('top-icons-night-phone');
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 if(await evaluate(`document.querySelector('#theme-toggle').getAttribute('data-state')`)!=='night')throw Error('Night preference lost');
-await tap('#theme-toggle');await tap('#play-tea');
+if(await evaluate(`document.querySelector('meta[name="theme-color"]').content`)!=='#111a28')throw Error('Reload lost browser theme');
+await tap('#play-tea');
+if(!await evaluate(`document.querySelector('meta[name="theme-color"]').content==='#fbf3e8' && !document.documentElement.classList.contains('shop-night') && document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content==='default'`))throw Error('Puzzle browser chrome not reset');
+await tap('[data-go="shop"]');
+if(await evaluate(`document.querySelector('meta[name="theme-color"]').content`)!=='#111a28')throw Error('Return lost browser theme');
+await tap('#theme-toggle');
+if(await evaluate(`document.querySelector('meta[name="theme-color"]').content`)!=='#fbf3e8')throw Error('Day browser chrome not reset');
+await tap('#play-tea');
 if(await evaluate(`document.querySelector('#mute').getAttribute('data-state')`)!=='on')throw Error('Levels audio state wrong');
 await tap('#mute');await tap('.continue-card');
 if(await evaluate(`document.querySelector('#mute').getAttribute('data-state')`)!=='off')throw Error('Puzzle audio state wrong');
@@ -60,7 +68,7 @@ await evaluate(`const p=JSON.parse(localStorage.getItem('tea-shop-progress-v1'))
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 for(const [width,height,name] of [[390,844,'phone'],[320,568,'small-phone'],[844,390,'landscape'],[1280,900,'desktop']]){
  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});await new Promise(r=>setTimeout(r,250));
- if(!await evaluate(`(()=>{const bar=document.querySelector('.shop-toolbar');return bar.scrollWidth<=bar.clientWidth+1 && [...bar.querySelectorAll('.toolbar-toggle')].every(b=>{const r=b.getBoundingClientRect();return r.width>=44&&r.height>=44&&r.right<=innerWidth;});})()`))throw Error('Toolbar overflow '+name);
+ if(!await evaluate(`(()=>{const bar=document.querySelector('.shop-toolbar');return bar.scrollWidth<=bar.clientWidth+1 && [...bar.querySelectorAll('.toolbar-toggle')].every(b=>{const r=b.getBoundingClientRect();return r.width>=40&&r.height>=40&&r.right<=innerWidth;});})()`))throw Error('Toolbar overflow '+name);
  await shot('top-icons-'+name);
 }
 await tap('#edit-toggle');await tap('#theme-toggle');await tap('#mute');
@@ -69,4 +77,4 @@ await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion
 if(await evaluate(`getComputedStyle(document.querySelector('.sun-icon')).transitionDuration`)!=='0s')throw Error('Reduced motion ignored');
 await send('Emulation.setEmulatedMedia',{features:[]});
 if(errors.length)throw Error(JSON.stringify(errors));
-console.log('PASS: audio on by default, saved mute/night, direct icons across screens, current-state visuals, non-interrupting puzzle toggle, 44px targets, responsive toolbar and reduced motion.');await clearReturningStart();ws.close();
+console.log('PASS: audio on by default, saved mute/night, direct icons across screens, current-state visuals, non-interrupting puzzle toggle, 40px compact targets, responsive toolbar and reduced motion.');await clearReturningStart();ws.close();

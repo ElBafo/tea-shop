@@ -4,7 +4,7 @@ import type { LevelDef } from './types';
 export const INVENTORY_LEVELS: LevelDef[] = [
   {
     id: 21, name: "Fresh Leaves",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Back to four treats per jar. Find a little breathing room.",
     capacity: 4,
     tubes: [
       ["matcha","matcha","rose","chai"],
@@ -15,11 +15,11 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true,false,false,true,false,false],
-    par: 13,
+    par: 15,
   },
   {
     id: 22, name: "Window Seat",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Four flavours and one lid: a quieter shelf.",
     capacity: 4,
     tubes: [
       ["rose","matcha","rose","matcha"],
@@ -30,11 +30,11 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,false,true,false,false,false],
-    par: 11,
+    par: 12,
   },
   {
     id: 23, name: "Second Serving",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Five flavours return. Keep space for a matching stack.",
     capacity: 4,
     tubes: [
       ["chai","rose","matcha","jasmine"],
@@ -46,11 +46,11 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,true,false,false,true,false,false],
-    par: 16,
+    par: 18,
   },
   {
     id: 24, name: "Tea for Two",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Matching pairs can travel together, if there is room.",
     capacity: 4,
     tubes: [
       ["chai","lavender","jasmine","rose"],
@@ -62,11 +62,11 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true,false,false,true,false,false,false],
-    par: 17,
+    par: 19,
   },
   {
     id: 25, name: "Garden Blend",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Five treats fill these jars. Look for stacks that can travel together.",
     capacity: 5,
     tubes: [
       ["matcha","jasmine","lavender","jasmine","lavender"],
@@ -78,11 +78,11 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,false,true,false,false,false,false],
-    par: 17,
+    par: 18,
   },
   {
     id: 26, name: "Lantern Hour",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Only four flavours today, with taller jars to fill.",
     capacity: 5,
     tubes: [
       ["matcha","chai","jasmine","rose","matcha"],
@@ -93,11 +93,11 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,true,false,false,false,false],
-    par: 17,
+    par: 18,
   },
   {
     id: 27, name: "Little Library",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Two lids hide the lower treats. Explore, and undo freely.",
     capacity: 5,
     tubes: [
       ["chai","lavender","chai","matcha","chai"],
@@ -109,11 +109,11 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true,false,false,true,false,false,false],
-    par: 19,
+    par: 21,
   },
   {
     id: 28, name: "Afternoon Company",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Shorter jars again. A full matching jar can rest.",
     capacity: 4,
     tubes: [
       ["lavender","rose","jasmine","lavender"],
@@ -125,11 +125,11 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,false,true,false,false,false,false],
-    par: 15,
+    par: 16,
   },
   {
     id: 29, name: "A Place for Everyone",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Taller jars need five matching treats, even near the finish.",
     capacity: 5,
     tubes: [
       ["matcha","jasmine","matcha","lavender","matcha"],
@@ -141,11 +141,11 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,true,false,false,true,false,false],
-    par: 18,
+    par: 20,
   },
   {
     id: 30, name: "House Blend",
-    blurb: "Fill every jar and make room for something new.",
+    blurb: "Six flavours share this shelf. Take one clear space at a time.",
     capacity: 4,
     tubes: [
       ["rose","earl","jasmine","lavender"],
@@ -158,6 +158,6 @@ export const INVENTORY_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true,false,false,true,false,false,false,false],
-    par: 20,
+    par: 22,
   },
 ];

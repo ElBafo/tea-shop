@@ -952,6 +952,7 @@ h1,
 .shop-actions #bakery .card-art { display: none; }
 
 /* Night is a lighting choice for the shop; puzzle colors stay familiar. */
+html.shop-night { background: #111a28; }
 body:has(.shop-room.is-night) {
   background: radial-gradient(ellipse at 50% 35%, #293b53, #111a28 75%);
 }
@@ -1332,4 +1333,114 @@ body:has(.shop-room.is-night) {
   box-shadow: 0 3px 14px #30201722;
   font-size: 12px;
   pointer-events: none;
+}
+
+/* Let arranging take priority over the catalogue on a phone. */
+.decorating:not(.has-guide) .shop-stage canvas { height: min(49dvh, 440px); }
+.decorating.has-selection .detail-copy .detail-note { display: none; }
+.decorating.has-selection .detail-copy strong { font-size: 15px; }
+.decorating.has-selection .style-row { gap: 6px; margin: 5px 0; }
+.decorating.has-selection .style-chip { padding: 7px 8px; font-size: 11px; }
+.decorating.has-selection .style-chip svg { height: 42px; }
+.decorating.has-selection .section-label { margin: 5px 0; font-size: 10px; }
+.decorating.has-selection .editor-saved { font-size: 10px; margin: 5px 0; }
+.decorating .upgrade-chip { padding: 8px; min-height: 102px; }
+.decorating .upgrade-chip .deco-icon svg { width: 66px; height: 54px; }
+.decorating .upgrade-chip strong { font-size: 12px; }
+.decorating .upgrade-chip > span:last-child { font-size: 10px; }
+.journey-goal { font-size: 12px; line-height: 1.5; color: var(--muted, #806c5c); margin: 12px 5px; }
+.is-night .journey-goal { color: #c5d2c9; }
+.chapter-list { overflow: auto; min-height: 0; padding-bottom: 12px; }
+.puzzle-chapter { background: #fff8eea8; border-radius: 18px; margin: 0 0 9px; }
+.puzzle-chapter summary { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px; }
+.puzzle-chapter summary strong { font-size: 14px; }
+.puzzle-chapter summary small { display: block; font-size: 11px; line-height: 1.5; margin-top: 5px; }
+.puzzle-chapter summary > span:last-child { font-size: 12px; white-space: nowrap; }
+.puzzle-chapter[open] summary { border-bottom: 1px solid #a78a6222; }
+.puzzle-chapter .level-grid { overflow: visible; max-height: none; padding: 9px; }
+.resume-card { width: 100%; text-align: left; padding: 12px 15px; margin-bottom: 8px; background: #e1ebd3; border: 1px solid #9cac83; border-radius: 16px; color: #3f543b; }
+.resume-card small { display: block; margin-top: 4px; font-size: 11px; font-weight: normal; }
+.milestone-reward { background: #e4edd6; color: #3f543b; padding: 12px; border-radius: 13px; font-size: 13px; line-height: 1.5; }
+.backup-dialog { width: min(420px, calc(100vw - 32px)); max-height: 85dvh; overflow: auto; border: none; border-radius: 22px; padding: 22px; color: #614739; background: #fff8ee; box-shadow: 0 12px 60px #0004; }
+.backup-dialog::backdrop { background: #251f1999; }
+.backup-dialog p { font-size: 13px; line-height: 1.55; }
+.backup-close { float: right; }
+.backup-dialog > button, .backup-dialog section button { margin: 6px 0; width: 100%; }
+.backup-picker { display: block; margin-top: 20px; font-size: 13px; font-weight: bold; }
+.backup-picker input { display: block; width: 100%; margin-top: 8px; font-size: 12px; }
+.save-warning { position: fixed; bottom: 8px; left: 8px; right: 8px; z-index: 1000; padding: 12px; border-radius: 12px; background: #fff2ca; color: #573e28; font-size: 12px; }
+.save-warning button { padding: 6px; font-size: 12px; }
+@media (max-height: 560px) and (orientation: landscape) {
+ .decorating:not(.has-guide) .shop-stage canvas { height: 0; }
+ .decorating.has-selection .style-chip svg { height: 32px; }
+}
+@media (min-width: 900px) {
+ .decorating:not(.has-guide) .shop-stage canvas { height: 0; }
+}
+.decorating.has-selection .style-row .style-chip { min-height: 72px; }
+.decorating.has-selection .detail-scroll { gap: 6px; }
+.chapter-list { flex: 1; }
+.decorating.tray-collapsed .shop-stage canvas { height: 0; }
+.backup-dialog button { min-height: 44px; border: none; border-radius: 12px; padding: 10px 14px; background: #e1ebd3; color: #3f543b; font: inherit; font-size: 13px; cursor: pointer; }
+.backup-dialog .backup-close { width: 44px; background: #f0e5d7; }
+.backup-dialog [data-cancel] { background: #f0e5d7; }
+.backup-picker input::file-selector-button { min-height: 44px; border: none; border-radius: 10px; padding: 8px 12px; background: #f0e5d7; color: #614739; }
+.upgrade-detail > .inventory-actions { flex-shrink: 0; display: flex; gap: 8px; margin: 0; padding-top: 6px; }
+.upgrade-detail > .inventory-actions button { min-height: 44px; flex: 1; }
+@media (max-height: 780px) and (orientation: portrait) {
+ .decorating:not(.has-guide):not(.tray-collapsed) .shop-stage canvas { height: 40dvh; }
+}
+
+/* Stable navigation: collection tabs and a Browse action survive item selection. */
+.editor-nav { display: flex; flex-shrink: 0; align-items: center; gap: 8px; padding: 0 10px; border-bottom: 1px solid #a78a6222; }
+.editor-nav .tray-toggle { flex: 1; width: auto; text-align: right; border-bottom: 0; min-height: 44px; padding: 10px; }
+.editor-nav .collection-back { flex: 1; align-self: auto; min-height: 44px; margin: 0; padding: 10px; border-radius: 12px; color: #3f543b; background: #e1ebd3; font-size: 13px; font-weight: 700; text-align: left; }
+.is-night .editor-nav .collection-back { color: #f2f5e9; background: #3d5148; }
+.decorating.has-selection .catalog-tabs { display: flex; flex-shrink: 0; }
+.decorating .upgrade-detail > .detail-copy { flex-shrink: 0; }
+.decorating .upgrade-detail > .detail-copy strong { display: block; }
+.decorating.has-selection .section-label { margin: 0; }
+.decorating.has-selection .detail-scroll { gap: 4px; }
+.decorating.has-selection .style-row .style-chip { min-height: 64px; }
+.decorating.has-selection .style-chip svg { height: 34px; }
+@media (max-height: 780px) and (orientation: portrait) {
+ .decorating:not(.has-guide):not(.tray-collapsed) .shop-stage canvas { height: 34dvh; }
+}
+
+/* Compact tabs and pills; primary purchase and placement actions stay 44px. */
+.catalog-tabs { padding: 4px; }
+.catalog-tabs button { min-height: 36px; padding: 4px 8px; border-radius: 12px; }
+.editor-nav .tray-toggle, .editor-nav .collection-back { min-height: 40px; padding: 6px 10px; }
+.shop-toolbar #shop-stars, .screen-toolbar .balance-pill { min-height: 36px; padding: 4px 10px; border-radius: 12px; gap: 5px; }
+.shop-toolbar #edit-toggle { min-height: 40px; padding: 4px 10px; }
+.shop-toolbar .toolbar-toggle, .screen-toolbar .toolbar-toggle { flex-basis: 40px; min-width: 40px; width: 40px; min-height: 40px; height: 40px; padding: 8px; border-radius: 13px; }
+.settings-menu summary { min-height: 40px; padding: 4px 10px; border-radius: 13px; }
+.decorating.has-selection .style-row .style-chip { min-height: 58px; padding: 4px 5px; gap: 3px; }
+.decorating.has-selection .style-chip svg { height: 30px; }
+
+/* A visual destination, with unlock progress separate from its purchase price. */
+.reward-card { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; border: 1px solid #d4c6ac; border-radius: 17px; background: #fff8ed; text-align: left; flex-shrink: 0; color: #594333; }
+.reward-art { width: 62px; flex: 0 0 62px; }
+.reward-art svg { width: 58px; height: 58px; }
+.reward-copy { flex: 1; min-width: 0; }
+.reward-copy strong { display: block; font-size: 13px; line-height: 1.3; }
+.reward-copy small { display: block; font-size: 11px; margin: 4px 0; }
+.reward-copy progress { display: block; width: 100%; height: 5px; border: 0; border-radius: 4px; overflow: hidden; background: #e9dfcc; accent-color: #68814e; }
+.reward-copy progress::-webkit-progress-bar { background: #e9dfcc; }
+.reward-copy progress::-webkit-progress-value { background: #68814e; }
+.reward-price { font-size: 14px; font-weight: 800; white-space: nowrap; }
+.reward-price small { display: block; margin-top: 8px; font-size: 10px; font-weight: 500; }
+.is-night .reward-card { background: #2e3b4b; border-color: #526074; color: #f4e6d6; }
+.shop-actions .reward-card { order: -1; }
+.return-item { align-self: center; min-height: 40px; padding: 6px 10px; font-size: 11px; color: var(--muted); text-decoration: underline; flex-shrink: 0; }
+.decorating.has-selection .upgrade-detail { gap: 5px; }
+.decorating.has-selection .detail-scroll { flex: 0 1 auto; }
+.decorating.has-selection .detail-note { font-size: 11px; margin: 4px 0; }
+.decorating.has-selection .upgrade-detail > .inventory-actions { padding-top: 4px; }
+.decorating.has-selection .detail-copy { margin: 0; }
+@media (max-width: 759px) and (orientation: portrait) {
+ .decorating.has-selection:not(.has-guide):not(.tray-collapsed) .shop-stage { flex: 1 1 0; }
+ .decorating.has-selection:not(.has-guide):not(.tray-collapsed) .shop-stage canvas { height: 0; flex: 1; min-height: 0; }
+ .decorating.has-selection:not(.has-guide):not(.tray-collapsed) .shop-dock { flex: 0 1 306px; }
+ .decorating.has-selection:not(.has-guide) .editor-content { padding: 9px 10px; }
 }

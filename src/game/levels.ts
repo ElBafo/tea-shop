@@ -11,6 +11,8 @@ const E: ItemId = "earl";
 const U: ItemId = "cup";
 const A: ItemId = "macaron";
 
+// Three-star targets allow one exploratory move per initially lidded jar.
+// Board IDs and layouts stay stable so unfinished puzzles can still resume.
 export const LEVELS: LevelDef[] = [
   {
     id: 1,
@@ -92,7 +94,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, false, false],
-    par: 12,
+    par: 13,
   },
   {
     id: 7,
@@ -108,7 +110,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, false, true, false, false],
-    par: 13,
+    par: 15,
   },
   {
     id: 8,
@@ -125,7 +127,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, false, true, false, false, false, false],
-    par: 16,
+    par: 17,
   },
   {
     id: 9,
@@ -143,12 +145,12 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, true, false, false, false],
-    par: 19,
+    par: 21,
   },
   {
     id: 10,
     name: "Closing Time",
-    blurb: "Tidy these jars. The bakery can wait.",
+    blurb: "A fuller shelf before a quieter morning.",
     capacity: 4,
     tubes: [
       [R, A, J, M],
@@ -161,7 +163,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, true, false, false, true, false, false],
-    par: 19,
+    par: 22,
   },
   {
     id: 11,
@@ -177,7 +179,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, false, false],
-    par: 11,
+    par: 12,
   },
   {
     id: 12,
@@ -194,7 +196,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, false, true, false, false, false],
-    par: 13,
+    par: 15,
   },
   {
     id: 13,
@@ -211,7 +213,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, false, true, false, false, false, false],
-    par: 13,
+    par: 14,
   },
   {
     id: 14,
@@ -228,7 +230,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, true, false, false],
-    par: 14,
+    par: 16,
   },
   {
     id: 15,
@@ -245,7 +247,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, true, false, false, false, false],
-    par: 15,
+    par: 17,
   },
   {
     id: 16,
@@ -261,7 +263,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, false, false, false],
-    par: 14,
+    par: 15,
   },
   {
     id: 17,
@@ -278,7 +280,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, false, true, false, false, false],
-    par: 20,
+    par: 22,
   },
   {
     id: 18,
@@ -295,7 +297,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, false, true, false, true, false, false],
-    par: 19,
+    par: 21,
   },
   {
     id: 19,
@@ -313,12 +315,12 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false, true, false, true, false, true, false, false],
-    par: 19,
+    par: 22,
   },
   {
     id: 20,
     name: "Last Call",
-    blurb: "Tidy the last taller jars. The shop is almost ready.",
+    blurb: "Three lids to open. Undo leaves room to explore.",
     capacity: 5,
     tubes: [
       [J, A, C, C, R],
@@ -330,7 +332,7 @@ export const LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true, false, true, false, true, false, false],
-    par: 18,
+    par: 21,
   },
   ...INVENTORY_LEVELS,
   ...COLLECTION_LEVELS,

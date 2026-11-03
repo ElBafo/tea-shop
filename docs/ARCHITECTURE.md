@@ -34,7 +34,7 @@ The room uses a 6×6 floor grid. The movable counter reserves its footprint and 
 
 ## Persistence and lifecycle
 
-`localStorage` key `tea-shop-progress-v1` stores best stars and moves, mute preference, owned upgrades, styles, placements, and completion celebration state. Available stars equal total best stars minus the cost of owned upgrades. Loading validates data and sanitizes the layout. Active puzzle state is not persisted, and there is no cross-device synchronization.
+`localStorage` key `tea-shop-progress-v1` stores best stars and moves, mute preference, owned upgrades, styles, placements, and completion celebration state. Available stars equal total best stars minus the cost of owned upgrades. Loading validates data and sanitizes the layout. Unfinished puzzles persist separately as replayable move logs. Device transfer uses manual backup files; there is no automatic cross-device synchronization.
 
 Leaving the shop disposes its Babylon scene and engine, stops the render loop, and removes resize observers/listeners. Preserve this lifecycle when changing navigation or adding effects.
 
@@ -95,3 +95,29 @@ The shop uses one stable render-loop callback. Visibility changes cancel unfinis
 The UI refinement keeps editor tray expansion as transient screen state. Collapsing it changes layout only; the existing canvas ResizeObserver refits the room, while selection and temporary purchase previews remain intact. Variant illustrations in `src/shop/icons.ts` are inline SVGs rather than extra WebGL scenes. Native details/summary elements group secondary settings; app-root handlers dismiss them on Escape and outside clicks.
 
 `index.html` paints the Decopu splash before the application bundle arrives. Start stays disabled until `mountApp` has prepared the Babylon scene; it unlocks audio through a user gesture and reveals the app. Loading failure and slow-loading recovery keep Reload available without altering saves. `src/game/guide.ts` stores a small onboarding stage under a key derived from the existing progress key. Existing saves skip first-time onboarding. The preview-only `?tour=1` mode uses in-memory progress and guidance and does not save scores, purchases, guide state, or appearance changes.
+
+
+## Depth preview: collecting, chapters and recovery
+
+`game/journey.ts` defines five chapter ranges and milestone copy. Collection unlocks depend on completed puzzles (8/16/24), independently of earned-star quality. `collectionUnlocked` is checked both in presentation and the purchase handler; preview remains free. New optional items use the same inventory, collision and resource ownership paths. Catalogue illustrations show the saved variant. Legal-position markers are non-pickable meshes rebuilt on selection/layout changes and disposed with their owned material; they do not cast shadows or alter placement rules.
+
+`game/resume.ts` persists a versioned level ID and move pairs under a key derived from the existing progress key. Loading replays legal moves from the canonical level, reconstructs Undo snapshots and rejects invalid or completed logs. Moves, Undo and restart update the log synchronously; wins clear it after recording rewards. Only one unfinished puzzle is retained, and starting another replaces it. Tour/showroom modes bypass persistence.
+
+`game/backup.ts` validates version, scores, known ownership, currency and the move log. `ui/backup.ts` provides a native modal file picker, a human-readable restore summary and an explicit replacement action, with a download of current progress before import. No file content is inserted as HTML. Local progress saves retain the previous valid value under `:recovery`; loading falls back to that slot if primary data is missing or unreadable. Failed writes keep play running and expose a backup warning. Recovery slots and manual files do not provide server durability or cloud accounts.
+
+The Conservatory adds three designs, each with three included styles, priced at 10/14/18 stars. Existing purchases and prices remain unchanged. Legacy catalogue cost stays 112; total catalogue cost becomes 190 against 132 earnable stars (114 from puzzles plus 18 chapter bonuses), while the core eight still cost 26. These optional choices do not change shop completion or puzzle rewards.
+
+
+Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 190-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle rules and maximum earnings are unchanged. Hidden-jar three-star targets now allow one exploratory move per initially lidded jar; existing scores are preserved.
+
+
+The focused editor keeps collection tabs accessible during selection and places Browse/Hide panel in a persistent navigation row. Item names and purchase/inventory actions sit outside the scrolling styles area. Browse clears a temporary preview, preserves paid placements and reopens the panel. Placement markers appear only after an item drag crosses the movement threshold; release, cancellation, scene synchronization and disposal remove them. Venue/story chapters are distinct from tea-shop puzzle milestone groups; UI rewards now say milestone stars.
+
+
+## Reward and experimentation preview
+
+`ui/reward.ts` renders the next milestone from `journey.nextReward` with an illustration, unlock progress and separate price. Home and puzzle-list cards open the same temporary shop preview. After the last unlock, the card offers an unowned milestone piece, including a returned one.
+
+`inventory.returnValue` and `returnItem` permit owned optional items only. Removing ownership releases its catalogue cost from derived spent stars; no independent refund counter exists. Confirmation uses a native modal dialog. Returns remove only the selected ID, style, placement and stored marker; other copy IDs survive unchanged. Core completion pieces and milestone scores are untouched. New armchair/fountain kinds use the existing grid, preview, material ownership and persistence paths.
+
+Hidden-jar pars include one exploration move per initial lid. The solver verifier checks optimum plus this allowance; `verify-pacing` fingerprints boards/IDs/hidden flags/capacities to protect saved move logs. Scores already stored are never reduced.

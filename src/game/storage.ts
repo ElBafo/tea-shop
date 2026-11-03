@@ -1,3 +1,4 @@
+import { chapterBonus } from './journey';
 import { cloneInventory } from "../shop/inventory";
 import { isGuidePreview, isShowroom, showroomProgress } from "./preview";
 import { sanitizeShop } from "../shop/grid";
@@ -22,8 +23,17 @@ export function loadProgress(): Progress {
   }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return emptyProgress();
-    const parsed = JSON.parse(raw) as Partial<Progress>;
+    if (!raw) {const recovery=localStorage.getItem(STORAGE_KEY+':recovery');return recovery?normalizeProgress(JSON.parse(recovery)):emptyProgress();}
+    return normalizeProgress(JSON.parse(raw));
+  } catch {
+    try { const backup=localStorage.getItem(STORAGE_KEY+':recovery'); if(backup)return normalizeProgress(JSON.parse(backup)); } catch { /* Both slots unavailable. */ }
+    return emptyProgress();
+  }
+}
+
+export function normalizeProgress(raw: unknown): Progress {
+  if(!raw || typeof raw!=='object' || !Array.isArray((raw as Progress).bestStars)) throw new Error('Invalid progress');
+  const parsed = raw as Partial<Progress>;
     const fresh = emptyProgress();
     if (typeof parsed.muted === "boolean") fresh.muted = parsed.muted;
     if (Array.isArray(parsed.bestStars)) {
@@ -44,18 +54,24 @@ export function loadProgress(): Progress {
     }
     fresh.shop = sanitizeShop(readShop(parsed.shop));
     return fresh;
+}
+
+
+export function saveProgress(progress: Progress): boolean {
+  if (isShowroom || isGuidePreview) return true;
+  try {
+    const previous=localStorage.getItem(STORAGE_KEY);
+    if(previous) { try {normalizeProgress(JSON.parse(previous));localStorage.setItem(STORAGE_KEY+':recovery',previous);} catch {/* Keep the previous valid recovery slot. */} }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    return true;
   } catch {
-    return emptyProgress();
+    window.dispatchEvent(new Event('decopu-save-failed'));
+    return false;
   }
 }
 
-export function saveProgress(progress: Progress): void {
-  if (isShowroom || isGuidePreview) return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-}
-
 export function totalStars(progress: Progress): number {
-  return progress.bestStars.reduce((sum, stars) => sum + stars, 0);
+  return progress.bestStars.reduce((sum, stars) => sum + stars, 0) + chapterBonus(progress);
 }
 
 export function spendableStars(progress: Progress): number {

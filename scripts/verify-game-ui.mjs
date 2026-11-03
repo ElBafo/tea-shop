@@ -74,7 +74,7 @@ await tap('[data-go="levels"]');await tap('.level-btn[data-level="2"]');await ne
 if(await evaluate(`document.querySelector('.moves').textContent`)!=='0 moves')throw Error('Old animation changed new puzzle');
 seed.bestStars=Array(38).fill(3);
 await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
-await send('Page.reload');await new Promise(r=>setTimeout(r,1400));await tap('#play-tea');await tap('.level-btn[data-level="20"]');
+await send('Page.reload');await new Promise(r=>setTimeout(r,1400));await tap('#play-tea');await tap('.puzzle-chapter:nth-child(3) summary');await tap('.level-btn[data-level="20"]');
 for(const [width,height,name] of [[390,844,'phone'],[320,568,'small-phone'],[844,390,'landscape'],[1280,900,'desktop']]){
  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});await new Promise(r=>setTimeout(r,250));
  const fit=await evaluate(`(()=>{const s=document.querySelector('.shelves'),bounds=s.getBoundingClientRect(),bar=document.querySelector('.play-bar').getBoundingClientRect();return {fits:s.scrollHeight<=s.clientHeight+2&&[...document.querySelectorAll('.jar')].every(j=>{const r=j.getBoundingClientRect();return r.top>=bounds.top&&r.bottom<=bar.top&&r.left>=0&&r.right<=innerWidth;}),scroll:s.scrollHeight,client:s.clientHeight,width:innerWidth};})()`);

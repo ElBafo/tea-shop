@@ -31,7 +31,7 @@ const seed={muted:true,bestStars:Array(20).fill(3),bestMoves:Array(20).fill(0),s
 await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1500));
 await evaluate(`(async()=>{const url=performance.getEntriesByType('resource').find(e=>e.name.includes('@babylonjs_core_Engines_engine.js')).name;const {Engine}=await import(url);window.__qaScene=Engine.Instances[0].scenes[0];await window.__qaScene.whenReadyAsync();})()`);
-const click=selector=>evaluate(`(()=>{const button=document.querySelector(${JSON.stringify(selector)});if(!button||button.getClientRects().length===0)throw Error('Button not visible: '+${JSON.stringify(selector)});button.click();})()`);
+const click=async selector=>{if(selector.startsWith('[data-filter') && await evaluate(`Boolean(document.querySelector('.has-selection'))`))await click('[data-act="browse"]');return evaluate(`(()=>{const button=document.querySelector(${JSON.stringify(selector)});if(!button||button.getClientRects().length===0)throw Error('Button not visible: '+${JSON.stringify(selector)});button.click();})()`);};
 const saved=()=>evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).shop`);
 const drag=async(name,y,dx,dz)=>{
  const points=await evaluate(`(()=>{const scene=window.__qaScene,e=scene.getEngine(),v=scene.getTransformNodeByName('${name}').position.clone();const rect=document.querySelector('canvas').getBoundingClientRect();const project=(x,z)=>{const p=v.constructor.Project(new v.constructor(x,${y},z),scene.getTransformMatrix().constructor.Identity(),scene.getTransformMatrix(),scene.activeCamera.viewport.toGlobal(e.getRenderWidth(),e.getRenderHeight()));return {x:rect.x+p.x*rect.width/e.getRenderWidth(),y:rect.y+p.y*rect.height/e.getRenderHeight()};};return {start:project(v.x,v.z),end:project(v.x+${dx},v.z+${dz})};})()`);
@@ -76,7 +76,7 @@ if(await evaluate(`Boolean(window.__qaScene.getTransformNodeByName('basket'))`))
 await click('[data-filter="all"]');await click('[data-upgrade="shelves"]');await click('[data-act="buy"]');await new Promise(r=>setTimeout(r,1600));
 await click('[data-act="rotate"]');await drag('shelves',1.85,0,1);
 if((await saved()).place.shelves.wall!=='left'||(await saved()).place.shelves.x!==1)throw Error('Shelf movement regressed');
-await click('[data-filter="all"]');await click('[data-upgrade="basket"]');await click('[data-act="cancel-preview"]');
+await click('[data-filter="all"]');await click('[data-upgrade="basket"]');await click('#editor-back');
 await click('[data-filter="owned"]');await click('[data-upgrade="lamp"]');await drag('lamp',1.28,-2,0);
 if((await saved()).place.lamp.x!==1)throw Error('Cannot move after cancelling preview');
 await click('[data-filter="owned"]');await click('#theme-toggle');

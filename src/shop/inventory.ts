@@ -28,3 +28,22 @@ export function placeItem(shop: ShopState, id: UpgradeId): ShopState | null {
   next.stored = next.stored!.filter(item => item !== id);
   return next;
 }
+
+// Stars are derived from current ownership. Returning an optional item removes
+// its cost from spentStars; no separate refund balance can be replayed or farmed.
+export function returnValue(shop: ShopState, id: UpgradeId): number {
+  const def = UPGRADE_BY_ID[id];
+  return def?.optional && isOwned(shop, id) ? def.cost : 0;
+}
+
+export function returnItem(shop: ShopState, id: UpgradeId): ShopState | null {
+  if (!returnValue(shop, id)) return null;
+  const next = cloneInventory(shop);
+  next.owned = next.owned.filter(item => item !== id);
+  next.stored = next.stored!.filter(item => item !== id);
+  delete next.style[id];
+  delete next.place[id];
+  // Copies keep their stable IDs, positions and styles, even when copy one is
+  // returned. Buying it again is still allowed through the usual purchase path.
+  return next;
+}
