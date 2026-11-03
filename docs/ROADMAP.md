@@ -8,6 +8,8 @@ This is the working delivery order, not a calendar promise. Priorities can chang
 
 Deliver the approved depth and ownership pass in a new preview: room-first decorating, distinctive collection milestones, puzzle chapters, a satisfying tea-shop endpoint, art refinement and save recovery. PR #11 (Decopu splash, guide and wall dragging) was accepted and merged. Preserve existing gameplay, purchases and saves; merge this next pass only after owner review.
 
+- Preview fix: synchronize Safari theme colour and the root safe-area background with shop day/night; reset on puzzle navigation. Update the installed-app status-bar hint too; physical iPhone/Home Screen behavior remains a device-review check.
+
 ## Current baseline
 
 - Released: 38 sorting puzzles, stars, fourteen decoration designs plus five paid second copies, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.

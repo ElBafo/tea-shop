@@ -7,7 +7,7 @@ import { isOfflinePreview } from "../game/offline";
 import { cloneInventory as clone, storeItem, placeItem } from "./inventory";
 import { styleThumbnail } from "./icons";
 import { imageFile, saveImage } from "./share";
-import { loadNight, saveNight } from "../game/appearance";
+import { loadNight, saveNight, setBrowserNight } from "../game/appearance";
 import { isGuidePreview, isPreview, isShowroom } from "../game/preview";
 import { playChime, playClick, playFinale } from "../game/audio";
 import { isBakeryOpen, saveShop, spendableStars } from "../game/storage";
@@ -173,6 +173,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   diorama.setNight(night);
 
   const paintChrome = () => {
+    setBrowserNight(night);
     root.querySelector(".shop-room")?.classList.toggle("is-night", night);
     root.querySelector(".shop-room")?.classList.toggle("tray-collapsed", edit && trayCollapsed);
     const tray = root.querySelector<HTMLButtonElement>("#tray-toggle")!;
@@ -529,7 +530,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   return {
     ready: () => diorama.ready(),
     refresh: () => paintChrome(),
-    dispose: () => diorama.dispose(),
+    dispose: () => { diorama.dispose(); setBrowserNight(false); },
   };
 }
 

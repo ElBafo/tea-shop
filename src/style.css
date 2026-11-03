@@ -952,6 +952,7 @@ h1,
 .shop-actions #bakery .card-art { display: none; }
 
 /* Night is a lighting choice for the shop; puzzle colors stay familiar. */
+html.shop-night { background: #111a28; }
 body:has(.shop-room.is-night) {
   background: radial-gradient(ellipse at 50% 35%, #293b53, #111a28 75%);
 }
