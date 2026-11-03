@@ -81,4 +81,7 @@ CDP_PORT=9225 node scripts/verify-depth.mjs
 ```
 
 
-Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 154-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle scoring itself is unchanged.
+Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 190-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle rules and maximum earnings are unchanged. Hidden-jar three-star targets now allow one exploratory move per initially lidded jar; existing scores are preserved.
+
+
+The reward preview adds Reading chair (32 puzzles,16 stars) and Tea garden fountain (38 puzzles,20 stars), both indoor decorations. Select an owned optional piece and use **Return for … stars** to exchange it at full value after confirmation. Core completion pieces stay owned. Goal cards show the next reward and open its free preview. Hidden-jar puzzles now include a small exploration allowance in their three-star targets; saved boards and scores remain compatible. See [pacing audit](docs/PUZZLE_PACING.md).

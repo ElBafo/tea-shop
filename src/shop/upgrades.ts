@@ -221,6 +221,18 @@ export const UPGRADES: UpgradeDef[] = [
     movable: true, surface: "floor", layer: "furn", size: {w:2,d:1}, defaultPlace:{x:3,z:4,rot:0},
     variants:[{name:"Jade atelier",blurb:"Deep jade, brass edging and ivory porcelain."},{name:"Blue porcelain",blurb:"Midnight cabinetry with pale blue tea ware."},{name:"Rose salon",blurb:"Rose cabinetry, cream shelves and golden handles."}],
   },
+  {
+    id: "armchair", title: "Reading chair", moveName: "reading chair", cost: 16, optional: true,
+    unlockAfter: 32, collection: "Signature pieces", blurb: "Your favourite seat for one more chapter.",
+    movable: true, surface: "floor", layer: "furn", size: {w:1,d:1}, defaultPlace:{x:4,z:5,rot:0},
+    variants:[{name:"Cloud cushion",blurb:"A rounded sage chair with a generous rose cushion."},{name:"Library wing",blurb:"A tall blue wingback with warm oak legs."},{name:"Woven nest",blurb:"An open cane chair with a cream seat and folded blanket."}],
+  },
+  {
+    id: "fountain", title: "Tea garden fountain", moveName: "tea garden fountain", cost: 20, optional: true,
+    unlockAfter: 38, collection: "Signature pieces", blurb: "A sculptural water garden to celebrate your finished journey.",
+    movable: true, surface: "floor", layer: "furn", size: {w:1,d:1}, defaultPlace:{x:0,z:4,rot:0},
+    variants:[{name:"Petal bowls",blurb:"Two ivory basins with a brass finial and blue water."},{name:"River stones",blurb:"Smooth stacked stones above a quiet reflecting pool."},{name:"Lotus garden",blurb:"A broad blush bowl with lily leaves and an ivory bloom."}],
+  },
 ];
 
 export const REPEATABLE: readonly RepeatableKind[] = ["plant", "lamp", "table", "art", "basket"];

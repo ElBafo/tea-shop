@@ -10,6 +10,21 @@ Deliver the approved depth and ownership pass in a new preview: room-first decor
 
 - Preview fix: synchronize Safari theme colour and the root safe-area background with shop day/night; reset on puzzle navigation. Update the installed-app status-bar hint too; physical iPhone/Home Screen behavior remains a device-review check.
 
+## Approved reward and experimentation pass — preview, awaiting review
+
+The owner approved all six review recommendations before wife testing. Main remains unchanged.
+
+- Improve the Glass garden and Botanical triptych with fuller, phone-readable geometry and meaningful style differences. Keep wood, brass, cream and complementary colours compatible across collections.
+- Replace accounting-heavy goal text with a reward illustration, puzzle progress, a separate star price and a tap directly into a free room preview. Unlocks mean available to buy, never automatically granted furniture.
+- Add Reading chair at 32 completed puzzles for 16 stars and Tea garden fountain at 38 for 20 stars. The fountain is a small indoor decoration; no yard or outdoor venue is added. Every style is included in the purchase.
+- Allow confirmed full-price returns of optional decorations, including stored items and optional second copies. Core eight completion pieces cannot be returned. Returns remove the chosen item and release its stars; ordinary storage remains free and does not refund stars. Other copies, scores and milestone unlocks remain intact. Repurchase uses the usual gates and price.
+- Keep Browse and collection tabs visible, shorten selected-item content, retain visual styles and primary Buy/Rotate/Store actions, and give unused panel space back to the room. Return is a secondary action with confirmation.
+- Refine puzzle pacing fairly: allow one exploratory move per initially lidded jar in the three-star target; preserve all 38 boards, IDs, hidden flags, capacities, existing scores and resumed move logs. Replace repetitive late-level guidance with specific brief cues. See [PUZZLE_PACING.md](PUZZLE_PACING.md) for evidence and player-test priorities.
+
+Economy: catalogue 190, maximum earnings 132 (114 puzzle + 18 milestone), core 26. A player finishing every puzzle with one star earns 56, enough for the core plus any one special piece (maximum20). Full legacy collectors still have20 available at maximum scores. Optional returns let players try the entire unlocked catalogue over time; owning everything simultaneously is deliberately outside the budget. No new bonus stars at32/38, no repeat-reward farming, no monetisation.
+
+Review on phone: choose a desired reward; preview styles before buying; buy, move, store, return and repurchase; check that the later rewards motivate play. Automated correctness checks do not establish enjoyment or retention. Bakery/cross-room rewards, larger rooms and monetisation remain later work.
+
 ## Current baseline
 
 - Released: 38 sorting puzzles, stars, fourteen decoration designs plus five paid second copies, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.
@@ -409,7 +424,7 @@ Phone review found the return link easy to miss or lose while scrolling selected
 - Collections must mix well: shared scale, compatible materials and coordinated accent colours should support intentional combinations across collections. Themes are suggestions, not compulsory sets; do not introduce matching-set bonuses or punish mixed styles. Future art review must include mixed-collection room arrangements, not only matching showroom sets.
 - The Bakery is the second room/story chapter, distinct from the five puzzle groups currently inside the tea shop. Completing the playable Bakery should unlock special decorations that can be brought back to the tea shop. Under the established all-decorations-cost-stars rule, this unlocks purchase availability; items, prices and completion criteria remain to be designed with the Bakery. Do not relabel the existing 8/16/24-puzzle unlocks as Bakery rewards or revoke current ownership.
 - Keep jar sorting as the current core. Long-term retention is unproven. First test whether new players enjoy multiple sessions, find later puzzles varied enough and voluntarily return to earn a specific decoration or open a room. Observe where sorting becomes a chore. A new minigame is not assumed necessary; do not add pressure mechanics to manufacture retention. No analytics collection is implemented by this decision.
-- Execute the editor pass first on PR #12's preview. Premium art refinement and optional-item exchanges remain subsequent review recommendations, not implemented features. A playable Bakery and its cross-room rewards remain future work.
+- Execute the editor pass first on PR #12's preview. Premium art refinement and optional-item exchanges were subsequently approved and implemented in the reward pass below. A playable Bakery and its cross-room rewards remain future work.
 
 
 Owner confirmed the immediate scope is the best possible single-shop experience for wife testing. Keep this pass on the tea shop and verify the first-time puzzle → reward → preview → purchase → arrange → browse loop. Bakery implementation is not part of this pass. Reserve story chapters for venues; tea-shop puzzle groups award “milestone stars” in player-facing copy. Future cross-room rewards must preserve each room’s layout and let players return freely to decorate the tea shop. Mixing styles remains an art acceptance criterion.

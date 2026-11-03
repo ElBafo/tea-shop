@@ -57,11 +57,11 @@ assert(await evaluate(`window.__qaScene.getMeshByName('back-wall').material.uniq
 assert(await evaluate(`window.__qaScene.getTransformNodeByName('lamp:2').getChildMeshes()[0].material.uniqueId`)===copyMaterial,'Restyling one copy disposed another');
 await click('[data-filter="owned"]');await click('[data-upgrade="bench"]');
 for(let i=0;i<12;i++){await click('[data-act="store"]');await click('[data-act="place"]');}
-for(let i=0;i<12;i++){await click('[data-filter="all"]');await click('[data-upgrade="clock"]');await click('[data-act="preview"][data-style="2"]');await click('[data-act="cancel-preview"]');}
+for(let i=0;i<12;i++){await click('[data-filter="all"]');await click('[data-upgrade="clock"]');await click('[data-act="preview"][data-style="2"]');await click('#editor-back');}
 assert(JSON.stringify(await counts())===JSON.stringify(before),'Storage/preview leaked resources');
 await click('[data-upgrade="paint"]');await click('[data-act="preview"][data-style="1"]');
 assert(await evaluate(`window.__qaScene.getMeshByName('back-wall').material.uniqueId`)!==wallId,'Paint preview did not rebuild walls');
-await click('[data-act="cancel-preview"]');
+await click('#editor-back');
 assert(JSON.stringify(await counts())===JSON.stringify(before),'Paint preview leaked resources');
 await click('[data-filter="owned"]');await click('[data-upgrade="lamp"]');
 for(let i=0;i<2;i++){

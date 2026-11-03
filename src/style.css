@@ -1417,3 +1417,30 @@ body:has(.shop-room.is-night) {
 .settings-menu summary { min-height: 40px; padding: 4px 10px; border-radius: 13px; }
 .decorating.has-selection .style-row .style-chip { min-height: 58px; padding: 4px 5px; gap: 3px; }
 .decorating.has-selection .style-chip svg { height: 30px; }
+
+/* A visual destination, with unlock progress separate from its purchase price. */
+.reward-card { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; border: 1px solid #d4c6ac; border-radius: 17px; background: #fff8ed; text-align: left; flex-shrink: 0; color: #594333; }
+.reward-art { width: 62px; flex: 0 0 62px; }
+.reward-art svg { width: 58px; height: 58px; }
+.reward-copy { flex: 1; min-width: 0; }
+.reward-copy strong { display: block; font-size: 13px; line-height: 1.3; }
+.reward-copy small { display: block; font-size: 11px; margin: 4px 0; }
+.reward-copy progress { display: block; width: 100%; height: 5px; border: 0; border-radius: 4px; overflow: hidden; background: #e9dfcc; accent-color: #68814e; }
+.reward-copy progress::-webkit-progress-bar { background: #e9dfcc; }
+.reward-copy progress::-webkit-progress-value { background: #68814e; }
+.reward-price { font-size: 14px; font-weight: 800; white-space: nowrap; }
+.reward-price small { display: block; margin-top: 8px; font-size: 10px; font-weight: 500; }
+.is-night .reward-card { background: #2e3b4b; border-color: #526074; color: #f4e6d6; }
+.shop-actions .reward-card { order: -1; }
+.return-item { align-self: center; min-height: 40px; padding: 6px 10px; font-size: 11px; color: var(--muted); text-decoration: underline; flex-shrink: 0; }
+.decorating.has-selection .upgrade-detail { gap: 5px; }
+.decorating.has-selection .detail-scroll { flex: 0 1 auto; }
+.decorating.has-selection .detail-note { font-size: 11px; margin: 4px 0; }
+.decorating.has-selection .upgrade-detail > .inventory-actions { padding-top: 4px; }
+.decorating.has-selection .detail-copy { margin: 0; }
+@media (max-width: 759px) and (orientation: portrait) {
+ .decorating.has-selection:not(.has-guide):not(.tray-collapsed) .shop-stage { flex: 1 1 0; }
+ .decorating.has-selection:not(.has-guide):not(.tray-collapsed) .shop-stage canvas { height: 0; flex: 1; min-height: 0; }
+ .decorating.has-selection:not(.has-guide):not(.tray-collapsed) .shop-dock { flex: 0 1 306px; }
+ .decorating.has-selection:not(.has-guide) .editor-content { padding: 9px 10px; }
+}

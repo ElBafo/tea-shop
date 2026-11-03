@@ -76,7 +76,7 @@ if(await evaluate(`Boolean(window.__qaScene.getTransformNodeByName('basket'))`))
 await click('[data-filter="all"]');await click('[data-upgrade="shelves"]');await click('[data-act="buy"]');await new Promise(r=>setTimeout(r,1600));
 await click('[data-act="rotate"]');await drag('shelves',1.85,0,1);
 if((await saved()).place.shelves.wall!=='left'||(await saved()).place.shelves.x!==1)throw Error('Shelf movement regressed');
-await click('[data-filter="all"]');await click('[data-upgrade="basket"]');await click('[data-act="cancel-preview"]');
+await click('[data-filter="all"]');await click('[data-upgrade="basket"]');await click('#editor-back');
 await click('[data-filter="owned"]');await click('[data-upgrade="lamp"]');await drag('lamp',1.28,-2,0);
 if((await saved()).place.lamp.x!==1)throw Error('Cannot move after cancelling preview');
 await click('[data-filter="owned"]');await click('#theme-toggle');

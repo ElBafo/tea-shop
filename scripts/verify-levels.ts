@@ -73,9 +73,10 @@ for (const [index, level] of LEVELS.entries()) {
     failed += 1;
   }
   const shortest = result.moves.length;
-  if (level.par !== shortest) {
+  const explorationAllowance = level.sealed?.filter(Boolean).length ?? 0;
+  if (level.par !== shortest + explorationAllowance) {
     console.error(
-      `Level ${level.id} par is ${level.par}, solver found ${shortest}`,
+      `Level ${level.id} par is ${level.par}; expected ${shortest} solution + ${explorationAllowance} exploration moves`,
     );
     failed += 1;
   }
@@ -88,7 +89,7 @@ for (const [index, level] of LEVELS.entries()) {
   }
 
   console.log(
-    `ok  ${String(level.id).padStart(2)}  ${level.name.padEnd(18)} par ${shortest}  ${ms}ms  visited ${result.visited}`,
+    `ok  ${String(level.id).padStart(2)}  ${level.name.padEnd(18)} solution ${shortest} / target ${level.par}  ${ms}ms  visited ${result.visited}`,
   );
 }
 

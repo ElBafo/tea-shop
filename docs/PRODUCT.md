@@ -37,10 +37,13 @@ Review changes on the hosted phone preview before merging to main. Preview and r
 The next review adds a room-first editor with compact variant illustrations and legal placement markers, five puzzle chapters, milestone-unlocked Conservatory pieces and a clear tea-shop completion/showcase action. The Bakery stays explicitly future content. All previous purchases/styles are preserved. New optional collections introduce choice beyond the current star budget; the core shop still costs 26 stars. Local progress gains manual file backup/restore, a previous-save recovery slot and unfinished-puzzle resuming with Undo. Accounts and automatic cloud sync remain future work.
 
 
-Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 154-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle scoring itself is unchanged.
+Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 190-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle rules and maximum earnings are unchanged. Hidden-jar three-star targets now allow one exploratory move per initially lidded jar; existing scores are preserved.
 
 
 Collections should be compatible across styles: coherent scale, materials and complementary colours support personal taste without mandatory matching sets. Completing the future Bakery (second venue/story chapter) should unlock star-bought special pieces usable in the original tea shop. This is separate from tea-shop puzzle-group milestones. Sorting remains the core; long-term retention needs player evidence before adding another game mode.
 
 
 Immediate priority is a strong single-shop experience for player testing. Monetisation is deferred to a later roadmap phase; no business model is selected. Earned-star progression is separate from future real-money decisions.
+
+
+The approved reward preview adds a Reading chair at32 completed puzzles (16 stars) and a small indoor Tea garden fountain at38 (20), bringing the catalogue to190. The core remains26 and maximum earnings132. Confirmed optional-item returns restore the full star price, allowing experimentation without changing milestone gates. Core completion pieces are excluded. Visual goals open free in-room previews; the compact editor keeps the room prominent. No outdoor space is implemented.

@@ -4,7 +4,7 @@ import type { LevelDef } from './types';
 export const COLLECTION_LEVELS: LevelDef[] = [
   {
     id: 31, name: "A Quiet Seat",
-    blurb: "One full jar at a time. A new corner awaits.",
+    blurb: "Five flavours after the crowded shelf. There is no hurry.",
     capacity: 4,
     tubes: [
       ["jasmine","lavender","rose","lavender"],
@@ -16,11 +16,11 @@ export const COLLECTION_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true,false,false,true,false,false,false],
-    par: 17,
+    par: 19,
   },
   {
     id: 32, name: "Tea on Wheels",
-    blurb: "One full jar at a time. A new corner awaits.",
+    blurb: "Four flavours in taller jars: a smaller cast for this milestone.",
     capacity: 5,
     tubes: [
       ["rose","matcha","chai","matcha","jasmine"],
@@ -31,11 +31,11 @@ export const COLLECTION_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,false,true,false,false,false],
-    par: 14,
+    par: 15,
   },
   {
     id: 33, name: "Green Corner",
-    blurb: "One full jar at a time. A new corner awaits.",
+    blurb: "Back to four slots. Leave room for the next matching stack.",
     capacity: 4,
     tubes: [
       ["jasmine","matcha","rose","lavender"],
@@ -47,11 +47,11 @@ export const COLLECTION_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,true,false,false,true,false,false],
-    par: 15,
+    par: 17,
   },
   {
     id: 34, name: "Sunday Reading",
-    blurb: "One full jar at a time. A new corner awaits.",
+    blurb: "Five slots and two lids. Undo is here for trying another idea.",
     capacity: 5,
     tubes: [
       ["matcha","lavender","lavender","matcha","lavender"],
@@ -63,11 +63,11 @@ export const COLLECTION_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true,false,false,true,false,false,false],
-    par: 20,
+    par: 22,
   },
   {
     id: 35, name: "Sweet Company",
-    blurb: "One full jar at a time. A new corner awaits.",
+    blurb: "Six flavours in shorter jars. Gather the matching treats together.",
     capacity: 4,
     tubes: [
       ["earl","rose","matcha","lavender"],
@@ -80,11 +80,11 @@ export const COLLECTION_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,false,true,false,false,true,false,false],
-    par: 19,
+    par: 21,
   },
   {
     id: 36, name: "Under the Leaves",
-    blurb: "One full jar at a time. A new corner awaits.",
+    blurb: "Taller jars return. Keep their five-slot finish in mind.",
     capacity: 5,
     tubes: [
       ["chai","lavender","lavender","jasmine","chai"],
@@ -96,11 +96,11 @@ export const COLLECTION_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,true,false,false,true,false,false],
-    par: 18,
+    par: 20,
   },
   {
     id: 37, name: "Afternoon Ritual",
-    blurb: "One full jar at a time. A new corner awaits.",
+    blurb: "One more tall shelf. A completed jar can stay where it is.",
     capacity: 5,
     tubes: [
       ["matcha","lavender","lavender","rose","jasmine"],
@@ -112,11 +112,11 @@ export const COLLECTION_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [true,false,false,true,false,false,false],
-    par: 20,
+    par: 22,
   },
   {
     id: 38, name: "Stay a Little Longer",
-    blurb: "One full jar at a time. A new corner awaits.",
+    blurb: "The final shelf: bring every flavour into a full matching jar.",
     capacity: 4,
     tubes: [
       ["lavender","matcha","jasmine","lavender"],
@@ -129,6 +129,6 @@ export const COLLECTION_LEVELS: LevelDef[] = [
       [],
     ],
     sealed: [false,false,true,false,false,true,false,false],
-    par: 19,
+    par: 21,
   },
 ];

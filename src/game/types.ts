@@ -51,7 +51,9 @@ export type UpgradeKind =
   | "planter"
   | "terrarium"
   | "botanical"
-  | "cabinet";
+  | "cabinet"
+  | "armchair"
+  | "fountain";
 
 export type RepeatableKind = "plant" | "lamp" | "table" | "art" | "basket";
 // Existing IDs identify copy one; additional copies have stable independent IDs.

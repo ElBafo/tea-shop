@@ -1,6 +1,7 @@
+import { rewardCard } from "./reward";
 import { openBackups } from './backup';
 import { readPuzzle, writePuzzle } from '../game/resume';
-import { CHAPTERS, nextGoal, milestoneAt, chapterBonus } from '../game/journey';
+import { CHAPTERS, milestoneAt, chapterBonus } from '../game/journey';
 import { initGuide, guideStage, setGuide, guideCard, suggestedJar } from "../game/guide";
 import { audioToggle, updateAudioToggle } from "./toggles";
 import { animatePour, pourOrigins, reducedMotion } from "./motion";
@@ -30,7 +31,7 @@ import {
   spendableStars,
 } from "../game/storage";
 import { mountShop, type ShopScreen } from "../shop/screen";
-import type { Board, LevelDef, Progress } from "../game/types";
+import type { Board, LevelDef, Progress, UpgradeId } from "../game/types";
 import { treatMarkup } from "./items";
 
 type Screen = "shop" | "levels" | "play";
@@ -87,7 +88,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
     });
   });
 
-  const render = (editShop = false) => {
+  const render = (editShop = false, reward?: UpgradeId) => {
     stopMotion();
     stopMotion = () => {};
     const focusedJar = (document.activeElement as HTMLElement | null)?.dataset.jar;
@@ -117,7 +118,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
           progress = setMuted(progress, !progress.muted);
           if (!progress.muted) playClick(false);
         },
-      }, editShop);
+      }, editShop, reward);
       if (guideStage() === 'welcome') {
         root.querySelector<HTMLElement>('.shop-room')!.inert = true;
         root.insertAdjacentHTML('beforeend', `<div class="overlay welcome-overlay" role="dialog" aria-modal="true" aria-labelledby="welcome-title"><section class="modal welcome-card"><p class="kicker">Welcome to Decopu</p><h3 id="welcome-title">A little shop of your own</h3><div class="welcome-path" aria-hidden="true"><span>▤</span><b>→</b><span>✦</span><b>→</b><span>⌂</span></div><p>Sort treats, earn stars, and turn this quiet corner into your favourite place.</p><p class="welcome-note">No timer. No rush. Undo whenever you like.</p><button type="button" data-guide-start>Show me how</button><button type="button" class="ghost-btn" data-welcome-skip>Explore on my own</button></section></div>`);
@@ -167,6 +168,9 @@ export function mountApp(root: HTMLElement): Promise<void> {
       });
     }
 
+    node.querySelectorAll<HTMLButtonElement>('[data-reward]').forEach(button => button.addEventListener('click', () => {
+      screen = 'shop'; play = null; render(true, button.dataset.reward as UpgradeId);
+    }));
     node.querySelectorAll<HTMLElement>("[data-go]").forEach((el) => {
       el.addEventListener("click", () => {
         playClick(progress.muted);
@@ -407,7 +411,7 @@ function levelsMarkup(progress: Progress): string {
       <span><strong>${nextIndex >= 0 ? completed ? "Continue" : "Start playing" : "Play again"}</strong><small>${recommended.id} · ${recommended.name}</small></span><span aria-hidden="true">→</span>
     </button>
     <p class="collection-summary">All puzzles <span>${completed} / ${LEVELS.length} completed</span></p>
-    <p class="journey-goal">${nextGoal(progress)}</p>
+    ${rewardCard(progress)}
     <div class="chapter-list">${chapters}</div>
   </div>`;
 }
