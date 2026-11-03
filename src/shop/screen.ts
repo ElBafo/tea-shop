@@ -8,7 +8,7 @@ import { cloneInventory as clone, storeItem, placeItem, returnValue, returnItem 
 import { styleThumbnail } from "./icons";
 import { imageFile, saveImage } from "./share";
 import { loadNight, saveNight, setBrowserNight } from "../game/appearance";
-import { isGuidePreview, isPreview, isShowroom } from "../game/preview";
+import { isGuidePreview, isPreview, isShowroom, resetPreviewProgress } from "../game/preview";
 import { playChime, playClick, playFinale } from "../game/audio";
 import { isBakeryOpen, saveShop, spendableStars } from "../game/storage";
 import type { Placement, Progress, ShopState, UpgradeId } from "../game/types";
@@ -57,6 +57,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
             <summary aria-label="More shop options" title="More shop options"><span aria-hidden="true">⋯</span></summary>
             <div class="settings-popover">
               ${!isShowroom && !isGuidePreview ? '<button id="backup-progress" type="button">Progress & backups</button>' : ''}
+              ${isPreview ? '<button id="reset-preview" type="button">Reset preview progress</button>' : ""}
               <button id="showcase-toggle" class="icon-btn" type="button">Showcase</button>
             </div>
           </details>
@@ -329,6 +330,22 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   };
 
   const bind = () => {
+    root.querySelector('#reset-preview')?.addEventListener('click', () => {
+      if (!isPreview || returnDialog) return;
+      root.querySelector('.settings-menu')?.removeAttribute('open');
+      const dialog = document.createElement('dialog'); returnDialog = dialog;
+      dialog.className = 'backup-dialog';
+      dialog.setAttribute('aria-labelledby', 'reset-preview-title');
+      dialog.innerHTML = `<h3 id="reset-preview-title">Start the preview again?</h3><p>This clears this device’s preview progress, decorations and settings, then restarts onboarding. Your main game stays untouched.</p><p role="status" data-reset-error></p><button data-reset-confirm type="button">Clear preview & restart</button><button data-reset-cancel type="button" autofocus>Keep my progress</button>`;
+      const close = () => { dialog.close(); dialog.remove(); returnDialog = null; root.querySelector<HTMLElement>('.settings-menu summary')?.focus(); };
+      dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
+      dialog.querySelector('[data-reset-cancel]')!.addEventListener('click', close);
+      dialog.querySelector('[data-reset-confirm]')!.addEventListener('click', () => {
+        try { resetPreviewProgress(); location.replace(import.meta.env.BASE_URL); }
+        catch { dialog.querySelector('[data-reset-error]')!.textContent = 'Could not clear preview storage. Check browser storage access and try again.'; }
+      });
+      document.body.append(dialog); dialog.showModal();
+    });
     root.querySelector('.shop-actions')?.addEventListener('click', event => {
       const button = (event.target as Element).closest<HTMLElement>('[data-reward]');
       if (button) openDecoration(button.dataset.reward as UpgradeId);

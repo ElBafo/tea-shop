@@ -29,7 +29,7 @@ await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisable
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await new Promise(r=>setTimeout(r,1400));
 const seed={muted:true,bestStars:Array(38).fill(0),bestMoves:Array(38).fill(0),shop:{owned:[],style:{},place:{},finaleSeen:false}};
-await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
+await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 await evaluate(`document.querySelector('#play-tea').click();document.querySelector('.continue-card').click();document.querySelector('[data-jar="0"]').click();document.querySelector('[data-jar="2"]').click()`);
 if(await evaluate(`document.querySelectorAll('.flying-treat').length`)!==2)throw Error('Treats not animated');

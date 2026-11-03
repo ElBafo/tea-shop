@@ -1,7 +1,8 @@
-import { LEVEL_COUNT, type Progress } from "./types";
+import { LEVEL_COUNT, STORAGE_KEY, type Progress } from "./types";
 import { DECORATIONS } from "../shop/upgrades";
 
-export const isPreview = import.meta.env?.BASE_URL === "/tea-shop/preview/";
+export const isPreview = import.meta.env?.BASE_URL === "/tea-shop/preview/"
+  && location.pathname.startsWith("/tea-shop/preview/");
 export const isGuidePreview = isPreview && new URLSearchParams(location.search).get("tour") === "1";
 export const isShowroom = isPreview && new URLSearchParams(location.search).get("showroom") === "1";
 
@@ -18,4 +19,12 @@ export function showroomProgress(): Progress {
       finaleSeen: true,
     },
   };
+}
+
+// Explicit allowlist: never clear origin storage or touch the released game's keys.
+export function resetPreviewProgress(): void {
+  if (!isPreview || STORAGE_KEY !== 'tea-shop-preview-progress-v1') throw new Error('Preview reset unavailable');
+  for (const key of [STORAGE_KEY, STORAGE_KEY + ':recovery', STORAGE_KEY + ':puzzle-v1', STORAGE_KEY + ':guide-v1', 'tea-shop-preview-appearance-v1']) {
+    localStorage.removeItem(key);
+  }
 }

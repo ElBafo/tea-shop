@@ -30,7 +30,7 @@ await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisable
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await new Promise(r=>setTimeout(r,1400));
 const seed={muted:true,bestStars:Array(38).fill(0),bestMoves:Array(38).fill(0),shop:{owned:[],style:{},place:{},finaleSeen:false}};
-await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
+await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
 const tap=async(selector)=>{
  const p=await evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});if(!el||el.disabled||el.closest('[inert]'))throw Error('Unavailable control '+${JSON.stringify(selector)});el.scrollIntoView({block:'nearest'});const r=el.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
@@ -57,7 +57,7 @@ if(!await evaluate(`document.querySelector('.screen-toolbar').inert&&document.ac
 await shot('ui-result-phone');
 await tap('[data-replay]');await win();
 if(!await evaluate(`document.querySelector('.result-reward').textContent.includes('already collected')`))throw Error('Replay implies duplicate stars');
-if(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-progress-v1')).bestStars[0]`)!==3)throw Error('Best stars lost');
+if(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-progress-v1')).bestStars[0]`)!==3)throw Error('Best stars lost');
 await tap('.result-overlay [data-go="shop"]');await new Promise(r=>setTimeout(r,1000));
 if(!await evaluate(`document.querySelector('#shop-stars').textContent.includes('3')`))throw Error('Reward missing on shop');
 if(!await evaluate(`document.querySelector('#edit-toggle').textContent==='Done' && document.querySelector('[data-filter="all"]').getAttribute('aria-pressed')==='true'`))throw Error('Decorate did not open the editor catalogue');
@@ -73,7 +73,7 @@ await tap(`[data-jar="${solution[0].from}"]`);await tap(`[data-jar="${solution[0
 await tap('[data-go="levels"]');await tap('.level-btn[data-level="2"]');await new Promise(r=>setTimeout(r,700));
 if(await evaluate(`document.querySelector('.moves').textContent`)!=='0 moves')throw Error('Old animation changed new puzzle');
 seed.bestStars=Array(38).fill(3);
-await evaluate(`localStorage.setItem('tea-shop-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
+await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
 await send('Page.reload');await new Promise(r=>setTimeout(r,1400));await tap('#play-tea');await tap('.puzzle-chapter:nth-child(3) summary');await tap('.level-btn[data-level="20"]');
 for(const [width,height,name] of [[390,844,'phone'],[320,568,'small-phone'],[844,390,'landscape'],[1280,900,'desktop']]){
  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});await new Promise(r=>setTimeout(r,250));

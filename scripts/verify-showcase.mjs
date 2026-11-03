@@ -26,7 +26,7 @@ await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisable
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:2,mobile:true});
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/?showroom=1'});await new Promise(r=>setTimeout(r,2000));
 await evaluate(`(async()=>{const url=performance.getEntriesByType('resource').find(e=>e.name.includes('@babylonjs_core_Engines_engine.js')).name;const {Engine}=await import(url);window.__qaScene=Engine.Instances[0].scenes[0];await window.__qaScene.whenReadyAsync();Object.defineProperty(navigator,'canShare',{configurable:true,value:()=>true});Object.defineProperty(navigator,'share',{configurable:true,value:async({files})=>{window.__export=await new Promise(resolve=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.readAsDataURL(files[0]);});}});})()`);
-const saveBefore=await evaluate(`localStorage.getItem('tea-shop-progress-v1')`);
+const saveBefore=await evaluate(`localStorage.getItem('tea-shop-preview-progress-v1')`);
 for(const night of [false,true]){
  if(await evaluate(`document.querySelector('#theme-toggle').textContent`)!==(night?'Night':'Day'))await evaluate(`document.querySelector('#theme-toggle').click()`);
  await evaluate(`document.querySelector('#showcase-toggle').click()`);await new Promise(r=>setTimeout(r,300));
@@ -50,7 +50,7 @@ await new Promise(r=>setTimeout(r,200));
 if(await evaluate(`document.querySelector('#share-status').textContent`))throw Error('Cancellation displayed an error');
 await evaluate(`Object.defineProperty(navigator,'canShare',{configurable:true,value:()=>false});HTMLAnchorElement.prototype.click=function(){window.__download=this.download;};document.querySelector('#share-shop').click()`);
 if(await evaluate(`window.__download`)!=='my-tea-shop.png')throw Error('Download fallback missing');
-if(await evaluate(`localStorage.getItem('tea-shop-progress-v1')`)!==saveBefore)throw Error('Export changed progress');
+if(await evaluate(`localStorage.getItem('tea-shop-preview-progress-v1')`)!==saveBefore)throw Error('Export changed progress');
 await send('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
 await new Promise(r=>setTimeout(r,400));
 if(!await evaluate(`document.querySelector('#showcase-back').getBoundingClientRect().bottom<=innerHeight && document.documentElement.scrollWidth<=innerWidth`))throw Error('Desktop showcase overflows');

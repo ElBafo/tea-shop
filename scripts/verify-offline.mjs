@@ -6,7 +6,7 @@ import fs from 'node:fs/promises';
 import http from 'node:http';
 import assert from 'node:assert/strict';
 import {buildOffline} from './build-offline.mjs';
-const saveKey=process.env.SAVE_KEY || 'tea-shop-progress-v1';
+const saveKey=process.env.SAVE_KEY || 'tea-shop-preview-progress-v1';
 await fs.cp('work/offline-a','work/offline-b',{recursive:true});
 for(const version of ['a','b']) {
  const dir='work/offline-'+version;

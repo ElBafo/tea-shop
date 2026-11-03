@@ -27,7 +27,7 @@ const results=[];
 for(const dpr of [1,2]) for(const style of [0,1,2]){
  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:dpr,mobile:true});
  await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await new Promise(r=>setTimeout(r,1500));
- await evaluate(`localStorage.setItem('tea-shop-progress-v1',JSON.stringify({muted:true,bestStars:Array(38).fill(3),bestMoves:Array(38).fill(0),shop:{owned:['lamp'],style:{lamp:${style}},place:{},finaleSeen:true}}))`);
+ await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',JSON.stringify({muted:true,bestStars:Array(38).fill(3),bestMoves:Array(38).fill(0),shop:{owned:['lamp'],style:{lamp:${style}},place:{},finaleSeen:true}}))`);
  await send('Page.reload');await new Promise(r=>setTimeout(r,1500));
  await evaluate(`(async()=>{const url=performance.getEntriesByType('resource').find(e=>e.name.includes('@babylonjs_core_Engines_engine.js')).name;const {Engine}=await import(url);window.__qaScene=Engine.Instances[0].scenes[0];await window.__qaScene.whenReadyAsync();document.querySelector('canvas').addEventListener('pointerdown',e=>window.__qaPointer=e.pointerId);})()`);
  if(await evaluate(`document.querySelector('#theme-toggle').textContent`)!=='Night')await evaluate(`document.querySelector('#theme-toggle').click()`);
