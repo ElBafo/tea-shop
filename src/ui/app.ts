@@ -1,3 +1,5 @@
+import { isSecondEdition } from "../game/mode";
+import { nextReward } from "../game/journey";
 import { rewardCard } from "./reward";
 import { openBackups } from './backup';
 import { readPuzzle, writePuzzle } from '../game/resume';
@@ -105,6 +107,12 @@ export function mountApp(root: HTMLElement): Promise<void> {
         save(next) {
           progress = next;
         },
+        playNext() {
+          const unfinished = readPuzzle(progress);
+          if (unfinished) { resumePuzzle(); return; }
+          const next = LEVELS.find((_, i) => !progress.bestStars[i]) ?? LEVELS.find((_, i) => progress.bestStars[i] < 3) ?? LEVELS[0];
+          startLevel(next);
+        },
         goLevels() {
           playClick(progress.muted);
           leaveShop();
@@ -178,7 +186,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
         if (dest === "shop" || dest === "levels") {
           screen = dest;
           play = null;
-          render(dest === "shop" && el.hasAttribute("data-edit"));
+          render(dest === "shop" && el.hasAttribute("data-edit"), isSecondEdition && el.hasAttribute("data-edit") ? nextReward(progress)?.item.id : undefined);
         }
       });
     });
@@ -466,6 +474,7 @@ function playMarkup(
 
   const hint = guideStage() === 'puzzle'
     ? guideCard('1 · Fill each jar with one kind', selected === null ? 'Tap a jar to lift its top treats. Each finished jar must be full.' : suggestedJar(board, selected) === -1 ? 'That jar has no matching space. Tap another jar to try a different move.' : 'Tap a matching or empty jar to move the treats. The highlighted jar is one option.')
+    : isSecondEdition ? `<p class="hint">${level.blurb}</p>`
     : play.hint
     ? `<p class="hint">Fill each jar with one kind. Tap two jars to move treats.</p>`
     : "";
@@ -513,6 +522,7 @@ function winOverlay(play: PlayState, progress: Progress): string {
       <p class="kicker">Puzzle ${play.level.id} complete</p>
       <h3 id="result-title">All tidy</h3>
       <p class="big-stars" aria-label="${stars} of 3 stars">${starText(stars)}</p>
+      ${isSecondEdition ? rewardCard(progress) : ""}
       <p class="result-reward">${play.earnedStars ? `+${play.earnedStars} ${STAR} for your shop` : "Best stars already collected"}</p>
       ${guideStage() === 'decorate' ? '<p class="guide-reward">These stars are yours to spend. Try Decorate shop to choose your first piece.</p>' : ''}
       ${play.milestone?`<p class="milestone-reward">${play.milestone}</p>`:""}

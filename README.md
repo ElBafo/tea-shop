@@ -85,3 +85,10 @@ Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bo
 
 
 The reward preview adds Reading chair (32 puzzles,16 stars) and Tea garden fountain (38 puzzles,20 stars), both indoor decorations. Select an owned optional piece and use **Return for … stars** to exchange it at full value after confirmation. Core completion pieces stay owned. Goal cards show the next reward and open its free preview. Hidden-jar puzzles now include a small exploration allowance in their three-star targets; saved boards and scores remain compatible. See [pacing audit](docs/PUZZLE_PACING.md).
+
+
+## Second-edition prototype and versions
+
+The isolated **0.2.0-preview.1** prototype is reviewed at https://elbafo.github.io/tea-shop/preview/?edition=2. It contains a redesigned eight-piece room, ten authored puzzles, model thumbnails, personal decoration goals, tap-to-place and Undo move. It has its own save/appearance keys; the ordinary preview and released game retain their progress and content. More → Reset preview progress restarts only the current preview mode. The version appears at Start and in More.
+
+See [release notes](docs/RELEASES.md), [second-edition scope](docs/SECOND_EDITION.md), and [ten-puzzle pacing](docs/EDITION2_PACING.md). Main remains the approved baseline until a separate merge approval.

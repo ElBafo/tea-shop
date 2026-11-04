@@ -1,3 +1,4 @@
+import { isSecondEdition } from "../game/mode";
 import type { Placement, ShopState, UpgradeDef, UpgradeId, UpgradeKind, RepeatableKind } from "../game/types";
 
 export const UPGRADES: UpgradeDef[] = [
@@ -239,8 +240,9 @@ export const REPEATABLE: readonly RepeatableKind[] = ["plant", "lamp", "table", 
 export const EXTRA_COPIES: UpgradeDef[] = UPGRADES
   .filter(def => REPEATABLE.includes(def.id as RepeatableKind))
   .map(def => ({...def, id: `${def.id}:2` as UpgradeId, optional: true}));
-export const DECORATIONS: UpgradeDef[] = [...UPGRADES, ...EXTRA_COPIES];
-export const UPGRADE_BY_ID = Object.fromEntries(DECORATIONS.map(def => [def.id, def])) as Record<UpgradeId, UpgradeDef>;
+const ALL_DECORATIONS: UpgradeDef[] = [...UPGRADES, ...EXTRA_COPIES];
+export const DECORATIONS = isSecondEdition ? UPGRADES.filter(item => !item.optional) : ALL_DECORATIONS;
+export const UPGRADE_BY_ID = Object.fromEntries(ALL_DECORATIONS.map(def => [def.id, def])) as Record<UpgradeId, UpgradeDef>;
 export const UPGRADE_IDS = DECORATIONS.map(def => def.id);
 
 export function kindOf(id: UpgradeId): UpgradeKind {

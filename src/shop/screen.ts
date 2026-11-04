@@ -1,3 +1,6 @@
+import { isSecondEdition } from "../game/mode";
+import { APP_VERSION } from "../game/version";
+import { readGoal, saveGoal } from "../game/goal";
 import { readPuzzle } from '../game/resume';
 import { rewardCard } from '../ui/reward';
 import { collectionUnlocked } from './upgrades';
@@ -33,6 +36,7 @@ export interface ShopHost {
   progress: Progress;
   save(next: Progress): void;
   goLevels(): void;
+  playNext(): void;
   toggleMute(): void;
   resumePuzzle(): void;
   backups(): void;
@@ -56,6 +60,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
           <details class="settings-menu">
             <summary aria-label="More shop options" title="More shop options"><span aria-hidden="true">⋯</span></summary>
             <div class="settings-popover">
+              <span class="build-version">Decopu · v${APP_VERSION}</span>
+              ${isSecondEdition ? '<button id="browse-puzzles" type="button">All puzzles</button>' : ""}
               ${!isShowroom && !isGuidePreview ? '<button id="backup-progress" type="button">Progress & backups</button>' : ''}
               ${isPreview ? '<button id="reset-preview" type="button">Reset preview progress</button>' : ""}
               <button id="showcase-toggle" class="icon-btn" type="button">Showcase</button>
@@ -64,10 +70,11 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
           <button id="edit-toggle" class="icon-btn" type="button">Edit</button>
         </div>
       </header>
-      ${isPreview ? `<aside class="preview-bar"><span>${isGuidePreview ? "Tour · temporary" : isShowroom ? "Showroom · temporary" : isOfflinePreview ? "Offline preview" : "Preview"}</span><a href="${import.meta.env.BASE_URL}${isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
+      ${isPreview ? `<aside class="preview-bar"><span>${isGuidePreview ? "Tour · temporary" : isShowroom ? "Showroom · temporary" : isOfflinePreview ? "Offline preview" : isSecondEdition ? "Second edition · v" + APP_VERSION : "Preview · v" + APP_VERSION}</span><a href="${import.meta.env.BASE_URL}${isSecondEdition ? (isShowroom ? "?edition=2" : "?edition=2&showroom=1") : isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
       <div id="shop-guide"></div>
       <div class="shop-stage">
         <canvas id="shop-canvas" aria-label="The tea shop room. Pinch to zoom."></canvas>
+      ${isSecondEdition ? '<button id="undo-move" class="move-undo" type="button" disabled>Undo move</button>' : ""}
       <p id="placement-status" class="placement-status hidden" role="status" aria-live="polite"></p>
         <div class="shop-zoom" role="group" aria-label="Shop view">
           <button data-zoom="out" type="button" aria-label="Zoom out">−</button>
@@ -100,7 +107,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
           <button class="shop-card open" id="play-tea" type="button">
             <span class="home-play-icon" aria-hidden="true">▤</span>
             <span class="card-copy">
-              <strong>Play puzzles</strong>
+              <strong>${isSecondEdition ? "Play next puzzle" : "Play puzzles"}</strong>
               <em>Earn stars to decorate</em>
             </span><span class="home-arrow" aria-hidden="true">→</span>
           </button>
@@ -120,7 +127,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   const canvas = root.querySelector<HTMLCanvasElement>("#shop-canvas");
   if (!canvas) throw new Error("Missing shop canvas");
 
-  const appearanceKey = `tea-shop-${isPreview ? "preview-" : ""}appearance-v1`;
+  const appearanceKey = isSecondEdition ? "tea-shop-preview-edition2-appearance-v1" : `tea-shop-${isPreview ? "preview-" : ""}appearance-v1`;
   let night = loadNight(appearanceKey);
   let edit = startInEdit;
   let showcasing = false;
@@ -133,6 +140,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   let bakeryNote = false;
   let filter: "all" | "owned" = "all";
   let draft: DecorationDraft | null = null;
+  let lastMove: {id: UpgradeId; place: Placement} | null = null;
+  const browseScroll = {all:0, owned:0};
 
   const diorama = new Diorama(canvas, host.progress.shop, {
     onZoom: zoom => {
@@ -141,7 +150,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     },
     onPlacementBlocked: () => {
       const status = root.querySelector<HTMLElement>("#placement-status")!;
-      status.textContent = "No room on that wall. Move or store another decoration first.";
+      status.textContent = isSecondEdition ? "That spot is unavailable. Try another place." : "No room on that wall. Move or store another decoration first.";
       status.classList.remove("hidden");
     },
     onSelect: (id) => {
@@ -163,6 +172,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
         return;
       }
       const shop = clone(host.progress.shop);
+      if (isSecondEdition) lastMove = {id, place:{...(shop.place[id] ?? UPGRADE_BY_ID[id].defaultPlace)}};
       shop.place[id] = place;
       commit(shop);
       playChime(host.progress.muted);
@@ -176,6 +186,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
 
   const paintChrome = () => {
     setBrowserNight(night);
+    const undoMove = root.querySelector<HTMLButtonElement>('#undo-move');
+    if (undoMove) { undoMove.disabled = !lastMove; undoMove.classList.toggle('hidden', !edit); }
     root.querySelector(".shop-room")?.classList.toggle("is-night", night);
     root.querySelector(".shop-room")?.classList.toggle("tray-collapsed", edit && trayCollapsed);
     const tray = root.querySelector<HTMLButtonElement>("#tray-toggle")!;
@@ -195,7 +207,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     guide.innerHTML = stage === 'puzzle' ? guideCard('1 · Sort a shelf', 'Play the first puzzle to earn stars for your shop.', '<button type="button" data-guide-play>Play puzzles →</button>')
       : stage === 'decorate' && spendableStars(progress) < 2 ? guideCard('2 · Save for your first piece', 'Decorations start at 2 stars. Play another puzzle or improve your best score to earn more.', '<button type="button" data-guide-play>Play puzzles →</button>')
       : stage === 'decorate' ? guideCard('2 · Make it yours', edit ? 'Pick a decoration, try a style, then buy it with your stars. A counter costs 2 stars.' : 'Your stars buy decorations. Open Edit to choose your first piece.', edit ? '' : '<button type="button" data-guide-edit>Decorate →</button>')
-      : stage === 'arrange' ? guideCard('3 · Make it personal', progress.shop.owned.some(id => UPGRADE_BY_ID[id].movable) ? 'In Edit, drag your furniture to move it. Try another style or rotate it. Changes save automatically.' : 'Try a different wall style. When you add furniture, you can drag and rotate it in Edit. Changes save automatically.', '<button type="button" data-guide-done>Got it — my shop, my way</button>') : '';
+      : stage === 'arrange' ? guideCard('3 · Make it personal', progress.shop.owned.some(id => UPGRADE_BY_ID[id].movable) ? isSecondEdition ? 'Select furniture, then tap an open spot or drag it. Try Rotate and Undo move.' : 'In Edit, drag your furniture to move it. Try another style or rotate it. Changes save automatically.' : 'Try a different wall style. When you add furniture, you can drag and rotate it in Edit. Changes save automatically.', '<button type="button" data-guide-done>Got it — my shop, my way</button>') : '';
     guide.classList.toggle('hidden', !guide.innerHTML);
     root.querySelector('.shop-room')?.classList.toggle('has-guide', Boolean(guide.innerHTML));
     const spendable = spendableStars(progress);
@@ -306,7 +318,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     focus = id; selected = isOwned(host.progress.shop, id) ? id : null;
     filter = selected ? 'owned' : 'all';
     diorama.setEditMode(true); diorama.select(selected);
-    if (!selected) preview(id, 0);
+    if (!selected) preview(id, readGoal(host.progress)?.id === id ? readGoal(host.progress)!.style : 0);
     paintChrome();
   };
 
@@ -330,6 +342,14 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   };
 
   const bind = () => {
+    root.querySelector('#browse-puzzles')?.addEventListener('click',()=>host.goLevels());
+    root.querySelector('#undo-move')?.addEventListener('click',()=>{
+      if (!lastMove) return;
+      const {id,place}=lastMove;
+      if (!isOwned(host.progress.shop,id) || isStored(host.progress.shop,id) || !canPlace(id,place,host.progress.shop)) return;
+      clearPreview(); const shop=clone(host.progress.shop); shop.place[id]={...place}; lastMove=null;
+      commit(shop); selected=id; focus=id; filter='owned'; diorama.select(id); paintChrome();
+    });
     root.querySelector('#reset-preview')?.addEventListener('click', () => {
       if (!isPreview || returnDialog) return;
       root.querySelector('.settings-menu')?.removeAttribute('open');
@@ -341,7 +361,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
       dialog.querySelector('[data-reset-cancel]')!.addEventListener('click', close);
       dialog.querySelector('[data-reset-confirm]')!.addEventListener('click', () => {
-        try { resetPreviewProgress(); location.replace(import.meta.env.BASE_URL); }
+        try { resetPreviewProgress(); location.replace(import.meta.env.BASE_URL + (isSecondEdition ? "?edition=2" : "")); }
         catch { dialog.querySelector('[data-reset-error]')!.textContent = 'Could not clear preview storage. Check browser storage access and try again.'; }
       });
       document.body.append(dialog); dialog.showModal();
@@ -389,6 +409,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       playClick(host.progress.muted);
       clearPreview();
       edit = !edit;
+      lastMove = null;
       trayCollapsed = false;
       selected = null;
       focus = null;
@@ -403,7 +424,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       root.querySelector<HTMLButtonElement>("#edit-toggle")?.click();
       browse("all");
     });
-    root.querySelector("#play-tea")?.addEventListener("click", () => host.goLevels());
+    root.querySelector("#play-tea")?.addEventListener("click", () => isSecondEdition ? host.playNext() : host.goLevels());
     root.querySelector("#bakery")?.addEventListener("click", () => {
       if (!isBakeryOpen(host.progress)) return;
       playClick(host.progress.muted);
@@ -415,6 +436,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       if (!button) return;
       playClick(host.progress.muted);
       clearPreview();
+      if (isSecondEdition) browseScroll[filter] = root.querySelector(".editor-content")!.scrollTop;
       focus = button.dataset.upgrade as UpgradeId;
       selected = isOwned(host.progress.shop, focus) ? focus : null;
       diorama.select(selected);
@@ -444,6 +466,10 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
         const id = target.dataset.id as UpgradeId;
         const variant = Number(target.dataset.style ?? "0");
         restyle(id, variant);
+      } else if (act === "pin-goal" && focus) {
+        const goal=readGoal(host.progress);
+        saveGoal(goal?.id===focus && goal.style===(draft?.style??0) ? null : {id:focus,style:draft?.style??0});
+        paintChrome();
       } else if (act === "return" && selected) {
         confirmReturn(selected);
       } else if (act === "rotate") {
@@ -452,6 +478,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
         clearPreview();
         const next = act === "store" ? storeItem(host.progress.shop, selected) : placeItem(host.progress.shop, selected);
         if (next) {
+          lastMove=null;
           commit(next);
           diorama.select(selected);
           playClick(host.progress.muted);
@@ -490,6 +517,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     diorama.select(null);
     root.querySelector(".editor-content")!.scrollTop = 0;
     paintChrome();
+    if(isSecondEdition) root.querySelector(".editor-content")!.scrollTop=browseScroll[tab];
   };
 
   const previewShop = (): ShopState => {
@@ -526,6 +554,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     const place = draft?.id === id ? draft.place : findOpenPlacement(id, shop);
     if (!place || !canPlace(id, place, shop)) return;
     clearPreview();
+    lastMove=null;
+    if (readGoal(progress)?.id===id) saveGoal(null);
     shop.owned.push(id);
     shop.style[id] = variant;
     shop.place[id] = place;
@@ -565,6 +595,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     }
     playClick(host.progress.muted);
     const shop = clone(host.progress.shop);
+    if (isSecondEdition) lastMove={id,place:{...(shop.place[id]??UPGRADE_BY_ID[id].defaultPlace)}};
     shop.place[id] = next;
     commit(shop);
   };
@@ -572,7 +603,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   root.querySelector('#shop-guide')!.addEventListener('click', event => {
     const target = event.target as Element;
     if (target.closest('[data-guide-skip], [data-guide-done]')) { setGuide('done'); paintChrome(); }
-    if (target.closest('[data-guide-play]')) host.goLevels();
+    if (target.closest('[data-guide-play]')) { if(isSecondEdition)host.playNext();else host.goLevels(); }
     if (target.closest('[data-guide-edit]')) root.querySelector<HTMLButtonElement>('#edit-toggle')?.click();
   });
   bind();
@@ -602,6 +633,7 @@ function taskDetail(progress: Progress, focus: UpgradeId | null, draft: Decorati
   const fits = draft?.id === id && draft.place !== null;
   return `<div class="detail-copy"><strong>${label(id)}</strong>
     <p class="detail-note">${chosen === null ? "Choose a style to preview in your shop." : def.variants[chosen].blurb}</p></div>
+    ${isSecondEdition ? `<button class="goal-pin" type="button" data-act="pin-goal">${readGoal(progress)?.id===id && readGoal(progress)?.style===(chosen??0) ? "Your goal ✓ · Clear" : "Make this my goal"}</button>` : ""}
     <div class="style-row">${def.variants.map((variant, index) => `<button class="style-chip ${chosen === index ? "active" : ""}" aria-pressed="${chosen === index}" data-act="preview" data-id="${id}" data-style="${index}" type="button">${styleThumbnail(id, index)}<span>${variant.name}</span></button>`).join("")}</div>
     ${draft?.place && def.movable ? `<button class="style-chip rotate-action" data-act="rotate" type="button">${def.surface === "wall" ? "Other wall" : "Rotate"}</button>` : ""}
     ${chosen === null ? "" : `<p class="detail-note" role="status">${!unlocked ? `Complete ${def.unlockAfter} puzzles to unlock · Preview is free` : !fits ? "Make room by moving your decorations first." : !affordable ? `${def.cost - spendableStars(progress)} more stars needed · Preview is free` : "Styles included · Free to change"}</p><div class="purchase-row"><button class="buy-decoration" data-act="buy" data-id="${id}" data-style="${chosen}" type="button" ${!unlocked || !affordable || !fits ? "disabled" : ""}> ${!unlocked ? `Unlock at ${def.unlockAfter} puzzles` : !fits ? "Make room to buy" : !affordable ? `Need ${def.cost - spendableStars(progress)} more stars` : "Buy"} · ${def.cost} ✦</button></div>`}`;

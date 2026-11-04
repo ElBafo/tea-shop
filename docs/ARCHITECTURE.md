@@ -34,7 +34,7 @@ The room uses a 6×6 floor grid. The movable counter reserves its footprint and 
 
 ## Persistence and lifecycle
 
-`localStorage` key `tea-shop-progress-v1` stores best stars and moves, mute preference, owned upgrades, styles, placements, and completion celebration state. Available stars equal total best stars minus the cost of owned upgrades. Loading validates data and sanitizes the layout. Unfinished puzzles persist separately as replayable move logs. Device transfer uses manual backup files; there is no automatic cross-device synchronization.
+`localStorage` key `tea-shop-progress-v1` stores best stars and moves, mute preference, owned upgrades, styles, placements, and completion celebration state. Available stars equal total best stars plus derived milestone bonuses minus the cost of owned upgrades. Loading validates data and sanitizes the layout. Unfinished puzzles persist separately as replayable move logs. Device transfer uses manual backup files; there is no automatic cross-device synchronization.
 
 Leaving the shop disposes its Babylon scene and engine, stops the render loop, and removes resize observers/listeners. Preserve this lifecycle when changing navigation or adding effects.
 
@@ -48,7 +48,7 @@ Leaving the shop disposes its Babylon scene and engine, stops the render loop, a
 
 The solver is development tooling, not a live hint system. Its search has a node limit and prunes selected redundant moves; it is not a general-purpose unlimited solver.
 
-## Current considerations
+## Baseline considerations
 
 The shop is eagerly imported with the app, so Babylon contributes substantially to the initial bundle. The inspected production build emitted a main chunk of about 375 KB gzipped and a size warning. Consider loading boundaries if startup performance becomes an issue.
 
@@ -124,3 +124,22 @@ Hidden-jar pars include one exploration move per initial lid. The solver verifie
 
 
 Preview storage keys are selected from the Vite base in `game/types.ts`, so local previews share the hosted preview isolation. Runtime preview controls additionally require the preview URL path. `resetPreviewProgress` uses an explicit allowlist for primary, recovery, unfinished puzzle, guide and appearance keys; it never clears origin storage. The preview-only More menu confirms before clearing and navigating to the clean preview URL. Main ignores demo query flags and renders no showroom/reset controls.
+
+
+## Second-edition prototype — 0.2.0-preview.1
+
+The first slice is implemented and locally validated; hosting and owner review are pending. `game/mode.ts` gates it behind the preview build base, a preview URL path and `edition=2`. Ordinary preview and release retain the baseline mode. The prototype selects eight core decoration designs and ten authored levels; the existing 38-board sequence is preserved.
+
+`game/types.ts` selects `tea-shop-preview-edition2-progress-v1` and `LEVEL_COUNT = 10` in this mode. Recovery, unfinished-puzzle, guide and chosen-goal keys derive from that namespace; appearance uses `tea-shop-preview-edition2-appearance-v1`. Reset clears only the active experience and navigates back with `edition=2` retained. Backup import validates the active level count and catalogue, rejecting a 38-board save in the prototype and a 10-board save in the baseline.
+
+`game/edition-levels.ts` defines ten boards, `EDITION_ARCS`, scoring allowances and completion bonuses. `levels.ts` selects the sequence; the shared engine retains full monochrome jars, unlimited Undo and no timer/fail state. Bonuses after puzzles 3/6/10 are 4/5/7 stars. The slice therefore earns 26–46 stars against the 26-star core catalogue. `verify-edition-levels.ts` checks solvability, targets and budget; baseline verification still checks all 38 released boards.
+
+`game/goal.ts` stores an optional decoration ID and style under `STORAGE_KEY + ':goal-v1'`. It validates them against the active catalogue and ignores owned or invalid targets. `journey.ts` and `ui/reward.ts` use that choice for progress and preview navigation. Pinning does not spend/reserve currency or grant ownership. The result action opens the same chosen style. Direct Play starts the next puzzle or resumes the unfinished one; More retains All puzzles.
+
+`Diorama` routes drag and select-then-tap placement through the existing floor/wall validity checks and move callbacks. A transient target preview remains separate from saved placement. Illegal targets, swipes, pinch and cancellation do not commit. The shop screen retains the previous placement for one accepted owned move or rotation. Undo restores that placement, not an inventory/currency snapshot, and temporary unpurchased previews remain separate.
+
+`shop/edition-art.ts` supplies rounded core meshes, material choices, room details and a matching shopkeeper. Its visuals stay under the existing material-ownership and disposal lifecycle. A placed lamp and table within 2.3 room units enable an open-book/tea setting on the table; `itemKey` incorporates that predicate so synchronization updates the reaction. Existing steam handling is reused, with no added reward rule or animation loop.
+
+`render-edition-thumbnails.mjs` renders 24 images from the actual models into `public/edition2/thumbnails`. `shop/icons.ts` uses these static images for the prototype, avoiding a live Babylon scene per UI card. Prototype CSS is scoped under the second-edition body class; its jars stay stationary during transfers, hidden content uses neutral frosted artwork, and persistent level guidance avoids shifting the layout on selection.
+
+`game/version.ts` exposes `APP_VERSION = 0.2.0-preview.1`; package, Start and More identify this review build, including its ordinary-preview mode. Main remains the documented `0.1.0` baseline until explicitly approved for replacement. [RELEASES.md](RELEASES.md) records scope, local validation and pending PR/deployment status; [SECOND_EDITION.md](SECOND_EDITION.md) records acceptance and limitations.

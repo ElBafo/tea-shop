@@ -180,3 +180,32 @@ export function decorTexture(scene: Scene, kind: "art" | "clock", style: number)
     }
   });
 }
+
+// Calm, phone-readable materials for the isolated second-edition miniature.
+export function editionOakTexture(scene:Scene):DynamicTexture {
+ return canvasTex(scene,'edition-oak',512,(ctx,s)=>{
+  ctx.fillStyle='#d9ba91';ctx.fillRect(0,0,s,s);
+  for(let row=0;row<8;row++){
+   ctx.fillStyle=['#dfc29d','#d7b78d','#e4caa7','#dcc09a'][row%4];ctx.fillRect(0,row*64,s,63);
+   ctx.strokeStyle='#b7956e';ctx.globalAlpha=.3;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,row*64+.5);ctx.lineTo(s,row*64+.5);ctx.stroke();
+   for(let col=0;col<3;col++){const x=(col*192+(row%2)*96)%s;ctx.fillRect(x,row*64,1,64);}
+   ctx.globalAlpha=.07;ctx.strokeStyle='#765b42';for(let i=0;i<4;i++){ctx.beginPath();ctx.moveTo(0,row*64+12+i*12);ctx.bezierCurveTo(120,row*64+8+i*12,330,row*64+18+i*12,s,row*64+10+i*12);ctx.stroke();}ctx.globalAlpha=1;
+  }
+ });
+}
+export function editionFabricTexture(scene:Scene,style:number):DynamicTexture {
+ return canvasTex(scene,'edition-fabric-'+style,256,(ctx,s)=>{
+  const base=['#d6b58e','#cbb2a5','#b8c4b0'][style];ctx.fillStyle=base;ctx.fillRect(0,0,s,s);
+  ctx.strokeStyle='#f6eedf';ctx.lineWidth=7;ctx.strokeRect(13,13,s-26,s-26);ctx.lineWidth=2;ctx.strokeRect(25,25,s-50,s-50);
+  if(style===0){ctx.beginPath();ctx.moveTo(128,49);ctx.lineTo(201,128);ctx.lineTo(128,207);ctx.lineTo(55,128);ctx.closePath();ctx.stroke();}
+  if(style===1)for(let y=48;y<220;y+=40)for(let x=48;x<220;x+=40){ctx.beginPath();ctx.ellipse(x,y,8,4,-.5,0,Math.PI*2);ctx.fillStyle='#f1e3d5';ctx.fill();}
+  if(style===2){ctx.globalAlpha=.3;ctx.fillStyle='#f6eedf';for(let x=40;x<230;x+=30)ctx.fillRect(x,30,9,196);ctx.globalAlpha=1;}
+  ctx.globalAlpha=.08;ctx.fillStyle='#5d5142';for(let i=0;i<s;i+=3){ctx.fillRect(i,0,1,s);ctx.fillRect(0,i,s,1);}ctx.globalAlpha=1;
+ });
+}
+export function editionSignTexture(scene:Scene,style:number):DynamicTexture {
+ return canvasTex(scene,'edition-sign-'+style,256,(ctx,s)=>{
+  ctx.fillStyle=['#52675d','#eee3cb','#bd8d80'][style];ctx.fillRect(0,0,s,s);ctx.strokeStyle=style===1?'#927249':'#eee3cb';ctx.lineWidth=3;ctx.strokeRect(12,21,s-24,s-42);
+  ctx.fillStyle=style===1?'#52675d':'#fff6e5';ctx.font='bold 84px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('TEA',128,115);ctx.font='25px Georgia,serif';ctx.fillText('a little pause',128,179);
+ });
+}

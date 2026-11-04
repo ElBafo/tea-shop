@@ -1,14 +1,43 @@
-# Tea Shop roadmap
+# Decopu roadmap
 
 Record every agreed product decision here in the same work session. Clearly distinguish implemented behavior, agreed plans, and open decisions.
 
 This is the working delivery order, not a calendar promise. Priorities can change after phone reviews. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority
+## Current priority — 0.2.0-preview.1
 
-Deliver the approved depth and ownership pass in a new preview: room-first decorating, distinctive collection milestones, puzzle chapters, a satisfying tea-shop endpoint, art refinement and save recovery. PR #11 (Decopu splash, guide and wall dragging) was accepted and merged. Preserve existing gameplay, purchases and saves; merge this next pass only after owner review.
+Build the approved second-edition prototype as a separate development experience: one redesigned tea shop, eight refined core decoration designs, and ten deliberately paced puzzles. The owner approved all six directions below and asked to implement them. The immediate milestone is a complete playable slice across those directions, followed by phone review; it is not a commitment to replace the released game before review.
 
-- Preview fix: synchronize Safari theme colour and the root safe-area background with shop day/night; reset on puzzle navigation. Update the installed-app status-bar hint too; physical iPhone/Home Screen behavior remains a device-review check.
+- **Released baseline:** `0.1.0`, the existing package version, documented after PRs #12, #13 and #14 were merged. The version was not previously shown consistently in the app.
+- **Current work:** `0.2.0-preview.1`, first slice implemented and locally validated; hosting and owner review pending. Review URL once published: https://elbafo.github.io/tea-shop/preview/?edition=2. Its scores, room, guide, appearance and chosen goal must be isolated from both main and the ordinary preview.
+- **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines this milestone's acceptance criteria.
+- Display the version in the app so phone feedback identifies the build. Every published review build gets a new preview version and release-note entry; roadmap milestones refer to that version. A version label does not imply approval or deployment.
+
+### Six approved second-edition tracks
+
+| Track | First milestone: 0.2.0-preview.1 | Acceptance for phone review |
+| --- | --- | --- |
+| 1. A distinctive miniature | Refine counter, sign, paint, shelves, plant, rug, lamp and table, together with the room and shopkeeper. Use coordinated wood, ceramic and fabric treatments, rounded silhouettes and consistent proportions. | All eight designs read at phone size; mixed styles look intentional; day/night framing, material cleanup and placement footprints remain reliable. |
+| 2. Tactile puzzle presentation | Compose jars on a tea counter, with coherent treat artwork, clear glass and an understandable frosted treatment for hidden contents. Coordinate existing pour, settling and celebration feedback. | Jars remain stationary; pieces move clearly; concealed colours stay concealed; full-jar completion, Undo, audio preferences and reduced motion work. |
+| 3. A shorter, coherent journey | Make Play open the next puzzle, while retaining level browsing. Use a compact contextual decorating panel and accurate previews from the furniture models. Carry one visual language through shop, puzzles and results. | A player can go from shop to puzzle to chosen decoration without unnecessary intermediate screens, losing their selection or losing their collection position. |
+| 4. Comfortable arranging | Add select-then-tap placement alongside dragging, a clear destination preview, reachable Rotate and immediate Undo move. Preserve explicit Edit mode. | Floor and wall placement work with either method; blocked cells, other-item selection and pinch do not accidentally move furniture; Undo restores the accepted previous placement. |
+| 5. Personal goals and room life | Let the player pin a decoration to save for and show progress after puzzles. Add restrained room reactions to useful arrangements where supported by this slice. | The chosen goal persists, can be changed without losing stars, and leads to a correct purchase preview. Room life does not impose matching sets, scores, compulsory layouts or extra resource loops. |
+| 6. Authored puzzle sessions | Build ten puzzles with a rhythm of quick satisfaction, decisions, breathers and a finale. Use hidden contents selectively and verify the slice's star budget. | Every puzzle is solvable; full jars, no timer/fail state and unlimited Undo remain. Even minimum completion rewards can fund the required eight-piece shop. Existing 38-board identities and saves are untouched. |
+
+### Delivery stages
+
+1. **Playable slice — implemented and locally validated:** the six tracks are connected within the one-room/eight-design/ten-puzzle boundary. The app identifies `0.2.0-preview.1`; separate saves, reset, goals and the full first-win/purchase flow are checked. Actual scope, economy and tests are recorded in [RELEASES.md](RELEASES.md). Hosting and owner review remain pending.
+2. **Phone comparison — after the slice is ready:** review old and new versions, including a fresh onboarding session and the full choose-goal → play → reward → preview → buy → arrange loop. Observe confusing controls, missed drag/tap targets, wanted rewards and puzzle fatigue. Correct observed problems before expanding.
+3. **Extend the approved direction — after review:** carry the accepted art language through the wider catalogue, broaden room reactions and authored puzzle arcs, and refine the UI using player evidence. Visitors sitting in usable corners are an approved direction to explore, not a claim that a customer simulation ships in the first slice.
+4. **Release decision — requires owner approval:** choose whether and how the second edition replaces the baseline. Design and verify any save migration separately; do not automatically overwrite the existing game or progress.
+
+First-slice implementation: eight rounded core models with coordinated materials, room panelling and a refined shopkeeper; 24 thumbnails rendered from those models; a book/tea setting appears when a placed table is within 2.3 room units of a placed lamp. Direct Play opens the next or unfinished puzzle; More retains All puzzles. A pinned decoration and style persist through results and purchase preview. Tap placement, dragging, one-step owned move/rotation Undo, and collection-position restoration are implemented. Puzzle jars stay stationary, hidden pieces use a neutral frosted treatment, and level guidance remains visible to prevent a selection layout jump.
+
+Prototype economy: ten puzzles award 10–30 completion stars; fixed completion bonuses at puzzles 3/6/10 add 4/5/7 stars, for 26–46 total earnings. The required eight-piece shop costs 26. Two puzzles have hidden contents. The separate ten-board save cannot replace a 38-board backup. Baseline earnings and catalogue are unchanged.
+
+Local validation passed for baseline and prototype solvers, same-session flows, phone/desktop placement, responsive puzzle presentation, reduced motion and resource cleanup. These checks do not establish physical iPhone performance or enjoyable pacing. Richer visitors, a full production asset pipeline and the wider catalogue remain later work after this slice's review.
+
+Bakery implementation and its cross-room rewards, larger rooms, public galleries, cloud accounts and monetisation remain later roadmap work. A second minigame is not part of this milestone. The earlier sections below retain the game's delivery history and backlog; this section controls the immediate priority.
 
 ## Approved reward and experimentation pass — merged in PR #12
 
@@ -27,13 +56,13 @@ Review on phone: choose a desired reward; preview styles before buying; buy, mov
 
 ## Current baseline
 
-- Released: 38 sorting puzzles, stars, fourteen decoration designs plus five paid second copies, isometric 3D decorating, Edit mode, saved progress, and a completion celebration.
+- Released baseline `0.1.0`: 38 sorting puzzles, nineteen decoration designs plus five paid second copies, isometric 3D decorating, Edit mode, saved progress, and a completion celebration. Core decorations cost 26 stars; the full catalogue costs 190 against 132 maximum earnable stars.
 - Hosted preview: https://elbafo.github.io/tea-shop/preview/ automatically rebuilds from preview/shop-polish. The released game remains at https://elbafo.github.io/tea-shop/.
 - The simplified shop UI, showroom, touch picking, sign correction, and counter aisle were reviewed and merged in PR #2.
 - Mobile audio retry and clearer sound labels are implemented and checked with a mocked audio context; confirmed working by the owner in Safari.
 - The Bakery is an unlockable coming-soon card.
 
-## 1. Make phone play reliable — current priority
+## 1. Make phone play reliable — continuing acceptance criteria
 
 Resolve issues observed during phone reviews before adding more content.
 
@@ -45,7 +74,7 @@ Resolve issues observed during phone reviews before adding more content.
 
 Done when the owner can play puzzles and decorate comfortably on their phone, with no known blocking defects. Automated checks support this review but do not replace device testing.
 
-## 2. Make the tea shop lovely — next
+## 2. Make the tea shop lovely — continuing art direction
 
 Complete the existing art milestone rather than treating the initial pass as finished.
 
@@ -407,7 +436,7 @@ The owner accepted the full candid review after merging PR #11. Deliver on a sep
 
 Implementation choices for the depth preview: Conservatory prices are 10/14/18 stars with unlocks at 8/16/24 completed puzzles, three included styles each. Total catalogue is 154 stars against 132 earnable; the original 112-star catalogue and 26-star core retain their prices. Milestones unlock the right to buy, not free furniture. The 38 puzzles are grouped into five chapters without new rules. A single unfinished puzzle is saved; starting a different puzzle replaces that slot. Backups are manually transferred files, with validated import and replacement confirmation. Cloud accounts, larger rooms and a playable Bakery remain separate future work.
 
-Depth preview validation: all 38 solvability checks, full-jar rules, legacy inventory/currency, placement, backup round-trip/rejection/recovery/storage failure, and resume replay pass. Browser checks cover real-touch purchases, all nine new styles, milestone locks, reload/Undo, import confirmation, chapter-eight unlock, completion-to-showcase, 320px/390px/landscape/desktop layouts and pinned action controls. Existing gameplay/editor checks pass. Repeated editing/marker selection returns to baseline resource counts; hidden rendering pauses and scene disposal pass. Production offline/update/reopen checks pass. Physical iPhone review is still pending; main remains on the accepted PR #11 release.
+Depth preview validation: all 38 solvability checks, full-jar rules, legacy inventory/currency, placement, backup round-trip/rejection/recovery/storage failure, and resume replay pass. Browser checks cover real-touch purchases, all nine new styles, milestone locks, reload/Undo, import confirmation, chapter-eight unlock, completion-to-showcase, 320px/390px/landscape/desktop layouts and pinned action controls. Existing gameplay/editor checks pass. Repeated editing/marker selection returns to baseline resource counts; hidden rendering pauses and scene disposal pass. Production offline/update/reopen checks pass. At that validation checkpoint, physical iPhone review was pending and main was still on PR #11. The owner subsequently reviewed and merged the depth and reward work in PR #12.
 
 
 Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bonuses are derived from completion counts, so existing players receive them retroactively and replaying cannot farm them. Total earning capacity is 132 (114 puzzle stars + 18 chapter stars), against a 154-star catalogue. A player who already owns the entire 112-star legacy collection has 20 stars available and can afford any one new statement piece. Puzzle scoring itself is unchanged.
@@ -438,13 +467,13 @@ The owner explicitly deferred monetisation. First validate a satisfying, underst
 Phone feedback requests tighter vertical spacing across tabs and pills. Reduce collection tabs to 36px plus container spacing, secondary toolbar/navigation controls to 40px, the noninteractive star pill to 36px and style-card padding. Keep Buy/Rotate/Store actions at least 44px. Check wrapping, touch navigation and small-screen clipping in the same editor pass.
 
 
-## Post-review visual corrections — next preview
+## Post-review visual corrections — merged in PR #13
 
-PR #12 was approved and merged. The owner requested two follow-up refinements: remove the light-green filled Browse pill when a decoration is selected, and fix hidden-piece alignment inside puzzle jars. Browse remains a clearly labelled, transparent text control with the same tap target and keyboard focus. Hidden-piece artwork is centered within its treat container and sized proportionally so four-slot/five-slot and narrow/wide jar layouts agree. The owner clarified that the issue is horizontal and vertical alignment of concealed pieces, not the lid artwork; preserve their neutral appearance, concealment/reveal rules, jar lids, scoring and saves. Review this visual-only follow-up in a new preview before merging.
+PR #12 was approved and merged. The owner requested two follow-up refinements: remove the light-green filled Browse pill when a decoration is selected, and fix hidden-piece alignment inside puzzle jars. Browse remains a clearly labelled, transparent text control with the same tap target and keyboard focus. Hidden-piece artwork is centered within its treat container and sized proportionally so four-slot/five-slot and narrow/wide jar layouts agree. The owner clarified that the issue is horizontal and vertical alignment of concealed pieces, not the lid artwork; preserve their neutral appearance, concealment/reveal rules, jar lids, scoring and saves. The owner reviewed and approved this visual follow-up; PR #13 is merged.
 
 Phone follow-up: right-align Hide/Show panel. The wooden concealment strip must sit in the gap below the visible top piece, rather than at a fixed percentage of jar height that covers hidden artwork. Tie its position to the first hidden slot and use a thin divider; preserve reveal and Undo behavior.
 
 
-## Development-only showroom and onboarding reset
+## Development-only showroom and onboarding reset — merged in PR #14
 
 The owner requires the finished-shop demo and reset controls only in the development preview. Main renders neither, and ignores showroom/tour query flags. Preview detection requires both its build base and preview path. Preview save-key isolation now lives in source as well as the hosted build. More → Reset preview progress opens a confirmation, clears only the preview primary/recovery/puzzle/onboarding/appearance keys, and reloads the normal preview at Start with new-player guidance. Main progress and unrelated browser storage are preserved. The player's own Showcase remains a normal game feature; it does not grant the finished demo room.

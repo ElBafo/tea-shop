@@ -1,3 +1,4 @@
+import { isSecondEdition } from "../game/mode";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Camera } from "@babylonjs/core/Cameras/camera";
@@ -79,7 +80,7 @@ export class Diorama {
   private markers: TransformNode | null = null;
   private pointer = { x: 0, y: 0 };
   private drag: {
-    kind: "camera" | "item";
+    kind: "camera" | "item" | "tap";
     pointerId: number;
     lastX: number;
     lastY: number;
@@ -87,6 +88,7 @@ export class Diorama {
     start?: Placement;
     moved?: boolean;
     offset?: Vector3;
+    tapPlace?: Placement | null;
   } | null = null;
   private tweens: Tween[] = [];
   private customer: TransformNode | null = null;
@@ -231,7 +233,7 @@ export class Diorama {
 
   private updateMarkers(): void {
     this.markers?.dispose();this.markers=null;
-    if(this.edit && this.drag?.kind === "item" && this.drag.moved && this.selected && isPlaced(this.shop,this.selected)) this.markers=placementMarkers(this.scene,this.selected,this.shop);
+    if(this.edit && ((this.drag?.kind === "item" && this.drag.moved) || (isSecondEdition && this.drag?.kind === "tap")) && this.selected && isPlaced(this.shop,this.selected)) this.markers=placementMarkers(this.scene,this.selected,this.shop);
   }
 
   captureImage(): string {
@@ -654,6 +656,29 @@ export class Diorama {
       this.select(id);
       return;
     }
+    if (isSecondEdition && this.edit && this.selected && isPlaced(this.shop, this.selected) && UPGRADE_BY_ID[this.selected].movable) {
+      const selected = this.selected;
+      const def = UPGRADE_BY_ID[selected];
+      const hit = pick?.pickedPoint;
+      // A floor tap must hit the floor, not project a wall tap behind furniture.
+      // Wall details (trim/window) still use the established legal-wall snapping.
+      const onSurface = Boolean(hit && pick?.hit && (def.surface === "floor"
+        ? Math.abs(hit.y) < 0.12
+        : (Math.abs(hit.x) < 0.16 || Math.abs(hit.z) < 0.16) && hit.y > 0.4 && hit.y < 3.1));
+      const point = onSurface ? this.pickSurface(selected) : null;
+      const start = { ...placeOf(this.shop, selected) };
+      const next = point ? def.surface === "wall" ? this.wallDrop(selected, point) : snapFloor(point.x, point.z, def.size, start.rot) : null;
+      this.drag = { kind: "tap", pointerId: event.pointerId, lastX: event.clientX, lastY: event.clientY, id: selected, start, tapPlace: next };
+      this.updateMarkers();
+      const item = this.visuals.items[selected];
+      if (next && item) {
+        this.previewPlace(selected, item, next);
+        setItemTint(item, canPlace(selected, next, this.shop) ? "#9bb784" : "#d47d86");
+        this.ring.position.x = item.position.x;
+        this.ring.position.z = item.position.z;
+      }
+      return;
+    }
     if (!this.edit) {
       this.drag = {
         kind: "camera",
@@ -666,6 +691,12 @@ export class Diorama {
 
   private pointerMove(event: PointerEvent): void {
     if (!this.drag || event.pointerId !== this.drag.pointerId) return;
+    if (this.drag.kind === "tap") {
+      // Tap-to-place is deliberately not a second drag gesture. Moving the finger
+      // away cancels this candidate, so swipes and pinches cannot place furniture.
+      if (Math.hypot(event.clientX - this.drag.lastX, event.clientY - this.drag.lastY) >= 8) this.restoreDrag();
+      return;
+    }
     if (this.drag.kind === "camera") {
       const dx = event.clientX - this.drag.lastX;
       const dy = event.clientY - this.drag.lastY;
@@ -703,6 +734,26 @@ export class Diorama {
     const drag = this.drag;
     this.drag = null;
     this.updateMarkers();
+    if (drag.kind === "tap" && drag.id && drag.start) {
+      const id = drag.id;
+      const next = drag.tapPlace;
+      const item = this.visuals.items[id];
+      if (item) setItemTint(item, null);
+      const shortTap = Math.hypot(event.clientX - drag.lastX, event.clientY - drag.lastY) < 8;
+      const stillSelected = this.edit && this.selected === id && isPlaced(this.shop, id);
+      if (shortTap && stillSelected && next && canPlace(id, next, this.shop)) {
+        const moved = next.x !== drag.start.x || next.z !== drag.start.z || next.wall !== drag.start.wall || next.rot !== drag.start.rot;
+        if (moved) {
+          this.hooks.onMove(id, next);
+          if (this.visuals.items[id]) this.sparkle(this.visuals.items[id]!);
+        }
+      } else {
+        this.keys[id] = "";
+        this.sync(this.shop);
+        if (shortTap && stillSelected) this.hooks.onPlacementBlocked?.();
+      }
+      return;
+    }
     if (drag.kind !== "item" || !drag.id || !drag.start || !drag.moved) return;
     const id = drag.id;
     const root = this.visuals.items[id];

@@ -1,3 +1,4 @@
+import { isSecondEdition } from "../game/mode";
 import { kindOf } from "./upgrades";
 import type { UpgradeId, UpgradeKind } from "../game/types";
 
@@ -30,6 +31,7 @@ export function decorationIcon(id: UpgradeId): string {
 // Lightweight, variant-specific illustrations. The in-room preview remains the
 // exact 3D representation; no extra WebGL scenes are needed for the picker.
 export function styleThumbnail(id: UpgradeId, variant: number): string {
+  if (isSecondEdition) return `<span class="style-thumbnail model-thumbnail"><img src="${import.meta.env.BASE_URL}edition2/thumbnails/${id}-${variant}.webp" alt="" loading="lazy" /></span>`;
   const kind = kindOf(id);
   const palettes: Record<UpgradeKind, string[]> = {
     armchair:['#9caf92','#617d91','#d2b07e'], fountain:['#e7dcc5','#9faeaa','#d3aaa7'],

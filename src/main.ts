@@ -1,6 +1,15 @@
+import { isSecondEdition } from "./game/mode";
+import { APP_VERSION } from "./game/version";
 import { unlockAudio } from "./game/audio";
 import { mountApp } from "./ui/app";
 import "./style.css";
+import "./ui/edition.css";
+import "./ui/edition-puzzle.css";
+document.body.classList.toggle("edition-two", isSecondEdition);
+const versionLabel = document.createElement("small");
+versionLabel.className = "launch-version";
+versionLabel.textContent = `v${APP_VERSION}${isSecondEdition ? " · Second edition" : ""}`;
+document.querySelector(".launch-card")?.append(versionLabel);
 import * as offline from "./game/offline";
 
 const root = document.querySelector<HTMLDivElement>("#app");
