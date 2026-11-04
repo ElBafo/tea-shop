@@ -11,7 +11,7 @@ const evaluate=async expression=>{const r=await send('Runtime.evaluate',{express
 const pause=(ms=180)=>new Promise(r=>setTimeout(r,ms));
 const until=async expression=>{for(let i=0;i<160;i++){if(await evaluate(expression))return;await pause(125);}throw Error('Timed out '+expression);};
 const tap=async selector=>{
- const p=await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e||e.disabled||e.closest('[inert]'))throw Error('Unavailable '+${JSON.stringify(selector)});e.scrollIntoView({block:'nearest'});const r=e.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2};})()`);
+ const p=await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e||e.disabled||e.closest('[inert]'))throw Error('Unavailable '+${JSON.stringify(selector)});e.scrollIntoView({block:'nearest',behavior:'instant'});const r=e.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2};})()`);
  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...p,id:1}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await pause();
 };
 const shot=async name=>fs.writeFile('work/edition-flow-'+name+'.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
@@ -28,13 +28,13 @@ const seed={muted:true,bestStars:Array(10).fill(0),bestMoves:Array(10).fill(0),s
 await evaluate(`Object.keys(localStorage).filter(k=>k.startsWith('tea-shop-preview-edition2')).forEach(k=>localStorage.removeItem(k));localStorage.setItem('${key}',${JSON.stringify(JSON.stringify(seed))});localStorage.setItem('${key}:guide-v1','done');localStorage.setItem('tea-shop-progress-v1','released-save-sentinel');localStorage.setItem('tea-shop-progress-v1:recovery','released-recovery-sentinel');localStorage.setItem('tea-shop-preview-progress-v1','classic-preview-sentinel');localStorage.setItem('tea-shop-preview-progress-v1:goal-v1','classic-goal-sentinel');localStorage.setItem('tea-shop-preview-appearance-v1','night');localStorage.setItem('edition-flow-unrelated','keep')`);
 const sentinel=await otherSaves();
 await send('Page.reload');await start();
-assert.match(await evaluate(`document.querySelector('.preview-bar').textContent`),/Second edition · v0.2.0-preview.4/);
+assert.match(await evaluate(`document.querySelector('.preview-bar').textContent`),/Second edition · v0.2.0-preview.5/);
 assert.equal(await evaluate(`(async()=>{const {parseBackup}=await import('/tea-shop/preview/src/game/backup.ts');const p={muted:true,bestStars:Array(38).fill(0),bestMoves:Array(38).fill(0),shop:{owned:[],stored:[],style:{},place:{},finaleSeen:false}};try{parseBackup(JSON.stringify({format:'decopu-save',version:1,exportedAt:new Date().toISOString(),progress:p,puzzle:null}));return false;}catch{return true;}})()`),true,'prototype rejects classic 38-level backup');
 await shot('home');
 await tap('#edit-toggle');
-assert.equal(await evaluate(`document.querySelectorAll('#upgrade-rail [data-upgrade]').length`),14);
+assert.equal(await evaluate(`document.querySelectorAll('#upgrade-rail [data-upgrade]').length`),16);
 await evaluate(`document.querySelectorAll('#upgrade-rail .model-thumbnail img').forEach(img=>img.loading='eager')`);
-await until(`document.querySelectorAll('#upgrade-rail .model-thumbnail img').length===14 && [...document.querySelectorAll('#upgrade-rail .model-thumbnail img')].every(img=>img.complete&&img.naturalWidth>0)`);
+await until(`document.querySelectorAll('#upgrade-rail .model-thumbnail img').length===16 && [...document.querySelectorAll('#upgrade-rail .model-thumbnail img')].every(img=>img.complete&&img.naturalWidth>0)`);
 await tap('[data-upgrade="counter"]');await tap('[data-act="preview"][data-style="1"]');await tap('[data-act="pin-goal"]');
 assert.deepEqual(await evaluate(`JSON.parse(localStorage.getItem('${key}:goal-v1'))`),{id:'counter',style:1});
 assert.deepEqual((await saved()).shop.owned,[],'pinning/previewing never purchases');
@@ -51,7 +51,7 @@ for(const [from,to] of [[0,2],[1,0],[1,2]]){
 }
 await until(`!!document.querySelector('.result-overlay')`);
 assert.equal((await saved()).bestStars[0],3);
-assert.equal((await saved()).bestStars.length,10);
+assert.equal((await saved()).bestStars.length,16);
 assert.equal(await evaluate(`document.querySelector('.result-overlay .personal-goal').dataset.reward`),'counter');
 await pause(450);await shot('first-win');
 await tap('.result-overlay [data-reward="counter"]');
@@ -67,8 +67,8 @@ assert.equal(await evaluate(`document.querySelector('#undo-move').disabled`),fal
 await tap('#undo-move');assert.deepEqual((await saved()).shop.place.counter,beforeRotate,'Undo move restores previous placement');
 await shot('first-decoration');
 await tap('#edit-toggle');await tap('.settings-menu summary');
-assert.match(await evaluate(`document.querySelector('.build-version').textContent`),/v0.2.0-preview.4/);
-await tap('#browse-puzzles');assert.equal(await evaluate(`document.querySelectorAll('.level-btn').length`),10);
+assert.match(await evaluate(`document.querySelector('.build-version').textContent`),/v0.2.0-preview.5/);
+await tap('#browse-puzzles');assert.equal(await evaluate(`document.querySelectorAll('.level-btn').length`),16);
 await tap('[data-go="shop"]');await tap('#play-tea');
 assert.match(await evaluate(`document.querySelector('.play h2').textContent`),/A Little Space/,'Play advances to the next unfinished puzzle');
 await tap('[data-jar="1"]');await tap('[data-jar="2"]');await pause(650);
@@ -86,5 +86,5 @@ for(const suffix of ['',':recovery',':puzzle-v1',':goal-v1'])assert.equal(await 
 await tap('#launch-start');assert.ok(await evaluate(`!!document.querySelector('[data-guide-start]')`),'new-player welcome restored');
 await shot('reset-onboarding');
 assert.deepEqual(errors,[]);
-console.log('PASS: isolated second edition, version, fourteen-piece catalogue, pinned style persistence, direct real-touch first win→goal→purchase, move Undo, ten-puzzle browser, next/resume flow and edition-only onboarding reset.');
+console.log('PASS: isolated second edition, version, sixteen-piece catalogue, pinned style persistence, direct real-touch first win→goal→purchase, move Undo, sixteen-puzzle browser, next/resume flow and edition-only onboarding reset.');
 ws.close();

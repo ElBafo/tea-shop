@@ -1,5 +1,5 @@
-// Inspect the actual fourteen-design showroom, then stress isolated model disposal.
-// Vite5174 preview and CDP9231 are required. This writes only preview test progress.
+// Inspect the sixteen-design showroom, then stress isolated model disposal.
+// APP_ORIGIN/CDP_PORT select an isolated preview. Only test progress is written.
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import {installReturningPlayerStart} from './browser-start.mjs';
@@ -15,7 +15,7 @@ const pause=ms=>new Promise(r=>setTimeout(r,ms));
 await send('Page.enable');await send('Runtime.enable');
 const clear=await installReturningPlayerStart(send);
 const navigate=async(showroom=true)=>{
- await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/?edition=2'+(showroom?'&showroom=1':'')});
+ await send('Page.navigate',{url:(process.env.APP_ORIGIN??'http://127.0.0.1:5174')+'/tea-shop/preview/?edition=2'+(showroom?'&showroom=1':'')});
  await pause(1700);
  for(let i=0;i<100;i++){
   if(await evaluate(`!document.querySelector('#launch-screen')&&!!document.querySelector('#shop-canvas')`))return;
@@ -24,7 +24,7 @@ const navigate=async(showroom=true)=>{
  throw Error('Shop not ready');
 };
 await fs.mkdir('work',{recursive:true});
-const shot=async n=>fs.writeFile('work/edition-art-v2-'+n+'.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
+const shot=async n=>fs.writeFile('work/session-art-'+n+'.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
 await navigate();
 await evaluate(`localStorage.setItem('tea-shop-preview-edition2-appearance-v1','day')`);
@@ -45,7 +45,7 @@ const lifecycle=await evaluate(`(async()=>{
  const scene=new Scene(Engine.Instances[0]);
  const counts=()=>({meshes:scene.meshes.length,materials:scene.materials.length,textures:scene.textures.length,transforms:scene.transformNodes.length});
  const initial=counts(),peak={meshes:0,materials:0,textures:0,transforms:0},overflow=[];
- const extraIds=['art','clock','basket','bench','trolley','planter'];
+ const extraIds=['art','clock','basket','bench','trolley','planter','terrarium','botanical'];
  for(let i=0;i<12;i++)for(const d of UPGRADES){
   const shop=editionShowroomShop();shop.style[d.id]=i%3;
   const item=buildItem(scene,d.id,shop);
@@ -62,13 +62,13 @@ const lifecycle=await evaluate(`(async()=>{
  return{designs:UPGRADES.map(d=>d.id),artIds:editionArtIds,cycles:12,initial,final,peak,overflow,showroom};
 })();`);
 assert.deepEqual(lifecycle.overflow,[],'new decorations fit their placement footprints across all styles');
-assert.equal(lifecycle.designs.length,14,'all fourteen active designs are exercised');
+assert.equal(lifecycle.designs.length,16,'all sixteen active designs are exercised');
 assert.deepEqual(new Set(lifecycle.designs),new Set(lifecycle.artIds),'every active design uses edition art');
 assert.deepEqual(lifecycle.final,lifecycle.initial,'materials, textures, meshes and transforms release after repeated rebuilds');
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
-await evaluate(`localStorage.setItem('tea-shop-preview-edition2-progress-v1',JSON.stringify({muted:true,bestStars:Array(10).fill(0),bestMoves:Array(10).fill(0),shop:{owned:[],stored:[],style:{},place:{},finaleSeen:false}}));`);
+await evaluate(`localStorage.setItem('tea-shop-preview-edition2-progress-v1',JSON.stringify({muted:true,bestStars:Array(16).fill(0),bestMoves:Array(16).fill(0),shop:{owned:[],stored:[],style:{},place:{},finaleSeen:false}}));`);
 await navigate(false);await shot('empty-phone');
 assert.deepEqual(errors,[]);
-console.log('PASS: all fourteen active designs, mixed phone/day/night/desktop, empty room, and twelve rebuild cycles per design plus keeper release owned resources.',lifecycle);
-await fs.writeFile('work/edition-art-v2-check.json',JSON.stringify(lifecycle,null,2));
+console.log('PASS: all sixteen active designs, mixed phone/day/night/desktop, empty room, and twelve rebuild cycles per design plus keeper release owned resources.',lifecycle);
+await fs.writeFile('work/session-art-check.json',JSON.stringify(lifecycle,null,2));
 await clear();ws.close();

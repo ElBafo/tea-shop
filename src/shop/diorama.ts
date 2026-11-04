@@ -317,6 +317,9 @@ export class Diorama {
     }
 
     this.steam = Object.values(this.visuals.items).flatMap(root => root?.getChildMeshes().filter(mesh => mesh.metadata?.steam) ?? []);
+    // The edition's keeper belongs to a placed counter, including a temporary
+    // purchase preview. Waiting for the whole-shop finale leaves new shops empty.
+    if (isSecondEdition && isPlaced(shop, "counter") && !this.customer) this.spawnCustomer(true);
     this.positionShopkeeper();
     this.updateTraffic();
     this.setNight(this.night);
@@ -463,9 +466,12 @@ export class Diorama {
   }
 
   private spawnCustomer(_settled: boolean): void {
-    if (this.customer) this.customer.dispose();
-    this.customer = buildCustomer(this.scene);
-    this.castShadows(this.customer);
+    // Keep one figure through preview cancellation, storage and the finale.
+    // positionShopkeeper controls visibility from the current rendered shop.
+    if (!this.customer) {
+      this.customer = buildCustomer(this.scene);
+      this.castShadows(this.customer);
+    }
     this.walk = null;
     this.positionShopkeeper();
   }

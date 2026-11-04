@@ -57,18 +57,52 @@ export const EDITION_LEVELS: LevelDef[] = [
     blurb: 'Make room, gather matching treats, and finish one jar at a time. There is no hurry.',
     tubes: [[R,M,J,C],[C,R,J,M],[J,C,M,R],[M,J,C,R],[],[]], par: 15,
   },
+  {
+    id: 11, name: 'The Second Pot', capacity: 4,
+    blurb: 'A gentle refill. Bring the small portions together to finish each jar.',
+    tubes: [[R,R,R],[J,J,M],[M,M,M,R],[J,J],[]], par: 3,
+  },
+  {
+    id: 12, name: 'Save a Little Space', capacity: 4,
+    blurb: 'A matching pair needs two free spaces. Keep somewhere for it to land.',
+    tubes: [[R,J,J,M],[J,M,R,R],[M,R,M,J],[],[]], par: 8,
+  },
+  {
+    id: 13, name: 'Under Glass', capacity: 4,
+    blurb: 'One wrapped jar holds a surprise. Reveal it, then gather the matching pairs.',
+    tubes: [[R,R,M,J],[J,C,C,M],[M,M,J,C],[C,J,R,R],[],[]],
+    sealed: [false,true,false,false,false,false], par: 11,
+  },
+  {
+    id: 14, name: 'A Taller Pour', capacity: 5,
+    blurb: 'These taller jars hold five treats. Fill each with five of the same kind.',
+    tubes: [[R,R,R,J,J],[J,J,J,R,R],[],[]], par: 3,
+  },
+  {
+    id: 15, name: 'Room for Five', capacity: 5,
+    blurb: 'Three flavours, five treats each. Keep a spare jar for the next matching pour.',
+    tubes: [[R,R,R,J,M],[J,J,J,M,R],[M,M,M,R,J],[],[]], par: 7,
+  },
+  {
+    id: 16, name: 'Leaves and Light', capacity: 5,
+    blurb: 'Give the matching groups room to grow. Finish each tall jar at your own pace.',
+    tubes: [[R,R,M,J,C],[J,J,C,M,R],[M,M,J,R,C],[C,C,R,J,M],[],[]], par: 15,
+  },
 ];
 
 export const EDITION_ARCS = [
   {name: 'First light', start: 1, end: 3, copy: 'A first pour. A little space. Your own beginning.'},
   {name: 'A place for friends', start: 4, end: 6, copy: 'A quiet refill, a surprise, and tea to share.'},
   {name: 'Opening day', start: 7, end: 10, copy: 'A window seat and the finishing touches.'},
+  {name: 'Afternoon ritual', start: 11, end: 13, copy: 'Another pot, a little space, and a garden under glass.'},
+  {name: 'A room of your own', start: 14, end: 16, copy: 'Taller jars and a little more room to make it yours.'},
 ];
 
-// Completion, not score quality, funds the whole eight-piece room over this slice.
+// The first ten finishes still fund the core. Six more fund a Glass garden too.
 export const EDITION_MILESTONE_BONUSES = [
   {after: 3, stars: 4}, {after: 6, stars: 5}, {after: 10, stars: 7},
+  {after: 16, stars: 4},
 ];
 
 // Beyond one exploration move per hidden jar, arc finales have breathing room.
-export const EDITION_EXTRA_MOVES: Readonly<Record<number, number>> = {6: 1, 10: 2};
+export const EDITION_EXTRA_MOVES: Readonly<Record<number, number>> = {6: 1, 10: 2, 13: 1, 16: 2};

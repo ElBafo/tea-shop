@@ -216,7 +216,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       const complete = progress.bestStars.every(stars => stars > 0);
       const maxed = progress.bestStars.every(stars => stars === 3);
       root.querySelector('#play-tea strong')!.textContent = unfinished ? 'Continue puzzle' : maxed ? 'Revisit puzzles' : complete ? 'Improve your scores' : 'Play next puzzle';
-      root.querySelector('#play-tea em')!.textContent = unfinished ? 'Pick up where you left off' : maxed ? 'All ten finished · Play a favourite' : complete ? 'Earn more stars for your favourite pieces' : 'Earn stars to decorate';
+    root.querySelector('#play-tea em')!.textContent = unfinished ? 'Pick up where you left off' : maxed ? 'All puzzles finished · Play a favourite' : complete ? 'Earn more stars for your favourite pieces' : 'Earn stars to decorate';
     }
     const available = DECORATIONS.filter((item) => collectionUnlocked(item.id,progress.bestStars) && !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
     updateAudioToggle(root.querySelector("#mute"), progress.muted);

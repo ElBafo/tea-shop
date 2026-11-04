@@ -13,13 +13,16 @@ export function editionShowroomShop(): ShopState {
   return {
     owned: EDITION_DECORATIONS.map(item => item.id),
     stored: [],
-    style: {counter:2, paint:1, shelves:0, sign:2, plant:2, rug:1, lamp:1, table:2, bench:2, art:1, trolley:1, clock:0, planter:2, basket:0},
+    style: {counter:2, paint:1, shelves:0, sign:2, plant:2, rug:1, lamp:1, table:2, bench:2, art:1, trolley:1, clock:0, planter:2, basket:0, terrarium:0, botanical:1},
     place: {
       ...Object.fromEntries(EDITION_DECORATIONS.map(item => [item.id, {...item.defaultPlace}])),
       rug: {x:2,z:3,rot:0},
       lamp: {x:5,z:3,rot:0},
       bench: {x:1,z:5,rot:0},
       trolley: {x:1,z:3,rot:0},
+      sign: {x:1,z:0,rot:1,wall:"left"},
+      art: {x:3,z:0,rot:1,wall:"left"},
+      botanical: {x:4,z:0,rot:1,wall:"left"},
     },
     finaleSeen: true,
   };

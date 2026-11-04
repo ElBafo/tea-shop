@@ -10,7 +10,30 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.4 — hosted for owner review
+## 0.2.0-preview.5 — locally validated; hosting and owner review pending
+
+Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner reviewed preview.4 positively and asked to move to the next milestone. Main remains unchanged; no merge was authorized.
+
+Implemented scope:
+
+- Six authored puzzles, 11–16, in the Afternoon ritual and A room of your own arcs. The first ten definitions, IDs, scoring targets and bonuses are unchanged. Levels 14–16 introduce five-slot jars; level 13 uses one hidden jar.
+- Glass garden (10 stars, available after 13 completions) and Botanical triptych (14 stars, after 16), each with three edition models and accurate thumbnails: sixteen designs and 48 thumbnails total.
+- Four completion-bonus stars at 16. Total earnings are 36–68, with a 26-star core and 104-star catalogue. Minimum finishes fund the core plus Glass garden. Optional full-price returns and included style changes remain.
+- Existing edition saves gain six empty score/move entries. Valid ten-board edition backups remain supported alongside new sixteen-board backups, with explicit edition tags on new exports. Classic imports, invalid balances and ownership before its unlock are rejected. Purchases, placement, goals, preferences and unfinished puzzles are preserved.
+- The second-edition shopkeeper appears whenever the counter is placed, independently of core-room completion. He follows its rear aisle and orientation through free preview/cancellation, purchase, storage, restoration and reload. Classic behavior is retained.
+- Capacity-aware portrait sizing keeps the new five-slot rows above Undo and Restart, addressing the observed 12-pixel bottom-row clipping at 320×568.
+
+Guest traffic remains as reviewed in preview.4. Less stiff walking/smoother turns and a broader visitor cast including women and children are separate roadmap follow-ups, deferred beyond this milestone. Paid wall ownership, classic gameplay and main saves remain protected.
+
+The final production build after the shopkeeper and portrait fixes passed, along with every required verification script. All sixteen edition and 38 classic solver checks pass. Independent byte comparisons confirm the first ten edition definitions and classic definitions are unchanged; backup checks include rejecting locked ownership. Art checks cover all sixteen designs through twelve rebuild cycles, correct footprints, and owned resources returning to zero.
+
+The full session browser suite passed (`work/edition-session-check.json`): old local saves and recovery, saved goal/night preference, unfinished puzzle and Undo, actual legacy-backup picker cancellation/restoration and classic rejection, real puzzle-13/16 wins, the exact four-star bonus and no repeat farming, special purchase/style/return/repurchase, and the shopkeeper appearing on the first counter purchase before any finale. Preview cancellation, store/restore, rotation and reload also passed. Views checked: 390×844, 320×568, 844×390 and 1280×900, plus reduced motion, with no recorded browser errors. The existing flow and choices regressions also pass: onboarding/reset, first win to selected goal and purchase, all prior optional unlocks, refunds, replay/navigation and temporary showroom/tour goals. The final production build after the last shelf-margin adjustment passed in 14.70 seconds. The focused 320×568 check reports equal scroll/client heights of 376 pixels with the full shelf visible (`work/edition-session-tall-small-scroll.json`). These are browser checks, not measured physical iPhone performance or enjoyment evidence.
+
+Review screenshots: [styles](screenshots/second-edition-v5/styles.webp), [first counter and shopkeeper](screenshots/second-edition-v5/first-counter.webp), [room by day](screenshots/second-edition-v5/room-day.webp), [room by night](screenshots/second-edition-v5/room-night.webp), [tall jars](screenshots/second-edition-v5/tall-phone.webp), [small-phone tall jars](screenshots/second-edition-v5/tall-small.webp), [reward unlock](screenshots/second-edition-v5/reward-unlock.webp).
+
+Local validation is complete. Hosted deployment and owner phone review remain pending. Package/app/release version: `0.2.0-preview.5`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.4 until a new deployment is verified.
+
+## 0.2.0-preview.4 — hosted; continuation accepted
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner accepted the wall correction and said “Good. Let’s proceed.” This authorizes the next hosted preview, not a merge to main.
 
@@ -31,7 +54,7 @@ The final browser traffic suite passed (`work/edition-traffic-check.json`): elev
 
 Review screenshots: [busy day](screenshots/second-edition-v4/busy-day.webp), [busy night](screenshots/second-edition-v4/busy-night.webp), [visitors hidden in Edit](screenshots/second-edition-v4/edit-hidden.webp), [desktop](screenshots/second-edition-v4/desktop.webp), [reduced motion](screenshots/second-edition-v4/reduced-motion.webp).
 
-Package/app/release version: `0.2.0-preview.4`. Hosted deployment passed at app commit `c77181a07d5340da965b91ef5007344c51400e31`: [GitHub Pages run 41923115751](https://github.com/ElBafo/tea-shop/actions/runs/41923115751). Follow-up documentation commits record this status without changing the deployed app. Owner phone review remains pending. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 now serves preview.4. Main remains unchanged. Owner phone review must tune the initial timing and judge how the activity feels.
+Package/app/release version: `0.2.0-preview.4`. Hosted deployment passed at app commit `c77181a07d5340da965b91ef5007344c51400e31`: [GitHub Pages run 41923115751](https://github.com/ElBafo/tea-shop/actions/runs/41923115751). Follow-up documentation commits record this status without changing the deployed app. Owner feedback: “Looks good,” with follow-ups for stiff walking and visitor diversity, clarified as women and children. These are recorded separately in the roadmap and deferred while preview.5 proceeds. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.4 until the next verified deployment. Main remains unchanged. Positive feedback is continuation approval, not a merge or measured physical-device performance result.
 
 ## 0.2.0-preview.3 — superseded by preview.4; continuation accepted
 

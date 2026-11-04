@@ -4,15 +4,45 @@ Record every agreed product decision here in the same work session. Clearly dist
 
 This is the working delivery order, not a calendar promise. Priorities can change after phone reviews. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.2.0-preview.4
+## Current priority — 0.2.0-preview.5
 
-Publish and review the agreed ambient guest traffic after the owner accepted the paid-wall correction with “Good. Let’s proceed.” Preview.4 replaces the stationary guest foundation with bounded visits that respond to the placed room; implementation and local validation are complete. The paid-wall fix and fourteen-design catalogue remain in place. This authorizes continued preview work, not a merge or replacement of the released game.
+Continue the second edition with a new puzzle session and two aspirational decorations. The owner reviewed preview.4 positively, asked to record guest walking and visitor variety as later improvements, and said “Let’s go to the next.” This authorizes continued preview work, not a merge or replacement of the released game.
 
 - **Released baseline:** `0.1.0`, the existing package version, documented after PRs #12, #13 and #14 were merged. The version was not previously shown consistently in the app.
-- **Current work:** `0.2.0-preview.4`, hosted for owner review; production build, all verification checks and final browser regressions passed. Preview.3 received positive continuation feedback, and preview.4 is the latest deployed build. Review URL: https://elbafo.github.io/tea-shop/preview/?edition=2. Prototype saves remain isolated from main and the ordinary preview; the existing edition save continues across preview versions.
-- **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines this milestone's acceptance criteria.
-- **Review:** continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. [Preview.1 deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41836991363); [Preview.2 deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41895797422); [Preview.3 deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41918859412), and the owner accepted continuing. Preview.4 passed validation and deployment at app commit `c77181a07d5340da965b91ef5007344c51400e31` ([GitHub Pages run 41923115751](https://github.com/ElBafo/tea-shop/actions/runs/41923115751)); owner phone review remains pending.
-- Display the version in the app so phone feedback identifies the build. Every published review build gets a new preview version and release-note entry; roadmap milestones refer to that version. A version label does not imply approval or deployment.
+- **Current work:** `0.2.0-preview.5`, implemented with the final production build, required verification and full session browser checks passed. Hosting and owner phone review remain pending.
+- **Hosted build:** `0.2.0-preview.4` remains at https://elbafo.github.io/tea-shop/preview/?edition=2 until the new deployment is verified. Its app commit is `c77181a07d5340da965b91ef5007344c51400e31`, confirmed by [GitHub Pages run 41923115751](https://github.com/ElBafo/tea-shop/actions/runs/41923115751). The owner accepted continuation with the guest polish backlog below.
+- **Review:** continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. Prototype saves remain isolated from main and the ordinary preview; existing edition progress must carry forward.
+- **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines acceptance criteria. The version appears in the app; every newly published review build gets its own preview version. A version label does not imply approval or deployment.
+
+### Preview.5: a longer puzzle journey and two special pieces — locally validated; hosting and review pending
+
+Puzzles 11–16 add the Afternoon ritual and A room of your own arcs, with breathers, meaningful choices and selective hidden contents. Levels 14–16 use five-slot jars, and level 13 has one hidden jar. The first ten board definitions, IDs, scoring targets and existing completion bonuses are preserved. Full jars, unlimited Undo, no timer and no fail state remain the rules.
+
+| New edition design | Puzzle unlock | Star price | Included styles |
+| --- | --- | --- | --- |
+| Glass garden | 13 completed | 10 | 3 |
+| Botanical triptych | 16 completed | 14 | 3 |
+
+Both designs now use the edition's miniature art language with six accurate model thumbnails. They share the existing palette and placement categories, support mixed styles, and remain optional paid purchases. Unlocking only makes them available to buy. The catalogue contains sixteen designs costing 104 stars; the other three special designs remain later work.
+
+Four completion-bonus stars at 16 join the 4/5/7 bonuses at 3/6/10. Sixteen puzzles then earn 16–48 score stars plus 20 bonus stars: **36–68 total**. The core still costs 26, so even minimum finishes can fund it plus Glass garden; optional choices and better scores still matter. Full-value optional returns remain available. No farming, new currency or monetisation is introduced.
+
+The edition save namespace is retained. Existing ten-entry score/move arrays gain six empty entries without changing scores, purchases, styles, placements, goals, guide state or unfinished puzzles. Legitimate ten-board edition backups and new sixteen-board backups are accepted; new exports identify their edition. Classic imports, invalid balances and ownership before its unlock are rejected. The released boards and ordinary-preview behavior stay unchanged.
+
+Acceptance: all sixteen edition boards and all 38 classic boards pass verification; the first ten edition definitions stay unchanged; both new unlocks, prices, free previews, purchases, returns and goal paths work. Verify old local saves, ten-to-sixteen backup compatibility, unfinished-puzzle resuming, model footprints/disposal and phone/desktop day/night presentation. Record actual results before calling the build ready. Guest traffic and paid wall ownership remain regression requirements.
+
+This pass also addresses two observed defects. Buying and placing the counter now shows the shopkeeper immediately in the second edition, without waiting for core-room completion. He belongs in the aisle behind the counter and follows its placement and orientation. A free counter preview shows him temporarily; cancellation removes him, storage hides him, and restoration or reload shows him again when the counter is placed. Classic behavior remains unchanged.
+
+The new five-slot puzzles exposed bottom-row clipping at 320×568. Capacity-aware portrait sizing now keeps both jar rows above Undo and Restart. The full session browser suite passed on small/standard phones, landscape and desktop, including shopkeeper preview/cancel, purchase before completion, storage, restoration, rotation and reload. The final build and all required verification passed; all sixteen edition and 38 classic puzzles are solvable, and independent identity checks preserve existing boards. Art rebuilds across all sixteen designs return resources to zero. Onboarding/choices regressions and the focused small-phone overflow assertion also pass, with the complete shelf visible. Local validation is complete. Hosted deployment and owner phone review remain pending. See [RELEASES.md](RELEASES.md) for detailed evidence and screenshots.
+
+### Guest polish backlog — agreed after preview.4 review
+
+The owner said the visitors “walk funny stiff” and requested variety, then clarified: “By variety I mean women or kids.” These are two separate follow-ups, deferred while preview.5 advances puzzles and rewards:
+
+- **Natural movement:** reduce the stiff gait, improve limb timing and body motion, and smooth turns and activity transitions while retaining safe routes, Edit hiding and reduced-motion behavior.
+- **A broader visitor cast:** include women and children alongside the current visitors, with readable differences in proportions, hair and clothing. This means who visits, not merely more activity animations or recolours. Preserve the cozy miniature style and mobile resource budget.
+
+The current two-visitor cap and ambient-only role remain. Neither follow-up has shipped; positive continuation feedback is not a claim that movement polish or visitor diversity is finished, nor approval to merge.
 
 ### Preview.3: paid wall finish — hosted; continuation accepted
 
@@ -20,7 +50,7 @@ An unpurchased room starts with plain plaster. The twelve white wall panels and 
 
 A free preview must not spend stars or grant ownership. Browse, Done or selecting another unowned decoration restores the actual purchased room; buying paint commits the finish and selected style, which must survive reload. The finish group is initially disabled and follows the same ownership state on every room synchronization, so no completed finish appears before the first update. The floor foundation stays outside that group.
 
-All prices, fourteen-design content, ten boards, saves and classic/released behavior stayed unchanged. Fresh and counter-only rooms, all wall styles, cancellation, purchase/reload, unrelated owned previews, stable resources and phone/desktop day/night screenshots passed before hosting. The owner responded “Good. Let’s proceed.” Guest traffic is now the active preview.4 work.
+All prices, fourteen-design content, ten boards, saves and classic/released behavior stayed unchanged. Fresh and counter-only rooms, all wall styles, cancellation, purchase/reload, unrelated owned previews, stable resources and phone/desktop day/night screenshots passed before hosting. The owner responded “Good. Let’s proceed.” Guest traffic shipped in preview.4; preview.5 now extends puzzles and rewards.
 
 ### Preview.2: more choices and a first guest — hosted for review
 
@@ -36,7 +66,7 @@ The ten boards and existing saves remain compatible. Earnings stay 26–46, core
 
 A stationary seated guest is implemented when both the table and counter are actually placed. It is attached to the table, moves/rotates with it, is hidden in Edit, and disappears when either required piece is stored. This visual adds no lights, independent timer, economy state or walking simulation. Local build and all verification checks, including the expanded catalogue, passed; browser and guest lifecycle checks also passed; physical-phone review remains pending. This hosted stationary guest was the foundation for the preview.4 visit loop below.
 
-### Ambient guest traffic — 0.2.0-preview.4 hosted for owner review
+### Ambient guest traffic — 0.2.0-preview.4 hosted; continuation accepted
 
 The owner requested guests who arrive, look around and leave, react to the displayed room, and disappear while decorating. The local implementation now supports a maximum of two visitors: enter through a reachable open cutaway edge, browse placed shelves, order at the customer side of the counter, sit at reachable table or bench seating, then leave. A sparse room can support a look-around visit. Stored or blocked furniture is skipped; a blocked activity or exit can shorten a visit rather than force an overlap.
 
@@ -50,9 +80,9 @@ Reduced motion uses stationary visits at one reachable activity, retaining norma
 
 Visits are ambience: no queues, service deadlines, mandatory tasks, matching-set bonuses, star rewards, penalties or saved guest/economy state. They cannot block decorating. Prices, paid wall ownership, fourteen designs, ten puzzle boards and existing saves are unchanged.
 
-Pure route/runtime tests passed, including rotations, storage, blocked and disconnected layouts, seat approaches, Edit/reduced-motion behavior, population bounds and arrival scaling. A deterministic 600-second fixture recorded eight arrivals in an empty room and eighteen with the core eight, with mean core occupancy 1.96 and the cap respected. An adversarial run covered 180 legal layouts for 1,200 simulated seconds each, reporting 10,798 arrivals, minimum pair separation about 0.73 and no residual collision or stall. These are simulation checks, not phone performance or enjoyment evidence. Production build, all verification checks, final browser traffic tests, visual lifecycle checks and the paid-wall regression passed. Browser fixtures confirmed Edit hiding, reduced motion, collision avoidance and stable resources through sixteen cycles; [RELEASES.md](RELEASES.md) records the bounded evidence and screenshots. Deployment passed; owner phone review remains pending.
+Pure route/runtime tests passed, including rotations, storage, blocked and disconnected layouts, seat approaches, Edit/reduced-motion behavior, population bounds and arrival scaling. A deterministic 600-second fixture recorded eight arrivals in an empty room and eighteen with the core eight, with mean core occupancy 1.96 and the cap respected. An adversarial run covered 180 legal layouts for 1,200 simulated seconds each, reporting 10,798 arrivals, minimum pair separation about 0.73 and no residual collision or stall. These are simulation checks, not phone performance or enjoyment evidence. Production build, all verification checks, final browser traffic tests, visual lifecycle checks and the paid-wall regression passed. Browser fixtures confirmed Edit hiding, reduced motion, collision avoidance and stable resources through sixteen cycles; [RELEASES.md](RELEASES.md) records the bounded evidence and screenshots. Deployment passed. The owner reviewed positively and requested the movement and visitor-cast follow-ups recorded above.
 
-Further visitor work may deepen activity reactions and variation after this bounded loop is reviewed. It does not imply a serving game, real customer economy or new venue.
+The agreed movement and visitor-cast work stays in the guest polish backlog while the next puzzle/reward session is built. Further activity reactions may follow. It does not imply a serving game, real customer economy or new venue.
 
 ### Six approved second-edition tracks
 
@@ -69,14 +99,14 @@ Further visitor work may deepen activity reactions and variation after this boun
 
 1. **Playable slice — hosted; direction reviewed positively:** the six tracks are connected within the one-room/eight-design/ten-puzzle boundary. The app identifies `0.2.0-preview.1`; separate saves, reset, goals and the full first-win/purchase flow are checked. Actual scope, economy and tests are recorded in [RELEASES.md](RELEASES.md). Hosting passed; the owner approved continuing this direction without merging.
 2. **Phone comparison — after the slice is ready:** review old and new versions, including a fresh onboarding session and the full choose-goal → play → reward → preview → buy → arrange loop. Observe confusing controls, missed drag/tap targets, wanted rewards and puzzle fatigue. Correct observed problems before expanding.
-3. **Extend the approved direction — preview.4 hosted for owner review:** preview.2 added six optional designs and a seated guest, and preview.3 corrected unpaid wall decoration. Both were validated and hosted; the owner authorized continuing after the correction. The requested bounded ambient traffic is hosted in preview.4 while preserving paid finishes, saves, puzzles and economy. Complete owner phone review before expanding visitor behavior. Additional levels and conversion of the five remaining special designs stay later work.
+3. **Extend the approved direction — preview.5 locally validated; hosting and review pending:** preview.2 added six optional designs, preview.3 corrected paid wall ownership, and preview.4 added ambient visits. The owner accepted continuing, with movement and visitor diversity deferred. Preview.5 appends six puzzles and converts Glass garden and Botanical triptych, with compatible saves and a checked star budget. The remaining three special designs and further visitor polish stay later work.
 4. **Release decision — requires owner approval:** choose whether and how the second edition replaces the baseline. Design and verify any save migration separately; do not automatically overwrite the existing game or progress.
 
 First-slice implementation: eight rounded core models with coordinated materials, room panelling and a refined shopkeeper; 24 thumbnails rendered from those models; a book/tea setting appears when a placed table is within 2.3 room units of a placed lamp. Direct Play opens the next or unfinished puzzle; More retains All puzzles. A pinned decoration and style persist through results and purchase preview. Tap placement, dragging, one-step owned move/rotation Undo, and collection-position restoration are implemented. Puzzle jars stay stationary, hidden pieces use a neutral frosted treatment, and level guidance remains visible to prevent a selection layout jump.
 
-Prototype economy: ten puzzles award 10–30 completion stars; fixed completion bonuses at puzzles 3/6/10 add 4/5/7 stars, for 26–46 total earnings. The required eight-piece shop costs 26. Two puzzles have hidden contents. The separate ten-board save cannot replace a 38-board backup. Baseline earnings and catalogue are unchanged.
+First-slice economy: ten puzzles award 10–30 completion stars; fixed completion bonuses at puzzles 3/6/10 add 4/5/7 stars, for 26–46 total earnings. The required eight-piece shop costs 26. Two puzzles have hidden contents. The separate ten-board save cannot replace a 38-board backup. Baseline earnings and catalogue are unchanged.
 
-Local validation passed for baseline and prototype solvers, same-session flows, phone/desktop placement, responsive puzzle presentation, reduced motion and resource cleanup. These checks do not establish physical iPhone performance or enjoyable pacing. Preview.2 extended six optional designs and started a seated guest foundation. Walking visits are implemented and locally validated in preview.4, including production build, all verification checks and final browser regressions; hosting passed and owner phone review remains pending. A full production asset pipeline, additional levels and conversion of the five remaining special designs remain later work.
+Local validation passed for baseline and prototype solvers, same-session flows, phone/desktop placement, responsive puzzle presentation, reduced motion and resource cleanup. These checks do not establish physical iPhone performance or enjoyable pacing. Preview.2 extended six optional designs and started a seated guest foundation. Walking visits are implemented and locally validated in preview.4, including production build, all verification checks and final browser regressions; hosting passed and the owner accepted continuation with guest polish follow-ups. Preview.5 advances six additional levels and two special designs. A full production asset pipeline and the remaining three special designs stay later work.
 
 Bakery implementation and its cross-room rewards, larger rooms, public galleries, cloud accounts and monetisation remain later roadmap work. A second minigame is not part of this milestone. The earlier sections below retain the game's delivery history and backlog; this section controls the immediate priority.
 

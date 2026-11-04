@@ -125,6 +125,11 @@
   .edition-two .play .shelves { padding: 12px 6px; }
   .edition-two .play .shelf-row { gap: 15px 8px; }
 }
+@media (max-height: 690px) and (orientation: portrait) {
+  /* Fit both rows of five-slot jars above Undo/Restart on shorter phones. */
+  .edition-two .play .shelves[data-capacity="5"] { --slot-height: clamp(18px, calc(23px + (100dvh - 568px) / 10), 27px); }
+  .edition-two .play .shelves[data-capacity="5"] .plank { margin-bottom: 3px; }
+}
 @media (orientation: landscape) and (min-width: 560px) {
   .edition-two .play { --slot-height: 26px; max-width: 1000px; width: 100%; }
   .edition-two .play .shelves { padding: 12px; }

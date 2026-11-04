@@ -243,17 +243,19 @@ export const EXTRA_COPIES: UpgradeDef[] = UPGRADES
 const ALL_DECORATIONS: UpgradeDef[] = [...UPGRADES, ...EXTRA_COPIES];
 // Clone only the prototype's optional definitions. The released catalogue and
 // its existing unlocks retain their original objects, prices and meanings.
-const EDITION_OPTIONAL: {id: UpgradeId; after: number}[] = [
+const EDITION_OPTIONAL: {id: UpgradeId; after: number; collection?: string}[] = [
   {id: "bench", after: 3}, {id: "art", after: 3},
   {id: "trolley", after: 6}, {id: "clock", after: 6},
   {id: "planter", after: 10}, {id: "basket", after: 10},
+  {id: "terrarium", after: 13, collection: "Conservatory"},
+  {id: "botanical", after: 16, collection: "Conservatory"},
 ];
 export const EDITION_DECORATIONS: UpgradeDef[] = [
   ...UPGRADES.filter(item => !item.optional),
-  ...EDITION_OPTIONAL.map(({id, after}) => ({
+  ...EDITION_OPTIONAL.map(({id, after, collection}) => ({
     ...UPGRADES.find(item => item.id === id)!,
     unlockAfter: after,
-    collection: "Personal touches",
+    collection: collection ?? "Personal touches",
   })),
 ];
 

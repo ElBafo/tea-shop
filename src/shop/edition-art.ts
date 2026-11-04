@@ -1,4 +1,5 @@
 import { buildEditionExtra, editionExtraIds } from './edition-extras';
+import { buildEditionSpecial, editionSpecialIds } from './edition-specials';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Color3 } from '@babylonjs/core/Maths/math.color';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
@@ -13,7 +14,7 @@ import { editionFabricTexture, editionSignTexture, editionOakTexture } from './t
 
 const E={cream:'#f6eedf',oak:'#c79b70',dark:'#725340',sage:'#8da496',rose:'#c78d82',brass:'#b69862',leaf:'#69896b',leafDeep:'#46664e',ink:'#414f49'};
 export const editionCoreIds: UpgradeId[]=['counter','sign','paint','shelves','plant','rug','lamp','table'];
-export const editionArtIds: UpgradeId[]=[...editionCoreIds,...editionExtraIds];
+export const editionArtIds: UpgradeId[]=[...editionCoreIds,...editionExtraIds,...editionSpecialIds];
 export type EditionTools = { E:typeof E; mat:typeof mat; attach:typeof attach; orb:typeof orb; cylinder:typeof cylinder; ring:typeof ring; soft:typeof soft; cup:typeof cup; pot:typeof pot; place:typeof place; tag:typeof tag; };
 function mat(scene:Scene,name:string,hex:string,spec=.12){const m=new StandardMaterial('edition-'+name,scene);m.diffuseColor=Color3.FromHexString(hex);m.specularColor=new Color3(spec,spec,spec);m.maxSimultaneousLights=5;return m;}
 function attach(mesh:Mesh,p:TransformNode,m:StandardMaterial,x=0,y=0,z=0){mesh.parent=p;mesh.material=m;mesh.position.set(x,y,z);mesh.receiveShadows=true;return mesh;}
@@ -51,6 +52,7 @@ export function editionReadingNook(shop:ShopState):boolean{
  return Math.hypot(t.x-l.x,t.z-l.z)<2.3;
 }
 export function buildEditionItem(scene:Scene,id:UpgradeId,shop:ShopState,style:number):TransformNode{
+ if(editionSpecialIds.includes(id)) return buildEditionSpecial(scene,id,shop,style,{E,mat,attach,orb,cylinder,ring,soft,cup,pot,place,tag});
  if(editionExtraIds.includes(id)) return buildEditionExtra(scene,id,shop,style,{E,mat,attach,orb,cylinder,ring,soft,cup,pot,place,tag});
  const root=new TransformNode(id,scene);const wood=mat(scene,'oak',E.oak),cream=mat(scene,'porcelain',E.cream,.25),dark=mat(scene,'walnut',E.dark),brass=mat(scene,'brass',E.brass,.3),accent=mat(scene,'accent',[E.sage,E.cream,E.rose][style]);
  if(id==='counter'){
