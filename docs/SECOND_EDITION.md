@@ -1,6 +1,6 @@
 # Decopu second edition
 
-Status: preview.1 established the first slice; preview.2 expanded its catalogue; preview.3 fixed paid wall ownership; preview.4 added ambient guest visits. All were validated and hosted in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). The owner reviewed preview.4 positively, requested later improvements to stiff walking and visitor diversity (specifically women and children), and asked to continue. **0.2.0-preview.5 is implemented**, extending puzzles and special decorations. The final build, required verification and full session browser checks passed; hosting and owner phone review remain pending. Preview.4 remains the latest verified deployment. Continuing does not authorize a merge. See [release notes](RELEASES.md) for delivery evidence and [roadmap](ROADMAP.md) for sequencing.
+Status: preview.1 established the first slice; preview.2 expanded its catalogue; preview.3 fixed paid wall ownership; preview.4 added ambient guest visits. All were validated and hosted in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). The owner reviewed preview.4 positively, requested later improvements to stiff walking and visitor diversity (specifically women and children), and asked to continue. **0.2.0-preview.5 is hosted for review**, extending puzzles and special decorations. The final build, required verification and full session browser checks and hosted deployment passed; owner phone review remains pending. Preview.5 is the latest verified deployment. Continuing does not authorize a merge. See [release notes](RELEASES.md) for delivery evidence and [roadmap](ROADMAP.md) for sequencing.
 
 ## Experience
 
@@ -88,7 +88,7 @@ The first milestone is a limited but connected experience across all six approve
 
 Preview.3 makes the decorative wall panels and dado rails part of the existing three-star paint purchase. Empty and counter-only rooms retain plain plaster; a deliberate free wall preview shows the finish, cancellation removes it, and buying saves it with the chosen colour and curtains. The basic window, structural trim, floor and foundation remain visible. Focused visual, preview/cancel, purchase/reload and resource checks passed before hosting; the owner subsequently gave positive continuation feedback. Guest traffic shipped in preview.4; preview.5 retains its arrival-frequency and Edit-hiding rules.
 
-## Preview.5 continuation and acceptance — locally validated; hosting and review pending
+## Preview.5 continuation and acceptance — hosted for owner review
 
 Puzzles 11–16 add the Afternoon ritual and A room of your own arcs, preserving all first-ten definitions, IDs, targets and bonuses. Full-jar completion, unlimited Undo and calm pacing remain; level 13 has one hidden jar and levels 14–16 use five-slot jars. A four-star milestone at 16 brings bonus earnings to twenty and total earnings to 36–68. The required core remains 26.
 
@@ -100,4 +100,4 @@ A placed counter now shows the second-edition shopkeeper immediately, standing i
 
 The final production build and every required verification pass, including all sixteen and 38 classic solvers and independent identity checks for existing boards. The full session browser suite verifies legacy local/recovery saves, unfinished Undo, goal/night preference, actual backup picker cancellation/restoration and classic rejection, both unlock wins, exact bonus/no farming, purchase/style/return/repurchase and reduced motion. It covers 390×844, 320×568, 844×390 and 1280×900. Art checks confirm all sixteen footprints and clean resource disposal over twelve rebuild cycles. Existing onboarding/flow and choice regressions pass, along with the final small-phone shelf assertion: the 320×568 board has no scroll overflow and the full shelf is visible.
 
-Local validation is complete. Hosted deployment and owner phone review remain pending. [RELEASES.md](RELEASES.md) links day/night, model styles, first-counter, tall-jar and reward screenshots. Guest gait and a visitor cast including women and children remain explicitly deferred. These automated checks do not establish physical iPhone performance or player enjoyment.
+Local validation is complete. Hosted deployment passed; owner phone review remains pending. [RELEASES.md](RELEASES.md) links day/night, model styles, first-counter, tall-jar and reward screenshots. Guest gait and a visitor cast including women and children remain explicitly deferred. These automated checks do not establish physical iPhone performance or player enjoyment.

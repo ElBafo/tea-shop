@@ -10,7 +10,7 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.5 — locally validated; hosting and owner review pending
+## 0.2.0-preview.5 — hosted for owner review
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner reviewed preview.4 positively and asked to move to the next milestone. Main remains unchanged; no merge was authorized.
 
@@ -31,9 +31,9 @@ The full session browser suite passed (`work/edition-session-check.json`): old l
 
 Review screenshots: [styles](screenshots/second-edition-v5/styles.webp), [first counter and shopkeeper](screenshots/second-edition-v5/first-counter.webp), [room by day](screenshots/second-edition-v5/room-day.webp), [room by night](screenshots/second-edition-v5/room-night.webp), [tall jars](screenshots/second-edition-v5/tall-phone.webp), [small-phone tall jars](screenshots/second-edition-v5/tall-small.webp), [reward unlock](screenshots/second-edition-v5/reward-unlock.webp).
 
-Local validation is complete. Hosted deployment and owner phone review remain pending. Package/app/release version: `0.2.0-preview.5`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.4 until a new deployment is verified.
+Local validation is complete. Hosted deployment passed at app commit `718a3633cfbff230c85d10e2e5ed65c47b0ca60e`: [GitHub Pages run 41927729026](https://github.com/ElBafo/tea-shop/actions/runs/41927729026). Follow-up documentation commits record this status without changing the deployed app. Owner phone review remains pending. Package/app/release version: `0.2.0-preview.5`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 now serves preview.5.
 
-## 0.2.0-preview.4 — hosted; continuation accepted
+## 0.2.0-preview.4 — superseded by preview.5; continuation accepted
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner accepted the wall correction and said “Good. Let’s proceed.” This authorizes the next hosted preview, not a merge to main.
 
@@ -54,7 +54,7 @@ The final browser traffic suite passed (`work/edition-traffic-check.json`): elev
 
 Review screenshots: [busy day](screenshots/second-edition-v4/busy-day.webp), [busy night](screenshots/second-edition-v4/busy-night.webp), [visitors hidden in Edit](screenshots/second-edition-v4/edit-hidden.webp), [desktop](screenshots/second-edition-v4/desktop.webp), [reduced motion](screenshots/second-edition-v4/reduced-motion.webp).
 
-Package/app/release version: `0.2.0-preview.4`. Hosted deployment passed at app commit `c77181a07d5340da965b91ef5007344c51400e31`: [GitHub Pages run 41923115751](https://github.com/ElBafo/tea-shop/actions/runs/41923115751). Follow-up documentation commits record this status without changing the deployed app. Owner feedback: “Looks good,” with follow-ups for stiff walking and visitor diversity, clarified as women and children. These are recorded separately in the roadmap and deferred while preview.5 proceeds. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.4 until the next verified deployment. Main remains unchanged. Positive feedback is continuation approval, not a merge or measured physical-device performance result.
+Package/app/release version: `0.2.0-preview.4`. Hosted deployment passed at app commit `c77181a07d5340da965b91ef5007344c51400e31`: [GitHub Pages run 41923115751](https://github.com/ElBafo/tea-shop/actions/runs/41923115751). Follow-up documentation commits record this status without changing the deployed app. Owner feedback: “Looks good,” with follow-ups for stiff walking and visitor diversity, clarified as women and children. These are recorded separately in the roadmap and deferred while preview.5 proceeds. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 served preview.4 at this checkpoint and now serves preview.5. Main remains unchanged. Positive feedback is continuation approval, not a merge or measured physical-device performance result.
 
 ## 0.2.0-preview.3 — superseded by preview.4; continuation accepted
 
