@@ -9,9 +9,9 @@ This is the working delivery order, not a calendar promise. Priorities can chang
 Build the approved second-edition prototype as a separate development experience: one redesigned tea shop, eight refined core decoration designs, and ten deliberately paced puzzles. The owner approved all six directions below and asked to implement them. The immediate milestone is a complete playable slice across those directions, followed by phone review; it is not a commitment to replace the released game before review.
 
 - **Released baseline:** `0.1.0`, the existing package version, documented after PRs #12, #13 and #14 were merged. The version was not previously shown consistently in the app.
-- **Current work:** `0.2.0-preview.1`, first slice implemented and locally validated; hosting and owner review pending. Review URL once published: https://elbafo.github.io/tea-shop/preview/?edition=2. Its scores, room, guide, appearance and chosen goal must be isolated from both main and the ordinary preview.
+- **Current work:** `0.2.0-preview.1`, first slice implemented, validated and hosted for owner review. Review URL: https://elbafo.github.io/tea-shop/preview/?edition=2. Its scores, room, guide, appearance and chosen goal must be isolated from both main and the ordinary preview.
 - **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines this milestone's acceptance criteria.
-- **Review:** [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`; hosted deployment and owner review are pending.
+- **Review:** [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`; [hosted deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41836991363), owner review is pending.
 - Display the version in the app so phone feedback identifies the build. Every published review build gets a new preview version and release-note entry; roadmap milestones refer to that version. A version label does not imply approval or deployment.
 
 ### Six approved second-edition tracks
@@ -27,7 +27,7 @@ Build the approved second-edition prototype as a separate development experience
 
 ### Delivery stages
 
-1. **Playable slice — implemented and locally validated:** the six tracks are connected within the one-room/eight-design/ten-puzzle boundary. The app identifies `0.2.0-preview.1`; separate saves, reset, goals and the full first-win/purchase flow are checked. Actual scope, economy and tests are recorded in [RELEASES.md](RELEASES.md). Hosting and owner review remain pending.
+1. **Playable slice — hosted for review:** the six tracks are connected within the one-room/eight-design/ten-puzzle boundary. The app identifies `0.2.0-preview.1`; separate saves, reset, goals and the full first-win/purchase flow are checked. Actual scope, economy and tests are recorded in [RELEASES.md](RELEASES.md). Hosting passed; owner review remains pending.
 2. **Phone comparison — after the slice is ready:** review old and new versions, including a fresh onboarding session and the full choose-goal → play → reward → preview → buy → arrange loop. Observe confusing controls, missed drag/tap targets, wanted rewards and puzzle fatigue. Correct observed problems before expanding.
 3. **Extend the approved direction — after review:** carry the accepted art language through the wider catalogue, broaden room reactions and authored puzzle arcs, and refine the UI using player evidence. Visitors sitting in usable corners are an approved direction to explore, not a claim that a customer simulation ships in the first slice.
 4. **Release decision — requires owner approval:** choose whether and how the second edition replaces the baseline. Design and verify any save migration separately; do not automatically overwrite the existing game or progress.

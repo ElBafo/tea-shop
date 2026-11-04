@@ -1,6 +1,6 @@
 # Decopu second edition
 
-Status: the `0.2.0-preview.1` first slice is implemented and locally validated; hosting and owner review are pending. This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
+Status: the `0.2.0-preview.1` first slice is implemented, validated and hosted for owner review in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
 
 ## Experience
 

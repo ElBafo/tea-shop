@@ -10,7 +10,7 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.1 — locally validated, hosting/review pending
+## 0.2.0-preview.1 — hosted for review
 
 Recorded: 4 November 2026. Roadmap: **Current priority — 0.2.0-preview.1** in [ROADMAP.md](ROADMAP.md). Detailed scope: [SECOND_EDITION.md](SECOND_EDITION.md).
 
@@ -27,7 +27,7 @@ Implemented first slice:
 
 Economy: puzzle completions award 10–30 stars; derived bonuses after puzzles 3/6/10 add 4/5/7. Total earnings are 26–46 against a 26-star required eight-piece shop. Replaying improves best scores without farming rewards. Baseline economy is unchanged.
 
-Review URL when published: https://elbafo.github.io/tea-shop/preview/?edition=2.
+Hosted review URL: https://elbafo.github.io/tea-shop/preview/?edition=2.
 
 Save compatibility: prototype progress uses `tea-shop-preview-edition2-progress-v1`, with separate recovery, unfinished puzzle, guide and goal keys; appearance uses its own edition key. Reset keeps the edition URL and leaves main/ordinary-preview keys intact. Backup validation rejects 10/38-board cross-edition imports. Baseline board identities and saves remain unchanged; no migration or replacement of the released game is approved.
 
@@ -42,7 +42,7 @@ Local validation passed:
 
 Limits: physical Safari interaction/performance, subjective art quality and enjoyable pacing still need phone/player review. The first slice does not include a full production art pipeline, wider-catalogue conversion, visitor simulation, new venues or evidence of retention. Those remain later roadmap work.
 
-Review: [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. Implementation commit: `67df6df35e870dfe78a12459cdbfffe36e1b1d48`; follow-up documentation commits are visible in the PR. Hosted deployment: pending. Owner review: pending. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; this version has not been merged to main.
+Review: [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. Implementation commit: `67df6df35e870dfe78a12459cdbfffe36e1b1d48`; follow-up documentation commits are visible in the PR. Hosted deployment: successful at commit `73b342e18e3b633c9bf4837e650537141a1e5b0f`, confirmed by [GitHub Pages run 41836991363](https://github.com/ElBafo/tea-shop/actions/runs/41836991363). Later commits that only update these review records do not change the deployed app. Owner review: pending. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; this version has not been merged to main.
 
 ## 0.1.0 — documented released baseline
 
