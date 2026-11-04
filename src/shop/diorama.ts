@@ -19,7 +19,8 @@ import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 import type { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import type { Placement, ShopState, UpgradeId } from "../game/types";
 import { C } from "./palette";
-import { buildEditionGuest } from "./edition-guest";
+import { buildTrafficGuest, type TrafficGuestVisual } from "./edition-guest";
+import { GuestTraffic } from "./guest-traffic";
 import { sparkTexture } from "./textures";
 import {
   applyRoomStyle,
@@ -93,7 +94,8 @@ export class Diorama {
   } | null = null;
   private tweens: Tween[] = [];
   private customer: TransformNode | null = null;
-  private guest: TransformNode | null = null;
+  private traffic: GuestTraffic | null = null;
+  private trafficGuests: TrafficGuestVisual[] = [];
   private walk: { from: Vector3; to: Vector3; t: number } | null = null;
   private warm = 0;
   private night = false;
@@ -219,7 +221,7 @@ export class Diorama {
   setEditMode(on: boolean): void {
     if (this.edit !== on) this.cancelDrag();
     this.edit = on;
-    this.updateGuest();
+    this.updateTraffic();
     if (!on) {
       this.drag = null;
       this.select(null);
@@ -316,7 +318,7 @@ export class Diorama {
 
     this.steam = Object.values(this.visuals.items).flatMap(root => root?.getChildMeshes().filter(mesh => mesh.metadata?.steam) ?? []);
     this.positionShopkeeper();
-    this.updateGuest();
+    this.updateTraffic();
     this.setNight(this.night);
     this.updateRing();
     this.updateMarkers();
@@ -351,6 +353,10 @@ export class Diorama {
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
     window.removeEventListener("resize", this.onWinResize);
     this.engine.stopRenderLoop();
+    this.traffic?.clear();
+    this.traffic = null;
+    for (const guest of this.trafficGuests) guest.dispose();
+    this.trafficGuests = [];
     this.scene.dispose();
     this.engine.dispose();
   }
@@ -473,21 +479,35 @@ export class Diorama {
     this.customer.rotation.y = angle;
   }
 
-  private updateGuest(): void {
+  private updateTraffic(): void {
     if (!isSecondEdition) return;
-    const table = this.visuals.items.table;
-    const available = !!table && isPlaced(this.shop, "table") && isPlaced(this.shop, "counter");
-    if (this.guest?.isDisposed()) this.guest = null;
-    if (available && !this.edit && !this.guest) {
-      this.guest = buildEditionGuest(this.scene);
-      this.guest.parent = table!;
-      this.castShadows(this.guest);
-      this.lampShadowsDirty = true;
-    }
-    if (this.guest) {
-      const visible = available && !this.edit;
-      if (this.guest.isEnabled() !== visible) this.lampShadowsDirty = true;
-      this.guest.setEnabled(visible);
+    if (!this.traffic) {
+      this.traffic = new GuestTraffic(this.shop);
+      // These pooled visitors receive light but never enter cached shadow maps.
+      // Their small contact shadows move with them without rerendering lamp maps.
+      this.trafficGuests = [0,1].map(index=>buildTrafficGuest(this.scene,index));
+    } else this.traffic.update(this.shop);
+    this.traffic.setEditing(this.edit);
+    this.paintTraffic();
+  }
+
+  private tickTraffic(dt: number): void {
+    if (!this.traffic || document.hidden) return;
+    this.traffic.tick(dt,this.reducedMotion.matches);
+    this.paintTraffic();
+  }
+
+  private paintTraffic(): void {
+    const frames=this.traffic?.snapshot()??[];
+    for (let slot=0;slot<this.trafficGuests.length;slot++) {
+      const visual=this.trafficGuests[slot],frame=frames.find(frame=>frame.slot===slot);
+      if (visual.root.isEnabled()!==!!frame) visual.root.setEnabled(!!frame);
+      visual.root.metadata={...visual.root.metadata,guestState:frame??null};
+      if (!frame) continue;
+      visual.root.position.set(frame.x,frame.y,frame.z);
+      visual.root.rotation.y=frame.facing;
+      visual.setPose(frame.pose);
+      visual.animate(this.elapsed+slot*.7,frame.moving,this.reducedMotion.matches);
     }
   }
 
@@ -495,6 +515,7 @@ export class Diorama {
     const dt = Math.min(0.1, this.engine.getDeltaTime() / 1000);
     if (this.tweens.length || this.walk) this.lampShadowsDirty = true;
     this.elapsed += dt;
+    this.tickTraffic(dt);
     for (const mesh of this.steam) {
       mesh.setEnabled(!this.reducedMotion.matches);
       if (this.reducedMotion.matches) continue;
