@@ -53,7 +53,7 @@ Observe whether a player can independently choose a goal, solve a puzzle, previe
 Prioritize a satisfying single-shop experience. Larger shops, full-game dark appearance, a playable Bakery, cloud progress and public galleries remain later work. Monetisation is deferred; no business model is selected. Earned-star progression remains separate from future real-money decisions.
 
 
-The reviewed first slice covered all six directions at limited scale: 24 model-rendered style thumbnails, next/unfinished-puzzle Play, pinned decoration-and-style goals, select-then-tap plus drag placement and one-step move/rotation Undo. The initial room reaction is a book/tea setting near a lamp and table. The published continuation, `0.2.0-preview.2`, is hosted for owner review after passing build, verification and browser checks. Physical-phone acceptance remains pending. The current local fix identifies `0.2.0-preview.3` in package, Start, More and release notes; build/browser validation and hosting are pending. Main remains the recorded `0.1.0` baseline.
+The reviewed first slice covered all six directions at limited scale: 24 model-rendered style thumbnails, next/unfinished-puzzle Play, pinned decoration-and-style goals, select-then-tap plus drag placement and one-step move/rotation Undo. The initial room reaction is a book/tea setting near a lamp and table. The published continuation, `0.2.0-preview.2`, is hosted for owner review after passing build, verification and browser checks. Physical-phone acceptance remains pending. The current hosted fix identifies `0.2.0-preview.3` in package, Start, More and release notes; build, browser validation and hosting passed; owner review remains pending. Main remains the recorded `0.1.0` baseline.
 
 
 ## Approved continuation: 0.2.0-preview.2
@@ -68,4 +68,4 @@ Arrival frequency will respond to the number of actually placed decorations, inc
 
 ## Paid wall finish correction — 0.2.0-preview.3
 
-The starting room must not receive decorative wall panels or dado rails before purchase. Those details, wall colour and curtains belong to the existing three-star wall upgrade. Free style previews may show the complete finish, but cancellation restores the owned room and only a purchase makes the finish persistent. Basic room structure remains visible. This is a local correction awaiting validation and hosting, with no price or save changes. Planned guest traffic now targets preview.4.
+The starting room must not receive decorative wall panels or dado rails before purchase. Those details, wall colour and curtains belong to the existing three-star wall upgrade. Free style previews may show the complete finish, but cancellation restores the owned room and only a purchase makes the finish persistent. Basic room structure remains visible. This is a hosted correction awaiting owner review, with no price or save changes. Planned guest traffic now targets preview.4.
