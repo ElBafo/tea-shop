@@ -1,6 +1,6 @@
 # Decopu second edition
 
-Status: the `0.2.0-preview.1` first slice was implemented, validated, hosted and reviewed positively in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). The continuation, `0.2.0-preview.2`, is hosted for owner review after passing build, verification and browser checks. Physical-phone acceptance remains pending. The `0.2.0-preview.3` wall-ownership fix was hosted after passing validation and received positive continuation feedback. The current `0.2.0-preview.4` ambient traffic is implemented and locally validated: production build, all verification checks, final browser traffic/lifecycle checks and the paid-wall regression passed. Deployment and owner phone review remain pending. Continuing this direction does not authorize a merge. This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
+Status: the `0.2.0-preview.1` first slice was implemented, validated, hosted and reviewed positively in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). The continuation, `0.2.0-preview.2`, is hosted for owner review after passing build, verification and browser checks. Physical-phone acceptance remains pending. The `0.2.0-preview.3` wall-ownership fix was hosted after passing validation and received positive continuation feedback. The current `0.2.0-preview.4` ambient traffic is implemented and locally validated: production build, all verification checks, final browser traffic/lifecycle checks and the paid-wall regression passed. Deployment passed; owner phone review remains pending. Continuing this direction does not authorize a merge. This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
 
 ## Experience
 
@@ -58,7 +58,7 @@ The implemented goal UI states the puzzle unlock requirement even when a target 
 
 The implemented stationary seated guest appears only when both counter and table are placed. It is parented to the table and follows its placement/rotation, hides during Edit or when either required piece is stored, and adds no new economy state, lights or timer loops. It has no navigation or seat-allocation simulation. Full build and all verification checks passed, including catalogue guards, economy, returns and preview.1 core compatibility. Browser checks for old saves/backups, new thumbnails, goal states, replay behavior and guest lifecycle passed before publication. Owner phone review remains pending.
 
-## Guest traffic — 0.2.0-preview.4 locally validated
+## Guest traffic — 0.2.0-preview.4 hosted for review
 
 The owner requested guests who arrive, look around and leave, hide during decorating and become more frequent as the shop fills out. The local implementation supports at most two visitors, choosing reachable shelf browsing, counter-front ordering, table/bench seating or a look around before departure. Stored or blocked furniture leads to another activity or a shorter safe visit. Routes respect furniture, the counter working aisle and occupied destinations; table seat approaches go around chair backs.
 
@@ -68,7 +68,7 @@ Normal visits attempt up to three available activity kinds, with only one guest 
 
 Reduced motion uses one stationary reachable activity per visit, with no translation or bobbing. Two pooled, non-pickable figures reuse the existing loop and lights, use soft contact discs and do not enter cached room shadow maps. Visits remain atmosphere: no queues, service deadlines, mandatory tasks, matching bonuses, rewards, penalties or persistent customer state.
 
-Production build and all verification checks passed, including deterministic density comparisons and legal-layout collision/deadlock checks. Final browser traffic tests, repeated visual/resource lifecycle checks and the paid-wall regression passed. [RELEASES.md](RELEASES.md) records the bounded evidence and day/night, Edit, desktop and reduced-motion screenshots. Deployment and owner phone review remain pending. Richer visitor reactions can follow review of this bounded loop. It does not add a serving game, a customer economy or another venue.
+Production build and all verification checks passed, including deterministic density comparisons and legal-layout collision/deadlock checks. Final browser traffic tests, repeated visual/resource lifecycle checks and the paid-wall regression passed. [RELEASES.md](RELEASES.md) records the bounded evidence and day/night, Edit, desktop and reduced-motion screenshots. Deployment passed; owner phone review remains pending. Richer visitor reactions can follow review of this bounded loop. It does not add a serving game, a customer economy or another venue.
 
 ## Review gate
 

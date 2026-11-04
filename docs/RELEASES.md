@@ -10,7 +10,7 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.4 — locally validated, hosting and owner review pending
+## 0.2.0-preview.4 — hosted for owner review
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner accepted the wall correction and said “Good. Let’s proceed.” This authorizes the next hosted preview, not a merge to main.
 
@@ -31,9 +31,9 @@ The final browser traffic suite passed (`work/edition-traffic-check.json`): elev
 
 Review screenshots: [busy day](screenshots/second-edition-v4/busy-day.webp), [busy night](screenshots/second-edition-v4/busy-night.webp), [visitors hidden in Edit](screenshots/second-edition-v4/edit-hidden.webp), [desktop](screenshots/second-edition-v4/desktop.webp), [reduced motion](screenshots/second-edition-v4/reduced-motion.webp).
 
-Package/app/release version: `0.2.0-preview.4`. Hosted deployment and owner phone review remain pending. The review URL remains https://elbafo.github.io/tea-shop/preview/?edition=2 and still serves preview.3 until deployment is verified. Main remains unchanged. Owner phone review must tune the initial timing and judge how the activity feels.
+Package/app/release version: `0.2.0-preview.4`. Hosted deployment passed at app commit `c77181a07d5340da965b91ef5007344c51400e31`: [GitHub Pages run 41923115751](https://github.com/ElBafo/tea-shop/actions/runs/41923115751). Follow-up documentation commits record this status without changing the deployed app. Owner phone review remains pending. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 now serves preview.4. Main remains unchanged. Owner phone review must tune the initial timing and judge how the activity feels.
 
-## 0.2.0-preview.3 — hosted; continuation accepted
+## 0.2.0-preview.3 — superseded by preview.4; continuation accepted
 
 Focused fix in [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, following the owner's report that the walls already looked decorated before any purchase.
 
@@ -43,7 +43,7 @@ Implementation: `decorateEditionRoom` creates an initially disabled `edition-wal
 
 Prices, catalogue, ten puzzle boards, save namespace and classic/released behavior are unchanged. Existing owners retain their purchased wall finish; no migration or progress reset is required. App/package/release target: `0.2.0-preview.3`.
 
-Validation passed: full production build and all verification scripts; focused browser checks for fresh and counter-only walls, all three free styles, Browse/Done/other-item cancellation, exact three-star purchase, reload persistence and preservation of owned finishes. Phone/desktop day/night views and classic isolation passed with no browser exceptions. Thirty-six room-style preview cycles retain identical mesh/material/texture/transform counts and dispose cleanly. [Before/after screenshots](screenshots/second-edition-v3) document the upgrade. The owner subsequently gave positive continuation feedback; this is not measured physical-device performance evidence. Hosted deployment passed at app commit `619d829bc1986d4fc2b8a508c61708ec23fcdb20`: [GitHub Pages run 41918859412](https://github.com/ElBafo/tea-shop/actions/runs/41918859412). Follow-up documentation commits record this status without changing the deployed app. Owner feedback: “Good. Let’s proceed.” The owner accepted continuing after the correction without approving a merge. The review URL remains https://elbafo.github.io/tea-shop/preview/?edition=2; preview.3 is the last verified deployment. Main is unchanged. Planned ambient guest traffic moves to `0.2.0-preview.4`; hiding during Edit, layout reactions and decoration-based arrival frequency remain agreed roadmap requirements.
+Validation passed: full production build and all verification scripts; focused browser checks for fresh and counter-only walls, all three free styles, Browse/Done/other-item cancellation, exact three-star purchase, reload persistence and preservation of owned finishes. Phone/desktop day/night views and classic isolation passed with no browser exceptions. Thirty-six room-style preview cycles retain identical mesh/material/texture/transform counts and dispose cleanly. [Before/after screenshots](screenshots/second-edition-v3) document the upgrade. The owner subsequently gave positive continuation feedback; this is not measured physical-device performance evidence. Hosted deployment passed at app commit `619d829bc1986d4fc2b8a508c61708ec23fcdb20`: [GitHub Pages run 41918859412](https://github.com/ElBafo/tea-shop/actions/runs/41918859412). Follow-up documentation commits record this status without changing the deployed app. Owner feedback: “Good. Let’s proceed.” The owner accepted continuing after the correction without approving a merge. The review URL remains https://elbafo.github.io/tea-shop/preview/?edition=2; preview.3 was the verified deployment at this checkpoint and is now superseded by preview.4. Main is unchanged. Preview.4 adds the agreed ambient traffic, including Edit hiding, layout reactions and decoration-based arrival frequency.
 
 ## 0.2.0-preview.2 — superseded by preview.3
 
