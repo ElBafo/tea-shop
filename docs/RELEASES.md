@@ -42,7 +42,7 @@ Local validation passed:
 
 Limits: physical Safari interaction/performance, subjective art quality and enjoyable pacing still need phone/player review. The first slice does not include a full production art pipeline, wider-catalogue conversion, visitor simulation, new venues or evidence of retention. Those remain later roadmap work.
 
-PR and hosted deployment: pending. Owner review: pending. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; this version has not been merged to main.
+Review: [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. Implementation commit: `67df6df35e870dfe78a12459cdbfffe36e1b1d48`; follow-up documentation commits are visible in the PR. Hosted deployment: pending. Owner review: pending. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; this version has not been merged to main.
 
 ## 0.1.0 — documented released baseline
 

@@ -11,6 +11,7 @@ Build the approved second-edition prototype as a separate development experience
 - **Released baseline:** `0.1.0`, the existing package version, documented after PRs #12, #13 and #14 were merged. The version was not previously shown consistently in the app.
 - **Current work:** `0.2.0-preview.1`, first slice implemented and locally validated; hosting and owner review pending. Review URL once published: https://elbafo.github.io/tea-shop/preview/?edition=2. Its scores, room, guide, appearance and chosen goal must be isolated from both main and the ordinary preview.
 - **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines this milestone's acceptance criteria.
+- **Review:** [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`; hosted deployment and owner review are pending.
 - Display the version in the app so phone feedback identifies the build. Every published review build gets a new preview version and release-note entry; roadmap milestones refer to that version. A version label does not imply approval or deployment.
 
 ### Six approved second-edition tracks
