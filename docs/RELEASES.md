@@ -10,7 +10,26 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.1 — hosted for review
+## 0.2.0-preview.2 — implemented locally; browser review and hosting pending
+
+Continuation of [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, following the owner's feedback on preview.1: “Looks good. Continue pls.” This approves continuing the direction; it does not authorize merging to main.
+
+Implemented local scope:
+
+- Six existing optional designs use the second-edition art language, with three styles each and eighteen additional model-rendered thumbnails: fourteen designs and forty-two thumbnails total.
+- Art (8 stars) and bench (6) unlock after 3 completed puzzles; clock (10) and trolley (8) after 6; basket (12) and planter (10) after 10. Every item remains a paid purchase after unlocking.
+- Chosen goals show their puzzle unlock requirement even when affordable, and suggest optional returns when no more stars can be earned. After all ten puzzles, “Improve your scores” targets score improvement; at all three-star scores, “Revisit puzzles” opens the browser. An unfinished puzzle still takes priority.
+- A stationary seated guest appears when table and counter are placed, follows the table transform, and is hidden during Edit or if either piece is stored. It adds no lights or independent timer. Walking traffic and full visits remain future work.
+
+Economy and compatibility: the ten boards, completion bonuses and edition save namespace stay unchanged. Minimum/maximum earnings remain 26/46. The eight core pieces cost 26; six optional pieces add 54 for an 80-star catalogue. A player with all core pieces and maximum scores has 20 stars left to choose optional pieces. Confirmed full-value optional returns allow experimentation and recover stars for unfinished core purchases; no purchase becomes a requirement and core completion items remain non-returnable.
+
+Validation: full local build and all `npm run verify` checks passed, including the fourteen-piece catalogue, milestone gates, star budget, optional returns and preview.1 core-save compatibility. Browser checks passed: all six unlock boundaries, funded locked goals, real-touch first win to chosen optional style, exact purchase/return/cancel/repurchase, Undo cleanup, preview.1 backup compatibility, completion navigation, and temporary showroom/tour goal isolation. The regular first-win/onboarding/reset flow and classic editor regression checks also pass. Guest checks cover all table styles, rotation, storage, Edit hiding, day/night, reduced motion and classic isolation; eighteen rebuild cycles retain identical resource counts. Art checks cover all eighteen new variant footprints and twelve rebuilds of all fourteen designs, releasing mesh/material/texture/transform resources to zero. [Review screenshots](screenshots/second-edition-v2) include day/night, desktop, the guest and Edit hiding. Physical-phone performance and enjoyment remain for review; a 320×568 selected-item view has a small room area, with actions still visible. Hosted deployment: pending. Package and app version: `0.2.0-preview.2`, displayed at Start and in More. The hosted URL remains https://elbafo.github.io/tea-shop/preview/?edition=2; it continues showing the previous published build until deployment is verified. Main remains the approved `0.1.0` baseline.
+
+Demo/tour decoration goals are session-only and cannot read or overwrite the real wishlist. Returning a moved optional piece clears its Undo state; the edition home uses one Continue puzzle action.
+
+Walking guest visits are a separate agreed future phase after this preview: arrive, browse, order, sit and leave in response to actually placed shelves, counters, tables, reading corners, available seats and reachable paths. The owner explicitly requires all guests hidden in Edit and valid activities/positions recomputed afterward; stored or blocked furniture leads to alternatives. Future arrival frequency also grows with actually placed decorations: occasional visits in a sparse shop, usually one or two guests in a well-furnished shop, with an initial cap of two and the core eight sufficient for that target. Stored pieces and matching styles do not influence it; valid paths/seats take precedence. Exact timing remains for phone tuning. See [ROADMAP.md](ROADMAP.md); no such traffic is claimed here.
+
+## 0.2.0-preview.1 — hosted; direction reviewed positively
 
 Recorded: 4 November 2026. Roadmap: **Current priority — 0.2.0-preview.1** in [ROADMAP.md](ROADMAP.md). Detailed scope: [SECOND_EDITION.md](SECOND_EDITION.md).
 
@@ -42,7 +61,7 @@ Local validation passed:
 
 Limits: physical Safari interaction/performance, subjective art quality and enjoyable pacing still need phone/player review. The first slice does not include a full production art pipeline, wider-catalogue conversion, visitor simulation, new venues or evidence of retention. Those remain later roadmap work.
 
-Review: [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. Implementation commit: `67df6df35e870dfe78a12459cdbfffe36e1b1d48`; follow-up documentation commits are visible in the PR. Hosted deployment: successful at commit `73b342e18e3b633c9bf4837e650537141a1e5b0f`, confirmed by [GitHub Pages run 41836991363](https://github.com/ElBafo/tea-shop/actions/runs/41836991363). Later commits that only update these review records do not change the deployed app. Owner review: pending. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; this version has not been merged to main.
+Review: [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. Implementation commit: `67df6df35e870dfe78a12459cdbfffe36e1b1d48`; follow-up documentation commits are visible in the PR. Hosted deployment: successful at commit `73b342e18e3b633c9bf4837e650537141a1e5b0f`, confirmed by [GitHub Pages run 41836991363](https://github.com/ElBafo/tea-shop/actions/runs/41836991363). Later commits that only update these review records do not change the deployed app. Owner feedback: “Looks good. Continue pls.” The owner accepted the direction and authorized further preview work; no merge approval was given. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; this version has not been merged to main.
 
 ## 0.1.0 — documented released baseline
 

@@ -14,7 +14,11 @@ export function nextReward(progress: Progress) {
  const done = progress.bestStars.filter(n => n > 0).length;
  if (isSecondEdition) {
    const pinned = readGoal(progress);
-   const item = DECORATIONS.find(item => item.id === pinned?.id) ?? DECORATIONS.find(item => !progress.shop.owned.includes(item.id));
+   const unowned = DECORATIONS.filter(item => !progress.shop.owned.includes(item.id));
+   const item = DECORATIONS.find(item => item.id === pinned?.id)
+     ?? unowned.find(item => !item.optional)
+     ?? unowned.find(item => (item.unlockAfter ?? 0) <= done)
+     ?? unowned[0];
    return item ? {item, done} : null;
  }
  const milestones = DECORATIONS.filter(item => item.unlockAfter);
@@ -24,10 +28,12 @@ export function nextReward(progress: Progress) {
 }
 export function nextGoal(progress: Progress): string {
  const goal = nextReward(progress);
- return goal ? `${goal.item.title} · ${Math.max(0, goal.item.unlockAfter! - goal.done)} puzzles to unlock` : 'All special pieces collected. Try a new arrangement.';
+ if (!goal) return 'All special pieces collected. Try a new arrangement.';
+ const remaining = Math.max(0, (goal.item.unlockAfter ?? 0) - goal.done);
+ return `${goal.item.title} · ${remaining ? `${remaining} puzzles to unlock` : `Available to buy for ${goal.item.cost} ✦`}`;
 }
 export function milestoneAt(count:number):string|null {
- if (isSecondEdition) return count===3 ? 'Shutters open · +4 stars for your shop' : count===6 ? 'Afternoon ritual complete · +5 stars' : count===10 ? 'Opening day · +7 stars. Make the room yours.' : null;
+ if (isSecondEdition) return count===3 ? '+4 stars · Bench and framed print now available to buy' : count===6 ? '+5 stars · Tea trolley and wall clock now available to buy' : count===10 ? '+7 stars · Planter and cozy basket now available to buy' : null;
  const reward=DECORATIONS.find(d=>d.unlockAfter===count);
  if(reward)return `${reward.title} unlocked · Available to buy for ${reward.cost} ✦${bonusAt(count) ? ` · +${bonusAt(count)} milestone stars` : ""}`;
  if(count===32)return 'A full house complete · Your final shelves await';

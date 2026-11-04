@@ -1,6 +1,6 @@
 # Decopu second edition
 
-Status: the `0.2.0-preview.1` first slice is implemented, validated and hosted for owner review in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
+Status: the `0.2.0-preview.1` first slice was implemented, validated, hosted and reviewed positively in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). The continuation, `0.2.0-preview.2`, is implemented locally with build and verification passed; browser review and deployment remain pending. Continuing this direction does not authorize a merge. This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
 
 ## Experience
 
@@ -48,7 +48,23 @@ Implemented locally: all eight core designs, coordinated room/shopkeeper, 24 ren
 
 The ten authored boards use three arcs and only two hidden-content puzzles. Completion bonuses after puzzles 3/6/10 are 4/5/7 stars. Total earnings are 26–46, funding the 26-star eight-piece shop even at one star per puzzle. Separate keys protect main and ordinary-preview saves; reset retains `edition=2`, and backup validation rejects cross-edition 10/38-board imports.
 
-Package, Start and More show `0.2.0-preview.1`. The same review-build version also appears in ordinary-preview mode on this branch. Main is unchanged. See [RELEASES.md](RELEASES.md) for passing local checks and outstanding device/player review.
+The hosted first slice identified itself as `0.2.0-preview.1`; the local continuation identifies itself as `0.2.0-preview.2` in package, Start and More. The same review-build version also appears in ordinary-preview mode on this branch. Main is unchanged. See [RELEASES.md](RELEASES.md) for passing local checks and outstanding device/player review.
+
+## Preview.2 continuation and acceptance
+
+Continue within the same room, ten boards and edition save namespace. Add six optional designs with three styles each: art (8 stars) and bench (6) after 3 puzzle completions; clock (10) and trolley (8) after 6; basket (12) and planter (10) after 10. Generate eighteen additional thumbnails from those models. Fourteen designs cost 80 stars in total, while earnings remain 26–46 and the core still costs 26. Returnable optional choices support experimentation and recovery of spending for core completion.
+
+The implemented goal UI states the puzzle unlock requirement even when a target is affordable, keeps previewing free and preserves the chosen style. After all ten boards, “Improve your scores” points toward an improvable score; at all three-star scores, “Revisit puzzles” opens the browser. Unfinished puzzles still take priority. Goal guidance suggests optional returns once no further stars can be earned.
+
+The implemented stationary seated guest appears only when both counter and table are placed. It is parented to the table and follows its placement/rotation, hides during Edit or when either required piece is stored, and adds no new economy state, lights or timer loops. It has no navigation or seat-allocation simulation. Full build and all verification checks passed, including catalogue guards, economy, returns and preview.1 core compatibility. Browser checks for old saves/backups, new thumbnails, goal states, replay behavior and guest lifecycle remain pending before publication.
+
+## Guest traffic — approved future phase
+
+The owner requested guests who arrive, look around and leave. A later calm visit can include browsing placed shelves, ordering at an accessible counter and sitting at a table before departing. The owner confirmed that reactions must follow actually placed shelves, counters, tables and cozy reading corners, reachable paths and available seats. Stored or blocked furniture should trigger another activity or a shorter safe visit. A room without one of those activities should still allow a safe visit.
+
+Arrival frequency will respond to the number of actually placed decorations, including fixed paint and excluding stored pieces. A sparse shop should receive occasional guests at configurable intervals; a well-furnished shop should usually have one or two guests, with an initial population cap of two. The eight core decorations must be enough to reach that livelier target: buying all fourteen designs or matching styles is not required. Reachable paths and available activity/seat slots take precedence over the occupancy target. Exact intervals and thresholds remain for phone-preview tuning; no specific number of minutes is agreed.
+
+Keep visits ambient initially, with no queues, deadlines, mandatory servicing, matching bonuses, star rewards or persistent economy effects. Always hide all guests in Edit; when Edit ends, recompute valid positions and activities before showing them again. Before review, define valid entrance/exit and routes, occupancy and interaction anchors, handling of moved/stored furniture, camera occlusion and a bounded guest population. Test blocked passages, occupied seats, repeated editing, reduced motion, backgrounding, disposal and physical-phone performance. The seated preview.2 guest is a foundation; it does not implement walking or a complete visit.
 
 ## Review gate
 

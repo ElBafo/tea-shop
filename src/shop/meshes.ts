@@ -1,5 +1,5 @@
 import { isSecondEdition } from "../game/mode";
-import { buildEditionItem, buildEditionKeeper, decorateEditionRoom, editionFloorMaterial, editionReadingNook, editionCoreIds } from "./edition-art";
+import { buildEditionItem, buildEditionKeeper, decorateEditionRoom, editionFloorMaterial, editionReadingNook, editionArtIds } from "./edition-art";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import type { Texture } from "@babylonjs/core/Materials/Textures/texture";
 import { Color3 } from "@babylonjs/core/Maths/math.color";
@@ -231,7 +231,7 @@ function buildItemMeshes(scene: Scene, id: UpgradeId, shop: ShopState): Transfor
     return root;
   }
   const style = styleOf(shop, id);
-  if (isSecondEdition && editionCoreIds.includes(id) && id !== "paint") return buildEditionItem(scene,id,shop,style);
+  if (isSecondEdition && editionArtIds.includes(id) && id !== "paint") return buildEditionItem(scene,id,shop,style);
   if (id === "terrarium" || id === "botanical" || id === "cabinet") return buildConservatory(scene, shop, id, style);
   if (id === "armchair" || id === "fountain") return buildSignature(scene, shop, id, style);
   if (id === "counter") return buildCounter(scene, shop, style);

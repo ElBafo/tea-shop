@@ -21,19 +21,21 @@ await evaluate(`(async()=>{
   const scene=new Scene(engine);scene.clearColor=new Color4(.969,.949,.902,1);scene.ambientColor=new Color3(.6,.6,.6);
   const camera=new ArcRotateCamera('thumbnail',-Math.PI/3,Math.PI/2.8,6,Vector3.Zero(),scene);camera.mode=1;
   const hemi=new HemisphericLight('sky',new Vector3(0,1,0),scene);hemi.intensity=.9;
-  const sun=new DirectionalLight('sun',new Vector3(-.5,-1,.7),scene);sun.intensity=.6;
+  const wallArt=id==='art'||id==='clock';
+  const sun=new DirectionalLight('sun',new Vector3(-.5,-1,wallArt?-.7:.7),scene);sun.intensity=.6;
   const shop={owned:[id],stored:[],style:{[id]:style},place:{[id]:{...UPGRADE_BY_ID[id].defaultPlace}},finaleSeen:false};
   const item=id==='paint'?buildEditionPaintSample(scene,style):buildEditionItem(scene,id,shop,style);item.position.setAll(0);item.rotation.setAll(0);
   // Look from the decorated front of wall pieces; floor furniture uses a three-quarter angle.
-  if(id==='sign'||id==='shelves'||id==='paint')camera.alpha=Math.PI/2-.25;else camera.alpha=Math.PI/3;
-  item.computeWorldMatrix(true);const {min,max}=item.getHierarchyBoundingVectors(true);const center=min.add(max).scale(.5);camera.target=center;camera.alpha=(id==='sign'||id==='shelves'||id==='paint')?Math.PI/2-.25:Math.PI/3;camera.beta=Math.PI/2.8;
+  if(id==='sign'||id==='shelves'||id==='paint'||id==='art'||id==='clock')camera.alpha=Math.PI/2-.25;else camera.alpha=Math.PI/3;
+  item.computeWorldMatrix(true);const {min,max}=item.getHierarchyBoundingVectors(true);const center=min.add(max).scale(.5);camera.target=center;camera.alpha=(id==='sign'||id==='shelves'||id==='paint'||id==='art'||id==='clock')?Math.PI/2-.25:Math.PI/3;camera.beta=Math.PI/2.8;
   const extent=max.subtract(min),span=Math.max(extent.x/1.25,extent.y,extent.z)*1.3;
   camera.orthoTop=span/2;camera.orthoBottom=-span/2;camera.orthoLeft=-span*.625;camera.orthoRight=span*.625;
   await scene.whenReadyAsync();scene.render();const data=canvas.toDataURL('image/webp',.92);const count={meshes:scene.meshes.length,materials:scene.materials.length};scene.dispose();return{data,count};
  };
 })();`);
 await fs.mkdir('public/edition2/thumbnails',{recursive:true});
-for(const id of ['counter','sign','paint','shelves','plant','rug','lamp','table'])for(let style=0;style<3;style++){
+const ids=process.env.THUMB_IDS?.split(',')??['counter','sign','paint','shelves','plant','rug','lamp','table','art','clock','basket','bench','trolley','planter'];
+for(const id of ids)for(let style=0;style<3;style++){
  const r=await evaluate(`window.renderThumb(${JSON.stringify(id)},${style})`);await fs.writeFile(`public/edition2/thumbnails/${id}-${style}.webp`,Buffer.from(r.data.split(',')[1],'base64'));console.log(id,style,r.count);
 }
 ws.close();

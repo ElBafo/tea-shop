@@ -211,6 +211,13 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     guide.classList.toggle('hidden', !guide.innerHTML);
     root.querySelector('.shop-room')?.classList.toggle('has-guide', Boolean(guide.innerHTML));
     const spendable = spendableStars(progress);
+    if (isSecondEdition) {
+      const unfinished = readPuzzle(progress);
+      const complete = progress.bestStars.every(stars => stars > 0);
+      const maxed = progress.bestStars.every(stars => stars === 3);
+      root.querySelector('#play-tea strong')!.textContent = unfinished ? 'Continue puzzle' : maxed ? 'Revisit puzzles' : complete ? 'Improve your scores' : 'Play next puzzle';
+      root.querySelector('#play-tea em')!.textContent = unfinished ? 'Pick up where you left off' : maxed ? 'All ten finished · Play a favourite' : complete ? 'Earn more stars for your favourite pieces' : 'Earn stars to decorate';
+    }
     const available = DECORATIONS.filter((item) => collectionUnlocked(item.id,progress.bestStars) && !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
     updateAudioToggle(root.querySelector("#mute"), progress.muted);
 
@@ -244,7 +251,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       return `
         <button aria-pressed="${active}" class="upgrade-chip ${owned ? "owned" : ""} ${active ? "active" : ""}" data-upgrade="${upgrade.id}" type="button">
           <span class="deco-icon" aria-hidden="true">${styleThumbnail(upgrade.id,styleOf(progress.shop,upgrade.id))}</span><strong>${label(upgrade.id)}</strong>
-          <span>${owned ? `${isStored(progress.shop, upgrade.id) ? "Stored" : "In shop"} · ${UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name}` : `${upgrade.cost} ${STAR}${!collectionUnlocked(upgrade.id,progress.bestStars) ? ` · ${upgrade.unlockAfter} puzzles` : upgrade.collection ? ` · ${upgrade.collection}` : ""}`}</span>
+          <span>${owned ? `${isStored(progress.shop, upgrade.id) ? "Stored" : "In shop"} · ${UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name}` : `${upgrade.cost} ${STAR}${!collectionUnlocked(upgrade.id,progress.bestStars) ? ` · ${isSecondEdition ? 'Unlock at ' : ''}${upgrade.unlockAfter} puzzles` : upgrade.collection ? ` · ${upgrade.collection}` : ""}`}</span>
         </button>`;
     }).join("");
 
@@ -281,7 +288,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     if(actions){
       actions.querySelector('.journey-goal, .reward-card')?.remove();actions.insertAdjacentHTML('beforeend',rewardCard(progress));
       actions.querySelector('[data-resume-shop]')?.remove();
-      if(readPuzzle(progress)) {const button=document.createElement('button');button.dataset.resumeShop='';button.className='resume-card';button.textContent='Resume unfinished puzzle →';button.onclick=()=>host.resumePuzzle();actions.prepend(button);}
+      if(!isSecondEdition && readPuzzle(progress)) {const button=document.createElement('button');button.dataset.resumeShop='';button.className='resume-card';button.textContent='Resume unfinished puzzle →';button.onclick=()=>host.resumePuzzle();actions.prepend(button);}
     }
     const modal = root.querySelector("#shop-modal");
     if (modal) {
@@ -335,7 +342,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     dialog.querySelector('[data-cancel-return]')!.addEventListener('click', close);
     dialog.querySelector('[data-confirm-return]')!.addEventListener('click', () => {
       const next = returnItem(host.progress.shop, id);
-      if (next) { clearPreview(); selected = null; focus = null; diorama.select(null); commit(next); browse('all'); }
+      if (next) { lastMove = null; clearPreview(); selected = null; focus = null; diorama.select(null); commit(next); browse('all'); }
       close();
     });
     dialog.showModal();

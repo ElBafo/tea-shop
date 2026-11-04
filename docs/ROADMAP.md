@@ -4,15 +4,39 @@ Record every agreed product decision here in the same work session. Clearly dist
 
 This is the working delivery order, not a calendar promise. Priorities can change after phone reviews. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.2.0-preview.1
+## Current priority — 0.2.0-preview.2
 
-Build the approved second-edition prototype as a separate development experience: one redesigned tea shop, eight refined core decoration designs, and ten deliberately paced puzzles. The owner approved all six directions below and asked to implement them. The immediate milestone is a complete playable slice across those directions, followed by phone review; it is not a commitment to replace the released game before review.
+Continue the separate second-edition prototype after the owner reviewed preview.1 positively and said “Looks good. Continue pls.” Preview.2 expands personal decorating choices with six optional designs and a stationary guest foundation, while retaining the ten-puzzle sequence. The six approved directions remain below. Continuing preview work does not authorize a merge or replacement of the released game.
 
 - **Released baseline:** `0.1.0`, the existing package version, documented after PRs #12, #13 and #14 were merged. The version was not previously shown consistently in the app.
-- **Current work:** `0.2.0-preview.1`, first slice implemented, validated and hosted for owner review. Review URL: https://elbafo.github.io/tea-shop/preview/?edition=2. Its scores, room, guide, appearance and chosen goal must be isolated from both main and the ordinary preview.
+- **Current work:** `0.2.0-preview.2`, implemented locally; full build and `npm run verify` passed. Browser checks and deployment remain pending. Preview.1 is hosted and its direction has been reviewed positively. Review URL: https://elbafo.github.io/tea-shop/preview/?edition=2. Prototype saves remain isolated from main and the ordinary preview; the existing edition save continues across preview versions.
 - **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines this milestone's acceptance criteria.
-- **Review:** [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`; [hosted deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41836991363), owner review is pending.
+- **Review:** continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. [Preview.1 deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41836991363); preview.2 must receive its own build/deployment evidence and owner review.
 - Display the version in the app so phone feedback identifies the build. Every published review build gets a new preview version and release-note entry; roadmap milestones refer to that version. A version label does not imply approval or deployment.
+
+### Preview.2: more choices and a first guest — local implementation, review pending
+
+| Optional designs | Puzzle unlock | Star prices |
+| --- | --- | --- |
+| Art, bench | 3 completed | 8, 6 |
+| Clock, trolley | 6 completed | 10, 8 |
+| Basket, planter | 10 completed | 12, 10 |
+
+Each design now has three styles in the existing miniature art language, with eighteen additional thumbnails rendered from those models: fourteen designs and forty-two thumbnails total. Goals show the puzzle unlock requirement even when the player can afford the price; reaching a milestone makes the item available to buy. After all ten puzzles, “Improve your scores” leads toward an improvable score, or “Revisit puzzles” opens the browser when every score is three stars. An unfinished puzzle still takes priority. When no further stars can be earned, goal guidance suggests returning optional pieces.
+
+The ten boards and existing saves remain compatible. Earnings stay 26–46, core cost 26, optional cost 54, total catalogue 80. Maximum-score players have 20 stars beyond the core to choose extras. Optional full-price returns let players change choices and recover stars for remaining core items; no additional currency or farming loop is introduced.
+
+A stationary seated guest is implemented when both the table and counter are actually placed. It is attached to the table, moves/rotates with it, is hidden in Edit, and disappears when either required piece is stored. This visual adds no lights, independent timer, economy state or walking simulation. Local build and all verification checks, including the expanded catalogue, passed; browser, guest lifecycle and physical-phone review are still pending. Full walking visits remain the next separate phase below.
+
+### Ambient guest traffic — agreed future phase after preview.2
+
+The owner requested visitors who arrive, look around and leave. Develop calm visits that can include arriving through a defined entrance, browsing available shelves, ordering at an accessible counter, sitting at a placed table and leaving. The owner explicitly confirmed these reactions: use actually placed shelves, counters, tables and usable reading corners, together with reachable paths and available seats. Stored or blocked furnishings must lead to an alternate activity or a safely shortened visit. These are proposed visit activities, not a claim that walking traffic is implemented.
+
+Arrival frequency will respond to the number of actually placed decorations, including fixed paint and excluding stored pieces. A sparse shop should receive occasional guests at configurable intervals; a well-furnished shop should usually have one or two guests, with an initial population cap of two. The eight core decorations must be enough to reach that livelier target: buying all fourteen designs or matching styles is not required. Reachable paths and available activity/seat slots take precedence over the occupancy target. Exact intervals and thresholds remain for phone-preview tuning; no specific number of minutes is agreed.
+
+Guests are ambient life initially: no queues, service deadlines, mandatory tasks, matching-set bonuses, star rewards or saved economy state. Always hide all guests during Edit so they do not obstruct placement. On leaving Edit, return them only after recomputing a valid position and activity from the current arrangement. The seated guest in preview.2 is a foundation only; arrival, walking, browsing, ordering and departure are not implemented traffic yet.
+
+Before previewing traffic, define entrance/exit points and valid walkable routes, furniture occupancy and interaction slots, camera occlusion, a small mobile-appropriate guest limit, and cancellation when furniture is moved or stored. Check blocked routes, all seating occupied, repeated Edit entry, hidden/background behavior, scene disposal, reduced motion and physical-phone performance. Guests must never occupy invalid paths, force a room style or prevent decorating. Start with a bounded simple visit and expand only after the existing room remains comfortable to play.
 
 ### Six approved second-edition tracks
 
@@ -27,16 +51,16 @@ Build the approved second-edition prototype as a separate development experience
 
 ### Delivery stages
 
-1. **Playable slice — hosted for review:** the six tracks are connected within the one-room/eight-design/ten-puzzle boundary. The app identifies `0.2.0-preview.1`; separate saves, reset, goals and the full first-win/purchase flow are checked. Actual scope, economy and tests are recorded in [RELEASES.md](RELEASES.md). Hosting passed; owner review remains pending.
+1. **Playable slice — hosted; direction reviewed positively:** the six tracks are connected within the one-room/eight-design/ten-puzzle boundary. The app identifies `0.2.0-preview.1`; separate saves, reset, goals and the full first-win/purchase flow are checked. Actual scope, economy and tests are recorded in [RELEASES.md](RELEASES.md). Hosting passed; the owner approved continuing this direction without merging.
 2. **Phone comparison — after the slice is ready:** review old and new versions, including a fresh onboarding session and the full choose-goal → play → reward → preview → buy → arrange loop. Observe confusing controls, missed drag/tap targets, wanted rewards and puzzle fatigue. Correct observed problems before expanding.
-3. **Extend the approved direction — after review:** carry the accepted art language through the wider catalogue, broaden room reactions and authored puzzle arcs, and refine the UI using player evidence. Visitors sitting in usable corners are an approved direction to explore, not a claim that a customer simulation ships in the first slice.
+3. **Extend the approved direction — preview.2 implemented locally, review pending:** six optional designs, clearer locked goals and replay recommendations, and a seated guest foundation are implemented. Full build and verification passed; browser review and deployment remain pending. Follow with the explicitly requested ambient-traffic phase. Additional levels and conversion of the five remaining special designs stay later work.
 4. **Release decision — requires owner approval:** choose whether and how the second edition replaces the baseline. Design and verify any save migration separately; do not automatically overwrite the existing game or progress.
 
 First-slice implementation: eight rounded core models with coordinated materials, room panelling and a refined shopkeeper; 24 thumbnails rendered from those models; a book/tea setting appears when a placed table is within 2.3 room units of a placed lamp. Direct Play opens the next or unfinished puzzle; More retains All puzzles. A pinned decoration and style persist through results and purchase preview. Tap placement, dragging, one-step owned move/rotation Undo, and collection-position restoration are implemented. Puzzle jars stay stationary, hidden pieces use a neutral frosted treatment, and level guidance remains visible to prevent a selection layout jump.
 
 Prototype economy: ten puzzles award 10–30 completion stars; fixed completion bonuses at puzzles 3/6/10 add 4/5/7 stars, for 26–46 total earnings. The required eight-piece shop costs 26. Two puzzles have hidden contents. The separate ten-board save cannot replace a 38-board backup. Baseline earnings and catalogue are unchanged.
 
-Local validation passed for baseline and prototype solvers, same-session flows, phone/desktop placement, responsive puzzle presentation, reduced motion and resource cleanup. These checks do not establish physical iPhone performance or enjoyable pacing. Richer visitors, a full production asset pipeline and the wider catalogue remain later work after this slice's review.
+Local validation passed for baseline and prototype solvers, same-session flows, phone/desktop placement, responsive puzzle presentation, reduced motion and resource cleanup. These checks do not establish physical iPhone performance or enjoyable pacing. Preview.2 now extends six optional designs and starts a seated guest foundation. Walking visits, a full production asset pipeline, additional levels and conversion of the five remaining special designs remain later work.
 
 Bakery implementation and its cross-room rewards, larger rooms, public galleries, cloud accounts and monetisation remain later roadmap work. A second minigame is not part of this milestone. The earlier sections below retain the game's delivery history and backlog; this section controls the immediate priority.
 

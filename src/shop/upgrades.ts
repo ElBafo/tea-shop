@@ -241,8 +241,34 @@ export const EXTRA_COPIES: UpgradeDef[] = UPGRADES
   .filter(def => REPEATABLE.includes(def.id as RepeatableKind))
   .map(def => ({...def, id: `${def.id}:2` as UpgradeId, optional: true}));
 const ALL_DECORATIONS: UpgradeDef[] = [...UPGRADES, ...EXTRA_COPIES];
-export const DECORATIONS = isSecondEdition ? UPGRADES.filter(item => !item.optional) : ALL_DECORATIONS;
-export const UPGRADE_BY_ID = Object.fromEntries(ALL_DECORATIONS.map(def => [def.id, def])) as Record<UpgradeId, UpgradeDef>;
+// Clone only the prototype's optional definitions. The released catalogue and
+// its existing unlocks retain their original objects, prices and meanings.
+const EDITION_OPTIONAL: {id: UpgradeId; after: number}[] = [
+  {id: "bench", after: 3}, {id: "art", after: 3},
+  {id: "trolley", after: 6}, {id: "clock", after: 6},
+  {id: "planter", after: 10}, {id: "basket", after: 10},
+];
+export const EDITION_DECORATIONS: UpgradeDef[] = [
+  ...UPGRADES.filter(item => !item.optional),
+  ...EDITION_OPTIONAL.map(({id, after}) => ({
+    ...UPGRADES.find(item => item.id === id)!,
+    unlockAfter: after,
+    collection: "Personal touches",
+  })),
+];
+
+// A pure mode selection also lets verification check both catalogues without
+// pretending a Node process is a browser or changing global build flags.
+export function catalogueForMode(secondEdition: boolean): {decorations: UpgradeDef[]; byId: Record<UpgradeId, UpgradeDef>} {
+  const decorations = secondEdition ? EDITION_DECORATIONS : ALL_DECORATIONS;
+  return {
+    decorations,
+    byId: Object.fromEntries([...ALL_DECORATIONS, ...decorations].map(def => [def.id, def])) as Record<UpgradeId, UpgradeDef>,
+  };
+}
+const catalogue = catalogueForMode(isSecondEdition);
+export const DECORATIONS = catalogue.decorations;
+export const UPGRADE_BY_ID = catalogue.byId;
 export const UPGRADE_IDS = DECORATIONS.map(def => def.id);
 
 export function kindOf(id: UpgradeId): UpgradeKind {

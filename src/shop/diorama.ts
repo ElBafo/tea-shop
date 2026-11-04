@@ -19,6 +19,7 @@ import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 import type { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import type { Placement, ShopState, UpgradeId } from "../game/types";
 import { C } from "./palette";
+import { buildEditionGuest } from "./edition-guest";
 import { sparkTexture } from "./textures";
 import {
   applyRoomStyle,
@@ -92,6 +93,7 @@ export class Diorama {
   } | null = null;
   private tweens: Tween[] = [];
   private customer: TransformNode | null = null;
+  private guest: TransformNode | null = null;
   private walk: { from: Vector3; to: Vector3; t: number } | null = null;
   private warm = 0;
   private night = false;
@@ -217,6 +219,7 @@ export class Diorama {
   setEditMode(on: boolean): void {
     if (this.edit !== on) this.cancelDrag();
     this.edit = on;
+    this.updateGuest();
     if (!on) {
       this.drag = null;
       this.select(null);
@@ -313,6 +316,7 @@ export class Diorama {
 
     this.steam = Object.values(this.visuals.items).flatMap(root => root?.getChildMeshes().filter(mesh => mesh.metadata?.steam) ?? []);
     this.positionShopkeeper();
+    this.updateGuest();
     this.setNight(this.night);
     this.updateRing();
     this.updateMarkers();
@@ -467,6 +471,24 @@ export class Diorama {
     const angle = place.rot * Math.PI / 2;
     this.customer.position.set(center.x - Math.sin(angle), 0, center.z - Math.cos(angle));
     this.customer.rotation.y = angle;
+  }
+
+  private updateGuest(): void {
+    if (!isSecondEdition) return;
+    const table = this.visuals.items.table;
+    const available = !!table && isPlaced(this.shop, "table") && isPlaced(this.shop, "counter");
+    if (this.guest?.isDisposed()) this.guest = null;
+    if (available && !this.edit && !this.guest) {
+      this.guest = buildEditionGuest(this.scene);
+      this.guest.parent = table!;
+      this.castShadows(this.guest);
+      this.lampShadowsDirty = true;
+    }
+    if (this.guest) {
+      const visible = available && !this.edit;
+      if (this.guest.isEnabled() !== visible) this.lampShadowsDirty = true;
+      this.guest.setEnabled(visible);
+    }
   }
 
   private tick(): void {

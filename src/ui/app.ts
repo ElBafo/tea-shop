@@ -110,8 +110,13 @@ export function mountApp(root: HTMLElement): Promise<void> {
         playNext() {
           const unfinished = readPuzzle(progress);
           if (unfinished) { resumePuzzle(); return; }
-          const next = LEVELS.find((_, i) => !progress.bestStars[i]) ?? LEVELS.find((_, i) => progress.bestStars[i] < 3) ?? LEVELS[0];
-          startLevel(next);
+          const next = LEVELS.find((_, i) => !progress.bestStars[i]) ?? LEVELS.find((_, i) => progress.bestStars[i] < 3);
+          if (next) { startLevel(next); return; }
+          playClick(progress.muted);
+          leaveShop();
+          screen = "levels";
+          play = null;
+          render();
         },
         goLevels() {
           playClick(progress.muted);

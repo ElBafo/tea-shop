@@ -27,7 +27,7 @@ Milestones make Glass garden, Botanical triptych, Collector’s cabinet, Reading
 
 The baseline uses restrained steam, shadows and animation, pauses background rendering, and preserves scene/material cleanup. The finished-shop demo and progress reset are development-preview controls. Players may still showcase and share their own room in the released game.
 
-This baseline is recorded under the existing package version `0.1.0`; the next preview introduces a visible app version and formal release record. See [RELEASES.md](RELEASES.md) for scope and PR history.
+This baseline is recorded under the existing package version `0.1.0`; preview.1 introduced a visible app version and formal release record. See [RELEASES.md](RELEASES.md) for scope and PR history.
 
 ## Approved second-edition direction
 
@@ -42,7 +42,7 @@ The six approved tracks are:
 5. Let players pin a desired decoration and see progress toward that goal. Add restrained reactions to room arrangements without rigid matching rules or compulsory layouts.
 6. Author short puzzle sessions with quick satisfaction, interesting decisions, breathers and a finale. Use hidden contents selectively and retain full-jar completion, no fail state and unlimited Undo.
 
-The first slice is `0.2.0-preview.1`, implemented and locally validated with hosting and owner review pending, at the development URL `/tea-shop/preview/?edition=2`. It uses separate saves and does not replace or migrate the released game. Its ten puzzles and milestone bonuses provide 26–46 stars against the 26-star core shop. [SECOND_EDITION.md](SECOND_EDITION.md) defines acceptance; [ROADMAP.md](ROADMAP.md) records delivery order. Full catalogue conversion, richer visitor behavior and longer puzzle arcs follow review of the slice.
+The first slice, `0.2.0-preview.1`, was implemented, validated and hosted; the owner responded “Looks good. Continue pls.” This accepts the direction and authorizes further preview work, not a merge. The development URL is `/tea-shop/preview/?edition=2`. It uses separate saves and does not replace or migrate the released game. Its ten puzzles and milestone bonuses provide 26–46 stars against the 26-star core shop. [SECOND_EDITION.md](SECOND_EDITION.md) defines acceptance; [ROADMAP.md](ROADMAP.md) records delivery order. Preview.2 now develops six optional designs and a seated guest foundation. Further catalogue conversion and longer puzzle arcs remain later work.
 
 ## Validation and delivery
 
@@ -53,4 +53,15 @@ Observe whether a player can independently choose a goal, solve a puzzle, previe
 Prioritize a satisfying single-shop experience. Larger shops, full-game dark appearance, a playable Bakery, cloud progress and public galleries remain later work. Monetisation is deferred; no business model is selected. Earned-star progression remains separate from future real-money decisions.
 
 
-The current first slice covers all six directions at limited scale: 24 model-rendered style thumbnails, next/unfinished-puzzle Play, pinned decoration-and-style goals, select-then-tap plus drag placement and one-step move/rotation Undo. The initial room reaction is a book/tea setting near a lamp and table. Richer visitors and full-catalogue art conversion follow review; they are not included in this preview. Package, Start screen and More show `0.2.0-preview.1` on this review branch, including its ordinary-preview mode; main remains the recorded `0.1.0` baseline.
+The reviewed first slice covered all six directions at limited scale: 24 model-rendered style thumbnails, next/unfinished-puzzle Play, pinned decoration-and-style goals, select-then-tap plus drag placement and one-step move/rotation Undo. The initial room reaction is a book/tea setting near a lamp and table. The next build, `0.2.0-preview.2`, is implemented locally with build and verification passed; browser review and deployment remain pending. Package, Start, More and release notes identify that version; main remains the recorded `0.1.0` baseline.
+
+
+## Approved continuation: 0.2.0-preview.2
+
+Expand the prototype to fourteen designs by refining six existing optional items: art and bench unlock after 3 completed puzzles, clock and trolley after 6, basket and planter after 10. Their respective prices stay 8/6, 10/8 and 12/10 stars. Each has three included styles and accurate model thumbnails. The ten boards and edition save namespace remain unchanged.
+
+The optional pieces add 54 stars to the 26-star core catalogue. Earnings remain 26–46; a player cannot own all 80 stars of decorations at once. Full-value optional returns support experimentation and protect the ability to recover stars for unfinished core items. Unlocks remain paid purchase availability. Goal labels now distinguish unlock requirements from affordability and suggest optional returns once no further stars can be earned. After all ten puzzles, players see “Improve your scores”, or “Revisit puzzles” at all three-star scores; unfinished puzzles still take priority.
+
+A stationary seated guest is implemented when counter and table are both placed. It follows the table and is hidden while decorating or when either piece is stored. The owner also requested a later phase of guests arriving, browsing, ordering, sitting and leaving. The owner explicitly confirmed that all guests must be hidden during Edit and react to actually placed shelves, counters, tables and cozy reading corners. Recompute valid positions and activities after Edit; use reachable paths and available seats, with alternate activities when furniture is stored or blocked. Visits remain calm and optional. Initially they add no queues, deadlines, mandatory matching rules, save state or star rewards. Valid paths, occupancy, occlusion, moved/stored furniture, reduced motion and mobile performance must be verified before claiming guest traffic works. Preview.2 is not a full visitor simulation.
+
+Arrival frequency will respond to the number of actually placed decorations, including fixed paint and excluding stored pieces. A sparse shop should receive occasional guests at configurable intervals; a well-furnished shop should usually have one or two guests, with an initial population cap of two. The eight core decorations must be enough to reach that livelier target: buying all fourteen designs or matching styles is not required. Reachable paths and available activity/seat slots take precedence over the occupancy target. Exact intervals and thresholds remain for phone-preview tuning; no specific number of minutes is agreed.
