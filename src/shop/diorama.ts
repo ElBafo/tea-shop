@@ -21,6 +21,8 @@ import type { Placement, ShopState, UpgradeId } from "../game/types";
 import { C } from "./palette";
 import { buildTrafficGuest, type TrafficGuestVisual } from "./edition-guest";
 import { GuestTraffic } from "./guest-traffic";
+import { GuestMotion, GuestRoster } from "./guest-motion";
+import { GUEST_PROFILES } from "./guest-profiles";
 import { sparkTexture } from "./textures";
 import {
   applyRoomStyle,
@@ -52,6 +54,14 @@ interface Tween {
   t: number;
   dur: number;
   onDone?: () => void;
+}
+
+// Scene navigation does not restart the cast; this cursor never enters a save.
+const sessionGuestRoster = new GuestRoster(GUEST_PROFILES.map(profile=>profile.id));
+interface GuestPresentation {
+  motion: GuestMotion;
+  visitId: number | null;
+  profileId: string | null;
 }
 
 export class Diorama {
@@ -96,6 +106,8 @@ export class Diorama {
   private customer: TransformNode | null = null;
   private traffic: GuestTraffic | null = null;
   private trafficGuests: TrafficGuestVisual[] = [];
+  private guestPresentation: GuestPresentation[] = [];
+  private resetTrafficOnResume = false;
   private walk: { from: Vector3; to: Vector3; t: number } | null = null;
   private warm = 0;
   private night = false;
@@ -103,7 +115,7 @@ export class Diorama {
   private disposed = false;
   private readonly resizeObs: ResizeObserver;
 
-  constructor(canvas: HTMLCanvasElement, shop: ShopState, hooks: DioramaHooks) {
+  constructor(canvas: HTMLCanvasElement, shop: ShopState, hooks: DioramaHooks, private readonly guestRoster = sessionGuestRoster) {
     this.hooks = hooks;
     this.shop = shop;
     this.engine = new Engine(canvas, true, { antialias: true, adaptToDeviceRatio: false, stencil: true }, true);
@@ -360,6 +372,7 @@ export class Diorama {
     this.traffic = null;
     for (const guest of this.trafficGuests) guest.dispose();
     this.trafficGuests = [];
+    this.guestPresentation = [];
     this.scene.dispose();
     this.engine.dispose();
   }
@@ -492,6 +505,7 @@ export class Diorama {
       // These pooled visitors receive light but never enter cached shadow maps.
       // Their small contact shadows move with them without rerendering lamp maps.
       this.trafficGuests = [0,1].map(index=>buildTrafficGuest(this.scene,index));
+      this.guestPresentation = [0,1].map(()=>({motion:new GuestMotion(),visitId:null,profileId:null}));
     } else this.traffic.update(this.shop);
     this.traffic.setEditing(this.edit);
     this.paintTraffic();
@@ -499,21 +513,46 @@ export class Diorama {
 
   private tickTraffic(dt: number): void {
     if (!this.traffic || document.hidden) return;
+    if (this.resetTrafficOnResume) {
+      this.resetTrafficOnResume=false;
+      // Discard the first elapsed delta after a hidden page. Keep route positions.
+      this.paintTraffic(0,true);
+      return;
+    }
     this.traffic.tick(dt,this.reducedMotion.matches);
-    this.paintTraffic();
+    this.paintTraffic(dt);
   }
 
-  private paintTraffic(): void {
+  private paintTraffic(dt=0, reset=false): void {
     const frames=this.traffic?.snapshot()??[];
     for (let slot=0;slot<this.trafficGuests.length;slot++) {
       const visual=this.trafficGuests[slot],frame=frames.find(frame=>frame.slot===slot);
+      const presentation=this.guestPresentation[slot];
       if (visual.root.isEnabled()!==!!frame) visual.root.setEnabled(!!frame);
-      visual.root.metadata={...visual.root.metadata,guestState:frame??null};
-      if (!frame) continue;
+      visual.root.metadata.guestState=frame??null;
+      if (!frame) {
+        presentation.motion.clear();
+        presentation.visitId=null;
+        presentation.profileId=null;
+        visual.root.metadata.guestMotion=null;
+        continue;
+      }
+      if (presentation.visitId!==frame.visitId) {
+        const occupied=frames.filter(other=>other.slot!==slot).flatMap(other=>{
+          const state=this.guestPresentation[other.slot];
+          return state.visitId===other.visitId&&state.profileId?[state.profileId]:[];
+        });
+        presentation.profileId=this.guestRoster.next(occupied);
+        presentation.visitId=frame.visitId;
+        visual.setProfile(presentation.profileId);
+      }
+      const profile=GUEST_PROFILES.find(profile=>profile.id===presentation.profileId)!;
+      const motion=presentation.motion.update(frame,dt,this.reducedMotion.matches,profile.strideLength,reset);
+      visual.root.metadata.guestMotion=motion;
       visual.root.position.set(frame.x,frame.y,frame.z);
-      visual.root.rotation.y=frame.facing;
+      visual.root.rotation.y=motion.facing;
       visual.setPose(frame.pose);
-      visual.animate(this.elapsed+slot*.7,frame.moving,this.reducedMotion.matches);
+      visual.animate(this.elapsed+slot*.7,frame.moving,this.reducedMotion.matches,motion);
     }
   }
 
@@ -630,6 +669,7 @@ export class Diorama {
   private readonly onVisibilityChange = (): void => {
     if (this.disposed) return;
     if (document.hidden) {
+      this.resetTrafficOnResume=true;
       this.cancelDrag();
       this.engine.stopRenderLoop(this.renderFrame);
     } else {

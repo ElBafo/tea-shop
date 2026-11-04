@@ -10,7 +10,33 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.5 — hosted for owner review
+## 0.2.0-preview.6 — locally validated; hosting pending
+
+Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner said “Continue” following preview.5. This authorizes the next preview, not a merge or an inferred acceptance of all prior fixes.
+
+Implemented scope:
+
+- Six visitor profiles covering two adult women, two adult men and two children, with stable appearance per visit on two reusable rigs. The roster cycles across room lifetimes within the session, without persistent guest state.
+- Bending knees and elbows, distance-driven gait and frame-rate-independent visual turning. The simulation's exact routes, positions, activity choices, timing, arrival rates and two-visitor cap remain unchanged.
+- Child proportions and seating that keep the hips at cushion height while shorter legs can dangle.
+- Static reduced motion, Edit hiding, safe new-visit/reset behavior, background pause and clean resource disposal. No added lights, room-shadow casters, timers, saved guest state or star rewards.
+
+The existing sixteen puzzles and designs, 36–68 earnings, 104-star catalogue, save namespace, first-counter shopkeeper and compact five-slot layout remain. There is no save-schema change, migration or reset. Main and classic behavior remain isolated.
+
+Production build and all package verification pass. Independent source review found no blocking issue. The visual verifier covers all six profiles, 48 gait phases and twelve create/dispose cycles, confirming stable resources, root/metadata preservation, static reduced motion, child seating and safe floor/seat transitions. Each reusable rig has 40 meshes, 11 materials and 17 transforms; profile switching does not allocate another rig. A separate NullEngine review sampled 1,296 gait combinations and confirmed floor clearance within floating-point precision. Roster and seated still-image review found no blocking art issue.
+
+Final browser validation passed:
+
+- A 900-second simulated visit sequence showed all six profiles over 25 arrivals and 23 departures, respecting the two-visitor cap and a minimum guest separation of about 0.73 room units. All 345 sampled turns eased, and 177 unchanged repaints preserved presentation. Room resources stayed at 285 meshes, 90 materials, 7 textures, 48 transforms and 5 lights, with zero visitors in the shadow-caster lists.
+- Both children naturally used every table and bench style: twelve profile/seat-style combinations. Actual UI checks passed Edit hiding, decoration drafts, background pause, static reduced motion, classic isolation and saved-progress isolation.
+- Fresh preview.6 onboarding passed Start → guided first win → paid counter purchase → immediate shopkeeper. Shopkeeper preview/cancellation, purchase before the finale, storage/restoration, rotations, reload and day/night regressions also passed.
+- Phone day/night/Edit, desktop and room-pose screenshots were inspected without a blocking art issue. The walking clip uses four seconds of fixed 30 Hz simulation; it is motion evidence, not a measured phone frame rate.
+
+Artifacts: [visitor roster](screenshots/second-edition-v6/roster.webp), [gait poses](screenshots/second-edition-v6/gait.webp), [seated comparison](screenshots/second-edition-v6/seated.webp), [walking clip](screenshots/second-edition-v6/walking.mp4), [room day](screenshots/second-edition-v6/room-day.webp), [room night](screenshots/second-edition-v6/room-night.webp), [child seated](screenshots/second-edition-v6/child-seated.webp), [phone](screenshots/second-edition-v6/phone.webp), [night phone](screenshots/second-edition-v6/night-phone.webp), [Edit hiding](screenshots/second-edition-v6/edit-hidden.webp), [desktop](screenshots/second-edition-v6/desktop.webp) and [reduced motion](screenshots/second-edition-v6/reduced-motion.webp). Local logs are `work/guest-polish-integration-check.json`, `work/guest-polish-ui-check.json`, `work/guest-polish-onboarding-check.json` and `work/guest-polish-keeper.log`.
+
+Local validation is complete. Hosted deployment and owner phone review remain pending. The app/package target is `0.2.0-preview.6`; the review URL https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.5. Automated checks and recorded simulation do not establish physical iPhone performance or player enjoyment. The [roadmap](ROADMAP.md) records acceptance criteria.
+
+## 0.2.0-preview.5 — hosted; continuation authorized
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner reviewed preview.4 positively and asked to move to the next milestone. Main remains unchanged; no merge was authorized.
 
@@ -31,7 +57,7 @@ The full session browser suite passed (`work/edition-session-check.json`): old l
 
 Review screenshots: [styles](screenshots/second-edition-v5/styles.webp), [first counter and shopkeeper](screenshots/second-edition-v5/first-counter.webp), [room by day](screenshots/second-edition-v5/room-day.webp), [room by night](screenshots/second-edition-v5/room-night.webp), [tall jars](screenshots/second-edition-v5/tall-phone.webp), [small-phone tall jars](screenshots/second-edition-v5/tall-small.webp), [reward unlock](screenshots/second-edition-v5/reward-unlock.webp).
 
-Local validation is complete. Hosted deployment passed at app commit `718a3633cfbff230c85d10e2e5ed65c47b0ca60e`: [GitHub Pages run 41927729026](https://github.com/ElBafo/tea-shop/actions/runs/41927729026). Follow-up documentation commits record this status without changing the deployed app. Owner phone review remains pending. Package/app/release version: `0.2.0-preview.5`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 now serves preview.5.
+Local validation is complete. Hosted deployment passed at app commit `718a3633cfbff230c85d10e2e5ed65c47b0ca60e`: [GitHub Pages run 41927729026](https://github.com/ElBafo/tea-shop/actions/runs/41927729026). Follow-up documentation commits record this status without changing the deployed app. The owner subsequently said “Continue,” authorizing further preview work without explicitly accepting every fix or approving a merge. Package/app/release version: `0.2.0-preview.5`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 now serves preview.5.
 
 ## 0.2.0-preview.4 — superseded by preview.5; continuation accepted
 
