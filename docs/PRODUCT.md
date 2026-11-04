@@ -53,7 +53,7 @@ Observe whether a player can independently choose a goal, solve a puzzle, previe
 Prioritize a satisfying single-shop experience. Larger shops, full-game dark appearance, a playable Bakery, cloud progress and public galleries remain later work. Monetisation is deferred; no business model is selected. Earned-star progression remains separate from future real-money decisions.
 
 
-The reviewed first slice covered all six directions at limited scale: 24 model-rendered style thumbnails, next/unfinished-puzzle Play, pinned decoration-and-style goals, select-then-tap plus drag placement and one-step move/rotation Undo. The initial room reaction is a book/tea setting near a lamp and table. The next build, `0.2.0-preview.2`, is implemented locally with build and verification passed; browser review and deployment remain pending. Package, Start, More and release notes identify that version; main remains the recorded `0.1.0` baseline.
+The reviewed first slice covered all six directions at limited scale: 24 model-rendered style thumbnails, next/unfinished-puzzle Play, pinned decoration-and-style goals, select-then-tap plus drag placement and one-step move/rotation Undo. The initial room reaction is a book/tea setting near a lamp and table. The next build, `0.2.0-preview.2`, is hosted for owner review after passing build, verification and browser checks. Physical-phone acceptance remains pending. Package, Start, More and release notes identify that version; main remains the recorded `0.1.0` baseline.
 
 
 ## Approved continuation: 0.2.0-preview.2

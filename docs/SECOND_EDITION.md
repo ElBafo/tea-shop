@@ -1,6 +1,6 @@
 # Decopu second edition
 
-Status: the `0.2.0-preview.1` first slice was implemented, validated, hosted and reviewed positively in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). The continuation, `0.2.0-preview.2`, is implemented locally with build and verification passed; browser review and deployment remain pending. Continuing this direction does not authorize a merge. This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
+Status: the `0.2.0-preview.1` first slice was implemented, validated, hosted and reviewed positively in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). The continuation, `0.2.0-preview.2`, is hosted for owner review after passing build, verification and browser checks. Physical-phone acceptance remains pending. Continuing this direction does not authorize a merge. This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
 
 ## Experience
 
@@ -56,7 +56,7 @@ Continue within the same room, ten boards and edition save namespace. Add six op
 
 The implemented goal UI states the puzzle unlock requirement even when a target is affordable, keeps previewing free and preserves the chosen style. After all ten boards, “Improve your scores” points toward an improvable score; at all three-star scores, “Revisit puzzles” opens the browser. Unfinished puzzles still take priority. Goal guidance suggests optional returns once no further stars can be earned.
 
-The implemented stationary seated guest appears only when both counter and table are placed. It is parented to the table and follows its placement/rotation, hides during Edit or when either required piece is stored, and adds no new economy state, lights or timer loops. It has no navigation or seat-allocation simulation. Full build and all verification checks passed, including catalogue guards, economy, returns and preview.1 core compatibility. Browser checks for old saves/backups, new thumbnails, goal states, replay behavior and guest lifecycle remain pending before publication.
+The implemented stationary seated guest appears only when both counter and table are placed. It is parented to the table and follows its placement/rotation, hides during Edit or when either required piece is stored, and adds no new economy state, lights or timer loops. It has no navigation or seat-allocation simulation. Full build and all verification checks passed, including catalogue guards, economy, returns and preview.1 core compatibility. Browser checks for old saves/backups, new thumbnails, goal states, replay behavior and guest lifecycle passed before publication. Owner phone review remains pending.
 
 ## Guest traffic — approved future phase
 
