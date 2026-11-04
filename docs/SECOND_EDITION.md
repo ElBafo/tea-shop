@@ -1,6 +1,6 @@
 # Decopu second edition
 
-Status: the `0.2.0-preview.1` first slice was implemented, validated, hosted and reviewed positively in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). The continuation, `0.2.0-preview.2`, is hosted for owner review after passing build, verification and browser checks. Physical-phone acceptance remains pending. Continuing this direction does not authorize a merge. This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
+Status: the `0.2.0-preview.1` first slice was implemented, validated, hosted and reviewed positively in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). The continuation, `0.2.0-preview.2`, is hosted for owner review after passing build, verification and browser checks. Physical-phone acceptance remains pending. The current `0.2.0-preview.3` wall-ownership fix is locally validated; deployment is pending. Continuing this direction does not authorize a merge. This document defines the wider approved direction and review criteria; the release notes identify the limited slice actually delivered. See [release notes](RELEASES.md) for build status and [roadmap](ROADMAP.md) for sequencing.
 
 ## Experience
 
@@ -48,7 +48,7 @@ Implemented locally: all eight core designs, coordinated room/shopkeeper, 24 ren
 
 The ten authored boards use three arcs and only two hidden-content puzzles. Completion bonuses after puzzles 3/6/10 are 4/5/7 stars. Total earnings are 26–46, funding the 26-star eight-piece shop even at one star per puzzle. Separate keys protect main and ordinary-preview saves; reset retains `edition=2`, and backup validation rejects cross-edition 10/38-board imports.
 
-The hosted first slice identified itself as `0.2.0-preview.1`; the local continuation identifies itself as `0.2.0-preview.2` in package, Start and More. The same review-build version also appears in ordinary-preview mode on this branch. Main is unchanged. See [RELEASES.md](RELEASES.md) for passing local checks and outstanding device/player review.
+The hosted first slice identified itself as `0.2.0-preview.1`; the current local wall fix identifies itself as `0.2.0-preview.3` in package, Start and More. The same review-build version also appears in ordinary-preview mode on this branch. Main is unchanged. See [RELEASES.md](RELEASES.md) for passing local checks and outstanding device/player review.
 
 ## Preview.2 continuation and acceptance
 
@@ -79,3 +79,7 @@ Before describing the slice as ready:
 - Add actual validation, screenshots, commit/PR and hosted-review status to [RELEASES.md](RELEASES.md). Request merge approval only once the preview is concrete and reviewable.
 
 The first milestone is a limited but connected experience across all six approved directions. It does not claim the entire catalogue, a second venue, a complete customer simulation or retention evidence.
+
+## Wall ownership correction before guest traffic
+
+Preview.3 makes the decorative wall panels and dado rails part of the existing three-star paint purchase. Empty and counter-only rooms retain plain plaster; a deliberate free wall preview shows the finish, cancellation removes it, and buying saves it with the chosen colour and curtains. The basic window, structural trim, floor and foundation remain visible. Focused visual, preview/cancel, purchase/reload and resource checks are required before hosting; no validation is claimed yet. Guest traffic moves to the planned preview.4 phase without changing its agreed arrival-frequency or Edit-hiding rules.

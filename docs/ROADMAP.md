@@ -4,15 +4,23 @@ Record every agreed product decision here in the same work session. Clearly dist
 
 This is the working delivery order, not a calendar promise. Priorities can change after phone reviews. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.2.0-preview.2
+## Current priority — 0.2.0-preview.3
 
-Continue the separate second-edition prototype after the owner reviewed preview.1 positively and said “Looks good. Continue pls.” Preview.2 expands personal decorating choices with six optional designs and a stationary guest foundation, while retaining the ten-puzzle sequence. The six approved directions remain below. Continuing preview work does not authorize a merge or replacement of the released game.
+Correct the paid wall upgrade after the owner noticed that the empty shop already appeared decorated. Preview.3 is a focused visual ownership fix before expanding guest traffic: the decorative wall panels and dado rails belong to the three-star wall purchase. The six approved directions and preview.2 catalogue remain below. Preview work does not authorize a merge or replacement of the released game.
 
 - **Released baseline:** `0.1.0`, the existing package version, documented after PRs #12, #13 and #14 were merged. The version was not previously shown consistently in the app.
-- **Current work:** `0.2.0-preview.2`, hosted for review. Build, verification, browser interaction and lifecycle checks passed; owner phone review is pending. Preview.1 is hosted and its direction has been reviewed positively. Review URL: https://elbafo.github.io/tea-shop/preview/?edition=2. Prototype saves remain isolated from main and the ordinary preview; the existing edition save continues across preview versions.
+- **Current work:** `0.2.0-preview.3`, locally validated; deployment pending. Preview.2 is the last hosted build, and its owner feedback identified the unpaid wall decoration issue. Review URL: https://elbafo.github.io/tea-shop/preview/?edition=2. Prototype saves remain isolated from main and the ordinary preview; the existing edition save continues across preview versions.
 - **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines this milestone's acceptance criteria.
-- **Review:** continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. [Preview.1 deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41836991363); [Preview.2 deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41895797422); owner review remains pending.
+- **Review:** continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. [Preview.1 deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41836991363); [Preview.2 deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/41895797422); preview.3 build and browser checks passed; hosting and owner review remain pending.
 - Display the version in the app so phone feedback identifies the build. Every published review build gets a new preview version and release-note entry; roadmap milestones refer to that version. A version label does not imply approval or deployment.
+
+### Preview.3: paid wall finish — validated, hosting pending
+
+An unpurchased room starts with plain plaster. The twelve white wall panels and two decorative dado rails appear only when paint is owned, or while the player is deliberately previewing its style. The existing three-star wall upgrade includes the colour, decorative finish and curtains. Basic walls, window, floor, structural edge trim and the diorama foundation remain part of the room.
+
+A free preview must not spend stars or grant ownership. Browse, Done or selecting another unowned decoration restores the actual purchased room; buying paint commits the finish and selected style, which must survive reload. The finish group is initially disabled and follows the same ownership state on every room synchronization, so no completed finish appears before the first update. The floor foundation stays outside that group.
+
+Keep all prices, fourteen-design content, ten boards, saves and classic/released behavior unchanged. Validate fresh and counter-only rooms, all wall styles, cancellation, purchase/reload, unrelated owned previews, stable resources and phone/desktop day/night screenshots before hosting. Guest traffic moves to preview.4; its agreed behavior is unchanged.
 
 ### Preview.2: more choices and a first guest — hosted for review
 
@@ -28,7 +36,7 @@ The ten boards and existing saves remain compatible. Earnings stay 26–46, core
 
 A stationary seated guest is implemented when both the table and counter are actually placed. It is attached to the table, moves/rotates with it, is hidden in Edit, and disappears when either required piece is stored. This visual adds no lights, independent timer, economy state or walking simulation. Local build and all verification checks, including the expanded catalogue, passed; browser and guest lifecycle checks also passed; physical-phone review remains pending. Full walking visits remain the next separate phase below.
 
-### Ambient guest traffic — planned review target 0.2.0-preview.3
+### Ambient guest traffic — planned review target 0.2.0-preview.4
 
 The owner requested visitors who arrive, look around and leave. Develop calm visits that can include arriving through a defined entrance, browsing available shelves, ordering at an accessible counter, sitting at a placed table and leaving. The owner explicitly confirmed these reactions: use actually placed shelves, counters, tables and usable reading corners, together with reachable paths and available seats. Stored or blocked furnishings must lead to an alternate activity or a safely shortened visit. These are proposed visit activities, not a claim that walking traffic is implemented.
 
@@ -53,7 +61,7 @@ Before previewing traffic, define entrance/exit points and valid walkable routes
 
 1. **Playable slice — hosted; direction reviewed positively:** the six tracks are connected within the one-room/eight-design/ten-puzzle boundary. The app identifies `0.2.0-preview.1`; separate saves, reset, goals and the full first-win/purchase flow are checked. Actual scope, economy and tests are recorded in [RELEASES.md](RELEASES.md). Hosting passed; the owner approved continuing this direction without merging.
 2. **Phone comparison — after the slice is ready:** review old and new versions, including a fresh onboarding session and the full choose-goal → play → reward → preview → buy → arrange loop. Observe confusing controls, missed drag/tap targets, wanted rewards and puzzle fatigue. Correct observed problems before expanding.
-3. **Extend the approved direction — preview.2 hosted, owner review pending:** six optional designs, clearer locked goals and replay recommendations, and a seated guest foundation are implemented. Build, verification, browser checks and deployment passed; owner review remains pending. Follow with the explicitly requested ambient-traffic phase. Additional levels and conversion of the five remaining special designs stay later work.
+3. **Extend the approved direction — preview.2 hosted, owner review pending:** six optional designs, clearer locked goals and replay recommendations, and a seated guest foundation are implemented. Build, verification, browser checks and deployment passed; owner review remains pending. Correct the wall ownership issue in preview.3, then follow with the explicitly requested ambient-traffic phase in preview.4. Additional levels and conversion of the five remaining special designs stay later work.
 4. **Release decision — requires owner approval:** choose whether and how the second edition replaces the baseline. Design and verify any save migration separately; do not automatically overwrite the existing game or progress.
 
 First-slice implementation: eight rounded core models with coordinated materials, room panelling and a refined shopkeeper; 24 thumbnails rendered from those models; a book/tea setting appears when a placed table is within 2.3 room units of a placed lamp. Direct Play opens the next or unfinished puzzle; More retains All puzzles. A pinned decoration and style persist through results and purchase preview. Tap placement, dragging, one-step owned move/rotation Undo, and collection-position restoration are implemented. Puzzle jars stay stationary, hidden pieces use a neutral frosted treatment, and level guidance remains visible to prevent a selection layout jump.

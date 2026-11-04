@@ -24,6 +24,7 @@ import { UPGRADE_BY_ID, placeOf, styleOf, kindOf } from "./upgrades";
 
 export interface ShopVisuals {
   wallStyleKey?: string;
+  wallFinish?: TransformNode;
   floor: Mesh;
   backWall: Mesh;
   leftWall: Mesh;
@@ -181,8 +182,9 @@ export function createShopVisuals(scene: Scene): ShopVisuals {
   box(scene, "curtain-r", 0.36, 1.7, 0.08, curtains, curtainMat, 5.72, 1.9, 0.14);
   box(scene, "curtain-rod", 2.05, 0.06, 0.06, curtains, paint(scene, "rod", C.woodDeep), 4.85, 2.8, 0.14);
 
-  if (isSecondEdition) { floorMat.dispose(false,true); floor.material=editionFloorMaterial(scene); decorateEditionRoom(scene,room); }
-  return { floor, backWall, leftWall, glass, curtains, stain, items: {} };
+  let wallFinish: TransformNode | undefined;
+  if (isSecondEdition) { floorMat.dispose(false,true); floor.material=editionFloorMaterial(scene); wallFinish=decorateEditionRoom(scene,room); }
+  return { floor, backWall, leftWall, glass, curtains, stain, wallFinish, items: {} };
 }
 
 function placeFloorItem(root: TransformNode, id: UpgradeId, shop: ShopState, lift = 0): void {
@@ -525,6 +527,7 @@ export function applyRoomStyle(visuals: ShopVisuals, shop: ShopState, scene: Sce
   glass.diffuseColor = Color3.FromHexString(painted ? C.glass : C.dirtyGlass);
   glass.alpha = painted ? 0.28 : 0.42;
   visuals.curtains.setEnabled(painted);
+  visuals.wallFinish?.setEnabled(painted);
   visuals.stain.setEnabled(!painted && !isSecondEdition);
 }
 

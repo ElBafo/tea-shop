@@ -110,10 +110,12 @@ export function buildEditionKeeper(scene:Scene):TransformNode{
  const eyes=mat(scene,'eyes',E.ink),cheek=mat(scene,'cheek','#d9917c');for(const x of [-.065,.065])orb(scene,'eye',root,eyes,.016,x,1.13,.19,.7,1,.4);for(const x of [-.12,.12])orb(scene,'cheek',root,cheek,.032,x,1.075,.166,1,.55,.25);
  orb(scene,'nose',root,skin,.025,0,1.09,.205);root.scaling.setAll(1.12);return root;
 }
-export function decorateEditionRoom(scene:Scene,room:TransformNode):void{
+export function decorateEditionRoom(scene:Scene,room:TransformNode):TransformNode{
  const trim=mat(scene,'room-joinery',E.cream),wood=mat(scene,'room-foundation',E.dark);
  soft(scene,'diorama-foundation',room,wood,6.3,.2,6.3,.16,3,-.17,3);
- for(const x of [.5,1.5,2.5,3.5,4.5,5.5]){soft(scene,'wall-panel',room,trim,.83,.7,.035,.06,x,.55,.04);const panel=soft(scene,'wall-panel-left',room,trim,.83,.7,.035,.06,.04,.55,x);panel.rotation.y=Math.PI/2;}
- soft(scene,'dado-back',room,trim,6.2,.07,.08,.03,3,.98,.04);const rail=soft(scene,'dado-left',room,trim,6.2,.07,.08,.03,.04,.98,3);rail.rotation.y=Math.PI/2;
+ const finish=new TransformNode('edition-wall-finish',scene);finish.parent=room;finish.setEnabled(false);
+ for(const x of [.5,1.5,2.5,3.5,4.5,5.5]){soft(scene,'wall-panel',finish,trim,.83,.7,.035,.06,x,.55,.04);const panel=soft(scene,'wall-panel-left',finish,trim,.83,.7,.035,.06,.04,.55,x);panel.rotation.y=Math.PI/2;}
+ soft(scene,'dado-back',finish,trim,6.2,.07,.08,.03,3,.98,.04);const rail=soft(scene,'dado-left',finish,trim,6.2,.07,.08,.03,.04,.98,3);rail.rotation.y=Math.PI/2;
+ return finish;
 }
 export function editionFloorMaterial(scene:Scene):StandardMaterial{const m=mat(scene,'pale-oak','#ffffff',.04);m.diffuseTexture=editionOakTexture(scene);return m;}

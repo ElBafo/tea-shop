@@ -10,6 +10,18 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
+## 0.2.0-preview.3 — validated, hosting pending
+
+Focused fix in [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, following the owner's report that the walls already looked decorated before any purchase.
+
+The empty second-edition room now keeps its twelve white panels and two decorative dado rails hidden. These belong to the existing three-star wall upgrade, alongside its colour and curtains. A deliberate free style preview shows the finish temporarily; cancelling restores the actual owned room, while purchase makes it persistent. Basic walls, window, floor, structural edge trim and the diorama foundation remain visible.
+
+Implementation: `decorateEditionRoom` creates an initially disabled `edition-wall-finish` group and keeps the foundation separate. `applyRoomStyle` updates the group from the supplied shop's paint ownership on every synchronization, so temporary preview state and saved ownership use the same path.
+
+Prices, catalogue, ten puzzle boards, save namespace and classic/released behavior are unchanged. Existing owners retain their purchased wall finish; no migration or progress reset is required. App/package/release target: `0.2.0-preview.3`.
+
+Validation passed: full production build and all verification scripts; focused browser checks for fresh and counter-only walls, all three free styles, Browse/Done/other-item cancellation, exact three-star purchase, reload persistence and preservation of owned finishes. Phone/desktop day/night views and classic isolation passed with no browser exceptions. Thirty-six room-style preview cycles retain identical mesh/material/texture/transform counts and dispose cleanly. [Before/after screenshots](screenshots/second-edition-v3) document the upgrade. Physical-phone acceptance remains for owner review. Hosted deployment and owner review: pending. The review URL remains https://elbafo.github.io/tea-shop/preview/?edition=2 and continues showing preview.2 until this fix is deployed. Main is unchanged. Planned ambient guest traffic moves to `0.2.0-preview.4`; hiding during Edit, layout reactions and decoration-based arrival frequency remain agreed roadmap requirements.
+
 ## 0.2.0-preview.2 — hosted for review
 
 Continuation of [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, following the owner's feedback on preview.1: “Looks good. Continue pls.” This approves continuing the direction; it does not authorize merging to main.
