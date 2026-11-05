@@ -4,7 +4,9 @@ Record every agreed product decision here in the same work session. Distinguish 
 
 ## Current priority — 0.2.1
 
-**Release 0.2.1 approved; production deployment pending.** The owner requested “Merge to main” for [PR #17](https://github.com/ElBafo/tea-shop/pull/17). This promotes the reviewed drag controls, puzzle artwork and visual first-puzzle guide. Existing 0.2.0 progress is preserved; there is no new reset or storage namespace.
+**Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
+
+Release verification and the production build pass. A production-browser smoke test at 390×844 confirms v0.2.1, existing scores/purchases/layout/preferences, reload/resume with Undo, and absent preview/reset controls, with zero runtime exceptions (`work/release-0.2.1-smoke.json`). GitHub CI verified and built both the release and retained stable preview before successful deployment.
 
 **Family feedback, 2026-11-05:** the tester repeatedly tries to move tea bags between jars by keeping her finger down and dragging to the destination. The owner confirmed this is a drag, not a quick flick. Her favourite puzzle game is [Screwdom 3D / Screwdom](https://apps.apple.com/us/app/screwdom/id6740043080), particularly its graphics. This is feedback from family play, not a complete iPhone regression sign-off. The preceding 0.2.0 release supported tap-to-select and tap-to-transfer only.
 

@@ -1,6 +1,6 @@
 # Decopu: product direction
 
-**Release 0.2.1 approved; production deployment pending.** The owner requested “Merge to main” for [PR #17](https://github.com/ElBafo/tea-shop/pull/17). This promotes the reviewed drag controls, puzzle artwork and visual first-puzzle guide. Existing 0.2.0 progress is preserved; there is no new reset or storage namespace.
+**Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
 ## Experience
 

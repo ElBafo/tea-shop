@@ -1,6 +1,6 @@
 # Decopu releases
 
-**Release 0.2.1 approved; production deployment pending.** The owner requested “Merge to main” for [PR #17](https://github.com/ElBafo/tea-shop/pull/17). This promotes the reviewed drag controls, puzzle artwork and visual first-puzzle guide. Existing 0.2.0 progress is preserved; there is no new reset or storage namespace.
+**Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
 Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.md) scope and records whether it is in progress, hosted for review, approved or released. A preview suffix is not a release approval.
 
@@ -12,13 +12,13 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.1 — approved; production deployment pending
+## 0.2.1 — released
 
 The owner explicitly requested “Merge to main” for [PR #17](https://github.com/ElBafo/tea-shop/pull/17). Promote the reviewed `0.2.1-preview.1` application to `0.2.1`: drag tea pieces between jars alongside tap/keyboard controls, refined rounded pieces and glass, and an animated hand with nearby bubbles in the first guided puzzle. The promotion changes version/release metadata only.
 
 Existing production progress, decorations, preferences and unfinished puzzles carry forward in the same namespaces. No reset, migration, board, price or economy change is introduced. Main continues to exclude development-only reset, showroom and temporary-tour controls; stable preview remains separate.
 
-Reviewed-preview validation passed: all package checks and the production build, sixteen drag regression groups and ten visual-guide groups with zero exceptions, fresh onboarding/session flow and layouts at 320×568, 390×844, 844×390 and 1280×900. The prior preview entry retains detailed evidence and screenshots. Release-version verification passed using the documented no-IPC tsx loader fallback (`work/release-0.2.1-verify.log`), and the 0.2.1 production build passed (`work/release-0.2.1-build.log`). Production deployment remains pending. Physical-device performance is not established by Chromium checks.
+Reviewed-preview validation passed: all package checks and the production build, sixteen drag regression groups and ten visual-guide groups with zero exceptions, fresh onboarding/session flow and layouts at 320×568, 390×844, 844×390 and 1280×900. The prior preview entry retains detailed evidence and screenshots. Release-version verification passed using the documented no-IPC tsx loader fallback (`work/release-0.2.1-verify.log`), and the 0.2.1 production build passed (`work/release-0.2.1-build.log`). The production-browser smoke test at 390×844 passed with zero exceptions (`work/release-0.2.1-smoke.json`): existing synthetic scores, purchases/layout/styles, goal and preferences survive; an unfinished puzzle resumes across reload and restored Undo persists; main ignores showroom/tour query flags and exposes no preview/reset controls. GitHub CI verified and built the release and retained stable preview; both build and deploy jobs passed in [run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597). Build logs confirm merge `2df365fd0921835cd2d647c3277d026b682f821b`, release `0.2.1` and stable preview `0.2.1-preview.1`. Physical-device performance is not established by Chromium checks.
 
 ## 0.2.1-preview.1 — reviewed; approved for 0.2.1
 
