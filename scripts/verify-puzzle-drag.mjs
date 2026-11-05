@@ -21,7 +21,11 @@ ws.addEventListener('message', event => {
     const request = pending.get(message.id); pending.delete(message.id);
     message.error ? request.reject(new Error(JSON.stringify(message.error))) : request.resolve(message.result);
   }
-  if (message.method === 'Runtime.exceptionThrown') errors.push(message.params.exceptionDetails.text);
+  if (message.method === 'Runtime.exceptionThrown') {
+    const detail=message.params.exceptionDetails;
+    const error={text:detail.text,description:detail.exception?.description,url:detail.url,line:detail.lineNumber,stack:detail.stackTrace,after:checks.at(-1)??'startup'};
+    errors.push(error);console.error('BROWSER EXCEPTION:',JSON.stringify(error));
+  }
 });
 const send = (method, params = {}) => new Promise((resolve, reject) => {
   pending.set(++sequence, { resolve, reject }); ws.send(JSON.stringify({ id: sequence, method, params }));
@@ -100,14 +104,28 @@ const begin = async (from, to, fraction = .45) => {
   }
   return { start, end };
 };
+const releaseTouch = async end => {
+  // Finish the injected drag with a stationary finger before lifting. Without
+  // this phase Chromium's raw CDP stream can leave native fling/tap suppression
+  // active; the same failure reproduces on a static page without Decopu code.
+  // This is part of the drag, not a delay before the next button activation.
+  await pause(100); await touch('touchMove',[end]); await pause(20); await touch('touchEnd');
+};
 const finish = async ({ start, end }, { cancel = false } = {}) => {
   if (!cancel) for (let step=5; step<=10; step++) {
     const t = .45+(.55*(step-4)/6);
     await touch('touchMove', [{x:start.x+(end.x-start.x)*t,y:start.y+(end.y-start.y)*t}]); await pause(20);
   }
-  await touch(cancel ? 'touchCancel' : 'touchEnd'); await idle(); await clean();
+  if(cancel)await touch('touchCancel'); else await releaseTouch(end);
+  await idle(); await clean();
 };
-const drag = async (from, to) => { const gesture = await begin(from, to); await finish(gesture); };
+const drag = async (from, to) => {
+  const start = await topPoint(from), end = typeof to === 'number' ? await jarPoint(to) : to;
+  // Generate a complete native touch gesture with no fling. Raw events remain
+  // above for inspecting a held piece and for interruption/multitouch cases.
+  await send('Input.synthesizeScrollGesture',{x:start.x,y:start.y,xDistance:end.x-start.x,yDistance:end.y-start.y,speed:600,gestureSourceType:'touch',preventFling:true});
+  await idle(); await clean();
+};
 const mouseDrag = async (from, to) => {
   const start = await topPoint(from), end = await jarPoint(to);
   await send('Input.dispatchMouseEvent', { type:'mousePressed',...start,button:'left',buttons:1,clickCount:1 });
@@ -136,7 +154,7 @@ try {
     window.__qaEvents=[];
     for(const type of ['pointerdown','pointerup','pointercancel','lostpointercapture','click'])document.addEventListener(type,e=>{
       if(type==='pointerdown')window.__qaPointerId=e.pointerId;
-      const entry={type,id:e.pointerId,target:e.target.id||e.target.closest('button')?.outerHTML.slice(0,160)||e.target.tagName,detail:e.detail};
+      const entry={type,id:e.pointerId,target:e.target.id||e.target.closest?.('button')?.outerHTML.slice(0,160)||e.target.tagName||e.target.nodeName,detail:e.detail};
       window.__qaEvents.push(entry);if(window.__qaEvents.length>30)window.__qaEvents.shift();queueMicrotask(()=>entry.prevented=e.defaultPrevented);
     },{capture:true});` })).identifier;
   await viewport(390,844); await send('Page.navigate', { url }); await launch();
@@ -155,7 +173,7 @@ try {
   const lastGhost = await point('.puzzle-drag-ghost');
   assert.ok(Math.hypot(lastGhost.x-firstGhost.x,lastGhost.y-firstGhost.y)>15,'ghost continues following beyond its initial position');
   assert.ok(await evaluate(`document.querySelector('[data-jar="2"]').classList.contains('drag-over')`),'hovered legal destination is distinct');
-  await shot('phone-dragging'); await touch('touchEnd'); await idle(); await clean();
+  await shot('phone-dragging'); await releaseTouch(gesture.end); await idle(); await clean();
   assert.deepEqual(await actions(),[[0,2]],'one physical drag commits exactly one action');
   assert.deepEqual(await labels(),['Jar 1, 2 of 4','Jar 2, 4 of 4','Jar 3, 2 of 4'],'whole pair moves');
   assert.deepEqual(await jarPositions(),positions,'jars stay fixed after transfer');
@@ -211,23 +229,25 @@ try {
     if (cancellation === 'touchCancel') await touch('touchCancel');
     if (cancellation === 'lostCapture') {
       assert.ok(await evaluate(`(() => {const e=[...document.querySelectorAll('*')].find(e=>e.hasPointerCapture?.(window.__qaPointerId));if(!e)return false;e.releasePointerCapture(window.__qaPointerId);return true})()`),'pointer capture is held during drag');
-      await pause(30); await touch('touchMove',[active.end]); await touch('touchEnd');
+      await pause(30); await touch('touchMove',[active.end]); await releaseTouch(active.end);
     }
-    if (cancellation === 'blur') { await evaluate(`window.dispatchEvent(new Event('blur'))`); await touch('touchMove',[active.end]); await touch('touchEnd'); }
+    if (cancellation === 'blur') { await evaluate(`window.dispatchEvent(new Event('blur'))`); await touch('touchMove',[active.end]); await releaseTouch(active.end); }
     if (cancellation === 'multitouch') {
       await touch('touchStart',[{...active.start,id:1},{x:active.start.x+14,y:active.start.y+12,id:2}]);
       await touch('touchMove',[{...active.end,id:1},{x:active.start.x+18,y:active.start.y+15,id:2}]);
-      await touch('touchEnd',[{...active.end,id:1}]);
-      await touch('touchMove',[active.end]); await touch('touchEnd');
+      // Partial CDP touchEnd names the contact being lifted, not those kept.
+      await touch('touchEnd',[{x:active.start.x+18,y:active.start.y+15,id:2}]);
+      await touch('touchMove',[active.end]); await releaseTouch(active.end);
     }
     await pause(100); await clean(); assert.deepEqual(await actions(),[],`${cancellation} cancels without a move`);
     await drag(0,2); assert.deepEqual(await actions(),[[0,2]],`input recovers after ${cancellation}`); await tap('#undo');
+    assert.deepEqual(await actions(),[],`Undo restores the fixture after ${cancellation}`);
   }
   check('real touch cancellation, lost capture, blur and additional fingers clean up and recover');
   }
 
   await seed();
-  await begin(0,2); await evaluate(`document.querySelector('[data-go="levels"]').click()`); await touch('touchEnd'); await clean();
+  const navigating = await begin(0,2); await evaluate(`document.querySelector('[data-go="levels"]').click()`); await releaseTouch(navigating.end); await clean();
   assert.ok(await evaluate(`!!document.querySelector('.levels')`),'navigation during drag succeeds');
   assert.deepEqual(await actions(),[],'navigation does not commit an unfinished drag');
   // Navigation above is deliberately programmatic during a live finger gesture.
@@ -236,7 +256,7 @@ try {
   // touch failure behind a delay. Ordinary completed drag→tap is checked below.
   await activateWithKeyboard('[data-resume]');
   await idle(); await drag(0,2); await tap('#undo');
-  await begin(0,2);
+  const backgrounding = await begin(0,2);
   // A real tab change delivers visibilitychange; no application internals are mocked.
   const other = await send('Target.createTarget', {url:'about:blank',background:false});
   try {
@@ -244,7 +264,7 @@ try {
     assert.equal(await evaluate('document.visibilityState'),'hidden','test tab actually enters the background');
     await clean();
   } finally { await send('Target.closeTarget',{targetId:other.targetId}); await send('Page.bringToFront'); }
-  await touch('touchEnd'); await pause(80); assert.deepEqual(await actions(),[],'backgrounding does not commit');
+  await releaseTouch(backgrounding.end); await pause(80); assert.deepEqual(await actions(),[],'backgrounding does not commit');
   await drag(0,2); await tap('#undo');
   check('navigation and real background/foreground interruption');
 
