@@ -1,5 +1,7 @@
 # Architecture
 
+**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+
 ## Runtime
 
 Decopu is a static, client-side TypeScript application built with Vite. Babylon.js renders the shop. The puzzle screens and shop controls use HTML templates, CSS, and DOM event listeners rather than a UI framework. There is no backend or account service.
@@ -142,7 +144,7 @@ The first slice was implemented, validated and hosted. The owner reviewed its di
 
 `render-edition-thumbnails.mjs` renders 24 images from the actual models into `public/edition2/thumbnails`. `shop/icons.ts` uses these static images for the prototype, avoiding a live Babylon scene per UI card. Prototype CSS is scoped under the second-edition body class; its jars stay stationary during transfers, hidden content uses neutral frosted artwork, and persistent level guidance avoids shifting the layout on selection.
 
-The latest hosted build remains `0.2.0-preview.7`, with its package, Start and More version validated at deployment. The owner subsequently said “Continue,” authorizing the local `0.2.0-preview.8` target. Implementation and local validation for preview.8 are complete; deployment is pending. Main remains the documented `0.1.0` baseline. [RELEASES.md](RELEASES.md) records evidence and delivery; [SECOND_EDITION.md](SECOND_EDITION.md) records acceptance criteria.
+The latest hosted build is `0.2.0-preview.8`, with its package, Start and More version validated at deployment. The owner subsequently said “Continue,” authorizing the local `0.2.0-preview.8` target. Implementation and local validation for preview.8 are complete; deployment passed. Main remains the documented `0.1.0` baseline. [RELEASES.md](RELEASES.md) records evidence and delivery; [SECOND_EDITION.md](SECOND_EDITION.md) records acceptance criteria.
 
 
 ## Second-edition continuation — 0.2.0-preview.2 hosted preview

@@ -1,5 +1,7 @@
 # Decopu releases
 
+**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+
 Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.md) scope and records whether it is in progress, hosted for review, approved or released. A preview suffix is not a release approval.
 
 ## Version policy
@@ -10,7 +12,7 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.8 — locally validated; deployment pending
+## 0.2.0-preview.8 — hosted for phone review
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner said “Continue” following hosted preview.7. The next review build continues on the preview branch; main remains unchanged.
 
@@ -22,7 +24,7 @@ Planned scope:
 - Existing visitors can use a reachable placed chair through the current seating pose and pooled rigs. Verify style/rotation-specific seat geometry, safe approach/departure paths, blocked/stored cases, Edit hiding, reduced motion and disposal, without a new serving system or guest economy.
 - Preserve the edition namespace, scores, purchases, layout, goals, preferences, guide, recovery and unfinished play. Keep known ten-, sixteen- and twenty-board edition backups compatible with the new twenty-four-board shape and strict validation.
 
-Implementation, screenshots and local validation are complete; deployment and owner review are pending. The app/package target is `0.2.0-preview.8`; https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.7. [ROADMAP.md](ROADMAP.md) records acceptance criteria.
+Implementation, screenshots and local validation are complete; hosting passed; owner review is pending. The app/package target is `0.2.0-preview.8`; https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.7. [ROADMAP.md](ROADMAP.md) records acceptance criteria.
 
 Local validation is complete: all package checks and the final production build pass, including 24 edition and 38 classic solvers. Browser legacy, purchase, visuals, seating, lifecycle and onboarding/goal/reset flow checks pass. Known 10/16/20-board backups carry forward; real 23/24 wins add score stars only. All 18 models fit their footprints and release resources after twelve rebuild cycles. All six guest profiles fit all three chair styles; 72 rendered style/profile/rotation combinations pass. Phone 390×844, small phone 320×568, landscape 844×390 and desktop 1280×900 were checked in Chromium. Physical iPhone review remains pending. Evidence: `work/reading-final-verify.log`, `work/reading-final-build.log`, `work/edition-reading-*-check.json`, `work/edition8-art-check.json`.
 

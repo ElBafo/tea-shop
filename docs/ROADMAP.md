@@ -1,5 +1,7 @@
 # Decopu roadmap
 
+**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+
 Record every agreed product decision here in the same work session. Clearly distinguish implemented behavior, agreed plans, and open decisions.
 
 This is the working delivery order, not a calendar promise. Priorities can change after phone reviews. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
@@ -9,8 +11,8 @@ This is the working delivery order, not a calendar promise. Priorities can chang
 Continue the single-shop puzzle and collecting journey. After preview.7 was hosted, the owner said “Continue.” Preview.8 takes up four more puzzles, the Reading chair and seating for existing visitors. Main remains unchanged while preview work continues.
 
 - **Released baseline:** `0.1.0`, the existing package version, documented after PRs #12, #13 and #14 were merged. The version was not previously shown consistently in the app.
-- **Current work:** `0.2.0-preview.8`, Reading corner implementation and local validation are complete. Deployment and owner review are pending.
-- **Hosted build:** `0.2.0-preview.7` remains available at https://elbafo.github.io/tea-shop/preview/?edition=2. Its app commit is `cc371290eacb2355f164a867057feffbdbdaac0f`, confirmed by [GitHub Pages run 41940688895](https://github.com/ElBafo/tea-shop/actions/runs/41940688895). The owner requested continuation. Stable branch `preview/shop-polish` stays at this app commit while preview.8 is prepared. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`.
+- **Current work:** `0.2.0-preview.8`, Reading corner implementation and local validation are complete. Hosting passed; owner review is pending.
+- **Hosted build:** `0.2.0-preview.8`, app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`, confirmed by [Pages run 42008456025](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). The stable preview branch stays at the app commit; review-branch documentation records delivery. Main is unchanged.
 - **Review:** continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. Prototype saves remain isolated from main and the ordinary preview; existing edition progress must carry forward.
 - **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines acceptance criteria. The version appears in the app; every newly published review build gets its own preview version. A version label does not imply approval or deployment.
 

@@ -1,6 +1,8 @@
 # Decopu second edition
 
-Status: preview.1 established the first slice; preview.2 expanded the catalogue; preview.3 fixed paid walls; preview.4 added visits; preview.5 extended puzzles/rewards; preview.6 polished guests; preview.7 added Treasures to keep and Collector’s cabinet. These builds were validated and hosted in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). **Preview.7 remains the latest hosted build.** The owner said “Continue,” authorizing **0.2.0-preview.8 Reading corner**: four more puzzles, Reading chair and safe seating for existing visitors. Implementation and local validation are complete; deployment is pending. Main remains unchanged. See [release notes](RELEASES.md) for evidence and [roadmap](ROADMAP.md) for sequencing.
+**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+
+Status: preview.1 established the first slice; preview.2 expanded the catalogue; preview.3 fixed paid walls; preview.4 added visits; preview.5 extended puzzles/rewards; preview.6 polished guests; preview.7 added Treasures to keep and Collector’s cabinet. These builds were validated and hosted in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). **Preview.8 is the latest hosted build.** The owner said “Continue,” authorizing **0.2.0-preview.8 Reading corner**: four more puzzles, Reading chair and safe seating for existing visitors. Implementation and local validation are complete; deployment passed. Main remains unchanged. See [release notes](RELEASES.md) for evidence and [roadmap](ROADMAP.md) for sequencing.
 
 ## Experience
 
@@ -48,7 +50,7 @@ Implemented locally: all eight core designs, coordinated room/shopkeeper, 24 ren
 
 The ten authored boards use three arcs and only two hidden-content puzzles. Completion bonuses after puzzles 3/6/10 are 4/5/7 stars. Total earnings are 26–46, funding the 26-star eight-piece shop even at one star per puzzle. Separate keys protect main and ordinary-preview saves; reset retains `edition=2`, and backup validation rejects cross-edition 10/38-board imports.
 
-The hosted first slice identified itself as `0.2.0-preview.1`; the wall fix identified itself as `0.2.0-preview.3`; the latest hosted build remains `0.2.0-preview.7`. The local app/package target is now `0.2.0-preview.8`, with local validation complete and hosting pending. The review-build version also appears in ordinary-preview mode on this branch. Main is unchanged. See [RELEASES.md](RELEASES.md) for delivery and continuation status.
+The hosted first slice identified itself as `0.2.0-preview.1`; the wall fix identified itself as `0.2.0-preview.3`; the latest hosted build is `0.2.0-preview.8`. The local app/package target is now `0.2.0-preview.8`, with local validation complete and hosting complete. The review-build version also appears in ordinary-preview mode on this branch. Main is unchanged. See [RELEASES.md](RELEASES.md) for delivery and continuation status.
 
 ## Preview.2 continuation and acceptance
 
@@ -134,7 +136,7 @@ Final browser checks pass preserved sixteen-board balances, resumed Undo/recover
 
 All four new boards fit 390×844, 320×568, 844×390 and 1280×900; hidden puzzle 19 maintains centering, privacy and divider clarity, and real Next transitions across capacities 4/5/4/5 work with reduced motion. The final small-phone puzzle-20 shelf reports scroll/client heights 373/373 after a scoped vertical-padding fix, preserving the two-line title, 23-pixel treats and every jar/plank. Twelve all-style/storage cycles keep resources stable; a 600-second, sixteen-arrival guest run respects the cap, separation and cabinet bounds. Edit hiding, stored geometry removal and zero-resource disposal pass.
 
-The final production rebuild after the padding fix passed. Root visual review found no blocking issue in unlock/Edit/day/night/hidden/tall-small/style captures. [RELEASES.md](RELEASES.md) links evidence and screenshots; paid room images show an affordable core-plus-cabinet composition, while the seventeen-piece showroom is a separate development demo. Local validation and hosted deployment passed. The link still serves preview.7. The owner subsequently said “Continue”; preview work continues. Reading chair is now preview.8 scope; Tea garden fountain, further arcs, Bakery, larger rooms, cloud accounts and monetisation remain later work.
+The final production rebuild after the padding fix passed. Root visual review found no blocking issue in unlock/Edit/day/night/hidden/tall-small/style captures. [RELEASES.md](RELEASES.md) links evidence and screenshots; paid room images show an affordable core-plus-cabinet composition, while the seventeen-piece showroom is a separate development demo. Local validation and hosted deployment passed. The link now serves preview.8. The owner subsequently said “Continue”; preview work continues. Reading chair is now preview.8 scope; Tea garden fountain, further arcs, Bakery, larger rooms, cloud accounts and monetisation remain later work.
 
 ## Preview.8 Reading corner — locally validated
 
@@ -148,4 +150,4 @@ Keep edition progress isolated and carry scores, ownership, styles, placements, 
 
 Acceptance covers twenty-four and classic thirty-eight solver checks; first-twenty/bonus fingerprints; old twenty-board continuation and all three legacy backup sizes; actual final unlock and zero new bonus; all-style previews/cancellation, exact purchase/return/repurchase, insufficient-funds states, touch placement, rotation, storage and reload. Check new boards at small/standard portrait, landscape and desktop sizes, with hidden-content privacy and reduced motion. Verify adult/child chair contact, all styles/rotations, reachable and blocked layouts, Edit transitions, safe guest separation and repeated resource cleanup.
 
-Implementation, screenshots and local validation are complete; deployment and owner review are pending. The link still serves preview.7. Tea garden fountain, further arcs, Bakery, larger rooms, cloud accounts and monetisation remain later work.
+Implementation, screenshots and local validation are complete; hosting passed; owner review is pending. The link now serves preview.8. Tea garden fountain, further arcs, Bakery, larger rooms, cloud accounts and monetisation remain later work.
