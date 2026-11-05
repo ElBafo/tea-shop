@@ -16,7 +16,7 @@ Record every agreed product decision here in the same work session. Distinguish 
 
 Acceptance for an implementation preview: actual touch drag between jars in both directions, matching/full/empty/invalid targets, whole-group capacity, four- and five-slot jars, hidden-content privacy, tap/keyboard fallback, cancelled and interrupted gestures, repeated moves, Undo/reload and a final winning drag without duplicate rewards. Check small/standard phone, landscape and desktop layouts, reduced motion and day/night readability; then obtain physical iPhone feedback on how it feels. Preview first; merge gameplay or art changes after owner review.
 
-## Current release — 0.2.0
+## Current priority — 0.2.0
 
 **Released: [Decopu 0.2.0](https://elbafo.github.io/tea-shop/).** [PR #16](https://github.com/ElBafo/tea-shop/pull/16) merged as `966c613fa486c9ce34dd1cf5f8bb9ac4a5905d3c`; [Pages run 42081278504](https://github.com/ElBafo/tea-shop/actions/runs/42081278504) passed. Main opens the second edition with fresh production progress and normal onboarding. Progress earned afterward saves normally. Family feedback has now begun; a complete physical iPhone regression pass remains pending.
 
