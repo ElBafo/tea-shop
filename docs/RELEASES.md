@@ -12,7 +12,7 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.1-preview.1 — direct puzzle dragging and tactile visuals; locally validated
+## 0.2.1-preview.1 — direct puzzle dragging and tactile visuals; hosted for review
 
 The owner approved this pass after family testing showed repeated attempts to drag tea bags between jars. Direct press–drag–release now sits alongside existing tapping and keyboard controls. It moves the available matching top group, keeps jars stationary, shows legal destinations and settles a valid drop. Invalid or interrupted drags return without a move; concealed pieces remain neutral. The whole-group capacity rule, unlimited Undo, scoring and existing reward path remain.
 
@@ -26,7 +26,7 @@ Implementation and local visual review are complete. Package verification passed
 
 The final drag suite passes all sixteen groups with zero runtime exceptions (`work/puzzle-drag-check.json`, `work/puzzle-drag-run.log`), including touch/tap/keyboard/mouse, whole-group capacity, hidden privacy, Undo/reload, interruption recovery, exactly-once wins, reduced motion and all four viewport sizes. The guided-tour suite passes all ten groups with zero exceptions (`work/visual-guide-check.json`, `work/visual-guide-run.log`), including complete drag and tap tours, immediate tap selection after dragging, Skip, static reduced-motion guidance and scroll/navigation cleanup. Raw DevTools touch injection produced a synthetic-fling artifact on an independent static control page; tests use validated native touch gestures and stationary releases, with no added delay before the following tap.
 
-Application source: `ec38845ab8b604f72f9e85661425cc1d032711a5` on `preview/tactile-puzzles`, [PR #17](https://github.com/ElBafo/tea-shop/pull/17). Preview deployment is pending. These Chromium checks do not establish physical iPhone performance or enjoyment; phone review follows hosting. See [ROADMAP.md](ROADMAP.md) for the full acceptance scope.
+Application source: `ec38845ab8b604f72f9e85661425cc1d032711a5` on `preview/tactile-puzzles`, [PR #17](https://github.com/ElBafo/tea-shop/pull/17). [Pages run 42122917736](https://github.com/ElBafo/tea-shop/actions/runs/42122917736) passed for validated preview head `f06a2a0562ece292ed7f4cfef200ab269e0a8d11`. The [phone preview](https://elbafo.github.io/tea-shop/preview/?edition=2) and [temporary tour](https://elbafo.github.io/tea-shop/preview/?edition=2&tour=1) are hosted. These Chromium checks do not establish physical iPhone performance or enjoyment; owner phone review and merge approval remain pending. See [ROADMAP.md](ROADMAP.md) for the full acceptance scope.
 
 [Phone puzzle](screenshots/tactile-puzzles/phone.webp) · [Dragging](screenshots/tactile-puzzles/dragging.webp) · [Small phone](screenshots/tactile-puzzles/small.webp) · [Tall jars](screenshots/tactile-puzzles/tall.webp) · [Desktop](screenshots/tactile-puzzles/desktop.webp) · [First-puzzle demonstration](screenshots/tactile-puzzles/guide.webp) · [Tap destination cue](screenshots/tactile-puzzles/guide-tap.webp)
 
