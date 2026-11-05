@@ -1,6 +1,6 @@
 # Decopu releases
 
-**Current work: `0.2.0` production activation.** The owner requested a fresh installation experience for family testing. Implementation and local verification are complete; production deployment is pending. [PR #15](https://github.com/ElBafo/tea-shop/pull/15) merged the reviewed source as `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`; [deployment 42067411686 passed](https://github.com/ElBafo/tea-shop/actions/runs/42067411686), with the second edition still preview-gated at that checkpoint. See [release notes](RELEASES.md) for delivery evidence.
+**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
 
 Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.md) scope and records whether it is in progress, hosted for review, approved or released. A preview suffix is not a release approval.
 
@@ -12,7 +12,7 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0 — locally validated; production deployment pending
+## 0.2.0 — validated; PR #16 awaits merge confirmation
 
 The owner clarified: “I don’t care about keeping the progress. My wife should check it out like a new installation.” This supersedes the proposed migration, import and edition-choice work for this release.
 
@@ -26,7 +26,7 @@ Main keeps development-only showroom, temporary tour and reset controls unavaila
 
 The final production build (`work/activation-build.log`) and all package checks (`work/activation-verify.log`) pass, including all twenty-four second-edition and thirty-eight classic solvers, production routing/storage isolation, backup compatibility and guest seating. Independent source review found no blocker. The release browser suite passes (`work/release-activation.log`, `work/release-activation-check.json`): an existing installed production service worker updates to the new build and opens fresh welcome guidance despite populated synthetic classic and preview saves; real first-win → style preview → counter purchase → arranging/rotation/Undo succeeds; new production progress, preferences and unfinished-puzzle resume persist after reload. The new catalogue has eighteen designs and the browser exposes twenty-four puzzles. Main ignores showroom/tour flags and has no reset/demo controls. Same-origin preview and classic data remain unchanged. Layout checks pass at 390×844, 320×568, 844×390 and 1280×900, and the updated controlled app reopens offline. Root visual review found no blocking issue in the phone welcome and first-decoration captures. These Chromium checks do not establish physical iPhone performance or enjoyment; family testing follows deployment.
 
-Production deployment and physical-phone family testing remain pending. [Start](screenshots/release-0.2.0/start.webp) · [Welcome](screenshots/release-0.2.0/welcome.webp) · [First decoration](screenshots/release-0.2.0/first-decoration.webp) · [Small phone](screenshots/release-0.2.0/small-phone.webp).
+Explicit confirmation to merge PR #16, production deployment and physical-phone family testing remain pending. [Start](screenshots/release-0.2.0/start.webp) · [Welcome](screenshots/release-0.2.0/welcome.webp) · [First decoration](screenshots/release-0.2.0/first-decoration.webp) · [Small phone](screenshots/release-0.2.0/small-phone.webp).
 
 ### Source integration checkpoint
 

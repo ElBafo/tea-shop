@@ -1,6 +1,6 @@
 # Decopu: product direction
 
-**Current work: `0.2.0` production activation.** The owner requested a fresh installation experience for family testing. Implementation and local verification are complete; production deployment is pending. [PR #15](https://github.com/ElBafo/tea-shop/pull/15) merged the reviewed source as `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`; [deployment 42067411686 passed](https://github.com/ElBafo/tea-shop/actions/runs/42067411686), with the second edition still preview-gated at that checkpoint. See [release notes](RELEASES.md) for delivery evidence.
+**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
 
 ## Experience
 
@@ -27,7 +27,7 @@ The main link will open the second edition directly, with a fresh production nam
 
 The release uses the reviewed twenty-four puzzles and eighteen paid decoration designs, with fifty-four included styles/model thumbnails. Earnings remain 44–92 stars, the eight-piece core costs 26, and the full catalogue costs 138. Reading chair still unlocks at twenty-four completions for 16 stars. No puzzles, prices, bonuses, guest rules or purchase mechanics are added in this activation pass.
 
-Preview and production progress stay separate. A new account system, automatic import, progress translation and edition chooser are outside this fresh-start release. Main provides the normal onboarding and persistence experience, with no development reset or completed-room demo. Activation verification passed; deployment and family testing are pending.
+Preview and production progress stay separate. A new account system, automatic import, progress translation and edition chooser are outside this fresh-start release. Main provides the normal onboarding and persistence experience, with no development reset or completed-room demo. Activation verification passed; PR #16 awaits merge confirmation, followed by deployment and family testing.
 
 ## Classic baseline: 0.1.0 (historical)
 

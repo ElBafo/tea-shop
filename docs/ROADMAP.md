@@ -4,7 +4,7 @@ Record every agreed product decision here in the same work session. Distinguish 
 
 ## Current priority — 0.2.0
 
-**Current work: `0.2.0` production activation.** The owner requested a fresh installation experience for family testing. Implementation and local verification are complete; production deployment is pending. [PR #15](https://github.com/ElBafo/tea-shop/pull/15) merged the reviewed source as `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`; [deployment 42067411686 passed](https://github.com/ElBafo/tea-shop/actions/runs/42067411686), with the second edition still preview-gated at that checkpoint. See [release notes](RELEASES.md) for delivery evidence.
+**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
 
 The owner clarified: “I don’t care about keeping the progress. My wife should check it out like a new installation.” This supersedes the proposed migration, import and edition-choice work for this release.
 
@@ -20,7 +20,7 @@ Acceptance: verify default main and its query variants use the fresh edition, on
 
 The final production build (`work/activation-build.log`) and all package checks (`work/activation-verify.log`) pass, including all twenty-four second-edition and thirty-eight classic solvers, production routing/storage isolation, backup compatibility and guest seating. Independent source review found no blocker. The release browser suite passes (`work/release-activation.log`, `work/release-activation-check.json`): an existing installed production service worker updates to the new build and opens fresh welcome guidance despite populated synthetic classic and preview saves; real first-win → style preview → counter purchase → arranging/rotation/Undo succeeds; new production progress, preferences and unfinished-puzzle resume persist after reload. The new catalogue has eighteen designs and the browser exposes twenty-four puzzles. Main ignores showroom/tour flags and has no reset/demo controls. Same-origin preview and classic data remain unchanged. Layout checks pass at 390×844, 320×568, 844×390 and 1280×900, and the updated controlled app reopens offline. Root visual review found no blocking issue in the phone welcome and first-decoration captures. These Chromium checks do not establish physical iPhone performance or enjoyment; family testing follows deployment.
 
-Production publishing is the next step; hosted completion has not yet been claimed. See [RELEASES.md](RELEASES.md) for screenshots and final deployment identifiers.
+PR #16 is the concrete release candidate. Obtain explicit merge confirmation, then publish and verify deployment before calling this release live. See [RELEASES.md](RELEASES.md) for validation and screenshots.
 
 The following preview sections are delivery history. Their original review gates do not override the fresh-start production decision above.
 

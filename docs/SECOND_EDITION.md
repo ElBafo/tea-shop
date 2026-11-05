@@ -1,6 +1,6 @@
 # Decopu second edition
 
-**Current work: `0.2.0` production activation.** The owner requested a fresh installation experience for family testing. Implementation and local verification are complete; production deployment is pending. [PR #15](https://github.com/ElBafo/tea-shop/pull/15) merged the reviewed source as `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`; [deployment 42067411686 passed](https://github.com/ElBafo/tea-shop/actions/runs/42067411686), with the second edition still preview-gated at that checkpoint. See [release notes](RELEASES.md) for delivery evidence.
+**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
 
 ## Production activation — 0.2.0
 
@@ -14,7 +14,7 @@ The release uses the reviewed twenty-four puzzles and eighteen paid decoration d
 
 Acceptance: verify default main and its query variants use the fresh edition, onboarding starts even when old classic/preview saves exist, first win → preview → purchase → arranging works, and newly earned production progress and preferences survive reload. Check that classic and preview keys are unchanged, preview progress still loads, main exposes no showroom/tour/reset controls, and cached/installed-app updates reopen the intended edition. Run all package checks, the production build, phone/desktop browser flows and offline checks. Physical iPhone family testing follows deployment.
 
-Local release validation passed: full package checks, production build, fresh main onboarding with prior keys present, actual first win/purchase/arranging, new-save persistence, preview isolation, four viewport sizes and installed-update/offline reopening. [RELEASES.md](RELEASES.md) records evidence and screenshots. Production hosting and physical iPhone family testing remain pending.
+Local release validation passed: full package checks, production build, fresh main onboarding with prior keys present, actual first win/purchase/arranging, new-save persistence, preview isolation, four viewport sizes and installed-update/offline reopening. [RELEASES.md](RELEASES.md) records evidence and screenshots. PR #16 awaits merge confirmation; production hosting and physical iPhone family testing remain pending.
 
 ## Experience
 

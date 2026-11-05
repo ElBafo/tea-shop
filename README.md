@@ -4,7 +4,7 @@ A cozy sorting puzzle that earns stars for a small isometric tea shop. Fill jars
 
 **Play:** https://elbafo.github.io/tea-shop/
 
-**0.2.0 production activation is locally validated.** PR #15 merged the reviewed second-edition source, but kept its preview gate. This release will open the new edition directly on the main link. Local verification passed and deployment is pending; [release notes](docs/RELEASES.md) record the actual delivery status.
+**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
 
 ## Fresh start for family testing
 

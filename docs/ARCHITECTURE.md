@@ -1,6 +1,6 @@
 # Architecture
 
-**Current work: `0.2.0` production activation.** The owner requested a fresh installation experience for family testing. Implementation and local verification are complete; production deployment is pending. [PR #15](https://github.com/ElBafo/tea-shop/pull/15) merged the reviewed source as `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`; [deployment 42067411686 passed](https://github.com/ElBafo/tea-shop/actions/runs/42067411686), with the second edition still preview-gated at that checkpoint. See [release notes](RELEASES.md) for delivery evidence.
+**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
 
 ## Runtime
 
