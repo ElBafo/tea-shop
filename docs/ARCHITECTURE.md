@@ -1,6 +1,6 @@
 # Architecture
 
-**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+**Current work: `0.2.0` production activation.** The owner requested a fresh installation experience for family testing. Implementation and local verification are complete; production deployment is pending. [PR #15](https://github.com/ElBafo/tea-shop/pull/15) merged the reviewed source as `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`; [deployment 42067411686 passed](https://github.com/ElBafo/tea-shop/actions/runs/42067411686), with the second edition still preview-gated at that checkpoint. See [release notes](RELEASES.md) for delivery evidence.
 
 ## Runtime
 
@@ -8,13 +8,21 @@ Decopu is a static, client-side TypeScript application built with Vite. Babylon.
 
 `index.html` loads `src/main.ts`, which mounts the app and registers the service worker. `src/ui/app.ts` owns the screen state (`shop`, `levels`, `play`), current progress, active puzzle, and undo history. Screen navigation is internal state rather than URL routing.
 
+## Production mode and fresh-start storage — 0.2.0
+
+The activation implementation makes the normal `/tea-shop/` page select the second edition: twenty-four authored boards and eighteen paid designs. Preview mode still requires the preview build/path and `edition=2`; an explicit production `?edition=1` route retains the classic runtime for regression checks. Headless Node verification falls back to the classic mode when there is no browser context. The production-mode regression and browser checks pass for these boundaries.
+
+Production uses `tea-shop-edition2-progress-v1` and `tea-shop-edition2-appearance-v1`. Recovery, unfinished-puzzle, guide and goal keys derive from the new progress key. The preview keeps `tea-shop-preview-edition2-progress-v1` and its existing appearance key; the classic keys also stay unchanged.
+
+The owner chose a fresh installation experience. There is no migration, preview copy, chooser or destructive storage clear. `loadProgress`, `initGuide`, resume and goal handling operate on the selected namespace: the first production visit receives empty progress and welcome guidance; later visits resume the newly saved game. `shop/screen.ts` uses the selected appearance key rather than a hardcoded preview key. Preview-only reset/showroom/tour gates stay independent from selecting the second-edition visuals and rules.
+
 ## Modules
 
 | Module | Responsibility |
 | --- | --- |
 | `src/game/types.ts` | Shared board, level, progress, upgrade, and placement contracts |
 | `src/game/engine.ts` | Move validation and application, completion, board cloning, scoring, solver move helpers |
-| `src/game/levels.ts` | 38 static level definitions and par values; additions live in `inventory-levels.ts` and `collection-levels.ts` |
+| `src/game/levels.ts`, `edition-levels.ts` | Select the 24-board second edition or preserved 38-board classic sequence |
 | `src/game/solver.ts` | Bounded breadth-first search used by development scripts |
 | `src/game/storage.ts` | Load, validate, and save progress; best scores, unlocks, and available stars |
 | `src/game/audio.ts` | Web Audio sound effects, unlocked by a user gesture |
@@ -36,7 +44,7 @@ The room uses a 6×6 floor grid. The movable counter reserves its footprint and 
 
 ## Persistence and lifecycle
 
-`localStorage` key `tea-shop-progress-v1` stores best stars and moves, mute preference, owned upgrades, styles, placements, and completion celebration state. Available stars equal total best stars plus derived milestone bonuses minus the cost of owned upgrades. Loading validates data and sanitizes the layout. Unfinished puzzles persist separately as replayable move logs. Device transfer uses manual backup files; there is no automatic cross-device synchronization.
+The active progress key stores best stars and moves, mute preference, owned upgrades, styles, placements, and completion celebration state. Production second edition uses `tea-shop-edition2-progress-v1`; classic uses `tea-shop-progress-v1`, with separate preview keys described above. Available stars equal total best stars plus derived milestone bonuses minus the cost of owned upgrades. Loading validates data and sanitizes the layout. Unfinished puzzles persist separately as replayable move logs. Device transfer uses manual backup files; there is no automatic cross-device synchronization.
 
 Leaving the shop disposes its Babylon scene and engine, stops the render loop, and removes resize observers/listeners. Preserve this lifecycle when changing navigation or adding effects.
 
@@ -128,9 +136,9 @@ Hidden-jar pars include one exploration move per initial lid. The solver verifie
 Preview storage keys are selected from the Vite base in `game/types.ts`, so local previews share the hosted preview isolation. Runtime preview controls additionally require the preview URL path. `resetPreviewProgress` uses an explicit allowlist for primary, recovery, unfinished puzzle, guide and appearance keys; it never clears origin storage. The preview-only More menu confirms before clearing and navigating to the clean preview URL. Main ignores demo query flags and renders no showroom/reset controls.
 
 
-## Second-edition prototype — 0.2.0-preview.1
+## Second-edition prototype — historical 0.2.0-preview.1
 
-The first slice was implemented, validated and hosted. The owner reviewed its direction positively and authorized continuation; it remains unmerged. `game/mode.ts` gates it behind the preview build base, a preview URL path and `edition=2`. Ordinary preview and release retain the baseline mode. The prototype selects eight core decoration designs and ten authored levels; the existing 38-board sequence is preserved.
+The first slice was implemented, validated and hosted. The owner reviewed its direction positively and authorized continuation; the accumulated source was later merged in PR #15. At this original prototype checkpoint, `game/mode.ts` gated it behind the preview build base, a preview URL path and `edition=2`. Ordinary preview and release retained the baseline mode. The prototype selected eight core decoration designs and ten authored levels; the existing 38-board sequence was preserved.
 
 `game/types.ts` selects `tea-shop-preview-edition2-progress-v1` and `LEVEL_COUNT = 10` in this mode. Recovery, unfinished-puzzle, guide and chosen-goal keys derive from that namespace; appearance uses `tea-shop-preview-edition2-appearance-v1`. Reset clears only the active experience and navigates back with `edition=2` retained. Backup import validates the active level count and catalogue, rejecting a 38-board save in the prototype and a 10-board save in the baseline.
 
@@ -144,7 +152,7 @@ The first slice was implemented, validated and hosted. The owner reviewed its di
 
 `render-edition-thumbnails.mjs` renders 24 images from the actual models into `public/edition2/thumbnails`. `shop/icons.ts` uses these static images for the prototype, avoiding a live Babylon scene per UI card. Prototype CSS is scoped under the second-edition body class; its jars stay stationary during transfers, hidden content uses neutral frosted artwork, and persistent level guidance avoids shifting the layout on selection.
 
-The latest hosted build is `0.2.0-preview.8`, with its package, Start and More version validated at deployment. The owner subsequently said “Continue,” authorizing the local `0.2.0-preview.8` target. Implementation and local validation for preview.8 are complete; deployment passed. Main remains the documented `0.1.0` baseline. [RELEASES.md](RELEASES.md) records evidence and delivery; [SECOND_EDITION.md](SECOND_EDITION.md) records acceptance criteria.
+Preview.8 was hosted with its package, Start and More version validated at deployment. PR #15 integrated that source into main while retaining the classic default. The current 0.2.0 activation section above supersedes that gate. [RELEASES.md](RELEASES.md) records evidence and delivery; [SECOND_EDITION.md](SECOND_EDITION.md) records acceptance criteria.
 
 
 ## Second-edition continuation — 0.2.0-preview.2 hosted preview

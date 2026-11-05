@@ -24,16 +24,19 @@ const key=point=>`${Math.floor(point.x)},${Math.floor(point.z)}`;
 const normals=[{x:0,z:1},{x:1,z:0},{x:0,z:-1},{x:-1,z:0}];
 const stopOf=layout=>layout.stops.find(stop=>stop.key==='armchair:rest');
 
-for(const [name,base,search] of [['released','/tea-shop/',''],['ordinary-preview','/tea-shop/preview/',''],['release-query','/tea-shop/','?edition=2']]) {
+for(const [name,base,search] of [['original','/tea-shop/','?edition=1'],['ordinary-preview','/tea-shop/preview/','']]) {
   const api=await mode(name,base,search);
   const original=shop({armchair:p(2,2)});
-  assert.equal(stopOf(api.buildGuestLayout(original)),undefined,'Released and ordinary-preview chair behavior stays unchanged');
+  assert.equal(stopOf(api.buildGuestLayout(original)),undefined,'Original and ordinary-preview chair behavior stays unchanged');
   const traffic=new api.GuestTraffic(original,()=>.5);
   for(let i=0;i<60;i++)traffic.tick(.1,true);
   const visits=traffic.snapshot();
   traffic.update({...original,style:{armchair:2}});
   assert.deepEqual(traffic.snapshot(),visits,'Classic free chair styles do not invalidate unrelated visitors');
 }
+
+const released=await mode('released-second-edition','/tea-shop/');
+assert.ok(stopOf(released.buildGuestLayout(shop({armchair:{...released.UPGRADE_BY_ID.armchair.defaultPlace}}))), 'The new released edition uses the reachable Reading chair seat');
 
 const api=await mode('second-edition','/tea-shop/preview/','?edition=2');
 let checkedSeats=0;

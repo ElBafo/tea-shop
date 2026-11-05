@@ -1,4 +1,4 @@
-import { isSecondEdition } from "../game/mode";
+import { APPEARANCE_KEY, isSecondEdition } from "../game/mode";
 import { APP_VERSION } from "../game/version";
 import { readGoal, saveGoal } from "../game/goal";
 import { readPuzzle } from '../game/resume';
@@ -127,7 +127,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   const canvas = root.querySelector<HTMLCanvasElement>("#shop-canvas");
   if (!canvas) throw new Error("Missing shop canvas");
 
-  const appearanceKey = isSecondEdition ? "tea-shop-preview-edition2-appearance-v1" : `tea-shop-${isPreview ? "preview-" : ""}appearance-v1`;
+  const appearanceKey = APPEARANCE_KEY;
   let night = loadNight(appearanceKey);
   let edit = startInEdit;
   let showcasing = false;
