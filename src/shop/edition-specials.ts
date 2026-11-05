@@ -1,17 +1,19 @@
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
+import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
+import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import type { Scene } from '@babylonjs/core/scene';
 import type { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import type { ShopState, UpgradeId } from '../game/types';
 import type { EditionTools } from './edition-art';
 
-export const editionSpecialIds: UpgradeId[] = ['terrarium', 'botanical'];
+export const editionSpecialIds: UpgradeId[] = ['terrarium', 'botanical', 'cabinet'];
 
 // These models share the miniature's palette and the caller's ownedVisual scope.
 // Their relief and foliage are geometry, so thumbnails show the actual purchase.
 export function buildEditionSpecial(scene:Scene,id:UpgradeId,shop:ShopState,style:number,t:EditionTools):TransformNode {
- const {E,mat,attach,soft,cylinder,orb,ring,place,tag}=t;
+ const {E,mat,attach,soft,cylinder,orb,ring,cup,pot,place,tag}=t;
  const root=new TransformNode(id,scene);
  const cream=mat(scene,'special-ivory',E.cream,.22),oak=mat(scene,'special-oak',E.oak);
  const dark=mat(scene,'special-walnut',E.dark),brass=mat(scene,'special-brass',E.brass,.28);
@@ -131,6 +133,108 @@ export function buildEditionSpecial(scene:Scene,id:UpgradeId,shop:ShopState,styl
     }
     const l=orb(scene,'wildflower-leaf',root,sage,.1,x-.055,-.25,.111,.5,1,.23);l.rotation.z=.6;
    }
+  }
+ }else if(id==='cabinet'){
+  const finish=mat(scene,'cabinet-finish',[E.leafDeep,'#405d70',E.rose][style]);
+  const porcelain=mat(scene,'cabinet-glaze',style===1?'#b5d3d7':E.cream,.3);
+  const inset=mat(scene,'cabinet-inset',style===0?'#d7d7bb':style===1?'#7f9ba8':'#ebcfba');
+  const panel=(name:string,m:StandardMaterial,w:number,h:number,d:number,r:number,x:number,y:number,z:number)=>{
+   const a=soft(scene,name,root,m,w,d,h,r,x,y,z);a.rotation.x=Math.PI/2;return a;
+  };
+  // Extruded round-top joinery keeps the silhouette solid from every rotation.
+  const arch=(name:string,m:StandardMaterial,w:number,bottom:number,spring:number,rise:number,depth:number,x:number,z:number)=>{
+   const points=[[x-w/2,bottom],[x+w/2,bottom]];
+   for(let i=0;i<=24;i++){const a=i*Math.PI/24;points.push([x+Math.cos(a)*w/2,spring+Math.sin(a)*rise]);}
+   const positions:number[]=[],indices:number[]=[];
+   for(const zz of [z-depth/2,z+depth/2])for(const [xx,yy]of points)positions.push(xx,yy,zz);
+   const n=points.length;
+   for(let i=1;i<n-1;i++)indices.push(0,i,i+1,n,n+i+1,n+i);
+   for(let i=0;i<n;i++){const j=(i+1)%n;indices.push(i,n+j,j,i,n+i,n+j);}
+   const normals:number[]=[];VertexData.ComputeNormals(positions,indices,normals);
+   const data=new VertexData();data.positions=positions;data.indices=indices;data.normals=normals;
+   const a=new Mesh(name,scene);data.applyToMesh(a);a.convertToFlatShadedMesh();attach(a,root,m);return a;
+  };
+  const crown=(name:string,m:StandardMaterial,x:number,w:number,y:number,rise:number,z:number,r=.045)=>{
+   const path=Array.from({length:25},(_,i)=>{const a=i*Math.PI/24;return new Vector3(x+Math.cos(a)*w/2,y+Math.sin(a)*rise,z);});
+   return attach(MeshBuilder.CreateTube(name,{path,radius:r,tessellation:10},scene),root,m);
+  };
+  const vase=(x:number,y:number,z:number,height:number,m=porcelain)=>{
+   cylinder(scene,'porcelain-foot',root,brass,.025,.08,x,y+.012,z);
+   orb(scene,'porcelain-belly',root,m,.105,x,y+height*.39,z,1,height*2.8,1);
+   cylinder(scene,'porcelain-neck',root,m,height*.28,.048,x,y+height*.81,z,.057);
+   ring(scene,'porcelain-lip',root,brass,.116,.013,x,y+height*.95,z);
+  };
+  const plate=(x:number,y:number,z:number,r:number)=>{
+   const p=cylinder(scene,'display-plate',root,porcelain,.027,r,x,y,z);p.rotation.x=Math.PI/2;
+   orb(scene,'glazed-plate-face',root,porcelain,r*.91,x,y,z+.019,1,1,.12);
+   const edge=ring(scene,'plate-rim',root,brass,r*1.84,.014,x,y,z+.018);edge.rotation.x=Math.PI/2;
+   if(style===1){
+    for(let i=0;i<5;i++){const a=i*Math.PI*2/5;const petal=orb(scene,'porcelain-blue-petal',root,blue,.029,x+Math.sin(a)*.04,y+Math.cos(a)*.04,z+.048,.65,1,.18);petal.rotation.z=-a;}
+   }else{
+    const leafMark=orb(scene,'porcelain-leaf-mark',root,style===0?deep:rose,.05,x-.018,y,z+.047,.5,1,.10);leafMark.rotation.z=-.4;
+    const second=orb(scene,'porcelain-leaf-mark',root,style===0?sage:rose,.038,x+.022,y+.018,z+.047,.5,1,.10);second.rotation.z=.6;
+   }
+  };
+  const teaSet=(x:number,y:number,z:number,scale:number)=>{
+   const set=new TransformNode('cabinet-tea-set',scene);set.parent=root;set.position.set(x,y,z);set.scaling.setAll(scale);
+   pot(scene,set,porcelain,brass,0,0,0);cup(scene,set,porcelain,dark,.43,0,.03);
+  };
+  for(const x of [-.72,.72])for(const z of [-.27,.27]){
+   const leg=cylinder(scene,'cabinet-foot',root,style===1?dark:brass,.17,.048,x,.09,z,.037);
+   if(style===2)leg.rotation.z=-Math.sign(x)*.12;
+  }
+  soft(scene,'cabinet-plinth',root,style===1?oak:finish,1.85,.13,.84,.13,0,.21,0);
+  soft(scene,'cabinet-lower-body',root,finish,1.74,.43,.76,.10,0,.45,-.015);
+  soft(scene,'cabinet-counter-lip',root,style===1?oak:brass,1.87,.055,.87,.11,0,.69,0);
+  if(style===0){
+   // One generous arch, a broad porcelain collection and a single long drawer.
+   arch('atelier-arched-back',finish,1.73,.65,1.52,.51,.13,0,-.30);
+   arch('atelier-cream-inset',inset,1.48,.71,1.52,.39,.024,0,-.222);
+   for(const x of [-.81,.81])soft(scene,'atelier-side',root,finish,.12,.93,.67,.045,x,1.125,0);
+   crown('atelier-arched-front',finish,0,1.62,1.55,.47,.30,.068);
+   crown('atelier-gold-line',brass,0,1.61,1.55,.47,.357,.017);
+   soft(scene,'atelier-upper-shelf',root,cream,1.56,.065,.61,.045,0,1.28,.01);
+   soft(scene,'atelier-shelf-edge',root,brass,1.56,.025,.025,.008,0,1.28,.328);
+   vase(-.47,1.32,.015,.39);vase(.46,1.32,.015,.28);plate(0,1.57,-.165,.20);
+   teaSet(-.2,.72,.04,.88);
+   panel('atelier-drawer',inset,1.5,.25,.035,.055,0,.46,.38);
+   panel('atelier-drawer-field',finish,1.39,.17,.025,.04,0,.46,.406);
+   for(const x of [-.11,.11])orb(scene,'drawer-handle-mount',root,brass,.025,x,.47,.43);
+   panel('drawer-pull',brass,.25,.027,.026,.01,0,.47,.45);
+  }else if(style===1){
+   // Twin round-top bays, oak shelves and blue floral plates make a different hutch.
+   for(const x of [-.42,.42]){
+    arch('porcelain-twin-back',finish,.86,.68,1.56,.37,.14,x,-.30);
+    arch('porcelain-twin-inset',inset,.69,.73,1.56,.28,.025,x,-.218);
+    crown('porcelain-twin-front',finish,x,.76,1.56,.33,.29,.059);
+    crown('porcelain-ivory-line',cream,x,.75,1.56,.33,.34,.018);
+    soft(scene,'porcelain-bay-shelf',root,oak,.72,.06,.63,.04,x,1.22,.01);
+    plate(x,1.52,-.13,.21);vase(x-.13,.73,.035,.29);vase(x+.14,.73,.035,.21,cream);
+    panel('porcelain-door',inset,.72,.29,.04,.05,x,.46,.38);
+    panel('porcelain-door-inset',finish,.62,.20,.025,.035,x,.46,.407);
+    orb(scene,'porcelain-door-knob',root,brass,.028,x+(x<0?.23:-.23),.48,.435);
+   }
+   for(const x of [-.82,0,.82])soft(scene,'porcelain-upright',root,finish,.09,.91,.63,.035,x,1.15,0);
+  }else{
+   // A lower salon cabinet with a wide bowed crown and a tiered tea display.
+   arch('salon-bowed-back',finish,1.77,.67,1.51,.27,.15,0,-.30);
+   arch('salon-ivory-inset',cream,1.51,.72,1.49,.19,.025,0,-.209);
+   crown('salon-bowed-front',finish,0,1.64,1.51,.25,.30,.075);
+   crown('salon-cream-trim',cream,0,1.63,1.51,.25,.36,.025);
+   for(const x of [-.81,.81])soft(scene,'salon-side',root,finish,.13,.83,.68,.045,x,1.1,0);
+   for(const x of [-.52,.52]){
+    soft(scene,'salon-raised-shelf',root,finish,.52,.055,.56,.06,x,1.12,.015);
+    vase(x,1.16,0,.25);
+   }
+   teaSet(-.16,.73,.11,.95);
+   plate(0,1.37,-.14,.16);
+   for(const x of [-.4,.4]){
+    panel('salon-bowed-drawer',inset,.74,.27,.045,.075,x,.46,.38);
+    panel('salon-drawer-field',finish,.63,.18,.025,.055,x,.46,.413);
+    const pull=ring(scene,'salon-ring-pull',root,brass,.09,.018,x,.47,.45);pull.rotation.x=Math.PI/2;
+   }
+   for(let i=0;i<5;i++){const a=i*Math.PI*2/5;orb(scene,'salon-crown-petal',root,cream,.032,Math.sin(a)*.04,1.7+Math.cos(a)*.04,.385,1,1,.3);}
+   orb(scene,'salon-crown-heart',root,brass,.024,0,1.7,.405,1,1,.4);
   }
  }
  place(root,id,shop);tag(root,id);return root;

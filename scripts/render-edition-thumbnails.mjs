@@ -22,7 +22,8 @@ await evaluate(`(async()=>{
   const camera=new ArcRotateCamera('thumbnail',-Math.PI/3,Math.PI/2.8,6,Vector3.Zero(),scene);camera.mode=1;
   const hemi=new HemisphericLight('sky',new Vector3(0,1,0),scene);hemi.intensity=.9;
   const wallArt=UPGRADE_BY_ID[id].surface==='wall'||id==='paint';
-  const sun=new DirectionalLight('sun',new Vector3(-.5,-1,wallArt?-.7:.7),scene);sun.intensity=.6;
+  // The tall cabinet's display faces the camera like wall art; light its contents.
+  const sun=new DirectionalLight('sun',new Vector3(-.5,-1,wallArt||id==='cabinet'?-.7:.7),scene);sun.intensity=.6;
   const shop={owned:[id],stored:[],style:{[id]:style},place:{[id]:{...UPGRADE_BY_ID[id].defaultPlace}},finaleSeen:false};
   const item=id==='paint'?buildEditionPaintSample(scene,style):buildEditionItem(scene,id,shop,style);item.position.setAll(0);item.rotation.setAll(0);
   // Look from the decorated front of wall pieces; floor furniture uses a three-quarter angle.
@@ -34,7 +35,7 @@ await evaluate(`(async()=>{
  };
 })();`);
 await fs.mkdir('public/edition2/thumbnails',{recursive:true});
-const ids=process.env.THUMB_IDS?.split(',')??['counter','sign','paint','shelves','plant','rug','lamp','table','art','clock','basket','bench','trolley','planter','terrarium','botanical'];
+const ids=process.env.THUMB_IDS?.split(',')??['counter','sign','paint','shelves','plant','rug','lamp','table','art','clock','basket','bench','trolley','planter','terrarium','botanical','cabinet'];
 for(const id of ids)for(let style=0;style<3;style++){
  const r=await evaluate(`window.renderThumb(${JSON.stringify(id)},${style})`);await fs.writeFile(`public/edition2/thumbnails/${id}-${style}.webp`,Buffer.from(r.data.split(',')[1],'base64'));console.log(id,style,r.count);
 }

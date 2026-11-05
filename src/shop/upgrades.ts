@@ -249,6 +249,7 @@ const EDITION_OPTIONAL: {id: UpgradeId; after: number; collection?: string}[] = 
   {id: "planter", after: 10}, {id: "basket", after: 10},
   {id: "terrarium", after: 13, collection: "Conservatory"},
   {id: "botanical", after: 16, collection: "Conservatory"},
+  {id: "cabinet", after: 20, collection: "Conservatory"},
 ];
 export const EDITION_DECORATIONS: UpgradeDef[] = [
   ...UPGRADES.filter(item => !item.optional),

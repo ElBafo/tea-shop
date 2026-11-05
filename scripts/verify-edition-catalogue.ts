@@ -8,13 +8,14 @@ import type { ShopState, UpgradeId } from '../src/game/types';
 
 const classic = catalogueForMode(false), edition = catalogueForMode(true);
 assert.equal(classic.decorations.length, 24);
-assert.equal(edition.decorations.length, 16);
-assert.equal(new Set(edition.decorations.map(d => d.id)).size,16);
+assert.equal(edition.decorations.length, 17);
+assert.equal(new Set(edition.decorations.map(d => d.id)).size,17);
 assert.ok(edition.decorations.every(d => !d.id.includes(':')), 'No second copies added to the prototype');
-assert.equal(edition.decorations.reduce((sum,d) => sum+d.cost,0),104);
+assert.equal(edition.decorations.reduce((sum,d) => sum+d.cost,0),122);
+assert.equal(edition.decorations.reduce((sum,d) => sum+d.variants.length,0),51);
 const extras: [UpgradeId, number, number][] = [
   ['bench',6,3], ['art',8,3], ['trolley',8,6], ['clock',10,6], ['planter',10,10], ['basket',12,10],
-  ['terrarium',10,13], ['botanical',14,16],
+  ['terrarium',10,13], ['botanical',14,16], ['cabinet',18,20],
 ];
 for (const [id,cost,after] of extras) {
   const item=edition.byId[id];
@@ -23,11 +24,11 @@ for (const [id,cost,after] of extras) {
   assert.equal(item.unlockAfter,after);
   assert.equal(item.optional,true);
   assert.equal(item.variants.length,3);
-  assert.equal(classic.byId[id].unlockAfter,id==='terrarium'?8:id==='botanical'?16:undefined,'Classic gates remain unchanged');
+  assert.equal(classic.byId[id].unlockAfter,id==='terrarium'?8:id==='botanical'?16:id==='cabinet'?24:undefined,'Classic gates remain unchanged');
   assert.equal(classic.byId[id],UPGRADES.find(d=>d.id===id),'Mode selection must not mutate original definitions');
   assert.notEqual(item,classic.byId[id],'Edition gates belong to a clone');
 }
-for (const id of ['cabinet','armchair','fountain'] as UpgradeId[]) {
+for (const id of ['armchair','fountain'] as UpgradeId[]) {
   assert.equal(edition.decorations.some(item=>item.id===id),false,'Later collections remain outside this preview');
   assert.equal(classic.byId[id],edition.byId[id],'Registry retains shared definitions without exposing them for purchase');
 }
@@ -37,10 +38,12 @@ assert.equal(core.reduce((sum,d)=>sum+d.cost,0),26);
 assert.deepEqual(core,UPGRADES.filter(d=>!d.optional),'Preview.1 core definitions/prices/placements unchanged');
 const bonus=EDITION_MILESTONE_BONUSES.reduce((sum,m)=>sum+m.stars,0);
 const minimum=EDITION_LEVELS.length+bonus, maximum=EDITION_LEVELS.length*3+bonus;
-assert.equal(minimum,36);assert.equal(maximum,68);
-assert.equal(minimum-26,10,'All one-star finishes fund the core and Glass garden');
-assert.equal(maximum-26,42,'Optional collection is still a choice within earnings');
-assert.equal(extras.reduce((sum,entry)=>sum+entry[1],0),78);
+assert.equal(bonus,20,'The new arc adds no milestone bonus');
+assert.equal(minimum,40);assert.equal(maximum,80);
+assert.equal(minimum-26,14,'All one-star finishes fund the core and Botanical triptych');
+assert.equal(26+edition.byId.cabinet.cost-minimum,4,'Cabinet plus core needs four score improvements beyond minimum finishes');
+assert.equal(maximum-26,54,'Optional collection is still a choice within earnings');
+assert.equal(extras.reduce((sum,entry)=>sum+entry[1],0),96);
 assert.ok(maximum<edition.decorations.reduce((sum,d)=>sum+d.cost,0),'Collecting everything simultaneously is outside the budget');
 for(const [id,cost] of extras) {
   assert.ok(cost<=maximum-26,`${id} can be earned alongside the complete core room`);
@@ -60,9 +63,9 @@ assert.equal(shopComplete(normalized),true);
 assert.equal(spentStars(normalized),26);
 assert.equal(returnValue(normalized,'counter'),0,'Core purchases remain permanent');
 const showroom=editionShowroomShop();
-assert.equal(showroom.owned.length,16);
+assert.equal(showroom.owned.length,17);
 assert.deepEqual(showroom.stored,[]);
 for(const id of showroom.owned) assert.equal(canPlace(id,showroom.place[id]!,showroom),true,`${id} showroom placement is legal`);
 assert.deepEqual(sanitizeShop(showroom),showroom,'The demo must not silently move or store pieces');
 assert.equal(EDITION_DECORATIONS,edition.decorations);
-console.log('PASS: 16-piece edition catalogue, unchanged classic definitions, 3/6/10/13/16 unlocks, 36–68-star budget, optional full returns, preview.1 core compatibility and legal full showroom.');
+console.log('PASS: 17-piece edition catalogue, unchanged classic definitions, 3/6/10/13/16/20 unlocks, 40–80-star budget, optional full returns, preview.1 core compatibility and legal full showroom.');

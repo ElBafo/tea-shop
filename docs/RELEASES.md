@@ -10,7 +10,46 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.6 — hosted for owner phone review
+## 0.2.0-preview.7 — locally validated; hosting pending
+
+Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner reviewed preview.6 positively and said “Looks good. Proceed.” This is the next bounded preview, with main unchanged.
+
+Implemented scope:
+
+- Four authored puzzles, 17–20, in the Treasures to keep arc, keeping the first sixteen board definitions, IDs, targets and bonuses intact. Full jars, unlimited Undo, no timer and no fail state remain.
+- Collector’s cabinet unlocks for purchase after 20 completions at 18 stars. Three included edition styles and actual-model thumbnails bring the catalogue to seventeen designs and fifty-one thumbnails, costing 122 stars. Core completion still costs 26.
+- Existing milestone bonuses remain 20 stars in total, with no new bonus at 20. Twenty puzzles earn 40–80 total. Minimum finishes leave 14 stars after the core; the cabinet needs four additional score stars or a different optional collection choice. Optional returns retain full value.
+- The edition namespace and existing scores, purchases, placement, styles, goals, guide, preferences, recovery and unfinished play are preserved. Both known ten- and sixteen-board edition backups load alongside current twenty-board files, with strict edition/count/unlock/balance checks.
+- Preview.6 guests, the first-counter shopkeeper and classic/main isolation are retained. A small short-portrait shelf-padding fix keeps the full two-line finale title, 23-pixel treats, jars and plank visible without a stray scrollbar. No new traffic, currency, account or venue system is part of this pass.
+
+The final production rebuild after the small-phone padding fix and all package verification pass (`work/cabinet-build.log`, `work/cabinet-verify.log`). Real-mode ten/sixteen→twenty save/backup/recovery/resume compatibility and catalogue checks pass. Independent review found no logic or compatibility blocker: the first-sixteen fingerprint and bonuses are preserved, and protected guest, keeper, storage and shared-type source files match hosted preview.6.
+
+| Puzzle | Capacity | Solver moves | Three-star target |
+| --- | --- | --- | --- |
+| 17 · The Quiet Cup | 4 | 4 | 4 |
+| 18 · Pairs and Space | 5 | 8 | 8 |
+| 19 · A Wrapped Keepsake | 4 | 11 | 12 |
+| 20 · A Place for Keepsakes | 5 | 13 | 15 |
+
+The new arrangements are unique under flavour renaming and jar permutations. Puzzle 19 has one hidden jar and its exploration allowance; puzzle 20 has two moves of finale breathing room. [EDITION2_PACING.md](EDITION2_PACING.md) records the authored rhythm. These solver checks establish legal solutions and the scoring contract, not enjoyable pacing.
+
+All seventeen designs pass footprint checks and twelve rebuild cycles with owned resources returning to zero. The cabinet styles use 42/58/49 meshes respectively and twelve owned materials each: one broad jade arch, twin blue porcelain bays and a lower bowed rose salon. Three actual-model thumbnails extend the unchanged forty-eight existing images to fifty-one. Phone day/night/showroom views and the style sheet were inspected without a blocking art issue. Only the temporary showroom’s wall slots were rearranged to clear the cabinet crown; player layouts are unchanged.
+
+Final browser validation passed:
+
+- Legacy UI continuation preserves the sixteen-board balance when extending to twenty, with resumed Undo and recovery intact. Actual ten-/sixteen-board backup picker cancellation and restoration pass, as does cross-edition rejection.
+- Real touch wins at 19 and 20 take earnings from 74 to 80 through six puzzle-score stars only: cabinet availability unlocks at twenty with no added bonus. All three free style previews, cancellation, exact 18-star purchase/refund, touch movement, rotation Undo, storage/restoration, free style changes, reload, return cancellation/confirmation and repurchase pass. Replays do not farm stars, and funded-but-locked and unlocked-but-insufficient states remain distinct.
+- Every new board fits 390×844, 320×568, 844×390 and 1280×900. Hidden puzzle 19 retains centered, private concealed pieces and clear divider placement. Real Next navigation across capacities 4/5/4/5 and reduced motion pass. Puzzle 20 initially had scroll height 375 versus client height 373 at 320×568; the scoped padding correction makes both 373 without shortening the title or shrinking the 23-pixel treats. All jars and the plank remain visible.
+- Twelve complete style/storage cycles retain 338 meshes, 103 materials, 7 textures, 50 transforms and 5 lights. A 600-second simulation records sixteen arrivals and fourteen departures, respecting the two-guest cap, minimum separation 1.0 and cabinet collision bounds. Edit hides visitors, stored cabinet geometry is absent, and room disposal returns all resource counts to zero.
+- The original onboarding/first-win → goal → purchase flow, move Undo, twenty-level next/resume navigation and edition-only reset pass. Root visual review covered the final unlock, editor, day/night, hidden, tall-small and style captures.
+
+Evidence: `work/edition-cabinet-legacy-check.json`, `work/edition-cabinet-purchase-check.json`, `work/edition-cabinet-visuals-check.json`, `work/edition-cabinet-lifecycle-check.json` and `work/edition-cabinet-flow.log`. Browser emulation and simulation establish these bounded checks, not physical iPhone performance or player enjoyment.
+
+Artifacts: [cabinet styles](screenshots/second-edition-v7/styles.webp), [paid room by day](screenshots/second-edition-v7/room-day.webp), [paid room by night](screenshots/second-edition-v7/room-night.webp), [desktop](screenshots/second-edition-v7/desktop.webp), [separate development showroom](screenshots/second-edition-v7/showroom.webp), [cabinet unlock](screenshots/second-edition-v7/unlock.webp), [cabinet editing](screenshots/second-edition-v7/cabinet-edit.webp), [small-phone finale](screenshots/second-edition-v7/puzzle-small.webp) and [hidden puzzle](screenshots/second-edition-v7/hidden-phone.webp). Day/night/desktop use an affordable paid core-plus-cabinet composition; the full seventeen-piece showroom is a development demo.
+
+Local validation is complete. Hosted deployment and owner phone review remain pending. The app/package version is `0.2.0-preview.7`; the review URL https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.6. [ROADMAP.md](ROADMAP.md) records acceptance criteria.
+
+## 0.2.0-preview.6 — hosted; continuation accepted
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner said “Continue” following preview.5. This authorizes the next preview, not a merge or an inferred acceptance of all prior fixes.
 
@@ -34,7 +73,7 @@ Final browser validation passed:
 
 Artifacts: [visitor roster](screenshots/second-edition-v6/roster.webp), [gait poses](screenshots/second-edition-v6/gait.webp), [seated comparison](screenshots/second-edition-v6/seated.webp), [walking clip](screenshots/second-edition-v6/walking.mp4), [room day](screenshots/second-edition-v6/room-day.webp), [room night](screenshots/second-edition-v6/room-night.webp), [child seated](screenshots/second-edition-v6/child-seated.webp), [phone](screenshots/second-edition-v6/phone.webp), [night phone](screenshots/second-edition-v6/night-phone.webp), [Edit hiding](screenshots/second-edition-v6/edit-hidden.webp), [desktop](screenshots/second-edition-v6/desktop.webp) and [reduced motion](screenshots/second-edition-v6/reduced-motion.webp). Local logs are `work/guest-polish-integration-check.json`, `work/guest-polish-ui-check.json`, `work/guest-polish-onboarding-check.json` and `work/guest-polish-keeper.log`.
 
-Local validation and hosted deployment passed. App commit: `6492179aa34b447d66f32d2b3ecac75c7567d4e8`, confirmed by [GitHub Pages run 41933373195](https://github.com/ElBafo/tea-shop/actions/runs/41933373195). Stable branch `preview/shop-polish` stays at that app commit; follow-up documentation commits on `preview/second-edition` record delivery without changing the deployed app. Package/app/release version: `0.2.0-preview.6`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 now serves preview.6. Physical-phone review remains pending; automated checks and recorded simulation do not establish physical iPhone performance or player enjoyment. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`, with no merge authorized. The [roadmap](ROADMAP.md) records acceptance criteria.
+Local validation and hosted deployment passed. App commit: `6492179aa34b447d66f32d2b3ecac75c7567d4e8`, confirmed by [GitHub Pages run 41933373195](https://github.com/ElBafo/tea-shop/actions/runs/41933373195). Stable branch `preview/shop-polish` stays at that app commit while preview.7 is developed; review-branch documentation records delivery without changing the deployed app. Package/app/release version at this checkpoint: `0.2.0-preview.6`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.6. The owner responded “Looks good. Proceed,” accepting continuation after positive review; this does not authorize a merge or establish measured physical-device performance. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`. The [roadmap](ROADMAP.md) records the next scope.
 
 ## 0.2.0-preview.5 — superseded by preview.6; continuation authorized
 
