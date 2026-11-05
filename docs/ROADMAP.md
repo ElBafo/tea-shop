@@ -1,6 +1,12 @@
 # Decopu roadmap
 
-**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+## Merge approved — 2026-11-05
+
+The owner requested “Merge with main” for [PR #15](https://github.com/ElBafo/tea-shop/pull/15). Integrate the reviewed second-edition source into main, preserving the current edition gate and save namespaces. The tested application source is unchanged from preview.8; subsequent changes record delivery and this approval.
+
+Main continues to run the classic 38-puzzle game with its existing saves. The second edition remains available at https://elbafo.github.io/tea-shop/preview/?edition=2 with its separate progress. Enabling it as the default production game and transferring existing progress require a separately implemented and tested transition. Keep the preview.8 version label for this integrated build; do not label the new edition a completed production launch.
+
+This approval supersedes earlier pending-merge statements below. Preview.8 implementation, checks and hosting are complete; its remaining gate is production activation and save transition.
 
 Record every agreed product decision here in the same work session. Clearly distinguish implemented behavior, agreed plans, and open decisions.
 
@@ -16,9 +22,9 @@ Continue the single-shop puzzle and collecting journey. After preview.7 was host
 - **Review:** continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. Prototype saves remain isolated from main and the ordinary preview; existing edition progress must carry forward.
 - **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines acceptance criteria. The version appears in the app; every newly published review build gets its own preview version. A version label does not imply approval or deployment.
 
-### Preview.8: Reading corner — in development
+### Preview.8: Reading corner — hosted; source merge approved
 
-Add four authored puzzles, 21–24, in the A quiet chapter arc. Preserve the first twenty definitions, IDs, capacities, hidden flags, scoring targets and all existing bonuses, together with the classic thirty-eight-board sequence. Keep full-jar completion, unlimited Undo and a calm progression without timers or fail states. Final board names and scoring evidence will be recorded after implementation.
+Add four authored puzzles, 21–24, in the A quiet chapter arc. Preserve the first twenty definitions, IDs, capacities, hidden flags, scoring targets and all existing bonuses, together with the classic thirty-eight-board sequence. Keep full-jar completion, unlimited Undo and a calm progression without timers or fail states. Puzzles 21–24 are The First Page, A Little Bookmark, Under the Fold and Settle In, with solver/three-star targets 4/4, 7/7, 10/11 and 12/14.
 
 Reading chair becomes available to buy after **24 completed puzzles for 16 stars**, with three included edition styles and three thumbnails rendered from the actual models. This targets eighteen paid designs, fifty-four thumbnails and a 138-star catalogue. The core eight still cost 26. Existing milestone bonuses stay at twenty stars, so twenty-four puzzles earn **44–92 total**; there is no added bonus at twenty-four. At minimum scores, completing the core leaves eighteen stars, enough for the Reading chair or Collector’s cabinet as alternative choices. Optional full-value returns and free included style changes remain.
 
@@ -28,7 +34,7 @@ Keep the edition namespace and preserve scores, moves, ownership, styles, placem
 
 Acceptance: solve/replay all twenty-four edition and thirty-eight classic boards; independently preserve the first twenty identities and bonus table; verify old twenty-board continuation, all three legacy backup sizes, actual final unlock with no new bonus, every chair style’s free preview/cancel and exact purchase/return/repurchase, touch placement/rotation/storage/reload and insufficient-funds/locked states. Check small/standard portrait phones, landscape, desktop, hidden contents and reduced motion. Verify chair seat contact and access for adults/children across styles and rotations, blocked/stored cases, Edit transitions, guest separation and repeated resource cleanup. Keep the shopkeeper, cabinet and prior room behavior reliable.
 
-Implementation is in progress. Testing, visual evidence, hosting and owner phone review are pending. Tea garden fountain, further arcs, Bakery, larger rooms, cloud accounts and monetisation remain later work.
+Implementation, local testing, visual evidence and hosting are complete. The owner authorized merging the reviewed source. Tea garden fountain, further arcs, Bakery, larger rooms, cloud accounts and monetisation remain later work.
 
 Local validation is complete: all package checks and the final production build pass, including 24 edition and 38 classic solvers. Browser legacy, purchase, visuals, seating, lifecycle and onboarding/goal/reset flow checks pass. Known 10/16/20-board backups carry forward; real 23/24 wins add score stars only. All 18 models fit their footprints and release resources after twelve rebuild cycles. All six guest profiles fit all three chair styles; 72 rendered style/profile/rotation combinations pass. Phone 390×844, small phone 320×568, landscape 844×390 and desktop 1280×900 were checked in Chromium. Physical iPhone review remains pending. Evidence: `work/reading-final-verify.log`, `work/reading-final-build.log`, `work/edition-reading-*-check.json`, `work/edition8-art-check.json`.
 
