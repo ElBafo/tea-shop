@@ -7,6 +7,8 @@ import { CHAPTERS, milestoneAt, chapterBonus } from '../game/journey';
 import { initGuide, guideStage, setGuide, guideCard, suggestedJar } from "../game/guide";
 import { audioToggle, updateAudioToggle } from "./toggles";
 import { animatePour, pourOrigins, reducedMotion } from "./motion";
+import { bindPuzzleDrag } from './puzzle-drag';
+import { mountPuzzleGuide } from './puzzle-guide';
 import {
   playClick,
   playComplete,
@@ -64,6 +66,8 @@ export function mountApp(root: HTMLElement): Promise<void> {
   let landed: { jar: number; count: number } | null = null;
   let shop: ShopScreen | null = null;
   let stopMotion = () => {};
+  let cancelDrag = () => {};
+  let stopPuzzleGuide = () => {};
 
   window.addEventListener('decopu-save-failed',()=>{
     if(document.querySelector('.save-warning'))return;
@@ -91,6 +95,9 @@ export function mountApp(root: HTMLElement): Promise<void> {
   });
 
   const render = (editShop = false, reward?: UpgradeId) => {
+    stopPuzzleGuide();
+    stopPuzzleGuide = () => {};
+    cancelDrag();
     stopMotion();
     stopMotion = () => {};
     const focusedJar = (document.activeElement as HTMLElement | null)?.dataset.jar;
@@ -155,6 +162,9 @@ export function mountApp(root: HTMLElement): Promise<void> {
     }
     if (screen === 'levels' && guideStage() === 'decorate') root.querySelector('.level-grid')?.insertAdjacentHTML('beforebegin', guideCard('Your stars are ready', 'Try your first decoration, or keep playing to save up.', '<button type="button" data-go="shop" data-edit>Decorate shop →</button>'));
     bind(root);
+    if (screen === 'play' && play && !play.busy && !play.won && guideStage() === 'puzzle') {
+      stopPuzzleGuide = mountPuzzleGuide(root, play.board, play.selected);
+    }
     if (focusedJar !== undefined && !root.querySelector('.result-overlay')) {
       root.querySelector<HTMLElement>(`[data-jar="${focusedJar}"]`)?.focus({preventScroll:true});
     }
@@ -319,7 +329,14 @@ export function mountApp(root: HTMLElement): Promise<void> {
       return;
     }
 
-    const origins = pourOrigins(root, from, count);
+    transfer(from, index);
+  };
+
+  const transfer = (from: number, index: number, draggedOrigins?: DOMRect[]) => {
+    if (!play || play.busy || play.won) return;
+    const count = canPour(play.board, from, index);
+    if (!count) return;
+    const origins = draggedOrigins ?? pourOrigins(root, from, count);
     const snapshot = cloneBoard(play.board);
     const destWasComplete = isCompleteTube(play.board.tubes[index], play.board.capacity);
     const move = applyMove(play.board, from, index);
@@ -355,33 +372,42 @@ export function mountApp(root: HTMLElement): Promise<void> {
       if(firstWin) play.milestone=milestoneAt(progress.bestStars.filter(n=>n>0).length);
       if (guideStage() === 'puzzle') setGuide('decorate');
     }
-    render();
     const activePlay = play;
-    const motion = animatePour(root, index, move.item, origins);
-    stopMotion = motion.cancel;
-    void motion.finished.then(() => {
+    const present = () => {
       if (play !== activePlay || screen !== "play") return;
-      stopMotion = () => {};
-      if (destNowComplete) playComplete(progress.muted);
-      if (won) {
-        landed = null;
-        play.celebrating = true;
-        playWin(progress.muted);
-        render();
-        window.setTimeout(() => {
-          if (play !== activePlay || screen !== "play") return;
-          play.celebrating = false;
-          play.busy = false;
-          pendingComplete = [];
+      render();
+      const motion = animatePour(root, index, move.item, origins, Boolean(draggedOrigins));
+      stopMotion = motion.cancel;
+      void motion.finished.then(() => {
+        if (play !== activePlay || screen !== "play") return;
+        stopMotion = () => {};
+        if (destNowComplete) playComplete(progress.muted);
+        if (won) {
+          landed = null;
+          play.celebrating = true;
+          playWin(progress.muted);
           render();
-        }, reducedMotion() ? 0 : 420);
-      } else {
-        play.busy = false;
-        render();
-        landed = null;
-        pendingComplete = [];
-      }
-    });
+          window.setTimeout(() => {
+            if (play !== activePlay || screen !== "play") return;
+            play.celebrating = false;
+            play.busy = false;
+            pendingComplete = [];
+            render();
+          }, reducedMotion() ? 0 : 420);
+        } else {
+          play.busy = false;
+          render();
+          landed = null;
+          pendingComplete = [];
+        }
+      });
+    };
+    if (draggedOrigins) {
+      // Keep the pointerup target attached until the native gesture completes.
+      // The move and any reward are already committed; only painting waits.
+      root.querySelector('.shelves')?.setAttribute('aria-busy', 'true');
+      window.setTimeout(present, 0);
+    } else present();
   };
 
   const shake = (index: number) => {
@@ -392,6 +418,12 @@ export function mountApp(root: HTMLElement): Promise<void> {
     jar?.classList.add("shake");
   };
 
+  const drag = bindPuzzleDrag(root, {
+    board: () => screen === 'play' && play && !play.busy && !play.won ? play.board : null,
+    lift: () => { playClick(progress.muted); navigator.vibrate?.(12); },
+    drop: transfer,
+  });
+  cancelDrag = drag.cancel;
   render();
   const initialShop = shop as ShopScreen | null;
   return initialShop ? initialShop.ready() : Promise.resolve();
@@ -478,10 +510,10 @@ function playMarkup(
     .join("");
 
   const hint = guideStage() === 'puzzle'
-    ? guideCard('1 · Fill each jar with one kind', selected === null ? 'Tap a jar to lift its top treats. Each finished jar must be full.' : suggestedJar(board, selected) === -1 ? 'That jar has no matching space. Tap another jar to try a different move.' : 'Tap a matching or empty jar to move the treats. The highlighted jar is one option.')
+    ? `<aside class="guide-card puzzle-guide-heading" aria-label="Getting started"><strong>Fill each jar with one kind</strong><button type="button" data-guide-skip aria-label="Skip the getting-started guide">Skip</button></aside>`
     : isSecondEdition ? `<p class="hint">${level.blurb}</p>`
     : play.hint
-    ? `<p class="hint">Fill each jar with one kind. Tap two jars to move treats.</p>`
+    ? `<p class="hint">Fill each jar with one kind. Drag treats, or tap two jars.</p>`
     : "";
 
   const overlay = won && !play.busy ? winOverlay(play, progress) : "";

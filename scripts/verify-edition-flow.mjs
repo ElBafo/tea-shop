@@ -1,6 +1,7 @@
 // Vite at 5174 with /tea-shop/preview/; isolated Chromium CDP defaults to9234.
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+const appVersion = JSON.parse(await fs.readFile(new URL('../package.json', import.meta.url), 'utf8')).version;
 await fs.mkdir('work',{recursive:true});
 const tabs=await(await fetch(`http://127.0.0.1:${process.env.CDP_PORT??9234}/json`)).json();
 const ws=new WebSocket(tabs[0].webSocketDebuggerUrl);await new Promise(r=>ws.addEventListener('open',r,{once:true}));
@@ -28,7 +29,7 @@ const seed={muted:true,bestStars:Array(10).fill(0),bestMoves:Array(10).fill(0),s
 await evaluate(`Object.keys(localStorage).filter(k=>k.startsWith('tea-shop-preview-edition2')).forEach(k=>localStorage.removeItem(k));localStorage.setItem('${key}',${JSON.stringify(JSON.stringify(seed))});localStorage.setItem('${key}:guide-v1','done');localStorage.setItem('tea-shop-progress-v1','released-save-sentinel');localStorage.setItem('tea-shop-progress-v1:recovery','released-recovery-sentinel');localStorage.setItem('tea-shop-preview-progress-v1','classic-preview-sentinel');localStorage.setItem('tea-shop-preview-progress-v1:goal-v1','classic-goal-sentinel');localStorage.setItem('tea-shop-preview-appearance-v1','night');localStorage.setItem('edition-flow-unrelated','keep')`);
 const sentinel=await otherSaves();
 await send('Page.reload');await start();
-assert.match(await evaluate(`document.querySelector('.preview-bar').textContent`),/Second edition · v0.2.0/);
+assert.ok((await evaluate(`document.querySelector('.preview-bar').textContent`)).includes(`Second edition · v${appVersion}`));
 assert.equal(await evaluate(`(async()=>{const {parseBackup}=await import('/tea-shop/preview/src/game/backup.ts');const p={muted:true,bestStars:Array(38).fill(0),bestMoves:Array(38).fill(0),shop:{owned:[],stored:[],style:{},place:{},finaleSeen:false}};try{parseBackup(JSON.stringify({format:'decopu-save',version:1,exportedAt:new Date().toISOString(),progress:p,puzzle:null}));return false;}catch{return true;}})()`),true,'prototype rejects classic 38-level backup');
 await shot('home');
 await tap('#edit-toggle');
@@ -67,7 +68,7 @@ assert.equal(await evaluate(`document.querySelector('#undo-move').disabled`),fal
 await tap('#undo-move');assert.deepEqual((await saved()).shop.place.counter,beforeRotate,'Undo move restores previous placement');
 await shot('first-decoration');
 await tap('#edit-toggle');await tap('.settings-menu summary');
-assert.match(await evaluate(`document.querySelector('.build-version').textContent`),/v0.2.0/);
+assert.ok((await evaluate(`document.querySelector('.build-version').textContent`)).includes(`v${appVersion}`));
 await tap('#browse-puzzles');assert.equal(await evaluate(`document.querySelectorAll('.level-btn').length`),24);
 await tap('[data-go="shop"]');await tap('#play-tea');
 assert.match(await evaluate(`document.querySelector('.play h2').textContent`),/A Little Space/,'Play advances to the next unfinished puzzle');

@@ -4,9 +4,11 @@ A cozy sorting puzzle that earns stars for a small isometric tea shop. Fill jars
 
 **Play:** https://elbafo.github.io/tea-shop/
 
-**Released: [Decopu 0.2.0](https://elbafo.github.io/tea-shop/).** [PR #16](https://github.com/ElBafo/tea-shop/pull/16) merged as `966c613fa486c9ce34dd1cf5f8bb9ac4a5905d3c`; [Pages run 42081278504](https://github.com/ElBafo/tea-shop/actions/runs/42081278504) passed. Main opens the second edition with fresh production progress and normal onboarding. Progress earned afterward saves normally; physical iPhone family testing remains pending.
+**Release 0.2.1 approved; production deployment pending.** The owner requested “Merge to main” for [PR #17](https://github.com/ElBafo/tea-shop/pull/17). This promotes the reviewed drag controls, puzzle artwork and visual first-puzzle guide. Existing 0.2.0 progress is preserved; there is no new reset or storage namespace.
 
-## Fresh start for family testing
+**Reviewed preview: `0.2.1-preview.1`.** Drag tea pieces between jars alongside tap controls, with rounded piece artwork, clearer glass and restrained landing feedback. The first guided puzzle has an animated hand and brief bubble beside the jars. The [phone preview](https://elbafo.github.io/tea-shop/preview/?edition=2) and [temporary guided tour](https://elbafo.github.io/tea-shop/preview/?edition=2&tour=1) remain available. See [release evidence and screenshots](docs/RELEASES.md).
+
+## Progress since the 0.2.0 fresh start
 
 The owner requested a new-installation experience. The first visit to the main game shows Start and the normal first-time guide, using fresh production progress. Existing classic and preview saves remain untouched. New progress earned after that first visit saves normally on the device.
 
@@ -14,7 +16,7 @@ Production uses `tea-shop-edition2-progress-v1` and `tea-shop-edition2-appearanc
 
 ## Play and decorate
 
-Tap a jar to select its top matching treats, then tap a compatible jar with enough space. Finish when every non-empty jar is full of one kind. Hidden jars reveal their contents as you pour; taller jars hold five treats. Source jars stay still during the pour animation.
+Drag the top matching treats to a compatible jar with enough space, or tap the source and then the destination. Finish when every non-empty jar is full of one kind. Hidden jars reveal their contents as you pour; taller jars hold five treats. Source jars stay still during the pour animation.
 
 The second edition has 24 authored puzzles and 18 paid decoration designs, each with three included styles. Earn up to three stars per puzzle; improving a best score earns the difference, while repeated wins cannot farm stars. Milestone bonuses bring total earnings to 44–92. The core room costs 26 stars; the 138-star catalogue gives players choices beyond what they can own at once.
 
