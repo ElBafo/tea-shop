@@ -1,6 +1,6 @@
 # Decopu: product direction
 
-**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
+**Released: [Decopu 0.2.0](https://elbafo.github.io/tea-shop/).** [PR #16](https://github.com/ElBafo/tea-shop/pull/16) merged as `966c613fa486c9ce34dd1cf5f8bb9ac4a5905d3c`; [Pages run 42081278504](https://github.com/ElBafo/tea-shop/actions/runs/42081278504) passed. Main opens the second edition with fresh production progress and normal onboarding. Progress earned afterward saves normally; physical iPhone family testing remains pending.
 
 ## Experience
 
@@ -23,11 +23,11 @@ The core loop is: solve a shelf → earn stars → preview and buy a decoration 
 
 The owner clarified: “I don’t care about keeping the progress. My wife should check it out like a new installation.” This supersedes the proposed migration, import and edition-choice work for this release.
 
-The main link will open the second edition directly, with a fresh production namespace and the normal Start and first-time guide. It will not copy classic or preview scores, purchases, unfinished puzzles, goals or preferences. Existing keys remain untouched and unused by the default game. This is a one-time fresh start for the new production edition; progress earned afterward saves normally across reloads and later visits.
+The main link opens the second edition directly, with a fresh production namespace and the normal Start and first-time guide. It does not copy classic or preview scores, purchases, unfinished puzzles, goals or preferences. Existing keys remain untouched and unused by the default game. This is a one-time fresh start for the new production edition; progress earned afterward saves normally across reloads and later visits.
 
 The release uses the reviewed twenty-four puzzles and eighteen paid decoration designs, with fifty-four included styles/model thumbnails. Earnings remain 44–92 stars, the eight-piece core costs 26, and the full catalogue costs 138. Reading chair still unlocks at twenty-four completions for 16 stars. No puzzles, prices, bonuses, guest rules or purchase mechanics are added in this activation pass.
 
-Preview and production progress stay separate. A new account system, automatic import, progress translation and edition chooser are outside this fresh-start release. Main provides the normal onboarding and persistence experience, with no development reset or completed-room demo. Activation verification passed; PR #16 awaits merge confirmation, followed by deployment and family testing.
+Preview and production progress stay separate. A new account system, automatic import, progress translation and edition chooser are outside this fresh-start release. Main provides the normal onboarding and persistence experience, with no development reset or completed-room demo. Activation verification and production deployment passed after the owner approved PR #16. Family testing is next.
 
 ## Classic baseline: 0.1.0 (historical)
 
