@@ -2,9 +2,23 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.2.0
+## Next proposed preview — direct puzzle dragging and tactile visuals
 
-**Released: [Decopu 0.2.0](https://elbafo.github.io/tea-shop/).** [PR #16](https://github.com/ElBafo/tea-shop/pull/16) merged as `966c613fa486c9ce34dd1cf5f8bb9ac4a5905d3c`; [Pages run 42081278504](https://github.com/ElBafo/tea-shop/actions/runs/42081278504) passed. Main opens the second edition with fresh production progress and normal onboarding. Progress earned afterward saves normally; physical iPhone family testing remains pending.
+**Family feedback, 2026-11-05:** the tester repeatedly tries to move tea bags between jars by keeping her finger down and dragging to the destination. The owner confirmed this is a drag, not a quick flick. Her favourite puzzle game is [Screwdom 3D / Screwdom](https://apps.apple.com/us/app/screwdom/id6740043080), particularly its graphics. This is feedback from family play, not a complete iPhone regression sign-off. Released Decopu 0.2.0 currently supports tap-to-select and tap-to-transfer only.
+
+**Recommended next priority:** make the direct gesture work alongside tapping and keyboard controls, then review a focused puzzle-art pass. These are proposed follow-ups; no drag implementation or new visuals have shipped in this roadmap update.
+
+- Start dragging the available top tea pieces without a long press. The moving group follows slightly above the finger so the destination remains visible; eligible jars highlight, and a valid release settles the group into place. Keep the source and destination jars stationary.
+- Preserve the existing whole-group rule: all consecutive matching top pieces travel together and must fit in the destination. Do not transfer arbitrary buried pieces, partially split a group, reveal concealed contents, or change scoring and board definitions.
+- A release outside a legal target returns the pieces without spending a move. Keep tap-to-tap available, prevent the release from also firing a tap, and cancel cleanly on interrupted touch, navigation, backgrounding or additional fingers. Undo, saved unfinished puzzles and exactly-once win rewards must use the same transfer path as tapping.
+- Use Screwdom as a visual reference for the desired sense of tangible puzzle objects. The proposed Decopu treatment is chunkier, rounded tea pieces, clearer glass edges, consistent highlights and soft contact shadows, readable colours and restrained lift/landing feedback within the cozy palette. Compare a small visual sample on a phone before committing to a wider art overhaul.
+- Prioritize this observed interaction problem over adding another puzzle arc or more furniture. A full 3D puzzle renderer is an open option only if a focused treatment cannot achieve the intended result; the existing DOM/CSS presentation can support the first gesture preview.
+
+Acceptance for an implementation preview: actual touch drag between jars in both directions, matching/full/empty/invalid targets, whole-group capacity, four- and five-slot jars, hidden-content privacy, tap/keyboard fallback, cancelled and interrupted gestures, repeated moves, Undo/reload and a final winning drag without duplicate rewards. Check small/standard phone, landscape and desktop layouts, reduced motion and day/night readability; then obtain physical iPhone feedback on how it feels. Preview first; merge gameplay or art changes after owner review.
+
+## Current release — 0.2.0
+
+**Released: [Decopu 0.2.0](https://elbafo.github.io/tea-shop/).** [PR #16](https://github.com/ElBafo/tea-shop/pull/16) merged as `966c613fa486c9ce34dd1cf5f8bb9ac4a5905d3c`; [Pages run 42081278504](https://github.com/ElBafo/tea-shop/actions/runs/42081278504) passed. Main opens the second edition with fresh production progress and normal onboarding. Progress earned afterward saves normally. Family feedback has now begun; a complete physical iPhone regression pass remains pending.
 
 The owner clarified: “I don’t care about keeping the progress. My wife should check it out like a new installation.” This supersedes the proposed migration, import and edition-choice work for this release.
 
@@ -20,7 +34,7 @@ Acceptance: verify default main and its query variants use the fresh edition, on
 
 The final production build (`work/activation-build.log`) and all package checks (`work/activation-verify.log`) pass, including all twenty-four second-edition and thirty-eight classic solvers, production routing/storage isolation, backup compatibility and guest seating. Independent source review found no blocker. The release browser suite passes (`work/release-activation.log`, `work/release-activation-check.json`): an existing installed production service worker updates to the new build and opens fresh welcome guidance despite populated synthetic classic and preview saves; real first-win → style preview → counter purchase → arranging/rotation/Undo succeeds; new production progress, preferences and unfinished-puzzle resume persist after reload. The new catalogue has eighteen designs and the browser exposes twenty-four puzzles. Main ignores showroom/tour flags and has no reset/demo controls. Same-origin preview and classic data remain unchanged. Layout checks pass at 390×844, 320×568, 844×390 and 1280×900, and the updated controlled app reopens offline. Root visual review found no blocking issue in the phone welcome and first-decoration captures. These Chromium checks do not establish physical iPhone performance or enjoyment; family testing follows deployment.
 
-The owner explicitly approved PR #16, and its merge and production deployment are complete. Physical iPhone family testing is next. See [RELEASES.md](RELEASES.md) for validation and screenshots.
+The owner explicitly approved PR #16, and its merge and production deployment are complete. Initial family feedback is recorded above; broader physical iPhone testing continues. See [RELEASES.md](RELEASES.md) for validation and screenshots.
 
 The following preview sections are delivery history. Their original review gates do not override the fresh-start production decision above.
 
