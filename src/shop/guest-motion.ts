@@ -75,6 +75,10 @@ export class GuestMotion {
       sample.walkWeight+=(target-sample.walkWeight)*(1-Math.exp(-GUEST_GAIT_BLEND_RATE*dt));
       sample.facing+=shortestGuestTurn(sample.facing,frame.facing)*(1-Math.exp(-GUEST_TURN_RATE*dt));
     }
+    // Seating snaps the hips to a fixed cushion anchor. Align its facing in
+    // that same frame: easing a seated half-turn sweeps feet through the base
+    // and arms. Ordinary walking turns still use the smooth projection above.
+    if (frame.pose==='sit') sample.facing=frame.facing;
     // Repaints can rebase a position, but must never invent a step on the next tick.
     this.lastX=frame.x;
     this.lastZ=frame.z;

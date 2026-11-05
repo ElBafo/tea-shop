@@ -109,6 +109,27 @@ export const EDITION_LEVELS: LevelDef[] = [
     blurb: 'Give the larger groups room to land. Finish this tall shelf at your own pace.',
     tubes: [[R,R,M,J,J],[J,C,C,M,M],[M,C,R,J,R],[C,C,R,J,M],[],[]], par: 15,
   },
+  {
+    id: 21, name: 'The First Page', capacity: 5,
+    blurb: 'Two familiar flavours and a quiet start. Bring the smaller portions together.',
+    tubes: [[R,R,R,J],[J,J,R],[J,J,R],[]], par: 4,
+  },
+  {
+    id: 22, name: 'A Little Bookmark', capacity: 5,
+    blurb: 'Leave a little space for the next pair. Matching groups travel together.',
+    tubes: [[R,R,J,M,M],[J,J,M,M,R],[M,R,R,J,J],[],[]], par: 7,
+  },
+  {
+    id: 23, name: 'Under the Fold', capacity: 5,
+    blurb: 'One wrapped jar holds a small surprise. Uncover it, then gather each flavour.',
+    tubes: [[R,J,M,J,R],[J,J,M,R,M],[M,M,R,R,J],[],[]],
+    sealed: [false,true,false,false,false], par: 11,
+  },
+  {
+    id: 24, name: 'Settle In', capacity: 5,
+    blurb: 'Give the matching groups room to gather. One full jar at a time, without a hurry.',
+    tubes: [[R,J,J,C,M],[J,C,C,M,R],[M,M,R,R,J],[C,C,R,J,M],[],[]], par: 14,
+  },
 ];
 
 export const EDITION_ARCS = [
@@ -118,14 +139,15 @@ export const EDITION_ARCS = [
   {name: 'Afternoon ritual', start: 11, end: 13, copy: 'Another pot, a little space, and a garden under glass.'},
   {name: 'A room of your own', start: 14, end: 16, copy: 'Taller jars and a little more room to make it yours.'},
   {name: 'Treasures to keep', start: 17, end: 20, copy: 'A quiet cup, matching pairs, and a place for keepsakes.'},
+  {name: 'A quiet chapter', start: 21, end: 24, copy: 'A warm cup, a little room, and somewhere to settle.'},
 ];
 
 // The first ten finishes still fund the core. Six more fund a Glass garden too.
-// The following arc adds earned puzzle stars without another milestone bonus.
+// The following arcs add earned puzzle stars without another milestone bonus.
 export const EDITION_MILESTONE_BONUSES = [
   {after: 3, stars: 4}, {after: 6, stars: 5}, {after: 10, stars: 7},
   {after: 16, stars: 4},
 ];
 
 // Beyond one exploration move per hidden jar, arc finales have breathing room.
-export const EDITION_EXTRA_MOVES: Readonly<Record<number, number>> = {6: 1, 10: 2, 13: 1, 16: 2, 20: 2};
+export const EDITION_EXTRA_MOVES: Readonly<Record<number, number>> = {6: 1, 10: 2, 13: 1, 16: 2, 20: 2, 24: 2};

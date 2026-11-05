@@ -17,10 +17,10 @@ export function parseBackup(text:string):Backup {
  const edition=isSecondEdition?'second-edition':'classic';
  if(b.edition!==undefined&&b.edition!==edition)throw new Error('Choose a backup for this edition of Decopu. Nothing was changed.');
  const p=b.progress;
- // Preview.1–4 had ten boards; preview.5–6 had sixteen. Only known historical
- // sequence lengths may be padded; arbitrary short files remain invalid.
+ // Preview.1–4 had ten boards, preview.5–6 sixteen, and preview.7 twenty.
+ // Only known historical lengths may be padded; arbitrary short files stay invalid.
  const count=Array.isArray(p?.bestStars)?p.bestStars.length:0;
- const legacy=isSecondEdition&&[10,16].includes(count)&&count<LEVEL_COUNT;
+ const legacy=isSecondEdition&&[10,16,20].includes(count)&&count<LEVEL_COUNT;
  if(!p||!Array.isArray(p.bestStars)||(count!==LEVEL_COUNT&&!legacy)||!p.bestStars.every(n=>Number.isInteger(n)&&n>=0&&n<=3)||!Array.isArray(p.bestMoves)||p.bestMoves.length!==count||!p.bestMoves.every(n=>Number.isSafeInteger(n)&&n>=0)||!p.shop||!Array.isArray(p.shop.owned)||p.shop.owned.some(id=>!DECORATIONS.some(d=>d.id===id&&(!legacy||(d.unlockAfter??0)<=count)))||new Set(p.shop.owned).size!==p.shop.owned.length)throw new Error('The backup contains invalid progress. Nothing was changed.');
  if(legacy&&b.puzzle!==null&&(!b.puzzle||b.puzzle.levelId>count))throw new Error('The saved puzzle is invalid. Nothing was changed.');
  if(isSecondEdition&&p.shop.owned.some(id=>!collectionUnlocked(id,p.bestStars)))throw new Error('The backup contains a decoration that is still locked. Nothing was changed.');

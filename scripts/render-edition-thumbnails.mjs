@@ -35,7 +35,7 @@ await evaluate(`(async()=>{
  };
 })();`);
 await fs.mkdir('public/edition2/thumbnails',{recursive:true});
-const ids=process.env.THUMB_IDS?.split(',')??['counter','sign','paint','shelves','plant','rug','lamp','table','art','clock','basket','bench','trolley','planter','terrarium','botanical','cabinet'];
+const ids=process.env.THUMB_IDS?.split(',')??['counter','sign','paint','shelves','plant','rug','lamp','table','art','clock','basket','bench','trolley','planter','terrarium','botanical','cabinet','armchair'];
 for(const id of ids)for(let style=0;style<3;style++){
  const r=await evaluate(`window.renderThumb(${JSON.stringify(id)},${style})`);await fs.writeFile(`public/edition2/thumbnails/${id}-${style}.webp`,Buffer.from(r.data.split(',')[1],'base64'));console.log(id,style,r.count);
 }

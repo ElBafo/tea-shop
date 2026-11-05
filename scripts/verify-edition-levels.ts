@@ -7,9 +7,9 @@ import { solve } from '../src/game/solver';
 import { UPGRADES } from '../src/shop/upgrades';
 import type { LevelDef } from '../src/game/types';
 
-const expectedSolverMoves = [3,5,7,2,8,9,3,9,7,13,3,8,9,3,7,13,4,8,11,13];
-const expectedCapacities = [4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,4,5,4,5];
-assert.equal(EDITION_LEVELS.length, 20);
+const expectedSolverMoves = [3,5,7,2,8,9,3,9,7,13,3,8,9,3,7,13,4,8,11,13,4,7,10,12];
+const expectedCapacities = [4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,4,5,4,5,5,5,5,5];
+assert.equal(EDITION_LEVELS.length, 24);
 assert.equal(CLASSIC_LEVELS.length, 38);
 assert.equal(LEVELS, CLASSIC_LEVELS, 'Default and Node verification retain the released sequence');
 // Captured from preview.4 before appending levels. Saved scores and move logs
@@ -17,11 +17,13 @@ assert.equal(LEVELS, CLASSIC_LEVELS, 'Default and Node verification retain the r
 const identity = (levels: unknown) => createHash('sha256').update(JSON.stringify(levels)).digest('hex');
 assert.equal(identity(EDITION_LEVELS.slice(0,10)), '7c1bee1c1dbb6d3aa60e25fab7ef46aa9b5eaee8bdc3054dffcc20c98459f2fa', 'The first ten authored definitions must stay unchanged');
 assert.equal(identity(EDITION_LEVELS.slice(0,16)), '9e8226153f4d450f0b5aaf80ed66067fb10e656e5661471e4b19aa2cddb33487', 'Every preview.6 board, ID, target and hidden flag must stay unchanged');
+assert.equal(identity(EDITION_LEVELS.slice(0,20)), '6a97a2829b84c775e03fd71c09215bf9ff0585f2061faffcef65fa61461f8af0', 'Every preview.7 board, ID, target and hidden flag must stay unchanged');
 assert.equal(identity(CLASSIC_LEVELS), '021a6cd501aac4af2cff2309d879b40ac1e4373428489ae5922d9c4eac56fd79', 'Released level definitions must stay unchanged');
 assert.equal(EDITION_ARCS[0].start, 1);
 assert.equal(EDITION_ARCS.at(-1)!.end, EDITION_LEVELS.length);
 for(let i=1;i<EDITION_ARCS.length;i++) assert.equal(EDITION_ARCS[i].start, EDITION_ARCS[i-1].end+1);
-assert.deepEqual(EDITION_ARCS.at(-1),{name:'Treasures to keep',start:17,end:20,copy:'A quiet cup, matching pairs, and a place for keepsakes.'});
+assert.deepEqual(EDITION_ARCS[5],{name:'Treasures to keep',start:17,end:20,copy:'A quiet cup, matching pairs, and a place for keepsakes.'});
+assert.deepEqual(EDITION_ARCS.at(-1),{name:'A quiet chapter',start:21,end:24,copy:'A warm cup, a little room, and somewhere to settle.'});
 
 // A reordered or recoloured board does not count as a new puzzle. Ignore lids
 // here too: wrapping an existing board would not make its arrangement new.
@@ -51,6 +53,7 @@ for (const [index, level] of EDITION_LEVELS.entries()) {
     for(const item of tube) counts.set(item,(counts.get(item)??0)+1);
   }
   for(const count of counts.values()) assert.equal(count, level.capacity, 'Each flavour fills exactly one jar');
+  assert.ok(counts.size<=4, 'The authored sequence keeps its four familiar flavours');
   const hidden = level.sealed?.filter(Boolean).length ?? 0;
   if(hidden) hiddenLevels++;
   assert.ok(hidden<=1, 'The slice introduces only one hidden jar at once');
@@ -67,15 +70,19 @@ for (const [index, level] of EDITION_LEVELS.entries()) {
   assert.equal(starsForMoves(level.par+100,level.par),1,'A finish always earns a star');
   console.log(`ok ${level.id}: ${level.name} — ${solution.moves.length} solver moves / ${level.par} target`);
 }
-assert.equal(hiddenLevels,4);
+assert.equal(hiddenLevels,5);
 assert.ok(expectedSolverMoves[3]<expectedSolverMoves[2], 'Arc two opens with a breather');
 assert.ok(expectedSolverMoves[6]<expectedSolverMoves[5], 'Arc three opens with a breather');
 assert.ok(expectedSolverMoves[10]<expectedSolverMoves[9], 'Arc four opens with a breather');
 assert.ok(expectedSolverMoves[13]<expectedSolverMoves[12], 'The taller-jar introduction opens with a breather');
 assert.ok(expectedSolverMoves[16]<expectedSolverMoves[15], 'The keepsake arc opens with a breather');
-assert.ok(expectedSolverMoves.slice(16).every((moves,i,arc)=>i===0||moves>arc[i-1]),'The new arc builds from a breather toward its finale');
-assert.equal(EDITION_LEVELS.slice(16).filter(level=>level.sealed?.some(Boolean)).length,1,'Only one new board uses concealed contents');
-assert.equal(EDITION_LEVELS[19].sealed,undefined,'The new finale has visible information');
+assert.ok(expectedSolverMoves.slice(16,20).every((moves,i,arc)=>i===0||moves>arc[i-1]),'The keepsake arc builds from a breather toward its finale');
+assert.equal(EDITION_LEVELS.slice(16,20).filter(level=>level.sealed?.some(Boolean)).length,1,'Only one keepsake board uses concealed contents');
+assert.equal(EDITION_LEVELS[19].sealed,undefined,'The keepsake finale has visible information');
+assert.ok(expectedSolverMoves[20]<expectedSolverMoves[19], 'The reading arc opens with a breather');
+assert.ok(expectedSolverMoves.slice(20).every((moves,i,arc)=>i===0||moves>arc[i-1]),'The reading arc grows gradually from a short consolidation');
+assert.equal(EDITION_LEVELS.slice(20).filter(level=>level.sealed?.some(Boolean)).length,1,'Only one reading board uses concealed contents');
+assert.equal(EDITION_LEVELS[23].sealed,undefined,'The reading finale has visible information');
 assert.equal(EDITION_LEVELS[13].sealed,undefined,'Introduce taller jars without concealed pieces');
 assert.equal(isWon({capacity:5,tubes:[['rose','rose','rose','rose'],['rose'],[]],sealed:[false,false,false]}),false,'Four matching treats do not complete a five-slot jar');
 const bonus=EDITION_MILESTONE_BONUSES.reduce((n,m)=>n+m.stars,0);
@@ -84,7 +91,7 @@ assert.deepEqual(EDITION_MILESTONE_BONUSES,[{after:3,stars:4},{after:6,stars:5},
 const core=UPGRADES.filter(d=>!d.optional).reduce((n,d)=>n+d.cost,0);
 assert.equal(core,26);
 assert.equal(10+EDITION_MILESTONE_BONUSES.filter(m=>m.after<=10).reduce((n,m)=>n+m.stars,0),core,'The original ten one-star finishes still fund the core room');
-assert.equal(EDITION_LEVELS.length+bonus,40);
-assert.equal(EDITION_LEVELS.length+bonus-core,14,'All one-star finishes fund the core plus either Glass garden or Botanical triptych');
-assert.equal(EDITION_LEVELS.length*3+bonus,80);
-console.log('PASS: twenty authored puzzles, four hidden jars, a new four-puzzle keepsake arc, unchanged first sixteen and classic boards, solvability/full-jar completion and 40–80-star economy without a new bonus.');
+assert.equal(EDITION_LEVELS.length+bonus,44);
+assert.equal(EDITION_LEVELS.length+bonus-core,18,'All one-star finishes fund the core plus any current special, including Reading chair');
+assert.equal(EDITION_LEVELS.length*3+bonus,92);
+console.log('PASS: twenty-four authored puzzles, five hidden jars, a gradual four-puzzle reading arc, unchanged first twenty and classic boards, solvability/full-jar completion and 44–92-star economy without a new bonus.');

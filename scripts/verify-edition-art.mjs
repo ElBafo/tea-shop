@@ -1,4 +1,4 @@
-// Inspect the seventeen-design showroom, then stress isolated model disposal.
+// Inspect the eighteen-design showroom, then stress isolated model disposal.
 // APP_ORIGIN/CDP_PORT select an isolated preview. Only test progress is written.
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
@@ -45,7 +45,7 @@ const lifecycle=await evaluate(`(async()=>{
  const scene=new Scene(Engine.Instances[0]);
  const counts=()=>({meshes:scene.meshes.length,materials:scene.materials.length,textures:scene.textures.length,transforms:scene.transformNodes.length});
  const initial=counts(),peak={meshes:0,materials:0,textures:0,transforms:0},overflow=[];
- const extraIds=['art','clock','basket','bench','trolley','planter','terrarium','botanical','cabinet'];
+ const extraIds=['art','clock','basket','bench','trolley','planter','terrarium','botanical','cabinet','armchair'];
  for(let i=0;i<12;i++)for(const d of UPGRADES){
   const shop=editionShowroomShop();shop.style[d.id]=i%3;
   const item=buildItem(scene,d.id,shop);
@@ -62,13 +62,13 @@ const lifecycle=await evaluate(`(async()=>{
  return{designs:UPGRADES.map(d=>d.id),artIds:editionArtIds,cycles:12,initial,final,peak,overflow,showroom};
 })();`);
 assert.deepEqual(lifecycle.overflow,[],'new decorations fit their placement footprints across all styles');
-assert.equal(lifecycle.designs.length,17,'all seventeen active designs are exercised');
+assert.equal(lifecycle.designs.length,18,'all eighteen active designs are exercised');
 assert.deepEqual(new Set(lifecycle.designs),new Set(lifecycle.artIds),'every active design uses edition art');
 assert.deepEqual(lifecycle.final,lifecycle.initial,'materials, textures, meshes and transforms release after repeated rebuilds');
 await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
-await evaluate(`localStorage.setItem('tea-shop-preview-edition2-progress-v1',JSON.stringify({muted:true,bestStars:Array(20).fill(0),bestMoves:Array(20).fill(0),shop:{owned:[],stored:[],style:{},place:{},finaleSeen:false}}));`);
+await evaluate(`localStorage.setItem('tea-shop-preview-edition2-progress-v1',JSON.stringify({muted:true,bestStars:Array(24).fill(0),bestMoves:Array(24).fill(0),shop:{owned:[],stored:[],style:{},place:{},finaleSeen:false}}));`);
 await navigate(false);await shot('empty-phone');
 assert.deepEqual(errors,[]);
-console.log('PASS: all seventeen active designs, mixed phone/day/night/desktop, empty room, and twelve rebuild cycles per design plus keeper release owned resources.',lifecycle);
+console.log('PASS: all eighteen active designs, mixed phone/day/night/desktop, empty room, and twelve rebuild cycles per design plus keeper release owned resources.',lifecycle);
 await fs.writeFile('work/session-art-check.json',JSON.stringify(lifecycle,null,2));
 await clear();ws.close();

@@ -33,7 +33,7 @@ export function nextGoal(progress: Progress): string {
  return `${goal.item.title} · ${remaining ? `${remaining} puzzles to unlock` : `Available to buy for ${goal.item.cost} ✦`}`;
 }
 export function milestoneAt(count:number):string|null {
- if (isSecondEdition) return count===3 ? '+4 stars · Bench and framed print now available to buy' : count===6 ? '+5 stars · Tea trolley and wall clock now available to buy' : count===10 ? '+7 stars · Planter and cozy basket now available to buy' : count===13 ? 'Glass garden unlocked · Available to buy for 10 ✦' : count===16 ? '+4 stars · Botanical triptych unlocked · Available to buy for 14 ✦' : count===20 ? 'Collector’s cabinet unlocked · Available to buy for 18 ✦' : null;
+ if (isSecondEdition) return count===3 ? '+4 stars · Bench and framed print now available to buy' : count===6 ? '+5 stars · Tea trolley and wall clock now available to buy' : count===10 ? '+7 stars · Planter and cozy basket now available to buy' : count===13 ? 'Glass garden unlocked · Available to buy for 10 ✦' : count===16 ? '+4 stars · Botanical triptych unlocked · Available to buy for 14 ✦' : count===20 ? 'Collector’s cabinet unlocked · Available to buy for 18 ✦' : count===24 ? 'Reading chair unlocked · Available to buy for 16 ✦' : null;
  const reward=DECORATIONS.find(d=>d.unlockAfter===count);
  if(reward)return `${reward.title} unlocked · Available to buy for ${reward.cost} ✦${bonusAt(count) ? ` · +${bonusAt(count)} milestone stars` : ""}`;
  if(count===32)return 'A full house complete · Your final shelves await';

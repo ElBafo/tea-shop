@@ -1,12 +1,12 @@
-# Second edition: twenty-puzzle pacing
+# Second edition: twenty-four-puzzle pacing
 
-This sequence is available only in the isolated second-edition development mode. Preview.1 introduced puzzles 1–10; preview.5 added 11–16. Preview.7 adds the four-puzzle **Treasures to keep** arc, 17–20, alongside the optional Collector’s cabinet. The first sixteen definitions, IDs, targets and hidden flags are unchanged. The released 38-puzzle sequence also retains its board identities and targets. No existing score or unfinished puzzle is reassigned.
+This sequence is available only in the isolated second-edition development mode. Preview.1 introduced puzzles 1–10; preview.5 added 11–16; preview.7 added **Treasures to keep**, 17–20, alongside Collector’s cabinet. Preview.8 adds **A quiet chapter**, 21–24, and the optional Reading chair. The first twenty definitions, IDs, targets and hidden flags are unchanged. The released 38-puzzle sequence also retains its board identities and targets. No existing score or unfinished puzzle is reassigned.
 
 ## Rhythm
 
-Six short arcs connect quick satisfaction, spare-space decisions and decorating goals. The first ten boards use four-slot jars; puzzles 14–16 introduce five-slot jars. The new arc returns to a short four-slot consolidation at 17, develops matching-pair space in taller jars at 18, uses one wrapped jar at 19, and closes with a visible-information tall-jar finale at 20. There are never more than six jars or four flavours on these boards.
+Seven short arcs connect quick satisfaction, spare-space decisions and decorating goals. The first ten boards use four-slot jars; puzzles 14–16 introduce five-slot jars. The keepsake arc returns to a short four-slot consolidation at 17, develops matching-pair space in taller jars at 18, uses one wrapped jar at 19, and closes with a visible-information tall-jar finale at 20. The reading arc keeps five-slot jars throughout: a two-flavour consolidation at 21, matching-pair decisions at 22, one reveal at 23, then four familiar flavours in the visible finale at 24. There are never more than six jars or four flavours on these boards.
 
-Only four puzzles contain hidden contents, with one hidden jar each. Each receives one exploration move in its target. Puzzles 6, 10, 13, 16 and 20 have additional explicit breathing room. The solver uses bounded breadth-first search with existing pruning; its route lengths below are development evidence rather than a claim about every possible human strategy.
+Only five puzzles contain hidden contents, with one hidden jar each. Each receives one exploration move in its target. Puzzles 6, 10, 13, 16, 20 and 24 have additional explicit breathing room. The solver uses bounded breadth-first search with existing pruning; its route lengths below are development evidence rather than a claim about every possible human strategy.
 
 | Puzzle | Role | Capacity | Solver moves | Three-star target | Hidden jars |
 | --- | --- | ---: | ---: | ---: | ---: |
@@ -30,22 +30,28 @@ Only four puzzles contain hidden contents, with one hidden jar each. Each receiv
 | 18 · Pairs and Space | Make room for whole pairs | 5 | 8 | 8 | 0 |
 | 19 · A Wrapped Keepsake | Reveal one jar and regroup four flavours | 4 | 11 | 12 | 1 |
 | 20 · A Place for Keepsakes | Visible-information keepsake finale | 5 | 13 | 15 | 0 |
+| 21 · The First Page | Two-flavour consolidation breather | 5 | 4 | 4 | 0 |
+| 22 · A Little Bookmark | Gather pairs while keeping room for the next pour | 5 | 7 | 7 | 0 |
+| 23 · Under the Fold | One reveal among three familiar flavours | 5 | 10 | 11 | 1 |
+| 24 · Settle In | Moderate visible-information reading finale | 5 | 12 | 14 | 0 |
 
-Stacks remain bottom-to-top and use the existing legal-pour/full-jar rules. Partial same-colour stacks in puzzles 4, 11 and 17 intentionally require consolidation. Puzzle 17 can finish a jar on its first pour, offering a quick payoff after the longer sixteenth board. Puzzle 18 gives each matching pair room to move, while 19 adds only one reveal. The final board has no concealed information and a two-move allowance. Unlimited Undo, restart, and guaranteed stars for completion remain available. Three stars measure efficient play, never speed.
+Stacks remain bottom-to-top and use the existing legal-pour/full-jar rules. Partial same-colour stacks in puzzles 4, 11, 17 and 21 intentionally require consolidation. Puzzle 17 can finish a jar on its first pour, offering a quick payoff after the longer sixteenth board. Puzzle 18 gives each matching pair room to move, while 19 adds only one reveal. Puzzles 20 and 24 have no concealed information and a two-move allowance. The reading arc reduces workload after 20, then grows through solver routes of four, seven, ten and twelve moves; keeping five-slot jars throughout avoids changing capacity within that arc. Unlimited Undo, restart, and guaranteed stars for completion remain available. Three stars measure efficient play, never speed.
 
-The four new arrangements are checked against all earlier edition and released boards under flavour relabelling and jar reordering. Adding a lid, changing colours or shuffling jars on an old arrangement does not count as a new puzzle.
+The arrangements added after puzzle 16 are checked against all earlier edition and released boards under flavour relabelling and jar reordering, including against one another. Adding a lid, changing colours or shuffling jars on an old arrangement does not count as a new puzzle.
 
 ## Rewards
 
-The existing milestone bonuses remain 4 stars after puzzle 3, 5 after puzzle 6, 7 after puzzle 10, and 4 after puzzle 16: twenty bonus stars in total. There is no new bonus at 20. The original ten one-star finishes still fund the 26-star core shop. Finishing all twenty boards provides **40–80 stars**, depending on best scores.
+The existing milestone bonuses remain 4 stars after puzzle 3, 5 after puzzle 6, 7 after puzzle 10, and 4 after puzzle 16: twenty bonus stars in total. There is no new bonus at 20 or 24. The original ten one-star finishes still fund the 26-star core shop. Finishing all twenty-four boards provides **44–92 stars**, depending on best scores.
 
-The Collector’s cabinet becomes available to buy after twenty completions for 18 stars; unlocking it does not grant the decoration. The edition catalogue totals 122 stars, so players still choose a collection rather than automatically buying everything. At minimum scores, forty stars fund the core plus either Glass garden or Botanical triptych. A core owner starting from all one-star scores needs four additional best-score stars to afford the cabinet. Optional full-price returns also support changing choices. No extra currency, repeat-reward farming or paid monetisation is introduced.
+The Collector’s cabinet remains available to buy after twenty completions for 18 stars. Reading chair becomes available after twenty-four completions for 16 stars. These unlocks grant access to a purchase, not free furniture. The edition catalogue now contains eighteen designs costing 138 stars, so players still choose a collection rather than automatically buying everything. At minimum scores, forty-four stars fund the core plus any one current special: Glass garden, Botanical triptych, Collector’s cabinet or Reading chair. Optional full-price returns also support changing choices. No extra currency, repeat-reward farming or paid monetisation is introduced.
+
+At the preview.7 checkpoint, twenty completed boards still earn 40–80 against the previous 122-star catalogue. A core owner with only one-star scores at that point needs four additional score stars for the cabinet; the next four one-star finishes can supply those stars without replaying. Existing scores and bonus awards are never reduced.
 
 Stars remain universal; pursuing a chosen decoration never reserves or restricts them. `EDITION_MILESTONE_BONUSES` exports the unchanged schedule consumed by the journey code, and verification checks its exact values and the minimum/maximum budget.
 
 ## Evidence and player testing
 
-`node --import tsx scripts/verify-edition-levels.ts` passes all twenty boards, replaying each solver route through the real engine, checking full-jar completion, item counts, explicit target allowances, arrangement novelty and the intended breathing-room pattern. Fingerprints protect the first ten and first sixteen complete definitions as well as all released definitions. `verify-pacing.ts` independently confirms that released board identities stay unchanged. These are local development results; the release record owns hosted-build and phone-review status.
+`node --import tsx scripts/verify-edition-levels.ts` passes all twenty-four boards, replaying each solver route through the real engine, checking full-jar completion, item counts, explicit target allowances, arrangement novelty and the intended breathing-room pattern. Fingerprints protect the first ten, sixteen and twenty complete definitions as well as all released definitions. `verify-pacing.ts` independently confirms that released board identities stay unchanged. These are local development results; the release record owns hosted-build and phone-review status.
 
 Solver move counts are a rough workload signal, not a measurement of how difficult or enjoyable a person will find a puzzle. Player review should specifically observe:
 
@@ -58,5 +64,8 @@ Solver move counts are a rough workload signal, not a measurement of how difficu
 - Whether whole-pair capacity at 18 produces useful decisions without confusing pours.
 - Whether the single reveal at 19 is understandable without repeated restarts.
 - Whether the cabinet and its styles are appealing enough to motivate the final arc and a few improved scores.
+- Whether 21 feels like a restorative short shelf after the keepsake finale.
+- Whether the gradual reading arc stays interesting without making 22 or 23 feel repetitive.
+- Whether the final visible shelf and Reading chair unlock make a satisfying place to pause and decorate.
 
 No retention or enjoyment claim is established by automated verification.

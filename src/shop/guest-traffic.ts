@@ -1,4 +1,5 @@
 import type { ShopState } from '../game/types';
+import { isSecondEdition } from '../game/mode';
 import { isStored, kindOf, placeOf, styleOf } from './upgrades';
 import { buildGuestLayout, routeGuest, type GuestLayout, type GuestPoint, type GuestStop } from './guest-routes';
 
@@ -44,7 +45,8 @@ export function guestArrivalRange(count: number): readonly [number,number] {
   return [70-61*amount,100-86*amount];
 }
 function layoutKey(shop: ShopState): string {
-  return JSON.stringify(shop.owned.filter(id=>!isStored(shop,id)).sort().map(id=>[id,placeOf(shop,id),kindOf(id)==='bench'?styleOf(shop,id):null]));
+  return JSON.stringify(shop.owned.filter(id=>!isStored(shop,id)).sort().map(id=>[id,placeOf(shop,id),
+    kindOf(id)==='bench' || (isSecondEdition && kindOf(id)==='armchair')?styleOf(shop,id):null]));
 }
 
 /**

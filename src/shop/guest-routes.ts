@@ -1,4 +1,5 @@
 import type { Placement, ShopState, UpgradeId } from '../game/types';
+import { isSecondEdition } from '../game/mode';
 import { counterCells, floorCells, floorCenter, inRoom, ROOM } from './grid';
 import { isStored, kindOf, placeOf, styleOf, UPGRADE_BY_ID } from './upgrades';
 
@@ -158,6 +159,14 @@ export function buildGuestLayout(shop: ShopState): GuestLayout {
       const point=choose(candidates.filter(p=>seatApproachClear(p,seat,id,occupied)),seat);
       if(point) layout.stops.push({key:`${id}:read`,kind:'sit',point,facing:facing(point,seat),
         seat:{point:seat,facing:place.rot*Math.PI/2,elevation:[.125,.15,.175][styleOf(shop,id)]??.125}});
+    } else if(kind==='armchair' && isSecondEdition) {
+      const center=floorCenter(def.size,place), seat=localPoint(center,place.rot,0,.08);
+      // Every edition chair has the same cushion height and open front. Enter
+      // along its centreline so neither arms nor the backrest are crossed.
+      const approach=localPoint(center,place.rot,0,1);
+      const point=choose(seatApproachClear(approach,seat,id,occupied)?[approach]:[],seat);
+      if(point) layout.stops.push({key:`${id}:rest`,kind:'sit',point,facing:facing(point,seat),
+        seat:{point:seat,facing:place.rot*Math.PI/2,elevation:0}});
     }
   }
   // A bare room still supports a short visit. Keep look stops clear of the

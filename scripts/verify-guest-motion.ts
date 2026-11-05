@@ -22,6 +22,19 @@ const wrapped={...wrap.update(frame({x:.01,facing:-Math.PI+.04}),.016,false,.8)}
 assert.ok(wrapped.facing>Math.PI-.04&&wrapped.facing<Math.PI+.04,'yaw takes the short path over the wrap boundary');
 assert.ok(Math.abs(shortestGuestTurn(Math.PI-.04,wrapped.facing))<.08,'no full rotation at ±π');
 
+// The approach faces into a chair, but sitting faces out. Once hips use the
+// cushion anchor, the feet must not ease through its arms/base on a half-turn.
+for(const dt of [0,1/60,.1])for(let rot=0;rot<4;rot++) {
+ const seating=new GuestMotion(),outward=rot*Math.PI/2;
+ seating.update(frame({x:2.5,z:2.58,facing:outward+Math.PI}),0,false,.56);
+ const seated=frame({x:2.5,z:2.58,facing:outward,pose:'sit',moving:false,phase:'activity',stopKey:'armchair:rest'});
+ const original=structuredClone(seated),sample=seating.update(seated,dt,false,.56);
+ near(sample.facing,outward,'first seated frame aligns with the actual cushion even on a zero-dt repaint');
+ assert.deepEqual(seated,original,'seating alignment cannot change the route position or pose');
+ const next=seating.update(frame({x:2.5,z:2.65,facing:outward+Math.PI/2}),1/60,false,.56);
+ assert.ok(next.facing>outward&&next.facing<outward+Math.PI/2,'walking turn easing resumes after the fixed seat pose');
+}
+
 const moving=new GuestMotion();moving.update(frame(),0,false,.8);
 const source=frame({x:.05,facing:Math.PI/2}),original=structuredClone(source);
 moving.update(source,.05,false,.8);assert.deepEqual(source,original,'presentation cannot mutate traffic data or x/y/z');
@@ -59,4 +72,4 @@ const nextSceneRoster=sessionRoster;
 assert.equal(nextSceneRoster.next(),'child-a');
 assert.equal(nextSceneRoster.next(),'man-a');
 nextSceneRoster.reset();assert.equal(nextSceneRoster.next(['woman-a']),'child-a');
-console.log('PASS: distance-driven stride, angular-wrap/frame-partition easing, repaint/blocked/reduced/reset behavior, immutable route frames and per-visit roster variety.');
+console.log('PASS: distance-driven stride, angular-wrap/frame-partition easing, fixed seat-facing alignment, repaint/blocked/reduced/reset behavior, immutable route frames and per-visit roster variety.');

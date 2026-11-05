@@ -8,7 +8,7 @@ import type { StandardMaterial } from '@babylonjs/core/Materials/standardMateria
 import type { ShopState, UpgradeId } from '../game/types';
 import type { EditionTools } from './edition-art';
 
-export const editionSpecialIds: UpgradeId[] = ['terrarium', 'botanical', 'cabinet'];
+export const editionSpecialIds: UpgradeId[] = ['terrarium', 'botanical', 'cabinet', 'armchair'];
 
 // These models share the miniature's palette and the caller's ownedVisual scope.
 // Their relief and foliage are geometry, so thumbnails show the actual purchase.
@@ -235,6 +235,66 @@ export function buildEditionSpecial(scene:Scene,id:UpgradeId,shop:ShopState,styl
    }
    for(let i=0;i<5;i++){const a=i*Math.PI*2/5;orb(scene,'salon-crown-petal',root,cream,.032,Math.sin(a)*.04,1.7+Math.cos(a)*.04,.385,1,1,.3);}
    orb(scene,'salon-crown-heart',root,brass,.024,0,1.7,.405,1,1,.4);
+  }
+ }else if(id==='armchair'){
+  const fabric=mat(scene,'reading-upholstery',style===0?'#91a99b':style===1?'#607b91':E.cream,.045);
+  const cushion=mat(scene,'reading-cushion',style===0?'#d5a296':style===1?'#a4b7ba':E.cream,.035);
+  const cane=mat(scene,'reading-cane','#c9a578',.08);
+  const panel=(name:string,m:StandardMaterial,w:number,h:number,d:number,r:number,x:number,y:number,z:number)=>{
+   const a=soft(scene,name,root,m,w,d,h,r,x,y,z);a.rotation.x=Math.PI/2;return a;
+  };
+  const rail=(name:string,m:StandardMaterial,points:number[][],radius=.018)=>attach(
+   MeshBuilder.CreateTube(name,{path:points.map(p=>new Vector3(p[0],p[1],p[2])),radius,tessellation:10},scene),root,m);
+  // All three seats share the guest contract: top .47, facing +Z, root at
+  // local (0, 0, .08). The front edge .17 leaves a child's shorter legs clear.
+  // Decoration stays outside this space: no book or cushion prop blocks a guest.
+  for(const x of [-.28,.28])for(const z of [-.27,.07]){
+   const leg=cylinder(scene,'reading-chair-leg',root,style===2?cane:oak,style===0?.23:.31,.037,x,style===0?.12:.155,z,.028);
+   leg.rotation.z=-Math.sign(x)*.07;
+  }
+  if(style===0){
+   // Rounded tub chair: a soft sage shell and generous rose seat.
+   soft(scene,'cloud-seat-shell',root,fabric,.83,.19,.55,.20,0,.31,-.135);
+   panel('cloud-rounded-back',fabric,.73,.62,.19,.22,0,.73,-.29);
+   panel('cloud-back-cushion',fabric,.60,.43,.12,.17,0,.76,-.175);
+   for(const x of [-.36,.36])orb(scene,'cloud-padded-arm',root,fabric,.10,x,.56,-.055,.9,1.50,2.8);
+   soft(scene,'reading-seat-cushion',root,cushion,.58,.11,.46,.16,0,.415,-.06);
+   soft(scene,'cloud-front-piping',root,cream,.22,.012,.012,.005,0,.428,.172);
+   for(const x of [-.13,.13])orb(scene,'cloud-soft-tuft',root,cream,.017,x,.79,-.106,1,1,.35);
+  }else if(style===1){
+   // A taller wingback, with visible oak joinery and a lighter blue cushion.
+   soft(scene,'library-oak-seat-frame',root,oak,.83,.11,.55,.10,0,.33,-.135);
+   panel('library-high-back',fabric,.66,.88,.16,.14,0,.81,-.31);
+   panel('library-back-inset',fabric,.48,.66,.07,.12,0,.84,-.213);
+   for(const side of [-1,1]){
+    const wing=panel('library-wing',fabric,.18,.52,.25,.07,side*.31,.96,-.235);wing.rotation.z=-side*.08;
+    soft(scene,'library-arm-support',root,oak,.075,.24,.51,.028,side*.36,.47,-.08);
+    soft(scene,'library-padded-arm',root,fabric,.14,.12,.56,.065,side*.36,.63,-.055);
+   }
+   soft(scene,'reading-seat-cushion',root,cushion,.58,.11,.46,.14,0,.415,-.06);
+   soft(scene,'library-front-welt',root,cream,.28,.013,.012,.005,0,.429,.172);
+   for(const x of [-.14,0,.14])orb(scene,'library-back-button',root,brass,.016,x,.90,-.17,1,1,.4);
+  }else{
+   // An airy cane nest. Open rails and a blanket on the outer arm keep the seat usable.
+   soft(scene,'woven-seat-frame',root,cane,.81,.12,.55,.18,0,.33,-.135);
+   const arch=Array.from({length:25},(_,i)=>{const a=i*Math.PI/24;return[Math.cos(a)*.36,.56+Math.sin(a)*.47,-.31];});
+   rail('woven-rounded-back',cane,arch,.028);
+   for(const x of [-.24,-.12,0,.12,.24]){
+    const top=.56+Math.sqrt(1-(x/.36)**2)*.47;
+    rail('woven-back-upright',cane,[[x,.40,-.31],[x,top,-.31]],.012);
+   }
+   for(const y of [.54,.66,.78,.90]){
+    const half=y<=.56?.36:.36*Math.sqrt(1-((y-.56)/.47)**2);
+    rail('woven-back-crossing',cane,[[-half,y,-.297],[half,y,-.297]],.010);
+   }
+   for(const side of [-1,1]){
+    rail('woven-arm',cane,[[side*.34,.43,.14],[side*.36,.59,.16],[side*.37,.65,.07],[side*.36,.66,-.28]],.029);
+    rail('woven-arm-lower',cane,[[side*.34,.40,.13],[side*.36,.43,-.27]],.017);
+   }
+   soft(scene,'reading-seat-cushion',root,cushion,.58,.11,.46,.17,0,.415,-.06);
+   soft(scene,'woven-blanket-drape',root,rose,.10,.32,.29,.04,-.404,.48,.035);
+   soft(scene,'woven-blanket-fold',root,rose,.17,.045,.29,.025,-.375,.655,.035);
+   for(const z of [-.06,.035,.13])soft(scene,'woven-blanket-fringe',root,cream,.013,.07,.014,.005,-.455,.30,z);
   }
  }
  place(root,id,shop);tag(root,id);return root;

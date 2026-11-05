@@ -10,7 +10,27 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.7 — hosted for owner phone review
+## 0.2.0-preview.8 — locally validated; deployment pending
+
+Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner said “Continue” following hosted preview.7. The next review build continues on the preview branch; main remains unchanged.
+
+Planned scope:
+
+- Four authored puzzles, 21–24, in the A quiet chapter arc, preserving the first twenty and all thirty-eight classic identities, targets and existing bonuses.
+- Reading chair unlocks for purchase after 24 completions at 16 stars, with three included edition styles and actual-model thumbnails. Target totals: eighteen designs, fifty-four thumbnails, 138-star catalogue and 26-star core.
+- Bonuses stay at twenty, with no added reward at twenty-four. Twenty-four puzzles earn 44–92 total. Minimum finishes leave eighteen after the core, enough for Reading chair or Collector’s cabinet as alternatives; optional full-value returns remain.
+- Existing visitors can use a reachable placed chair through the current seating pose and pooled rigs. Verify style/rotation-specific seat geometry, safe approach/departure paths, blocked/stored cases, Edit hiding, reduced motion and disposal, without a new serving system or guest economy.
+- Preserve the edition namespace, scores, purchases, layout, goals, preferences, guide, recovery and unfinished play. Keep known ten-, sixteen- and twenty-board edition backups compatible with the new twenty-four-board shape and strict validation.
+
+Implementation, screenshots and local validation are complete; deployment and owner review are pending. The app/package target is `0.2.0-preview.8`; https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.7. [ROADMAP.md](ROADMAP.md) records acceptance criteria.
+
+Local validation is complete: all package checks and the final production build pass, including 24 edition and 38 classic solvers. Browser legacy, purchase, visuals, seating, lifecycle and onboarding/goal/reset flow checks pass. Known 10/16/20-board backups carry forward; real 23/24 wins add score stars only. All 18 models fit their footprints and release resources after twelve rebuild cycles. All six guest profiles fit all three chair styles; 72 rendered style/profile/rotation combinations pass. Phone 390×844, small phone 320×568, landscape 844×390 and desktop 1280×900 were checked in Chromium. Physical iPhone review remains pending. Evidence: `work/reading-final-verify.log`, `work/reading-final-build.log`, `work/edition-reading-*-check.json`, `work/edition8-art-check.json`.
+
+The new edition chair defaults to (1,3), facing the open aisle, so it is usable beside the core furniture immediately. Existing saved layouts and classic defaults stay unchanged. Seating now aligns facing on the first seated frame, preventing feet sweeping through the chair during a half-turn; walking turns retain easing.
+
+[Chair styles](screenshots/second-edition-v8/styles.webp) · [Adult and child seating](screenshots/second-edition-v8/seats.webp) · [Day](screenshots/second-edition-v8/room-day.webp) · [Night](screenshots/second-edition-v8/room-night.webp) · [Small phone](screenshots/second-edition-v8/puzzle-small.webp)
+
+## 0.2.0-preview.7 — hosted; continuation authorized
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner reviewed preview.6 positively and said “Looks good. Proceed.” This is the next bounded preview, with main unchanged.
 
@@ -47,7 +67,7 @@ Evidence: `work/edition-cabinet-legacy-check.json`, `work/edition-cabinet-purcha
 
 Artifacts: [cabinet styles](screenshots/second-edition-v7/styles.webp), [paid room by day](screenshots/second-edition-v7/room-day.webp), [paid room by night](screenshots/second-edition-v7/room-night.webp), [desktop](screenshots/second-edition-v7/desktop.webp), [separate development showroom](screenshots/second-edition-v7/showroom.webp), [cabinet unlock](screenshots/second-edition-v7/unlock.webp), [cabinet editing](screenshots/second-edition-v7/cabinet-edit.webp), [small-phone finale](screenshots/second-edition-v7/puzzle-small.webp) and [hidden puzzle](screenshots/second-edition-v7/hidden-phone.webp). Day/night/desktop use an affordable paid core-plus-cabinet composition; the full seventeen-piece showroom is a development demo.
 
-Local validation and hosted deployment passed. App commit: `cc371290eacb2355f164a867057feffbdbdaac0f`, confirmed by [GitHub Pages run 41940688895](https://github.com/ElBafo/tea-shop/actions/runs/41940688895). Stable branch `preview/shop-polish` stays at that app commit; follow-up documentation-only commits on `preview/second-edition` record delivery without changing the deployed app. Package/app/release version: `0.2.0-preview.7`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 now serves preview.7. Owner phone review remains pending; automated and simulated checks do not establish physical-device performance or player enjoyment. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`, with no merge authorized. [ROADMAP.md](ROADMAP.md) records acceptance criteria.
+Local validation and hosted deployment passed. App commit: `cc371290eacb2355f164a867057feffbdbdaac0f`, confirmed by [GitHub Pages run 41940688895](https://github.com/ElBafo/tea-shop/actions/runs/41940688895). Stable branch `preview/shop-polish` stays at that app commit; follow-up documentation-only commits on `preview/second-edition` record delivery without changing the deployed app. Package/app/release version: `0.2.0-preview.7`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 now serves preview.7. The owner subsequently said “Continue,” authorizing further preview work. Automated and simulated checks do not establish physical-device performance or player enjoyment. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`, with no merge authorized. [ROADMAP.md](ROADMAP.md) records acceptance criteria.
 
 ## 0.2.0-preview.6 — superseded by preview.7; continuation accepted
 

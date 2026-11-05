@@ -72,7 +72,8 @@ try{
      const r=d.trafficGuests[f.slot].root;seen.add(f.profile);groupSeen.add(f.group);if(!GUEST_PROFILES.some(p=>p.id===f.profile))issues.push('unknown-profile');
      if(!r.isEnabled()||Math.abs(r.position.x-f.x)>1e-8||Math.abs(r.position.y-f.y)>1e-8||Math.abs(r.position.z-f.z)>1e-8)issues.push('route-projection');
      if(visits.has(f.visitId)&&visits.get(f.visitId)!==f.profile)issues.push('appearance-changed-mid-visit');visits.set(f.visitId,f.profile);
-     const prev=last.get(f.visitId);if(prev&&!f.motion.reset){const stepYaw=Math.abs(angle(f.yaw,prev.yaw)),remaining=Math.abs(angle(f.facing,prev.yaw));maxYawStep=Math.max(maxYawStep,stepYaw);if(remaining>1e-6)maxTurnFraction=Math.max(maxTurnFraction,stepYaw/remaining);if(Math.abs(angle(f.facing,prev.facing))>1){turns++;if(stepYaw<Math.abs(angle(f.facing,prev.facing))-.05)smoothedTurns++;}}
+     if(f.pose==='sit'&&Math.abs(angle(f.yaw,f.facing))>1e-8)issues.push('seat-facing-not-aligned');
+     const prev=last.get(f.visitId);if(prev&&!f.motion.reset&&f.pose!=='sit'){const stepYaw=Math.abs(angle(f.yaw,prev.yaw)),remaining=Math.abs(angle(f.facing,prev.yaw));maxYawStep=Math.max(maxYawStep,stepYaw);if(remaining>1e-6)maxTurnFraction=Math.max(maxTurnFraction,stepYaw/remaining);if(Math.abs(angle(f.facing,prev.facing))>1){turns++;if(stepYaw<Math.abs(angle(f.facing,prev.facing))-.05)smoothedTurns++;}}
      last.set(f.visitId,{...f,motion:{...f.motion}});
      if(f.pose==='sit'){if(String(f.profile).includes('child'))childSeated++;else adultSeated++;}
     }
