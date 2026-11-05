@@ -1,6 +1,6 @@
 # Decopu: product direction
 
-**Released: [Decopu 0.2.0](https://elbafo.github.io/tea-shop/).** [PR #16](https://github.com/ElBafo/tea-shop/pull/16) merged as `966c613fa486c9ce34dd1cf5f8bb9ac4a5905d3c`; [Pages run 42081278504](https://github.com/ElBafo/tea-shop/actions/runs/42081278504) passed. Main opens the second edition with fresh production progress and normal onboarding. Progress earned afterward saves normally; physical iPhone family testing remains pending.
+**Release 0.2.1 approved; production deployment pending.** The owner requested “Merge to main” for [PR #17](https://github.com/ElBafo/tea-shop/pull/17). This promotes the reviewed drag controls, puzzle artwork and visual first-puzzle guide. Existing 0.2.0 progress is preserved; there is no new reset or storage namespace.
 
 ## Experience
 
@@ -19,11 +19,11 @@ The core loop is: solve a shelf → earn stars → preview and buy a decoration 
 - Let owned movable items be stored and placed again for free. Optional items can be returned for their full star price after confirmation; core completion pieces remain owned.
 - Completing the future Bakery should unlock star-bought special pieces usable in the original tea shop. This refers to the second venue, not a group of tea-shop puzzles. The Bakery is not playable yet.
 
-## Approved interaction preview — 0.2.1-preview.1
+## Approved puzzle interaction — 0.2.1
 
 Family testing identified an expectation to drag tea pieces from one jar to another. The owner approved adding this gesture alongside tapping and keyboard controls, with the available matching top group following the finger and legal destinations highlighted. Jars stay stationary. A valid drop follows the same move, scoring and Undo rules; an invalid or cancelled drag does not spend a move. Hidden contents remain concealed, and the whole group must fit.
 
-The implemented graphics direction is more tangible rounded pieces, clearer glass, consistent highlights and soft contact shadows, with calm lift/landing feedback. Screwdom is the owner's visual reference. This preview keeps the cozy palette, current puzzle/economy definitions and existing progress. Implementation, the final build and all browser regressions pass in [PR #17](https://github.com/ElBafo/tea-shop/pull/17). The [phone preview](https://elbafo.github.io/tea-shop/preview/?edition=2) is hosted for physical-phone review. The main release remains 0.2.0 until review and merge approval.
+The implemented graphics direction is more tangible rounded pieces, clearer glass, consistent highlights and soft contact shadows, with calm lift/landing feedback. Screwdom is the owner's visual reference. This release keeps the cozy palette, current puzzle/economy definitions and existing progress. Implementation, the final build and all browser regressions pass in [PR #17](https://github.com/ElBafo/tea-shop/pull/17). The [phone preview](https://elbafo.github.io/tea-shop/preview/?edition=2) is hosted for physical-phone review. The owner explicitly approved merging this reviewed preview as 0.2.1.
 
 The first guided puzzle must communicate the action visually beside the jars. A hand and brief bubble demonstrate a legal source-to-destination drag; tapping a source changes the cue to its destination. The cue hides during real dragging, cannot intercept input, respects reduced motion and leaves Skip available. This addresses family feedback that highlighted jars and small top-of-screen instructions were not understood.
 
