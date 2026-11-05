@@ -1,6 +1,6 @@
 # Decopu: product direction
 
-**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
 
 ## Experience
 
@@ -14,12 +14,22 @@ The core loop is: solve a shelf → earn stars → preview and buy a decoration 
 - Use Babylon.js for a real 3D cutaway diorama, with an isometric-style view and an explicit Edit mode.
 - Let players choose a visual style before buying. All existing included styles remain free to change after purchase.
 - Make every decoration cost earned stars. Preserve achievable core completion and distinguish an unlock from a purchase.
-- Preserve saved scores, purchases and layouts. Keep preview experiences separate from the released game.
+- Preserve saved scores, purchases and layouts within each edition. The owner explicitly chose a fresh production start for 0.2.0, using a new namespace while leaving older data untouched. Keep preview experiences separate from the released game.
 - Make styles compatible through coherent scale, materials and complementary colours. Do not impose matching sets or bonuses that punish mixed styles.
 - Let owned movable items be stored and placed again for free. Optional items can be returned for their full star price after confirmation; core completion pieces remain owned.
 - Completing the future Bakery should unlock star-bought special pieces usable in the original tea shop. This refers to the second venue, not a group of tea-shop puzzles. The Bakery is not playable yet.
 
-## Released baseline: 0.1.0
+## Production activation — 0.2.0
+
+The owner clarified: “I don’t care about keeping the progress. My wife should check it out like a new installation.” This supersedes the proposed migration, import and edition-choice work for this release.
+
+The main link will open the second edition directly, with a fresh production namespace and the normal Start and first-time guide. It will not copy classic or preview scores, purchases, unfinished puzzles, goals or preferences. Existing keys remain untouched and unused by the default game. This is a one-time fresh start for the new production edition; progress earned afterward saves normally across reloads and later visits.
+
+The release uses the reviewed twenty-four puzzles and eighteen paid decoration designs, with fifty-four included styles/model thumbnails. Earnings remain 44–92 stars, the eight-piece core costs 26, and the full catalogue costs 138. Reading chair still unlocks at twenty-four completions for 16 stars. No puzzles, prices, bonuses, guest rules or purchase mechanics are added in this activation pass.
+
+Preview and production progress stay separate. A new account system, automatic import, progress translation and edition chooser are outside this fresh-start release. Main provides the normal onboarding and persistence experience, with no development reset or completed-room demo. Activation verification passed; PR #16 awaits merge confirmation, followed by deployment and family testing.
+
+## Classic baseline: 0.1.0 (historical)
 
 The baseline includes 38 puzzles, nineteen paid decoration designs plus five second copies, style previews, movable furniture, day/night lighting, zoom, image sharing, full-jar completion, a skippable guide and a tea-shop completion celebration. Progress is local, with manual backup/restore, previous-save recovery and an unfinished-puzzle save. There is no account or automatic cloud sync.
 
@@ -44,7 +54,7 @@ The six approved tracks are:
 5. Let players pin a desired decoration and see progress toward that goal. Add restrained reactions to room arrangements without rigid matching rules or compulsory layouts.
 6. Author short puzzle sessions with quick satisfaction, interesting decisions, breathers and a finale. Use hidden contents selectively and retain full-jar completion, no fail state and unlimited Undo.
 
-The first slice, `0.2.0-preview.1`, was implemented, validated and hosted; the owner responded “Looks good. Continue pls.” This accepts the direction and authorizes further preview work, not a merge. The development URL is `/tea-shop/preview/?edition=2`. It uses separate saves and does not replace or migrate the released game. Its ten puzzles and milestone bonuses provide 26–46 stars against the 26-star core shop. [SECOND_EDITION.md](SECOND_EDITION.md) defines acceptance; [ROADMAP.md](ROADMAP.md) records delivery order. Preview.2 added six optional designs, preview.3 corrected paid wall finishes, and preview.4 added ambient visits. The owner reviewed traffic positively and deferred movement/visitor-cast polish. Preview.5 added six more puzzles and two special designs and passed validation and hosting. The owner then said “Continue.” Preview.6 delivered the requested guest movement and visitor-cast polish and passed validation and deployment. The owner responded “Looks good. Proceed.” Preview.7 continues the single-shop puzzle/reward journey with four more puzzles and Collector’s cabinet. Local validation and deployment passed. The owner then said “Continue.” Preview.8 now extends the journey with four more puzzles and Reading chair, including safe seating for existing visitors; implementation and validation are pending.
+The first slice, `0.2.0-preview.1`, was implemented, validated and hosted; the owner responded “Looks good. Continue pls.” This accepts the direction and authorizes further preview work, not a merge. The development URL is `/tea-shop/preview/?edition=2`. It uses separate saves and does not replace or migrate the released game. Its ten puzzles and milestone bonuses provide 26–46 stars against the 26-star core shop. [SECOND_EDITION.md](SECOND_EDITION.md) defines acceptance; [ROADMAP.md](ROADMAP.md) records delivery order. Preview.2 added six optional designs, preview.3 corrected paid wall finishes, and preview.4 added ambient visits. The owner reviewed traffic positively and deferred movement/visitor-cast polish. Preview.5 added six more puzzles and two special designs and passed validation and hosting. The owner then said “Continue.” Preview.6 delivered the requested guest movement and visitor-cast polish and passed validation and deployment. The owner responded “Looks good. Proceed.” Preview.7 continues the single-shop puzzle/reward journey with four more puzzles and Collector’s cabinet. Local validation and deployment passed. The owner then said “Continue.” Preview.8 now extends the journey with four more puzzles and Reading chair, including safe seating for existing visitors; its implementation and validation passed before source integration in PR #15.
 
 ## Validation and delivery
 

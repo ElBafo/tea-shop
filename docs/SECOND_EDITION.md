@@ -1,8 +1,20 @@
 # Decopu second edition
 
-**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
 
-Status: preview.1 established the first slice; preview.2 expanded the catalogue; preview.3 fixed paid walls; preview.4 added visits; preview.5 extended puzzles/rewards; preview.6 polished guests; preview.7 added Treasures to keep and Collector’s cabinet. These builds were validated and hosted in [PR #15](https://github.com/ElBafo/tea-shop/pull/15). **Preview.8 is the latest hosted build.** The owner said “Continue,” authorizing **0.2.0-preview.8 Reading corner**: four more puzzles, Reading chair and safe seating for existing visitors. Implementation and local validation are complete; deployment passed. Main remains unchanged. See [release notes](RELEASES.md) for evidence and [roadmap](ROADMAP.md) for sequencing.
+## Production activation — 0.2.0
+
+The owner clarified: “I don’t care about keeping the progress. My wife should check it out like a new installation.” This supersedes the proposed migration, import and edition-choice work for this release.
+
+The main link will open the second edition directly, with a fresh production namespace and the normal Start and first-time guide. It will not copy classic or preview scores, purchases, unfinished puzzles, goals or preferences. Existing keys remain untouched and unused by the default game. This is a one-time fresh start for the new production edition; progress earned afterward saves normally across reloads and later visits.
+
+Production uses `tea-shop-edition2-progress-v1` and `tea-shop-edition2-appearance-v1`. Recovery, unfinished-puzzle, guide and goal keys derive from the new progress key. The preview keeps `tea-shop-preview-edition2-progress-v1` and its existing appearance key; the classic keys also stay unchanged.
+
+The release uses the reviewed twenty-four puzzles and eighteen paid decoration designs, with fifty-four included styles/model thumbnails. Earnings remain 44–92 stars, the eight-piece core costs 26, and the full catalogue costs 138. Reading chair still unlocks at twenty-four completions for 16 stars. No puzzles, prices, bonuses, guest rules or purchase mechanics are added in this activation pass.
+
+Acceptance: verify default main and its query variants use the fresh edition, onboarding starts even when old classic/preview saves exist, first win → preview → purchase → arranging works, and newly earned production progress and preferences survive reload. Check that classic and preview keys are unchanged, preview progress still loads, main exposes no showroom/tour/reset controls, and cached/installed-app updates reopen the intended edition. Run all package checks, the production build, phone/desktop browser flows and offline checks. Physical iPhone family testing follows deployment.
+
+Local release validation passed: full package checks, production build, fresh main onboarding with prior keys present, actual first win/purchase/arranging, new-save persistence, preview isolation, four viewport sizes and installed-update/offline reopening. [RELEASES.md](RELEASES.md) records evidence and screenshots. PR #16 awaits merge confirmation; production hosting and physical iPhone family testing remain pending.
 
 ## Experience
 
@@ -12,7 +24,7 @@ Make Decopu feel like a beautiful little place the player owns, with satisfying 
 
 The first milestone delivered one complete tea-shop experience with eight core decoration designs and ten authored puzzles. The core designs are counter, sign, paint, shelves, plant, rug, lamp and table; their style options should remain easy to mix. It identified app version `0.2.0-preview.1`, with matching roadmap and release notes; later preview records below extend this baseline.
 
-The prototype is gated behind the development preview at `/tea-shop/preview/?edition=2`. It needs its own progress, recovery, unfinished-puzzle, onboarding, appearance and chosen-goal storage. Opening the prototype must neither copy over nor clear main or ordinary-preview progress. Its reset control must affect only that experience. Existing game rules and the released 38 boards remain available in the baseline.
+The original prototype was gated behind the development preview at `/tea-shop/preview/?edition=2`. It uses its own progress, recovery, unfinished-puzzle, onboarding, appearance and chosen-goal storage. Opening the prototype must neither copy over nor clear main or ordinary-preview progress. Its reset control must affect only that experience. Existing game rules and the released 38 boards remain available in the baseline.
 
 ## Art and presentation
 
@@ -50,7 +62,7 @@ Implemented locally: all eight core designs, coordinated room/shopkeeper, 24 ren
 
 The ten authored boards use three arcs and only two hidden-content puzzles. Completion bonuses after puzzles 3/6/10 are 4/5/7 stars. Total earnings are 26–46, funding the 26-star eight-piece shop even at one star per puzzle. Separate keys protect main and ordinary-preview saves; reset retains `edition=2`, and backup validation rejects cross-edition 10/38-board imports.
 
-The hosted first slice identified itself as `0.2.0-preview.1`; the wall fix identified itself as `0.2.0-preview.3`; the latest hosted build is `0.2.0-preview.8`. The local app/package target is now `0.2.0-preview.8`, with local validation complete and hosting complete. The review-build version also appears in ordinary-preview mode on this branch. Main is unchanged. See [RELEASES.md](RELEASES.md) for delivery and continuation status.
+The hosted first slice identified itself as `0.2.0-preview.1`; later previews carried their own versions through `0.2.0-preview.8`. Each was validated and hosted before source integration in PR #15. The current production activation target is `0.2.0`, with the fresh-start policy defined above. See [RELEASES.md](RELEASES.md) for delivery status.
 
 ## Preview.2 continuation and acceptance
 
@@ -138,7 +150,7 @@ All four new boards fit 390×844, 320×568, 844×390 and 1280×900; hidden puzzl
 
 The final production rebuild after the padding fix passed. Root visual review found no blocking issue in unlock/Edit/day/night/hidden/tall-small/style captures. [RELEASES.md](RELEASES.md) links evidence and screenshots; paid room images show an affordable core-plus-cabinet composition, while the seventeen-piece showroom is a separate development demo. Local validation and hosted deployment passed. The link now serves preview.8. The owner subsequently said “Continue”; preview work continues. Reading chair is now preview.8 scope; Tea garden fountain, further arcs, Bakery, larger rooms, cloud accounts and monetisation remain later work.
 
-## Preview.8 Reading corner — locally validated
+## Preview.8 Reading corner — hosted; source merged
 
 Append puzzles 21–24 while preserving all first-twenty definitions, IDs, capacities, hidden flags, scoring targets and the bonus table, plus the classic thirty-eight-board sequence. The A quiet chapter arc retains full monochrome jars, unlimited Undo and no timer or fail state. Final names, boards and scoring evidence will be recorded when authored and verified.
 

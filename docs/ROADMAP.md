@@ -1,26 +1,28 @@
 # Decopu roadmap
 
-## Merge approved — 2026-11-05
+Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-The owner requested “Merge with main” for [PR #15](https://github.com/ElBafo/tea-shop/pull/15). Integrate the reviewed second-edition source into main, preserving the current edition gate and save namespaces. The tested application source is unchanged from preview.8; subsequent changes record delivery and this approval.
+## Current priority — 0.2.0
 
-Main continues to run the classic 38-puzzle game with its existing saves. The second edition remains available at https://elbafo.github.io/tea-shop/preview/?edition=2 with its separate progress. Enabling it as the default production game and transferring existing progress require a separately implemented and tested transition. Keep the preview.8 version label for this integrated build; do not label the new edition a completed production launch.
+**Current status: `0.2.0` is implemented and locally validated; [PR #16](https://github.com/ElBafo/tea-shop/pull/16) is ready for explicit merge confirmation.** Its reviewed application commit is `c8f441b3b044bfd60c5d83a6eed2ac206aa0c7eb` on `release/second-edition`. Main remains at `f9a69b704e35ec5aca55bb2de14bc4681293c0e8`, serving the original game. PR #16 will make the second edition the default with fresh production progress and onboarding; it has not been merged or deployed.
 
-This approval supersedes earlier pending-merge statements below. Preview.8 implementation, checks and hosting are complete; its remaining gate is production activation and save transition.
+The owner clarified: “I don’t care about keeping the progress. My wife should check it out like a new installation.” This supersedes the proposed migration, import and edition-choice work for this release.
 
-Record every agreed product decision here in the same work session. Clearly distinguish implemented behavior, agreed plans, and open decisions.
+The main link will open the second edition directly, with a fresh production namespace and the normal Start and first-time guide. It will not copy classic or preview scores, purchases, unfinished puzzles, goals or preferences. Existing keys remain untouched and unused by the default game. This is a one-time fresh start for the new production edition; progress earned afterward saves normally across reloads and later visits.
 
-This is the working delivery order, not a calendar promise. Priorities can change after phone reviews. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
+Production uses `tea-shop-edition2-progress-v1` and `tea-shop-edition2-appearance-v1`. Recovery, unfinished-puzzle, guide and goal keys derive from the new progress key. The preview keeps `tea-shop-preview-edition2-progress-v1` and its existing appearance key; the classic keys also stay unchanged.
 
-## Current priority — 0.2.0-preview.8
+The release uses the reviewed twenty-four puzzles and eighteen paid decoration designs, with fifty-four included styles/model thumbnails. Earnings remain 44–92 stars, the eight-piece core costs 26, and the full catalogue costs 138. Reading chair still unlocks at twenty-four completions for 16 stars. No puzzles, prices, bonuses, guest rules or purchase mechanics are added in this activation pass.
 
-Continue the single-shop puzzle and collecting journey. After preview.7 was hosted, the owner said “Continue.” Preview.8 takes up four more puzzles, the Reading chair and seating for existing visitors. Main remains unchanged while preview work continues.
+The production page must keep development-only showroom, tour and reset controls hidden. The explicit `?edition=1` route may retain the classic runtime for regression checks; this pass adds no edition chooser or switch menu. Bakery, Tea garden fountain, further puzzle arcs, larger rooms, cloud accounts and monetisation remain later work.
 
-- **Released baseline:** `0.1.0`, the existing package version, documented after PRs #12, #13 and #14 were merged. The version was not previously shown consistently in the app.
-- **Current work:** `0.2.0-preview.8`, Reading corner implementation and local validation are complete. Hosting passed; owner review is pending.
-- **Hosted build:** `0.2.0-preview.8`, app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`, confirmed by [Pages run 42008456025](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). The stable preview branch stays at the app commit; review-branch documentation records delivery. Main is unchanged.
-- **Review:** continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`. Prototype saves remain isolated from main and the ordinary preview; existing edition progress must carry forward.
-- **Release record:** [RELEASES.md](RELEASES.md) records versions, scope, validation, PRs and review/deployment status. [SECOND_EDITION.md](SECOND_EDITION.md) defines acceptance criteria. The version appears in the app; every newly published review build gets its own preview version. A version label does not imply approval or deployment.
+Acceptance: verify default main and its query variants use the fresh edition, onboarding starts even when old classic/preview saves exist, first win → preview → purchase → arranging works, and newly earned production progress and preferences survive reload. Check that classic and preview keys are unchanged, preview progress still loads, main exposes no showroom/tour/reset controls, and cached/installed-app updates reopen the intended edition. Run all package checks, the production build, phone/desktop browser flows and offline checks. Physical iPhone family testing follows deployment.
+
+The final production build (`work/activation-build.log`) and all package checks (`work/activation-verify.log`) pass, including all twenty-four second-edition and thirty-eight classic solvers, production routing/storage isolation, backup compatibility and guest seating. Independent source review found no blocker. The release browser suite passes (`work/release-activation.log`, `work/release-activation-check.json`): an existing installed production service worker updates to the new build and opens fresh welcome guidance despite populated synthetic classic and preview saves; real first-win → style preview → counter purchase → arranging/rotation/Undo succeeds; new production progress, preferences and unfinished-puzzle resume persist after reload. The new catalogue has eighteen designs and the browser exposes twenty-four puzzles. Main ignores showroom/tour flags and has no reset/demo controls. Same-origin preview and classic data remain unchanged. Layout checks pass at 390×844, 320×568, 844×390 and 1280×900, and the updated controlled app reopens offline. Root visual review found no blocking issue in the phone welcome and first-decoration captures. These Chromium checks do not establish physical iPhone performance or enjoyment; family testing follows deployment.
+
+PR #16 is the concrete release candidate. Obtain explicit merge confirmation, then publish and verify deployment before calling this release live. See [RELEASES.md](RELEASES.md) for validation and screenshots.
+
+The following preview sections are delivery history. Their original review gates do not override the fresh-start production decision above.
 
 ### Preview.8: Reading corner — hosted; source merge approved
 
@@ -38,7 +40,7 @@ Implementation, local testing, visual evidence and hosting are complete. The own
 
 Local validation is complete: all package checks and the final production build pass, including 24 edition and 38 classic solvers. Browser legacy, purchase, visuals, seating, lifecycle and onboarding/goal/reset flow checks pass. Known 10/16/20-board backups carry forward; real 23/24 wins add score stars only. All 18 models fit their footprints and release resources after twelve rebuild cycles. All six guest profiles fit all three chair styles; 72 rendered style/profile/rotation combinations pass. Phone 390×844, small phone 320×568, landscape 844×390 and desktop 1280×900 were checked in Chromium. Physical iPhone review remains pending. Evidence: `work/reading-final-verify.log`, `work/reading-final-build.log`, `work/edition-reading-*-check.json`, `work/edition8-art-check.json`.
 
-Reading chair starts at a reachable position beside the core furniture. Fixed seated facing prevents a half-turn through the chair; walking still eases normally. Main remains unchanged pending explicit merge approval.
+Reading chair starts at a reachable position beside the core furniture. Fixed seated facing prevents a half-turn through the chair; walking still eases normally. The owner subsequently approved source integration in PR #15; production activation is the current 0.2.0 task.
 
 ### Preview.7: four puzzles and the Collector’s cabinet — hosted; continuation authorized
 
@@ -148,8 +150,8 @@ The agreed movement and visitor-cast work was deferred during preview.5, deliver
 
 1. **Playable slice — hosted; direction reviewed positively:** the six tracks are connected within the one-room/eight-design/ten-puzzle boundary. The app identifies `0.2.0-preview.1`; separate saves, reset, goals and the full first-win/purchase flow are checked. Actual scope, economy and tests are recorded in [RELEASES.md](RELEASES.md). Hosting passed; the owner approved continuing this direction without merging.
 2. **Phone comparison — after the slice is ready:** review old and new versions, including a fresh onboarding session and the full choose-goal → play → reward → preview → buy → arrange loop. Observe confusing controls, missed drag/tap targets, wanted rewards and puzzle fatigue. Correct observed problems before expanding.
-3. **Extend the approved direction — preview.8 in development:** preview.2 expanded the catalogue, preview.3 corrected paid walls, preview.4 introduced visits, preview.5 extended puzzles/rewards, preview.6 polished guests and preview.7 added Treasures to keep and Collector’s cabinet. After “Continue,” preview.8 now adds puzzles 21–24 and Reading chair, including safe use by existing visitors. Preserve prior progress, board identities and rewards; Tea garden fountain remains later work.
-4. **Release decision — requires owner approval:** choose whether and how the second edition replaces the baseline. Design and verify any save migration separately; do not automatically overwrite the existing game or progress.
+3. **Extend the approved direction — delivered through preview.8:** preview.2 expanded the catalogue, preview.3 corrected paid walls, preview.4 introduced visits, preview.5 extended puzzles/rewards, preview.6 polished guests and preview.7 added Treasures to keep and Collector’s cabinet. After “Continue,” preview.8 now adds puzzles 21–24 and Reading chair, including safe use by existing visitors. Preserve prior progress, board identities and rewards; Tea garden fountain remains later work.
+4. **Release decision — fresh-start activation approved:** the owner requested the second edition on main as a new installation. Version 0.2.0 uses a separate production namespace, without migration or an edition-choice screen. Verify onboarding, new-save persistence, preview isolation and installed/offline behavior before deployment.
 
 First-slice implementation: eight rounded core models with coordinated materials, room panelling and a refined shopkeeper; 24 thumbnails rendered from those models; a book/tea setting appears when a placed table is within 2.3 room units of a placed lamp. Direct Play opens the next or unfinished puzzle; More retains All puzzles. A pinned decoration and style persist through results and purchase preview. Tap placement, dragging, one-step owned move/rotation Undo, and collection-position restoration are implemented. Puzzle jars stay stationary, hidden pieces use a neutral frosted treatment, and level guidance remains visible to prevent a selection layout jump.
 
@@ -157,7 +159,7 @@ First-slice economy: ten puzzles award 10–30 completion stars; fixed completio
 
 Local validation passed for baseline and prototype solvers, same-session flows, phone/desktop placement, responsive puzzle presentation, reduced motion and resource cleanup. These checks do not establish physical iPhone performance or enjoyable pacing. Preview.2 extended six optional designs and started a seated guest foundation. Walking visits are implemented and locally validated in preview.4, including production build, all verification checks and final browser regressions; hosting passed and the owner accepted continuation with guest polish follow-ups. Preview.5 advances six additional levels and two special designs. Preview.6 guest polish was reviewed positively. Preview.7 added Collector’s cabinet and a four-puzzle arc. Preview.8 now takes up Reading chair and four further puzzles; a full production asset pipeline and Tea garden fountain stay later work.
 
-Bakery implementation and its cross-room rewards, larger rooms, public galleries, cloud accounts and monetisation remain later roadmap work. A second minigame is not part of this milestone. The earlier sections below retain the game's delivery history and backlog; this section controls the immediate priority.
+Bakery implementation and its cross-room rewards, larger rooms, public galleries, cloud accounts and monetisation remain later roadmap work. A second minigame is not part of this milestone. The sections below retain the game's delivery history and backlog; the current 0.2.0 section above controls the immediate priority.
 
 ## Approved reward and experimentation pass — merged in PR #12
 
@@ -174,7 +176,7 @@ Economy: catalogue 190, maximum earnings 132 (114 puzzle + 18 milestone), core 2
 
 Review on phone: choose a desired reward; preview styles before buying; buy, move, store, return and repurchase; check that the later rewards motivate play. Automated correctness checks do not establish enjoyment or retention. Bakery/cross-room rewards, larger rooms and monetisation remain later work.
 
-## Current baseline
+## Classic baseline before 0.2.0
 
 - Released baseline `0.1.0`: 38 sorting puzzles, nineteen decoration designs plus five paid second copies, isometric 3D decorating, Edit mode, saved progress, and a completion celebration. Core decorations cost 26 stars; the full catalogue costs 190 against 132 maximum earnable stars.
 - Hosted preview: https://elbafo.github.io/tea-shop/preview/ automatically rebuilds from preview/shop-polish. The released game remains at https://elbafo.github.io/tea-shop/.
