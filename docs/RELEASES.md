@@ -10,7 +10,7 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
-## 0.2.0-preview.7 — locally validated; hosting pending
+## 0.2.0-preview.7 — hosted for owner phone review
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner reviewed preview.6 positively and said “Looks good. Proceed.” This is the next bounded preview, with main unchanged.
 
@@ -47,9 +47,9 @@ Evidence: `work/edition-cabinet-legacy-check.json`, `work/edition-cabinet-purcha
 
 Artifacts: [cabinet styles](screenshots/second-edition-v7/styles.webp), [paid room by day](screenshots/second-edition-v7/room-day.webp), [paid room by night](screenshots/second-edition-v7/room-night.webp), [desktop](screenshots/second-edition-v7/desktop.webp), [separate development showroom](screenshots/second-edition-v7/showroom.webp), [cabinet unlock](screenshots/second-edition-v7/unlock.webp), [cabinet editing](screenshots/second-edition-v7/cabinet-edit.webp), [small-phone finale](screenshots/second-edition-v7/puzzle-small.webp) and [hidden puzzle](screenshots/second-edition-v7/hidden-phone.webp). Day/night/desktop use an affordable paid core-plus-cabinet composition; the full seventeen-piece showroom is a development demo.
 
-Local validation is complete. Hosted deployment and owner phone review remain pending. The app/package version is `0.2.0-preview.7`; the review URL https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.6. [ROADMAP.md](ROADMAP.md) records acceptance criteria.
+Local validation and hosted deployment passed. App commit: `cc371290eacb2355f164a867057feffbdbdaac0f`, confirmed by [GitHub Pages run 41940688895](https://github.com/ElBafo/tea-shop/actions/runs/41940688895). Stable branch `preview/shop-polish` stays at that app commit; follow-up documentation-only commits on `preview/second-edition` record delivery without changing the deployed app. Package/app/release version: `0.2.0-preview.7`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 now serves preview.7. Owner phone review remains pending; automated and simulated checks do not establish physical-device performance or player enjoyment. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`, with no merge authorized. [ROADMAP.md](ROADMAP.md) records acceptance criteria.
 
-## 0.2.0-preview.6 — hosted; continuation accepted
+## 0.2.0-preview.6 — superseded by preview.7; continuation accepted
 
 Continue [draft PR #15](https://github.com/ElBafo/tea-shop/pull/15), branch `preview/second-edition`, after the owner said “Continue” following preview.5. This authorizes the next preview, not a merge or an inferred acceptance of all prior fixes.
 
@@ -73,7 +73,7 @@ Final browser validation passed:
 
 Artifacts: [visitor roster](screenshots/second-edition-v6/roster.webp), [gait poses](screenshots/second-edition-v6/gait.webp), [seated comparison](screenshots/second-edition-v6/seated.webp), [walking clip](screenshots/second-edition-v6/walking.mp4), [room day](screenshots/second-edition-v6/room-day.webp), [room night](screenshots/second-edition-v6/room-night.webp), [child seated](screenshots/second-edition-v6/child-seated.webp), [phone](screenshots/second-edition-v6/phone.webp), [night phone](screenshots/second-edition-v6/night-phone.webp), [Edit hiding](screenshots/second-edition-v6/edit-hidden.webp), [desktop](screenshots/second-edition-v6/desktop.webp) and [reduced motion](screenshots/second-edition-v6/reduced-motion.webp). Local logs are `work/guest-polish-integration-check.json`, `work/guest-polish-ui-check.json`, `work/guest-polish-onboarding-check.json` and `work/guest-polish-keeper.log`.
 
-Local validation and hosted deployment passed. App commit: `6492179aa34b447d66f32d2b3ecac75c7567d4e8`, confirmed by [GitHub Pages run 41933373195](https://github.com/ElBafo/tea-shop/actions/runs/41933373195). Stable branch `preview/shop-polish` stays at that app commit while preview.7 is developed; review-branch documentation records delivery without changing the deployed app. Package/app/release version at this checkpoint: `0.2.0-preview.6`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 still serves preview.6. The owner responded “Looks good. Proceed,” accepting continuation after positive review; this does not authorize a merge or establish measured physical-device performance. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`. The [roadmap](ROADMAP.md) records the next scope.
+Local validation and hosted deployment passed. App commit: `6492179aa34b447d66f32d2b3ecac75c7567d4e8`, confirmed by [GitHub Pages run 41933373195](https://github.com/ElBafo/tea-shop/actions/runs/41933373195). The stable preview stayed at that app commit during preview.7 development; follow-up review-branch documentation recorded delivery without changing that app. Package/app/release version at this checkpoint: `0.2.0-preview.6`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 served preview.6 at this checkpoint and now serves preview.7. The owner responded “Looks good. Proceed,” accepting continuation after positive review; this does not authorize a merge or establish measured physical-device performance. Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`. The [roadmap](ROADMAP.md) records the next scope.
 
 ## 0.2.0-preview.5 — superseded by preview.6; continuation authorized
 
@@ -96,7 +96,7 @@ The full session browser suite passed (`work/edition-session-check.json`): old l
 
 Review screenshots: [styles](screenshots/second-edition-v5/styles.webp), [first counter and shopkeeper](screenshots/second-edition-v5/first-counter.webp), [room by day](screenshots/second-edition-v5/room-day.webp), [room by night](screenshots/second-edition-v5/room-night.webp), [tall jars](screenshots/second-edition-v5/tall-phone.webp), [small-phone tall jars](screenshots/second-edition-v5/tall-small.webp), [reward unlock](screenshots/second-edition-v5/reward-unlock.webp).
 
-Local validation is complete. Hosted deployment passed at app commit `718a3633cfbff230c85d10e2e5ed65c47b0ca60e`: [GitHub Pages run 41927729026](https://github.com/ElBafo/tea-shop/actions/runs/41927729026). Follow-up documentation commits record this status without changing the deployed app. The owner subsequently said “Continue,” authorizing further preview work without explicitly accepting every fix or approving a merge. Package/app/release version: `0.2.0-preview.5`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 served preview.5 at this checkpoint and now serves preview.6.
+Local validation is complete. Hosted deployment passed at app commit `718a3633cfbff230c85d10e2e5ed65c47b0ca60e`: [GitHub Pages run 41927729026](https://github.com/ElBafo/tea-shop/actions/runs/41927729026). Follow-up documentation commits record this status without changing the deployed app. The owner subsequently said “Continue,” authorizing further preview work without explicitly accepting every fix or approving a merge. Package/app/release version: `0.2.0-preview.5`. The review URL https://elbafo.github.io/tea-shop/preview/?edition=2 served preview.5 at this checkpoint and now serves preview.7.
 
 ## 0.2.0-preview.4 — superseded by preview.5; continuation accepted
 
