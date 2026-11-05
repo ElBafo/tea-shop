@@ -1,5 +1,7 @@
 # Architecture
 
+**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+
 ## Runtime
 
 Decopu is a static, client-side TypeScript application built with Vite. Babylon.js renders the shop. The puzzle screens and shop controls use HTML templates, CSS, and DOM event listeners rather than a UI framework. There is no backend or account service.
@@ -34,7 +36,7 @@ The room uses a 6×6 floor grid. The movable counter reserves its footprint and 
 
 ## Persistence and lifecycle
 
-`localStorage` key `tea-shop-progress-v1` stores best stars and moves, mute preference, owned upgrades, styles, placements, and completion celebration state. Available stars equal total best stars minus the cost of owned upgrades. Loading validates data and sanitizes the layout. Unfinished puzzles persist separately as replayable move logs. Device transfer uses manual backup files; there is no automatic cross-device synchronization.
+`localStorage` key `tea-shop-progress-v1` stores best stars and moves, mute preference, owned upgrades, styles, placements, and completion celebration state. Available stars equal total best stars plus derived milestone bonuses minus the cost of owned upgrades. Loading validates data and sanitizes the layout. Unfinished puzzles persist separately as replayable move logs. Device transfer uses manual backup files; there is no automatic cross-device synchronization.
 
 Leaving the shop disposes its Babylon scene and engine, stops the render loop, and removes resize observers/listeners. Preserve this lifecycle when changing navigation or adding effects.
 
@@ -48,7 +50,7 @@ Leaving the shop disposes its Babylon scene and engine, stops the render loop, a
 
 The solver is development tooling, not a live hint system. Its search has a node limit and prunes selected redundant moves; it is not a general-purpose unlimited solver.
 
-## Current considerations
+## Baseline considerations
 
 The shop is eagerly imported with the app, so Babylon contributes substantially to the initial bundle. The inspected production build emitted a main chunk of about 375 KB gzipped and a size warning. Consider loading boundaries if startup performance becomes an issue.
 
@@ -124,3 +126,99 @@ Hidden-jar pars include one exploration move per initial lid. The solver verifie
 
 
 Preview storage keys are selected from the Vite base in `game/types.ts`, so local previews share the hosted preview isolation. Runtime preview controls additionally require the preview URL path. `resetPreviewProgress` uses an explicit allowlist for primary, recovery, unfinished puzzle, guide and appearance keys; it never clears origin storage. The preview-only More menu confirms before clearing and navigating to the clean preview URL. Main ignores demo query flags and renders no showroom/reset controls.
+
+
+## Second-edition prototype — 0.2.0-preview.1
+
+The first slice was implemented, validated and hosted. The owner reviewed its direction positively and authorized continuation; it remains unmerged. `game/mode.ts` gates it behind the preview build base, a preview URL path and `edition=2`. Ordinary preview and release retain the baseline mode. The prototype selects eight core decoration designs and ten authored levels; the existing 38-board sequence is preserved.
+
+`game/types.ts` selects `tea-shop-preview-edition2-progress-v1` and `LEVEL_COUNT = 10` in this mode. Recovery, unfinished-puzzle, guide and chosen-goal keys derive from that namespace; appearance uses `tea-shop-preview-edition2-appearance-v1`. Reset clears only the active experience and navigates back with `edition=2` retained. Backup import validates the active level count and catalogue, rejecting a 38-board save in the prototype and a 10-board save in the baseline.
+
+`game/edition-levels.ts` defines ten boards, `EDITION_ARCS`, scoring allowances and completion bonuses. `levels.ts` selects the sequence; the shared engine retains full monochrome jars, unlimited Undo and no timer/fail state. Bonuses after puzzles 3/6/10 are 4/5/7 stars. The slice therefore earns 26–46 stars against the 26-star core catalogue. `verify-edition-levels.ts` checks solvability, targets and budget; baseline verification still checks all 38 released boards.
+
+`game/goal.ts` stores an optional decoration ID and style under `STORAGE_KEY + ':goal-v1'`. It validates them against the active catalogue and ignores owned or invalid targets. `journey.ts` and `ui/reward.ts` use that choice for progress and preview navigation. Pinning does not spend/reserve currency or grant ownership. The result action opens the same chosen style. Direct Play starts the next puzzle or resumes the unfinished one; More retains All puzzles.
+
+`Diorama` routes drag and select-then-tap placement through the existing floor/wall validity checks and move callbacks. A transient target preview remains separate from saved placement. Illegal targets, swipes, pinch and cancellation do not commit. The shop screen retains the previous placement for one accepted owned move or rotation. Undo restores that placement, not an inventory/currency snapshot, and temporary unpurchased previews remain separate.
+
+`shop/edition-art.ts` supplies rounded core meshes, material choices, room details and a matching shopkeeper. Its visuals stay under the existing material-ownership and disposal lifecycle. A placed lamp and table within 2.3 room units enable an open-book/tea setting on the table; `itemKey` incorporates that predicate so synchronization updates the reaction. Existing steam handling is reused, with no added reward rule or animation loop.
+
+`render-edition-thumbnails.mjs` renders 24 images from the actual models into `public/edition2/thumbnails`. `shop/icons.ts` uses these static images for the prototype, avoiding a live Babylon scene per UI card. Prototype CSS is scoped under the second-edition body class; its jars stay stationary during transfers, hidden content uses neutral frosted artwork, and persistent level guidance avoids shifting the layout on selection.
+
+The latest hosted build is `0.2.0-preview.8`, with its package, Start and More version validated at deployment. The owner subsequently said “Continue,” authorizing the local `0.2.0-preview.8` target. Implementation and local validation for preview.8 are complete; deployment passed. Main remains the documented `0.1.0` baseline. [RELEASES.md](RELEASES.md) records evidence and delivery; [SECOND_EDITION.md](SECOND_EDITION.md) records acceptance criteria.
+
+
+## Second-edition continuation — 0.2.0-preview.2 hosted preview
+
+The continuation keeps `isSecondEdition`, all ten board identities, completion bonuses, `LEVEL_COUNT` and `tea-shop-preview-edition2-progress-v1` unchanged. The active catalogue now has fourteen IDs: the eight core pieces plus art/bench at 3 completions, clock/trolley at 6 and basket/planter at 10. Existing prices and free style variants remain; eighteen new rendered thumbnails bring the total to forty-two. `catalogueForMode` clones optional definitions to apply edition gates without mutating classic definitions. Unlock gates apply in the goal/purchase UI and purchase handler.
+
+Goal/replay refinements distinguish unlock progress from saved-star progress. After ten completions, “Improve your scores” chooses an improvable score; “Revisit puzzles” opens the browser once all scores are three stars. Unfinished puzzles take priority, and goals suggest optional returns when earnings are exhausted. Optional returns continue to derive the refund from ownership removal. The 80-star catalogue exceeds maximum earnings of 46; core completion costs 26 and optional choices remain reversible.
+
+In preview.2, `edition-guest.ts` built a stationary seated figure and `Diorama.updateGuest` parented it to the table when counter and table are placed, hides it during Edit or when either requirement is absent, and rebuilds it when its table parent has been disposed. Guest meshes are non-pickable and materials are disposed with the guest. It adds no economy state, new lights, independent timer or path simulation. Build, verification, browser interaction/lifecycle checks and deployment passed. Physical-phone acceptance remains pending; the release record links the deployed app commit and workflow.
+
+Preview.4 replaces this stationary foundation with the bounded route/activity runtime described below. Its entrance/exit anchors, walkable grid, occupancy reservations, Edit invalidation, reduced-motion handling and cleanup are implemented and locally validated; hosting passed and the owner accepted continuation with movement and visitor-cast polish deferred.
+
+The agreed arrival policy is implemented by the preview.4 controller below: actually placed designs drive frequency, core-eight furnishing reaches the busiest rate, and valid paths/activity places constrain the two-guest target. Phone review may tune the initial intervals; guest state remains transient.
+
+Preview.2 keeps showroom/tour chosen goals in session memory, avoiding real-wishlist reads or writes in temporary experiences. Optional returns clear the prior placement Undo state; the edition home uses its primary Continue puzzle action without a duplicate legacy resume card.
+
+## Wall ownership correction — 0.2.0-preview.3
+
+`decorateEditionRoom` now returns an initially disabled `edition-wall-finish` transform containing the twelve wall panels and two dado rails; the foundation remains directly attached to the room. `ShopVisuals.wallFinish` is optional, leaving classic mode unchanged. `applyRoomStyle` sets its enabled state from paint ownership on every sync, outside the wall-material cache-key guard. Existing draft shop clones therefore show the finish for a free paint preview, and restoring actual state removes an unpaid finish. Buying paint persists through the existing ownership/style save path. No new material rebuild loop, save field or price is introduced. Build, focused browser checks and deployment passed; the release record links the app commit and workflow.
+
+## Ambient guest traffic — 0.2.0-preview.4 hosted; continuation accepted
+
+`guest-routes.ts` builds a pure `GuestLayout` and orthogonal cell-centre BFS routes. Placed floor furniture and the counter rear working aisle are blocked; rugs and stored items do not block traffic. It chooses an unblocked cutaway edge entrance with a reachable component, then exposes only reachable shelf browsing, counter-front ordering, table/bench seating and look-around stops. Seat approaches are separately checked with body clearance, side waypoints around table chair backs, reverse departure paths and bench cushion elevation. No valid entrance means no visit. An outward-facing bench at a room edge may have no interior approach and therefore no usable seat.
+
+`guest-traffic.ts` owns the transient deterministic `GuestTraffic` state machine. It accepts an injected random function for tests, returns render snapshots and never writes shop/storage state. It caps visits at two, reserves activities and approach places, avoids the other visitor's cell and permits only one guest to transit at a time. If a narrow route is occupied, a visit may end early so the guest nearer the exit can leave first. Normal visits try up to three available activity kinds before departure; an empty room can support a look-around visit.
+
+`furnishingCount` counts unique placed kinds, including paint and excluding stored items/copies; style changes do not change frequency. The first eligible visit follows four active seconds in a new runtime. `guestArrivalRange` interpolates recurring uniform intervals from 70–100 seconds at zero kinds to 9–14 at eight or more. Dwell ranges are browse 6–10, order 6–9, sit 24–36 and look 5–8 seconds. These values are initial preview tuning, constrained by cap, entrance and destination availability.
+
+Edit hides/clears visits and pauses the clock. Leaving Edit recalculates valid activity and schedules no earlier than two seconds without repeating the introductory arrival. Layout/storage changes invalidate routes and visits; the bench style is included in the geometry signature to refresh seating elevation without altering density or resetting its arrival clock. Other style-only changes retain runtime state. Each tick clamps delta to 0.1 seconds; the existing page-visibility pause prevents background catch-up.
+
+`Diorama.updateTraffic`, `tickTraffic` and `paintTraffic` connect the simulation to a two-visitor pool from `edition-guest.ts`, only in second-edition mode. Each visitor owns 30 meshes, including a soft unlit contact shadow, and its material palette for the scene lifetime. Pose changes reuse the rig. Visitors are non-pickable and are excluded from cached directional/lamp shadow maps; no new lights, timers or animation loops are added. The existing five lights and render loop remain. Disposal clears the simulation and disposes the two visual roots/materials.
+
+Reduced motion retains arrival and dwell timing but chooses one reachable stationary activity per visit, with no translation or limb/bob animation. Changes to the reduced-motion preference clear existing visits before applying the new mode.
+
+Production build and all verification checks pass, including pure routing/runtime tests and bounded adversarial legal-layout collision/deadlock checks. The final browser traffic suite confirmed the two-guest cap, Edit hiding, stationary reduced-motion visits, no guest inclusion in cached shadow-caster lists and stable resources through sixteen cycles: 261 meshes, 88 materials, 7 textures, 36 transforms and 5 lights. The visual lifecycle matrix and paid-wall regression also passed. [RELEASES.md](RELEASES.md) records the fixtures and screenshots. Hosted deployment passed and the owner gave positive continuation feedback, requesting smoother walking and a visitor cast including women and children in a later pass. This is not a measured physical iPhone performance result. The implementation is a bounded ambient visit loop, not a serving simulation or persistent customer economy.
+
+## Second puzzle session — 0.2.0-preview.5 implemented
+
+`EDITION_LEVELS` now has sixteen definitions and five arcs. The first ten definitions remain unchanged; Afternoon ritual covers 11–13 and A room of your own covers 14–16. The latter uses five-slot jars. A four-star milestone at 16 joins the existing bonuses at 3/6/10. Edition `LEVEL_COUNT` derives from this array; classic remains thirty-eight. `catalogueForMode` adds terrarium and botanical at 13/16 completions and 10/14 stars; three later special designs stay unavailable in this mode.
+
+The existing `tea-shop-preview-edition2-progress-v1` and derived goal, guide, recovery and unfinished-puzzle keys remain. Normalization extends ten-entry score/move arrays with zeros. Version-one backup exports add an optional edition discriminator; parsing still accepts untagged historical files but requires the known ten-board predecessor or current sixteen-board shape in the second edition. It rejects arbitrary shorter arrays, mismatched tags, classic imports, invalid balances, later-board unfinished puzzles in legacy files, and ownership before its unlock. New models in `edition-specials.ts` and six thumbnails use the existing material ownership, placement and disposal lifecycle without additional lights or loops.
+
+The missing shopkeeper came from creation being gated by core completion (`finaleSeen` or `playFinale`). The second-edition correction creates him whenever the synchronized shop has a placed counter. The same draft/owned synchronization handles preview/cancel, purchase, storage, restoration and reload; his transform follows the counter's rear aisle and orientation. The classic creation behavior is retained. The full session browser suite confirms appearance on the first purchase before completion and correct transitions afterward.
+
+The five-slot boards exposed 12 pixels of bottom-row clipping at 320×568. Capacity-aware portrait slot sizing keeps both rows above the existing Undo/Restart controls. Phone, landscape and desktop session checks pass. The focused 320×568 overflow assertion also passes after reducing the scoped shelf margin to three pixels: scroll height and client height both measure 376 pixels, with the full shelf visible.
+
+The final production build and all required verification pass, including sixteen and classic thirty-eight solver checks, independent identity comparisons for the existing definitions, the 36–68-star budget, catalogue unlocks and strict backup checks. Browser evidence covers old saves/recovery/preferences/goals, unfinished Undo, backup picker operations, real 13/16 wins and bonus accounting, optional purchases/returns, shopkeeper transitions and reduced motion. All sixteen models fit their footprints and release owned resources after twelve rebuild cycles. Existing onboarding/reset, goal-to-purchase, optional-choice and temporary-goal regressions also pass. Local validation is complete. Hosted deployment passed; owner phone review remains pending. See [RELEASES.md](RELEASES.md) for artifacts and limitations. Guest gait and women/children visitor profiles were subsequently delivered in preview.6 and reviewed positively.
+
+## Guest presentation polish — 0.2.0-preview.6 hosted; continuation accepted
+
+`guest-routes.ts` and `GuestTraffic` remain authoritative for exact positions, visits, activities and timing. `GuestMotion` in `guest-motion.ts` derives stride from travelled distance and exponentially blends facing over the shortest angle, without writing a route or position. `Diorama` copies the simulation's root position exactly and applies only the presentation facing. Repaints do not advance motion; new visits, hidden states, background changes and reduced-motion transitions reset presentation explicitly.
+
+`guest-profiles.ts` defines six appearances: two adult women, two adult men and two children. The session-scoped `GuestRoster` cycles profiles across replaced room scenes without duplicating a currently present profile. Each slot chooses once per visit, including through unchanged style repaints. No save field is added.
+
+`edition-guest.ts` reuses one rig per active slot, changes materials and visible hair/accessories in place, and animates bent knees/elbows with proportioned adult/child limbs. Child seated hips remain at cushion height while feet can dangle. Each rig owns 40 meshes, 11 materials and 17 transforms; profile changes allocate no new rig. The existing render loop drives both slots, with no added lights, timers, shadow-map casters or save fields.
+
+Production build and package verification pass. The six-profile visual verifier covers 48 gait phases and twelve create/dispose cycles, static reduced motion, root/metadata preservation, seat transitions and resource reuse. A separate 1,296-sample NullEngine review confirms floor clearance within floating-point precision; source review found no blocking issue. Final browser checks pass actual-visit roster coverage, exact positions and eased turns, stable repaints/resources, all twelve child seating combinations, Edit/drafts, background/reduced motion, onboarding, shopkeeper transitions and classic/save isolation. Local validation and hosted deployment passed, and the owner responded “Looks good. Proceed.” This records positive review and continuation; physical-device performance is not measured by these checks. [RELEASES.md](RELEASES.md) records screenshots, fixed-step motion evidence and practical limits.
+
+## Collector’s cabinet session — 0.2.0-preview.7 hosted; continuation authorized
+
+`EDITION_LEVELS` now contains twenty definitions, with Treasures to keep spanning 17–20. The first sixteen identities and existing `EDITION_MILESTONE_BONUSES` are preserved. Edition `LEVEL_COUNT` continues to derive from the active array; classic remains thirty-eight. `catalogueForMode` adds cabinet at twenty completions and 18 stars without changing the classic definition. Totals are seventeen designs, a 122-star catalogue, twenty bonus stars and 40–80 earnings.
+
+The edition save namespace and derived keys stay unchanged. Existing normalization extends score/move arrays with zeros while preserving values and state. Backup parsing explicitly recognizes known historical ten- and sixteen-board shapes plus the current twenty-board shape. Edition/count/balance/unlock validation remains strict, and unfinished-level bounds are checked against the source legacy count before normalization can pad it. Compatibility checks exercise both predecessors in real edition mode.
+
+`edition-specials.ts` adds cabinet geometry using the existing owned-material scope. Jade atelier has one broad arch, Blue porcelain twin display bays and Rose salon a lower bowed crown; the variants use 42/58/49 meshes and twelve materials each. Three model-rendered thumbnails join the unchanged forty-eight previous images. All seventeen designs pass footprint and twelve-cycle disposal checks, returning owned resources to zero. Temporary showroom wall slots were moved to clear the cabinet crown; saved player layouts are untouched.
+
+The final production rebuild and package verification pass. Independent review confirms preserved board/bonus identities and no logic or compatibility blocker. Protected visitor/keeper/storage/shared-type files match hosted preview.6; this pass adds no traffic controller, lights or loops. Browser checks pass legacy continuation/imports, actual 19/20 reward accounting, cabinet goal/purchase/return/placement paths, capacity transitions, hidden-content privacy, reduced motion, onboarding and next/resume/reset. Twelve style/storage cycles retain 338 meshes, 103 materials, 7 textures, 50 transforms and 5 lights; a 600-second visit simulation respects the two-guest cap and cabinet bounds, and disposal returns every resource count to zero.
+
+`ui/edition-puzzle.css` reduces five-slot shelf padding from 12 to 9 pixels in portrait viewports at most 690 pixels high. This addresses the two-pixel overflow triggered by puzzle 20’s wrapped title at 320×568, without changing the 23-pixel slot size at that height. The final shelf has equal scroll/client heights of 373 pixels, with the full title, jars and plank visible. Local validation and hosted deployment passed. The owner authorized continuation after preview.7; physical-device performance remains unmeasured. [RELEASES.md](RELEASES.md) records browser evidence and screenshots.
+
+## Reading corner — 0.2.0-preview.8 locally validated
+
+The planned extension appends four definitions to `EDITION_LEVELS`, preserving the first twenty identities, all classic boards and the existing bonus table. Edition `LEVEL_COUNT` remains derived from the sequence. `catalogueForMode` will include armchair at twenty-four completions and 16 stars, with three edition models/thumbnails. Target totals are eighteen designs, 138-star catalogue, twenty bonus stars and 44–92 earnings.
+
+The existing progress namespace and derived keys remain. Normalization must append zero score/move entries without replacing state. Backup validation must recognize historical ten-, sixteen- and twenty-board shapes plus the current twenty-four-board shape, preserving edition/count/balance/unlock checks and source-length unfinished-puzzle bounds.
+
+Guest routing will expose a chair seat only when the placed armchair has a safe reachable approach. Use chair rotation and each style’s seat geometry for access, seating and departure, while keeping the existing pooled rigs and seated pose. Preserve Edit invalidation, blocked/stored handling, reduced motion, background pause and owned-resource disposal. No new persistent customer model or serving simulation is planned. The edition-only chair route approaches its open front and resets safely on style changes. All three cushions use the same seat anchor; local checks pass.

@@ -1,3 +1,5 @@
+import { isSecondEdition } from "./mode";
+import { EDITION_LEVELS } from "./edition-levels";
 export type ItemId =
   | "rose"
   | "jasmine"
@@ -107,7 +109,7 @@ export interface Progress {
   shop: ShopState;
 }
 
-export const STORAGE_KEY = import.meta.env?.BASE_URL === "/tea-shop/preview/"
+export const STORAGE_KEY = isSecondEdition ? "tea-shop-preview-edition2-progress-v1" : import.meta.env?.BASE_URL === "/tea-shop/preview/"
   ? "tea-shop-preview-progress-v1"
   : "tea-shop-progress-v1";
-export const LEVEL_COUNT = 38;
+export const LEVEL_COUNT = isSecondEdition ? EDITION_LEVELS.length : 38;

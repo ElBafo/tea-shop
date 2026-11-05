@@ -1,3 +1,5 @@
+import { isSecondEdition } from "./mode";
+import { EDITION_LEVELS } from "./edition-levels";
 import { COLLECTION_LEVELS } from "./collection-levels";
 import { INVENTORY_LEVELS } from "./inventory-levels";
 import type { ItemId, LevelDef } from "./types";
@@ -13,7 +15,7 @@ const A: ItemId = "macaron";
 
 // Three-star targets allow one exploratory move per initially lidded jar.
 // Board IDs and layouts stay stable so unfinished puzzles can still resume.
-export const LEVELS: LevelDef[] = [
+export const CLASSIC_LEVELS: LevelDef[] = [
   {
     id: 1,
     name: "First Pour",
@@ -337,6 +339,8 @@ export const LEVELS: LevelDef[] = [
   ...INVENTORY_LEVELS,
   ...COLLECTION_LEVELS,
 ];
+
+export const LEVELS: LevelDef[] = isSecondEdition ? EDITION_LEVELS : CLASSIC_LEVELS;
 
 export function getLevel(id: number): LevelDef | undefined {
   return LEVELS.find((level) => level.id === id);

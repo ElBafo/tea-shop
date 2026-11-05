@@ -1,3 +1,4 @@
+import { isSecondEdition } from "../game/mode";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Camera } from "@babylonjs/core/Cameras/camera";
@@ -18,6 +19,10 @@ import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 import type { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import type { Placement, ShopState, UpgradeId } from "../game/types";
 import { C } from "./palette";
+import { buildTrafficGuest, type TrafficGuestVisual } from "./edition-guest";
+import { GuestTraffic } from "./guest-traffic";
+import { GuestMotion, GuestRoster } from "./guest-motion";
+import { GUEST_PROFILES } from "./guest-profiles";
 import { sparkTexture } from "./textures";
 import {
   applyRoomStyle,
@@ -51,6 +56,14 @@ interface Tween {
   onDone?: () => void;
 }
 
+// Scene navigation does not restart the cast; this cursor never enters a save.
+const sessionGuestRoster = new GuestRoster(GUEST_PROFILES.map(profile=>profile.id));
+interface GuestPresentation {
+  motion: GuestMotion;
+  visitId: number | null;
+  profileId: string | null;
+}
+
 export class Diorama {
   readonly engine: Engine;
   readonly scene: Scene;
@@ -79,7 +92,7 @@ export class Diorama {
   private markers: TransformNode | null = null;
   private pointer = { x: 0, y: 0 };
   private drag: {
-    kind: "camera" | "item";
+    kind: "camera" | "item" | "tap";
     pointerId: number;
     lastX: number;
     lastY: number;
@@ -87,9 +100,14 @@ export class Diorama {
     start?: Placement;
     moved?: boolean;
     offset?: Vector3;
+    tapPlace?: Placement | null;
   } | null = null;
   private tweens: Tween[] = [];
   private customer: TransformNode | null = null;
+  private traffic: GuestTraffic | null = null;
+  private trafficGuests: TrafficGuestVisual[] = [];
+  private guestPresentation: GuestPresentation[] = [];
+  private resetTrafficOnResume = false;
   private walk: { from: Vector3; to: Vector3; t: number } | null = null;
   private warm = 0;
   private night = false;
@@ -97,7 +115,7 @@ export class Diorama {
   private disposed = false;
   private readonly resizeObs: ResizeObserver;
 
-  constructor(canvas: HTMLCanvasElement, shop: ShopState, hooks: DioramaHooks) {
+  constructor(canvas: HTMLCanvasElement, shop: ShopState, hooks: DioramaHooks, private readonly guestRoster = sessionGuestRoster) {
     this.hooks = hooks;
     this.shop = shop;
     this.engine = new Engine(canvas, true, { antialias: true, adaptToDeviceRatio: false, stencil: true }, true);
@@ -215,6 +233,7 @@ export class Diorama {
   setEditMode(on: boolean): void {
     if (this.edit !== on) this.cancelDrag();
     this.edit = on;
+    this.updateTraffic();
     if (!on) {
       this.drag = null;
       this.select(null);
@@ -231,7 +250,7 @@ export class Diorama {
 
   private updateMarkers(): void {
     this.markers?.dispose();this.markers=null;
-    if(this.edit && this.drag?.kind === "item" && this.drag.moved && this.selected && isPlaced(this.shop,this.selected)) this.markers=placementMarkers(this.scene,this.selected,this.shop);
+    if(this.edit && ((this.drag?.kind === "item" && this.drag.moved) || (isSecondEdition && this.drag?.kind === "tap")) && this.selected && isPlaced(this.shop,this.selected)) this.markers=placementMarkers(this.scene,this.selected,this.shop);
   }
 
   captureImage(): string {
@@ -310,7 +329,11 @@ export class Diorama {
     }
 
     this.steam = Object.values(this.visuals.items).flatMap(root => root?.getChildMeshes().filter(mesh => mesh.metadata?.steam) ?? []);
+    // The edition's keeper belongs to a placed counter, including a temporary
+    // purchase preview. Waiting for the whole-shop finale leaves new shops empty.
+    if (isSecondEdition && isPlaced(shop, "counter") && !this.customer) this.spawnCustomer(true);
     this.positionShopkeeper();
+    this.updateTraffic();
     this.setNight(this.night);
     this.updateRing();
     this.updateMarkers();
@@ -345,6 +368,11 @@ export class Diorama {
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
     window.removeEventListener("resize", this.onWinResize);
     this.engine.stopRenderLoop();
+    this.traffic?.clear();
+    this.traffic = null;
+    for (const guest of this.trafficGuests) guest.dispose();
+    this.trafficGuests = [];
+    this.guestPresentation = [];
     this.scene.dispose();
     this.engine.dispose();
   }
@@ -451,9 +479,12 @@ export class Diorama {
   }
 
   private spawnCustomer(_settled: boolean): void {
-    if (this.customer) this.customer.dispose();
-    this.customer = buildCustomer(this.scene);
-    this.castShadows(this.customer);
+    // Keep one figure through preview cancellation, storage and the finale.
+    // positionShopkeeper controls visibility from the current rendered shop.
+    if (!this.customer) {
+      this.customer = buildCustomer(this.scene);
+      this.castShadows(this.customer);
+    }
     this.walk = null;
     this.positionShopkeeper();
   }
@@ -467,10 +498,69 @@ export class Diorama {
     this.customer.rotation.y = angle;
   }
 
+  private updateTraffic(): void {
+    if (!isSecondEdition) return;
+    if (!this.traffic) {
+      this.traffic = new GuestTraffic(this.shop);
+      // These pooled visitors receive light but never enter cached shadow maps.
+      // Their small contact shadows move with them without rerendering lamp maps.
+      this.trafficGuests = [0,1].map(index=>buildTrafficGuest(this.scene,index));
+      this.guestPresentation = [0,1].map(()=>({motion:new GuestMotion(),visitId:null,profileId:null}));
+    } else this.traffic.update(this.shop);
+    this.traffic.setEditing(this.edit);
+    this.paintTraffic();
+  }
+
+  private tickTraffic(dt: number): void {
+    if (!this.traffic || document.hidden) return;
+    if (this.resetTrafficOnResume) {
+      this.resetTrafficOnResume=false;
+      // Discard the first elapsed delta after a hidden page. Keep route positions.
+      this.paintTraffic(0,true);
+      return;
+    }
+    this.traffic.tick(dt,this.reducedMotion.matches);
+    this.paintTraffic(dt);
+  }
+
+  private paintTraffic(dt=0, reset=false): void {
+    const frames=this.traffic?.snapshot()??[];
+    for (let slot=0;slot<this.trafficGuests.length;slot++) {
+      const visual=this.trafficGuests[slot],frame=frames.find(frame=>frame.slot===slot);
+      const presentation=this.guestPresentation[slot];
+      if (visual.root.isEnabled()!==!!frame) visual.root.setEnabled(!!frame);
+      visual.root.metadata.guestState=frame??null;
+      if (!frame) {
+        presentation.motion.clear();
+        presentation.visitId=null;
+        presentation.profileId=null;
+        visual.root.metadata.guestMotion=null;
+        continue;
+      }
+      if (presentation.visitId!==frame.visitId) {
+        const occupied=frames.filter(other=>other.slot!==slot).flatMap(other=>{
+          const state=this.guestPresentation[other.slot];
+          return state.visitId===other.visitId&&state.profileId?[state.profileId]:[];
+        });
+        presentation.profileId=this.guestRoster.next(occupied);
+        presentation.visitId=frame.visitId;
+        visual.setProfile(presentation.profileId);
+      }
+      const profile=GUEST_PROFILES.find(profile=>profile.id===presentation.profileId)!;
+      const motion=presentation.motion.update(frame,dt,this.reducedMotion.matches,profile.strideLength,reset);
+      visual.root.metadata.guestMotion=motion;
+      visual.root.position.set(frame.x,frame.y,frame.z);
+      visual.root.rotation.y=motion.facing;
+      visual.setPose(frame.pose);
+      visual.animate(this.elapsed+slot*.7,frame.moving,this.reducedMotion.matches,motion);
+    }
+  }
+
   private tick(): void {
     const dt = Math.min(0.1, this.engine.getDeltaTime() / 1000);
     if (this.tweens.length || this.walk) this.lampShadowsDirty = true;
     this.elapsed += dt;
+    this.tickTraffic(dt);
     for (const mesh of this.steam) {
       mesh.setEnabled(!this.reducedMotion.matches);
       if (this.reducedMotion.matches) continue;
@@ -579,6 +669,7 @@ export class Diorama {
   private readonly onVisibilityChange = (): void => {
     if (this.disposed) return;
     if (document.hidden) {
+      this.resetTrafficOnResume=true;
       this.cancelDrag();
       this.engine.stopRenderLoop(this.renderFrame);
     } else {
@@ -654,6 +745,29 @@ export class Diorama {
       this.select(id);
       return;
     }
+    if (isSecondEdition && this.edit && this.selected && isPlaced(this.shop, this.selected) && UPGRADE_BY_ID[this.selected].movable) {
+      const selected = this.selected;
+      const def = UPGRADE_BY_ID[selected];
+      const hit = pick?.pickedPoint;
+      // A floor tap must hit the floor, not project a wall tap behind furniture.
+      // Wall details (trim/window) still use the established legal-wall snapping.
+      const onSurface = Boolean(hit && pick?.hit && (def.surface === "floor"
+        ? Math.abs(hit.y) < 0.12
+        : (Math.abs(hit.x) < 0.16 || Math.abs(hit.z) < 0.16) && hit.y > 0.4 && hit.y < 3.1));
+      const point = onSurface ? this.pickSurface(selected) : null;
+      const start = { ...placeOf(this.shop, selected) };
+      const next = point ? def.surface === "wall" ? this.wallDrop(selected, point) : snapFloor(point.x, point.z, def.size, start.rot) : null;
+      this.drag = { kind: "tap", pointerId: event.pointerId, lastX: event.clientX, lastY: event.clientY, id: selected, start, tapPlace: next };
+      this.updateMarkers();
+      const item = this.visuals.items[selected];
+      if (next && item) {
+        this.previewPlace(selected, item, next);
+        setItemTint(item, canPlace(selected, next, this.shop) ? "#9bb784" : "#d47d86");
+        this.ring.position.x = item.position.x;
+        this.ring.position.z = item.position.z;
+      }
+      return;
+    }
     if (!this.edit) {
       this.drag = {
         kind: "camera",
@@ -666,6 +780,12 @@ export class Diorama {
 
   private pointerMove(event: PointerEvent): void {
     if (!this.drag || event.pointerId !== this.drag.pointerId) return;
+    if (this.drag.kind === "tap") {
+      // Tap-to-place is deliberately not a second drag gesture. Moving the finger
+      // away cancels this candidate, so swipes and pinches cannot place furniture.
+      if (Math.hypot(event.clientX - this.drag.lastX, event.clientY - this.drag.lastY) >= 8) this.restoreDrag();
+      return;
+    }
     if (this.drag.kind === "camera") {
       const dx = event.clientX - this.drag.lastX;
       const dy = event.clientY - this.drag.lastY;
@@ -703,6 +823,26 @@ export class Diorama {
     const drag = this.drag;
     this.drag = null;
     this.updateMarkers();
+    if (drag.kind === "tap" && drag.id && drag.start) {
+      const id = drag.id;
+      const next = drag.tapPlace;
+      const item = this.visuals.items[id];
+      if (item) setItemTint(item, null);
+      const shortTap = Math.hypot(event.clientX - drag.lastX, event.clientY - drag.lastY) < 8;
+      const stillSelected = this.edit && this.selected === id && isPlaced(this.shop, id);
+      if (shortTap && stillSelected && next && canPlace(id, next, this.shop)) {
+        const moved = next.x !== drag.start.x || next.z !== drag.start.z || next.wall !== drag.start.wall || next.rot !== drag.start.rot;
+        if (moved) {
+          this.hooks.onMove(id, next);
+          if (this.visuals.items[id]) this.sparkle(this.visuals.items[id]!);
+        }
+      } else {
+        this.keys[id] = "";
+        this.sync(this.shop);
+        if (shortTap && stillSelected) this.hooks.onPlacementBlocked?.();
+      }
+      return;
+    }
     if (drag.kind !== "item" || !drag.id || !drag.start || !drag.moved) return;
     const id = drag.id;
     const root = this.visuals.items[id];

@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { APP_VERSION } from '../src/game/version';
+const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
+assert.equal(APP_VERSION,pkg.version);
+assert.equal(APP_VERSION,lock.version);
+assert.equal(APP_VERSION,lock.packages[''].version);
+assert.ok(fs.readFileSync('docs/RELEASES.md','utf8').includes(`## ${APP_VERSION} —`));
+assert.ok(fs.readFileSync('docs/ROADMAP.md','utf8').includes(`## Current priority — ${APP_VERSION}`));
+console.log(`PASS: app, package, lockfile, roadmap and release record agree on ${APP_VERSION}.`);

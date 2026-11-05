@@ -1,0 +1,146 @@
+/* Second-edition puzzle art. Scoped to the isolated prototype, including flyers. */
+.edition-two .play {
+  --slot-height: 36px;
+  --tea-glass: #8caaa2;
+  gap: 12px;
+  color: #344e47;
+}
+.edition-two .play .screen-toolbar h2 { font-family: Georgia, serif; font-size: 1.08rem; font-weight: 600; }
+.edition-two .play-meta { padding: 0 5px; color: #60736b; }
+.edition-two .play-meta .moves { font-size: .78rem; font-weight: 600; }
+.edition-two .play-meta .par { color: #687e73; font-size: .7rem; }
+.edition-two .play .shelves {
+  position: relative;
+  padding: 20px 10px 25px;
+  border-radius: 24px;
+  border: 1px solid #d5dfd4;
+  background:
+    radial-gradient(ellipse at 50% 10%, #fffff5cf, transparent 65%),
+    repeating-linear-gradient(105deg, transparent 0 32px, #c8d4c90d 33px 34px),
+    linear-gradient(150deg, #eaf0e3, #d9e4d9);
+  box-shadow: inset 0 2px 0 #ffffffc2, inset 0 -12px 25px #8ba18e13;
+  overflow: auto;
+  justify-content: safe center;
+}
+.edition-two .play .shelf-row { gap: 22px 10px; padding-top: 10px; position: relative; z-index: 1; }
+.edition-two .play .plank {
+  height: 9px;
+  margin: 2px 0 9px;
+  border-radius: 3px 3px 7px 7px;
+  background: linear-gradient(#d8b78f, #bb9167);
+  box-shadow: 0 3px 0 #a7805b, 0 8px 14px #50664b1c, inset 0 1px 0 #f7dfba;
+}
+.edition-two .play .jar { border-radius: 17px; filter: none; }
+.edition-two .play .jar,
+.edition-two .play .jar.selected,
+.edition-two .play.celebrating .jar.done { animation: none; }
+.edition-two .play .jar.selected .jar-neck,
+.edition-two .play .jar.selected .jar-glass { transform: none; }
+.edition-two .play .jar-neck {
+  width: 78%; height: 10px; margin-bottom: -3px; position: relative; z-index: 2;
+  border-radius: 8px 8px 3px 3px;
+  border: 1px solid #96ada08c;
+  background: linear-gradient(#fafff7f2 0 32%, #b7ccc0bb 36% 60%, #f9fff2e6 67%);
+  box-shadow: inset 0 1px 0 #fff, 0 2px 3px #4d695615;
+}
+.edition-two .play .jar-glass {
+  border-radius: 15px 15px 20px 20px;
+  border: 1.5px solid #a3b8a5;
+  background:
+    linear-gradient(90deg, #ffffffbf 0 5%, #ffffff19 12% 80%, #ffffff99 94% 98%, #d2dfd4a6),
+    linear-gradient(#fafff599, #f5f9ecbd);
+  box-shadow: inset 0 -7px 8px #8ca18e19, 0 4px 0 #68837412, 0 9px 12px #526d5520;
+  overflow: hidden;
+}
+.edition-two .play .jar-glass::after {
+  content: ''; position: absolute; left: 5%; right: 5%; bottom: 4px; height: 2px;
+  border-radius: 50%; background: #fffdf2bb; pointer-events: none;
+}
+.edition-two .play .jar.selected .jar-glass {
+  border-color: #476c57;
+  box-shadow: 0 0 0 3px #6f92724a, inset 0 -7px 8px #8ca18e19, 0 8px 12px #526d5520;
+}
+.edition-two .play .jar.valid-target .jar-glass { border-color: #79a26c; box-shadow: 0 0 0 2px #a8c49b73, inset 0 -7px 8px #8ca18e19; }
+.edition-two .play .jar.receiving .jar-glass { border-color: #b69647; box-shadow: 0 0 0 3px #d3b76a40; }
+.edition-two .play .jar:focus-visible { outline: 3px solid #456c58; outline-offset: 4px; }
+.edition-two .play .stack { padding: 8px 6px 9px; gap: 3px; min-height: calc(var(--slots, 4) * (var(--slot-height) + 3px) + 17px); }
+.edition-two .play .slot { flex-shrink: 0; }
+.edition-two .play .treat { width: min(62px, 100%); height: min(38px, var(--slot-height)); }
+.edition-two .tin-cap {
+  left: 16%; right: 16%; top: 3%; height: 16%; border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(#efe1bb, #c3b38e); box-shadow: inset 0 1px 0 #fff7d9;
+}
+.edition-two .tin-body {
+  top: 19%; bottom: 2%; left: 9%; right: 9%; border-radius: 7px 7px 10px 10px;
+  background: linear-gradient(105deg, #ffffff3b, transparent 40% 76%, #0000000a), linear-gradient(var(--fill), var(--deep));
+  border: 1px solid #ffffff50;
+  box-shadow: inset 0 2px 0 #ffffff45, inset 0 -3px 0 #0000000c, 0 2px 2px #36533d17;
+}
+.edition-two .tin-band { top: 10%; height: 8%; background: #fff8de3d; }
+.edition-two .tin-letter {
+  display: grid; place-items: center; margin-top: 9%; width: 44%; height: 66%;
+  border-radius: 5px; background: #fff9e4d9; color: #3a4c40;
+  font-family: Georgia, serif; font-size: clamp(10px, 2.9vw, 13px); font-weight: bold;
+  box-shadow: 0 1px 1px #334b3b19;
+}
+.edition-two .cup-bowl { left: 12%; right: 22%; top: 24%; bottom: 20%; border-radius: 4px 4px 15px 15px; box-shadow: inset 0 2px 0 #fff; }
+.edition-two .cup-handle { right: 9%; top: 33%; width: 19%; height: 33%; }
+.edition-two .cup-saucer { left: 10%; right: 10%; bottom: 12%; height: 10%; }
+.edition-two .cup-steam { left: 40%; top: 4%; width: 16%; height: 14%; }
+.edition-two .mac-top, .edition-two .mac-bot { left: 10%; right: 10%; height: 31%; box-shadow: inset 0 2px 0 #ffffff38; }
+.edition-two .mac-top { top: 14%; }
+.edition-two .mac-bot { bottom: 14%; }
+.edition-two .mac-fill { top: 44%; left: 17%; right: 17%; height: 16%; }
+.edition-two .play .mystery .fog {
+  display: grid; place-items: center; width: 79%; height: 76%; opacity: 1;
+  border-radius: 9px; border: 1px solid #a9b9ac;
+  background: linear-gradient(135deg, #ffffffcf, #cddbd0);
+  box-shadow: inset 0 1px 0 #fff, 0 2px 2px #47644f12;
+  color: #647b6c;
+}
+.edition-two .play .mystery .fog::after { content: '?'; font: 600 14px Georgia, serif; opacity: .8; }
+.edition-two .play .slot .lid { top: -3px; height: 2px; background: #adbfaf; opacity: .65; }
+.edition-two .play .jar.selected .slot.held { transform: translateY(-7px) scale(1.025); filter: drop-shadow(0 3px 2px #405a362b); }
+.edition-two .play .jar.done .jar-glass { border-color: #85a574; box-shadow: 0 0 0 2px #acc59c55, inset 0 -7px 8px #8ca18e19; }
+.edition-two .play .jar-check { right: -4px; bottom: -4px; width: 22px; height: 22px; line-height: 20px; background: #557b59; border: 2px solid #f6f5df; color: #fff; box-shadow: 0 2px 4px #37533c28; }
+.edition-two .play .puff { display: none; }
+.edition-two .play-bar button { min-height: 46px; border-radius: 15px; font-size: .82rem; }
+.edition-two .play-bar #undo { background: #d6e3d2; color: #345940; }
+.edition-two .play-bar #restart { background: #ebe6d8; color: #6c6a56; }
+.edition-two .play .result-overlay { background: #203e365e; backdrop-filter: blur(4px); }
+.edition-two .play .result-card { background: #fffcef; border: 1px solid #d0d8bb; border-radius: 27px; box-shadow: 0 20px 65px #1b382c38; color: #3c5748; }
+.edition-two .play .result-confetti i:nth-child(n+7) { display: none; }
+.edition-two .play .result-confetti i { width: 5px; height: 8px; opacity: .65; }
+.edition-two .play .result-card h3 { font-family: Georgia, serif; font-size: 2rem; }
+.edition-two .play .result-card .big-stars { color: #b58c3c; font-size: 2rem; }
+.edition-two .play .result-seal { background: #dfead3; color: #496d4c; }
+.edition-two .play .result-reward { color: #496d4c; }
+.edition-two .play .milestone-reward { background: #e7eddc; color: #49614a; }
+@media (min-height: 700px) and (orientation: portrait) {
+  .edition-two .play .shelves[data-count="3"], .edition-two .play .shelves[data-count="4"] { --slot-height: clamp(38px, 5.3dvh, 48px); }
+  .edition-two .play .shelves[data-count="3"] .treat { height: min(40px, var(--slot-height)); width: min(70px, 100%); }
+}
+@media (max-height: 690px) {
+  .edition-two .play { --slot-height: 27px; gap: 7px; }
+  .edition-two .play .shelves { padding: 12px 6px; }
+  .edition-two .play .shelf-row { gap: 15px 8px; }
+}
+@media (max-height: 690px) and (orientation: portrait) {
+  /* Leave room for a wrapped title without shrinking the treats on short phones. */
+  .edition-two .play .shelves[data-capacity="5"] { --slot-height: clamp(18px, calc(23px + (100dvh - 568px) / 10), 27px); padding-block: 9px; }
+  .edition-two .play .shelves[data-capacity="5"] .plank { margin-bottom: 3px; }
+}
+@media (orientation: landscape) and (min-width: 560px) {
+  .edition-two .play { --slot-height: 26px; max-width: 1000px; width: 100%; }
+  .edition-two .play .shelves { padding: 12px; }
+  .edition-two .play .shelves .shelf-row { gap: 14px; max-width: none; }
+  .edition-two .play .shelves .shelf-row .jar { flex: 0 1 90px; width: 90px; min-width: 0; max-width: 90px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .edition-two .play .jar.selected .slot.held { transform: none; filter: none; }
+  .edition-two .play .result-confetti { display: none; }
+}
+@media (orientation: landscape) and (min-height: 650px) {
+  .edition-two .play { --slot-height: 44px; }
+  .edition-two .play .shelves .shelf-row .jar { flex-basis: 110px; width: 110px; max-width: 110px; }
+}

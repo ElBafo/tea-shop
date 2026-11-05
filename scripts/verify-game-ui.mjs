@@ -31,7 +31,7 @@ await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScal
 await send('Page.navigate',{url:'http://127.0.0.1:5174/tea-shop/preview/'});await new Promise(r=>setTimeout(r,1400));
 const seed={muted:true,bestStars:Array(38).fill(0),bestMoves:Array(38).fill(0),shop:{owned:[],style:{},place:{},finaleSeen:false}};
 await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
-await send('Page.reload');await new Promise(r=>setTimeout(r,1400));
+await send('Page.reload');await new Promise(r=>setTimeout(r,400));for(let i=0;i<150;i++){if(await evaluate(`!!document.querySelector('#play-tea')&&!document.querySelector('#launch-screen')`))break;await new Promise(r=>setTimeout(r,100));}
 const tap=async(selector)=>{
  const p=await evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});if(!el||el.disabled||el.closest('[inert]'))throw Error('Unavailable control '+${JSON.stringify(selector)});el.scrollIntoView({block:'nearest'});const r=el.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...p,id:1}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,120));
@@ -74,7 +74,7 @@ await tap('[data-go="levels"]');await tap('.level-btn[data-level="2"]');await ne
 if(await evaluate(`document.querySelector('.moves').textContent`)!=='0 moves')throw Error('Old animation changed new puzzle');
 seed.bestStars=Array(38).fill(3);
 await evaluate(`localStorage.setItem('tea-shop-preview-progress-v1',${JSON.stringify(JSON.stringify(seed))})`);
-await send('Page.reload');await new Promise(r=>setTimeout(r,1400));await tap('#play-tea');await tap('.puzzle-chapter:nth-child(3) summary');await tap('.level-btn[data-level="20"]');
+await send('Page.reload');await new Promise(r=>setTimeout(r,400));for(let i=0;i<150;i++){if(await evaluate(`!!document.querySelector('#play-tea')&&!document.querySelector('#launch-screen')`))break;await new Promise(r=>setTimeout(r,100));}await tap('#play-tea');await tap('.puzzle-chapter:nth-child(3) summary');await tap('.level-btn[data-level="20"]');
 for(const [width,height,name] of [[390,844,'phone'],[320,568,'small-phone'],[844,390,'landscape'],[1280,900,'desktop']]){
  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});await new Promise(r=>setTimeout(r,250));
  const fit=await evaluate(`(()=>{const s=document.querySelector('.shelves'),bounds=s.getBoundingClientRect(),bar=document.querySelector('.play-bar').getBoundingClientRect();return {fits:s.scrollHeight<=s.clientHeight+2&&[...document.querySelectorAll('.jar')].every(j=>{const r=j.getBoundingClientRect();return r.top>=bounds.top&&r.bottom<=bar.top&&r.left>=0&&r.right<=innerWidth;}),scroll:s.scrollHeight,client:s.clientHeight,width:innerWidth};})()`);

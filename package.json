@@ -1,13 +1,13 @@
 {
   "name": "tea-shop",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0-preview.8",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "verify": "tsx scripts/verify-inventory.ts && tsx scripts/verify-exchange.ts && tsx scripts/verify-rewards.ts && tsx scripts/verify-completion.ts && tsx scripts/verify-placement.ts && tsx scripts/verify-backup.ts && tsx scripts/verify-pacing.ts && tsx scripts/verify-levels.ts"
+    "verify": "tsx scripts/verify-version.ts && tsx scripts/verify-inventory.ts && tsx scripts/verify-exchange.ts && tsx scripts/verify-rewards.ts && tsx scripts/verify-completion.ts && tsx scripts/verify-placement.ts && tsx scripts/verify-backup.ts && tsx scripts/verify-pacing.ts && node scripts/verify-edition-compat.mjs && node scripts/verify-edition-seating.mjs && tsx scripts/verify-edition-catalogue.ts && tsx scripts/verify-guest-routes.ts && tsx scripts/verify-guest-traffic.ts && tsx scripts/verify-guest-motion.ts && tsx scripts/verify-edition-levels.ts && tsx scripts/verify-levels.ts"
   },
   "devDependencies": {
     "tsx": "^4.20.6",

@@ -1,5 +1,7 @@
 # Decopu
 
+**Latest hosted preview:** [0.2.0-preview.8](https://elbafo.github.io/tea-shop/preview/?edition=2), app commit `cb068b8ff688c7dfab917e6d0476e39d310d19d4`. [GitHub Pages deployment 42008456025 passed](https://github.com/ElBafo/tea-shop/actions/runs/42008456025). Main remains `e7a475779e41d3a39fff9435e6ebdb119dec682d`; owner phone review and explicit merge approval remain pending. The backup fixture and associated browser harness were tested locally and kept out of the public repository after automatic approval review.
+
 A cozy little sort puzzle. Line up the tea tins, cups, and treats — there is no clock and no fail state. Stars you earn dress up a tiny 3D tea shop.
 
 **Play it here:** [https://elbafo.github.io/tea-shop/](https://elbafo.github.io/tea-shop/)
@@ -85,3 +87,24 @@ Chapter milestones also award 4/6/8 bonus stars at 8/16/24 completed puzzles. Bo
 
 
 The reward preview adds Reading chair (32 puzzles,16 stars) and Tea garden fountain (38 puzzles,20 stars), both indoor decorations. Select an owned optional piece and use **Return for … stars** to exchange it at full value after confirmation. Core completion pieces stay owned. Goal cards show the next reward and open its free preview. Hidden-jar puzzles now include a small exploration allowance in their three-star targets; saved boards and scores remain compatible. See [pacing audit](docs/PUZZLE_PACING.md).
+
+
+## Second-edition prototype and versions
+
+The isolated prototype is hosted at https://elbafo.github.io/tea-shop/preview/?edition=2. Preview.1 introduced a redesigned room, ten authored puzzles, actual-model thumbnails, personal decoration goals, tap-to-place and Undo move. Preview.2 expanded to fourteen designs, preview.3 made decorative wall finishes conditional on the paid wall upgrade, and **preview.4 added ambient guest visits**. Preview.6 delivered the requested smoother walking and visitors including women and children. The owner reviewed it positively and requested continuation.
+
+**0.2.0-preview.5 added:** six more puzzles and two special decorations, Glass garden and Botanical triptych, with three styles each. The sixteen-design catalogue costs 104 stars; sixteen puzzles and milestones earn 36–68. The 26-star core remains achievable at minimum scores, with enough left for Glass garden. Existing progress carries forward, including old ten-board backups. The final build, required verification, session/flow/choices browser suites and small-phone overflow check and hosted deployment pass; owner phone review remains pending. That deployment is preserved in the release record; the URL now serves preview.7.
+
+This pass also shows the shopkeeper as soon as the counter is placed, including temporary previews, and fits five-slot puzzles on small portrait phones. Preview/cancel, purchase before completion, storage, restoration, rotation and reload passed browser checks. The owner subsequently said “Continue”; this is continuation authorization, not a merge or an inferred acceptance of every fix.
+
+**0.2.0-preview.6 added the reviewed guest polish:** bending knees/elbows, distance-driven steps and smoother visual turns, plus six visitor profiles including adult women, adult men and children. Profiles stay stable per visit and cycle across room lifetimes in the session. Two reusable rigs retain the existing routes, arrival rates and visitor limit, with correct child seating and static reduced motion. Build, package verification, independent source/geometry review and final browser checks passed, including onboarding and the immediate first-counter shopkeeper. [Release notes](docs/RELEASES.md) include phone screenshots and a fixed-step walking clip. Its deployment used app commit `6492179aa34b447d66f32d2b3ecac75c7567d4e8`, confirmed by [GitHub Pages run 41933373195](https://github.com/ElBafo/tea-shop/actions/runs/41933373195). The owner said “Looks good. Proceed”; main has not been merged.
+
+**0.2.0-preview.7 remains the hosted build:** four new puzzles, 17–20, and Collector’s cabinet, an optional 18-star purchase unlocked after 20 completions. Three distinct cabinet styles bring the catalogue to seventeen designs and fifty-one model thumbnails. Bonuses stay at 20, so earnings are 40–80 against a 26-star core and 122-star catalogue; there is no extra bonus at 20. Existing progress and both ten-/sixteen-board edition backups carry forward. The final production rebuild, package checks, model checks and browser flows pass, including cabinet purchases, legacy backups, guest safety and the small-phone finale. [Release notes](docs/RELEASES.md) include screenshots and evidence. The preview link now serves .7 at app commit `cc371290eacb2355f164a867057feffbdbdaac0f`, confirmed by [GitHub Pages run 41940688895](https://github.com/ElBafo/tea-shop/actions/runs/41940688895). The owner subsequently said “Continue”; main is unchanged.
+
+**0.2.0-preview.8 is locally validated:** four more puzzles, 21–24, and Reading chair, an optional 16-star purchase unlocked after twenty-four completions. Three included styles and model thumbnails target eighteen designs and fifty-four thumbnails. Existing visitors will be able to use a reachable placed chair through the current seating system. Bonuses stay at twenty, giving 44–92 earnings against the 26-star core and 138-star catalogue. The first twenty puzzles and known ten-/sixteen-/twenty-board backups must carry forward. Implementation and local validation are complete; deployment passed; the link now serves preview.8.
+
+The edition has separate save/appearance keys; main and ordinary-preview progress remain isolated. More → Reset preview progress restarts only the current preview mode. The version appears at Start and in More. Main remains the approved baseline until separate merge approval.
+
+Guest traffic stays capped at two, with arrivals based on actually displayed decorations. All visitors hide/reset during Edit, and reduced motion uses stationary activities. Optional decorations remain paid purchases with confirmed full-price returns and included styles.
+
+See [release notes](docs/RELEASES.md), [second-edition scope](docs/SECOND_EDITION.md), [roadmap](docs/ROADMAP.md), and [first-slice puzzle pacing](docs/EDITION2_PACING.md).

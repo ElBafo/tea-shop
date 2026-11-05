@@ -1,3 +1,5 @@
+import { isSecondEdition } from "../game/mode";
+import { buildEditionItem, buildEditionKeeper, decorateEditionRoom, editionFloorMaterial, editionReadingNook, editionArtIds } from "./edition-art";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import type { Texture } from "@babylonjs/core/Materials/Textures/texture";
 import { Color3 } from "@babylonjs/core/Maths/math.color";
@@ -22,6 +24,7 @@ import { UPGRADE_BY_ID, placeOf, styleOf, kindOf } from "./upgrades";
 
 export interface ShopVisuals {
   wallStyleKey?: string;
+  wallFinish?: TransformNode;
   floor: Mesh;
   backWall: Mesh;
   leftWall: Mesh;
@@ -179,7 +182,9 @@ export function createShopVisuals(scene: Scene): ShopVisuals {
   box(scene, "curtain-r", 0.36, 1.7, 0.08, curtains, curtainMat, 5.72, 1.9, 0.14);
   box(scene, "curtain-rod", 2.05, 0.06, 0.06, curtains, paint(scene, "rod", C.woodDeep), 4.85, 2.8, 0.14);
 
-  return { floor, backWall, leftWall, glass, curtains, stain, items: {} };
+  let wallFinish: TransformNode | undefined;
+  if (isSecondEdition) { floorMat.dispose(false,true); floor.material=editionFloorMaterial(scene); wallFinish=decorateEditionRoom(scene,room); }
+  return { floor, backWall, leftWall, glass, curtains, stain, wallFinish, items: {} };
 }
 
 function placeFloorItem(root: TransformNode, id: UpgradeId, shop: ShopState, lift = 0): void {
@@ -228,6 +233,7 @@ function buildItemMeshes(scene: Scene, id: UpgradeId, shop: ShopState): Transfor
     return root;
   }
   const style = styleOf(shop, id);
+  if (isSecondEdition && editionArtIds.includes(id) && id !== "paint") return buildEditionItem(scene,id,shop,style);
   if (id === "terrarium" || id === "botanical" || id === "cabinet") return buildConservatory(scene, shop, id, style);
   if (id === "armchair" || id === "fountain") return buildSignature(scene, shop, id, style);
   if (id === "counter") return buildCounter(scene, shop, style);
@@ -475,7 +481,7 @@ function chair(scene: Scene, parent: TransformNode, seat: StandardMaterial, fram
 }
 
 export function buildCustomer(scene: Scene): TransformNode {
-  return ownedVisual(scene, () => buildCustomerMeshes(scene));
+  return ownedVisual(scene, () => isSecondEdition ? buildEditionKeeper(scene) : buildCustomerMeshes(scene));
 }
 
 function buildCustomerMeshes(scene: Scene): TransformNode {
@@ -504,13 +510,13 @@ function buildCustomerMeshes(scene: Scene): TransformNode {
 export function applyRoomStyle(visuals: ShopVisuals, shop: ShopState, scene: Scene): void {
   const painted = shop.owned.includes("paint");
   const style = styleOf(shop, "paint");
-  const hex = painted ? [C.creamWall, C.sageWall, C.roseWall][style] ?? C.creamWall : C.plaster;
+  const hex = isSecondEdition ? (painted ? ["#eadfcd","#bccbb9","#dcbab0"][style] : "#ded3c0") : painted ? [C.creamWall, C.sageWall, C.roseWall][style] ?? C.creamWall : C.plaster;
   const key = `${painted}:${style}`;
   if (visuals.wallStyleKey !== key) {
     const wallTex = plasterTexture(scene, hex, `wall-${painted ? style : "bare"}`);
     wallTex.uScale = 2;
     wallTex.vScale = 1.2;
-    const wallMat = paint(scene, `wall-live-${hex}`, hex, { tex: wallTex });
+    const wallMat = paint(scene, `wall-live-${hex}`, isSecondEdition ? "#ffffff" : hex, { tex: wallTex });
     const previous = visuals.backWall.material;
     visuals.backWall.material = wallMat;
     visuals.leftWall.material = wallMat;
@@ -521,7 +527,8 @@ export function applyRoomStyle(visuals: ShopVisuals, shop: ShopState, scene: Sce
   glass.diffuseColor = Color3.FromHexString(painted ? C.glass : C.dirtyGlass);
   glass.alpha = painted ? 0.28 : 0.42;
   visuals.curtains.setEnabled(painted);
-  visuals.stain.setEnabled(!painted);
+  visuals.wallFinish?.setEnabled(painted);
+  visuals.stain.setEnabled(!painted && !isSecondEdition);
 }
 
 export function collectMeshes(root: TransformNode): AbstractMesh[] {
@@ -530,7 +537,7 @@ export function collectMeshes(root: TransformNode): AbstractMesh[] {
 
 export function itemKey(id: UpgradeId, shop: ShopState): string {
   const place = placeOf(shop, id);
-  return `${id}:${shop.owned.includes(id)}:${styleOf(shop, id)}:${place.x}:${place.z}:${place.rot}:${place.wall ?? ""}`;
+  return `${id}:${shop.owned.includes(id)}:${styleOf(shop, id)}:${place.x}:${place.z}:${place.rot}:${place.wall ?? ""}${isSecondEdition && id === "table" ? `:nook-${editionReadingNook(shop)}` : ""}`;
 }
 
 const originalEmission = new WeakMap<StandardMaterial, Color3>();

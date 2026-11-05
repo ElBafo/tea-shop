@@ -1,3 +1,4 @@
+import { isSecondEdition } from "../game/mode";
 import type { Placement, ShopState, UpgradeDef, UpgradeId, UpgradeKind, RepeatableKind } from "../game/types";
 
 export const UPGRADES: UpgradeDef[] = [
@@ -239,8 +240,40 @@ export const REPEATABLE: readonly RepeatableKind[] = ["plant", "lamp", "table", 
 export const EXTRA_COPIES: UpgradeDef[] = UPGRADES
   .filter(def => REPEATABLE.includes(def.id as RepeatableKind))
   .map(def => ({...def, id: `${def.id}:2` as UpgradeId, optional: true}));
-export const DECORATIONS: UpgradeDef[] = [...UPGRADES, ...EXTRA_COPIES];
-export const UPGRADE_BY_ID = Object.fromEntries(DECORATIONS.map(def => [def.id, def])) as Record<UpgradeId, UpgradeDef>;
+const ALL_DECORATIONS: UpgradeDef[] = [...UPGRADES, ...EXTRA_COPIES];
+// Clone only the prototype's optional definitions. The released catalogue and
+// its existing unlocks retain their original objects, prices and meanings.
+const EDITION_OPTIONAL: {id: UpgradeId; after: number; collection?: string; defaultPlace?: Placement}[] = [
+  {id: "bench", after: 3}, {id: "art", after: 3},
+  {id: "trolley", after: 6}, {id: "clock", after: 6},
+  {id: "planter", after: 10}, {id: "basket", after: 10},
+  {id: "terrarium", after: 13, collection: "Conservatory"},
+  {id: "botanical", after: 16, collection: "Conservatory"},
+  {id: "cabinet", after: 20, collection: "Conservatory"},
+  {id: "armchair", after: 24, collection: "Signature pieces", defaultPlace: {x:1,z:3,rot:0}},
+];
+export const EDITION_DECORATIONS: UpgradeDef[] = [
+  ...UPGRADES.filter(item => !item.optional),
+  ...EDITION_OPTIONAL.map(({id, after, collection, defaultPlace}) => ({
+    ...UPGRADES.find(item => item.id === id)!,
+    ...(defaultPlace ? {defaultPlace: {...defaultPlace}} : {}),
+    unlockAfter: after,
+    collection: collection ?? "Personal touches",
+  })),
+];
+
+// A pure mode selection also lets verification check both catalogues without
+// pretending a Node process is a browser or changing global build flags.
+export function catalogueForMode(secondEdition: boolean): {decorations: UpgradeDef[]; byId: Record<UpgradeId, UpgradeDef>} {
+  const decorations = secondEdition ? EDITION_DECORATIONS : ALL_DECORATIONS;
+  return {
+    decorations,
+    byId: Object.fromEntries([...ALL_DECORATIONS, ...decorations].map(def => [def.id, def])) as Record<UpgradeId, UpgradeDef>,
+  };
+}
+const catalogue = catalogueForMode(isSecondEdition);
+export const DECORATIONS = catalogue.decorations;
+export const UPGRADE_BY_ID = catalogue.byId;
 export const UPGRADE_IDS = DECORATIONS.map(def => def.id);
 
 export function kindOf(id: UpgradeId): UpgradeKind {
