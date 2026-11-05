@@ -19,6 +19,14 @@ The core loop is: solve a shelf → earn stars → preview and buy a decoration 
 - Let owned movable items be stored and placed again for free. Optional items can be returned for their full star price after confirmation; core completion pieces remain owned.
 - Completing the future Bakery should unlock star-bought special pieces usable in the original tea shop. This refers to the second venue, not a group of tea-shop puzzles. The Bakery is not playable yet.
 
+## Approved interaction preview — 0.2.1-preview.1
+
+Family testing identified an expectation to drag tea pieces from one jar to another. The owner approved adding this gesture alongside tapping and keyboard controls, with the available matching top group following the finger and legal destinations highlighted. Jars stay stationary. A valid drop follows the same move, scoring and Undo rules; an invalid or cancelled drag does not spend a move. Hidden contents remain concealed, and the whole group must fit.
+
+The implemented graphics direction is more tangible rounded pieces, clearer glass, consistent highlights and soft contact shadows, with calm lift/landing feedback. Screwdom is the owner's visual reference. This preview keeps the cozy palette, current puzzle/economy definitions and existing progress. Implementation and the final build are complete; final touch/browser regressions and hosting are pending. The main release remains 0.2.0 until review and merge approval.
+
+The first guided puzzle must communicate the action visually beside the jars. A hand and brief bubble demonstrate a legal source-to-destination drag; tapping a source changes the cue to its destination. The cue hides during real dragging, cannot intercept input, respects reduced motion and leaves Skip available. This addresses family feedback that highlighted jars and small top-of-screen instructions were not understood.
+
 ## Production activation — 0.2.0
 
 The owner clarified: “I don’t care about keeping the progress. My wife should check it out like a new installation.” This supersedes the proposed migration, import and edition-choice work for this release.

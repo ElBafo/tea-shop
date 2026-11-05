@@ -1,16 +1,32 @@
 # Decopu releases
 
-**Released: [Decopu 0.2.0](https://elbafo.github.io/tea-shop/).** [PR #16](https://github.com/ElBafo/tea-shop/pull/16) merged as `966c613fa486c9ce34dd1cf5f8bb9ac4a5905d3c`; [Pages run 42081278504](https://github.com/ElBafo/tea-shop/actions/runs/42081278504) passed. Main opens the second edition with fresh production progress and normal onboarding. Progress earned afterward saves normally; physical iPhone family testing remains pending.
+**Released: [Decopu 0.2.0](https://elbafo.github.io/tea-shop/).** [PR #16](https://github.com/ElBafo/tea-shop/pull/16) merged as `966c613fa486c9ce34dd1cf5f8bb9ac4a5905d3c`; [Pages run 42081278504](https://github.com/ElBafo/tea-shop/actions/runs/42081278504) passed. Main opens the second edition with fresh production progress and normal onboarding. Progress earned afterward saves normally. Initial family feedback now informs the next preview; a complete physical iPhone regression pass remains pending.
 
 Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.md) scope and records whether it is in progress, hosted for review, approved or released. A preview suffix is not a release approval.
 
 ## Version policy
 
 - Show the same version in the app and in the package/release record.
-- Number preview builds as `0.2.0-preview.1`, `0.2.0-preview.2`, and so on. Increment the preview number for a newly published review build so phone reports can identify it.
-- Publish `0.2.0` only after its release is approved; use later patch versions for released fixes and minor versions for the next planned feature release.
+- Number review builds with the intended release and an incrementing preview suffix, such as `0.2.1-preview.1`. Increment the preview number for a newly published application build so phone reports can identify it.
+- Remove the preview suffix only after the release is approved. Use patch releases for focused refinements and minor releases for a broader planned feature milestone.
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
+
+## 0.2.1-preview.1 — direct puzzle dragging and tactile visuals; final browser checks pending
+
+The owner approved this pass after family testing showed repeated attempts to drag tea bags between jars. Direct press–drag–release now sits alongside existing tapping and keyboard controls. It moves the available matching top group, keeps jars stationary, shows legal destinations and settles a valid drop. Invalid or interrupted drags return without a move; concealed pieces remain neutral. The whole-group capacity rule, unlimited Undo, scoring and existing reward path remain.
+
+Further first-puzzle feedback showed that highlighted jars were not understood as destinations and small guidance text was missed. This preview adds a visual hand and short bubble beside the jars, demonstrating a legal drag and pointing at the destination after a source tap. It hides during real dragging, remains non-interactive, offers static reduced-motion guidance and preserves Skip. Independent guide layout/accessibility checks pass; the full touch interaction rerun remains pending.
+
+The puzzle art direction uses rounded, more tangible tea pieces, clearer glass edges, coherent highlights/contact shadows and restrained lift/landing feedback. Screwdom is a reference for the desired tactile quality; Decopu keeps its own cozy palette and HTML/CSS puzzle presentation. Reduced motion, four-/five-slot layouts and phone readability remain acceptance requirements. Dragging applies to both runtimes on this branch; the artwork is scoped to the second edition. Puzzles remain light when entered from a night shop, with a full-game dark theme still in the backlog.
+
+This is an interaction and presentation pass. The twenty-four edition puzzles, thirty-eight classic boards, eighteen paid designs, economy and all save namespaces remain unchanged. Existing progress, goals, preferences and unfinished-puzzle Undo history must continue. The released main build stays at `0.2.0` until owner review and an explicit merge instruction.
+
+Implementation and local visual review are complete. Package verification passed (`work/tactile-verify.log`), including twenty-four edition and thirty-eight classic solvers and existing persistence/economy regressions. The final production build passed (`work/tactile-build.log`), and the fresh onboarding/session flow passed (`work/tactile-flow.log`). The independent guide layout/reduced-motion/accessibility-scroll/Skip/navigation suite passed at 320×568, 390×844, 844×390 and 1280×900 (`work/visual-guide-layout-check.json`). Root reviewed phone artwork, actual dragging, tall/small puzzles and the guide, including landscape and desktop fit.
+
+Final end-to-end touch and first-puzzle guide regressions are pending before hosting. These Chromium checks do not establish physical iPhone performance or enjoyment. Working branch: `preview/tactile-puzzles`; draft PR and preview deployment are pending. Physical iPhone review follows hosting. See [ROADMAP.md](ROADMAP.md) for the full acceptance scope.
+
+[Phone puzzle](screenshots/tactile-puzzles/phone.webp) · [Dragging](screenshots/tactile-puzzles/dragging.webp) · [Small phone](screenshots/tactile-puzzles/small.webp) · [Tall jars](screenshots/tactile-puzzles/tall.webp) · [Desktop](screenshots/tactile-puzzles/desktop.webp) · [First-puzzle demonstration](screenshots/tactile-puzzles/guide.webp) · [Tap destination cue](screenshots/tactile-puzzles/guide-tap.webp)
 
 ## 0.2.0 — released
 

@@ -27,12 +27,24 @@ The owner chose a fresh installation experience. There is no migration, preview 
 | `src/game/storage.ts` | Load, validate, and save progress; best scores, unlocks, and available stars |
 | `src/game/audio.ts` | Web Audio sound effects, unlocked by a user gesture |
 | `src/ui/app.ts`, `src/ui/items.ts` | Screen orchestration, puzzle interaction, and item markup |
+| `src/ui/puzzle-drag.ts`, `puzzle-drag.css` | Pointer gesture capture, temporary lifted pieces, legal target feedback and cancellation; no saved game state |
+| `src/ui/puzzle-guide.ts`, `puzzle-guide.css` | First-puzzle legal-move demonstration, nearby action bubble, accessible instruction and overlay cleanup |
 | `src/shop/screen.ts` | Upgrade controls, purchase and style actions, editing controls, completion UI |
 | `src/shop/upgrades.ts` | Upgrade catalog, prices, variants, defaults, and completion rules |
 | `src/shop/grid.ts` | Placement rules, snapping, collisions, rotation, and saved-layout sanitization |
 | `src/shop/diorama.ts` | Babylon engine and scene, camera, lights, pointer interaction, animation, and disposal |
 | `src/shop/meshes.ts`, `textures.ts`, `palette.ts` | Procedural room and furniture visuals, textures, and colors |
 | `src/style.css` | Responsive layout, puzzle artwork, controls, and CSS animation |
+
+## Direct puzzle dragging — 0.2.1-preview.1
+
+The preview adds `bindPuzzleDrag` in `src/ui/puzzle-drag.ts`. It keeps a small transient gesture state, crosses an eight-pixel movement threshold before capturing the source jar, and moves cloned rendered pieces above the pointer. Jar elements stay in place. Targets use `canPour`, preserving the existing whole-run capacity rule. Sealed jars clone only their visible piece; concealed colours and hidden run length are not exposed by the lifted artwork.
+
+`app.ts` routes both taps and successful drops through one `transfer()` path, which owns validation, Undo snapshots, move logs, persistence and win rewards. Logical state and saves update immediately. After a drag, the shelf is marked busy immediately while presentation rendering is deferred to the next task and guarded against replacing a newer play state. A drag supplies its lifted-piece origins to `animatePour` in `motion.ts`; the `fromDrag` path settles directly into the jar. Invalid drops return the temporary pieces without changing the board. Rendering/navigation, pointer cancellation, lost capture, extra fingers, blur, backgrounding and resize cancel transient gesture state. Normal pointer completion lets the browser release capture; manual release handles interruption. Post-drag click suppression must preserve normal tapping and keyboard activation; final native-click regression checks are still pending.
+
+`mountPuzzleGuide` in `puzzle-guide.ts` demonstrates a legal move only while the first-puzzle guide stage is active. It uses the current board and selection to choose a source/destination through the existing move validator. A hand, route and short bubble show a drag, or point at the destination after a source tap. A separate live status description preserves the instruction for assistive technology. The fixed overlay follows shelf/jar geometry through resize and scroll observers, does not enlarge the shelf scroll area and cannot intercept input. Real dragging hides it. Reduced motion retains a static cue, backgrounding pauses animation, and render/navigation disposal cancels animation and removes observers/listeners. Existing Skip and guide progression remain authoritative.
+
+The gesture is available in both edition and classic runtime on this branch. The new artwork remains scoped to second-edition CSS. Puzzle screens retain their light palette when entered from a night shop; a dark theme for the whole game remains backlog work. No Babylon puzzle scene, new storage namespace, puzzle definition or economy change is introduced. Package verification, the final build, fresh-flow checks, guide layout/lifecycle checks and local visual review passed. Final end-to-end touch regressions and hosted review remain pending; see [RELEASES.md](RELEASES.md) for evidence and limits.
 
 ## Data flow
 
