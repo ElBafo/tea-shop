@@ -6,7 +6,7 @@ A cozy sorting puzzle that earns stars for a small isometric tea shop. Fill jars
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
-**Reviewed preview: `0.2.1-preview.1`.** Drag tea pieces between jars alongside tap controls, with rounded piece artwork, clearer glass and restrained landing feedback. The first guided puzzle has an animated hand and brief bubble beside the jars. The [phone preview](https://elbafo.github.io/tea-shop/preview/?edition=2) and [temporary guided tour](https://elbafo.github.io/tea-shop/preview/?edition=2&tour=1) remain available. See [release evidence and screenshots](docs/RELEASES.md).
+**Hosted preview: 0.2.2-preview.2.** A welcoming workbench, gently animated shopkeeper, clearer window and rebalanced day/night lighting. [Try the fresh-start preview](https://elbafo.github.io/tea-shop/preview/?edition=2&tour=1) (Start → Explore on my own). [PR #18](https://github.com/ElBafo/tea-shop/pull/18) and [deployment evidence](docs/RELEASES.md) are ready for review. Main stays at 0.2.1 until approval.
 
 ## Progress since the 0.2.0 fresh start
 

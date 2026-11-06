@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Starting-room preview — 0.2.2-preview.2
+
+`ShopVisuals.starterBench` owns temporary scenery under the room node. `positionShopkeeper` reuses the existing keeper, showing the bench only before counter ownership, outside Edit, and when `canPlace` accepts the default counter footprint and rear aisle. Owned/stored counters suppress it. No inventory/save keys change. Preview.2 adds a keeper head pivot, breathing and blink poses through the existing render tick, resetting during Edit/reduced motion. Existing ambient, sunlight and window-light settings are rebalanced for warmer daytime fill and clearer cool nights; no additional lights or continuous lamp-shadow refresh is added. Steam uses the existing frame loop and reduced-motion handling; the new geometry adds no lights or timers. Separate sky, outdoor greenery, glass and frame depths remove the old coplanar window faces. Day/night updates the backdrop material; base glass clarity no longer depends on purchasing paint. All changes are scoped to the second edition.
+
 ## Runtime
 
 Decopu is a static, client-side TypeScript application built with Vite. Babylon.js renders the shop. The puzzle screens and shop controls use HTML templates, CSS, and DOM event listeners rather than a UI framework. There is no backend or account service.
