@@ -2,7 +2,7 @@
 
 ## 0.3.0-preview.3 — completion and reward polish
 
-Local implementation: an earned-star receipt toward the selected decoration, distinct milestones, quieter no-new-reward replays, stationary jar completion highlight, shorter win pause and paper/ceramic pour audio. Rules, rewards and saves are unchanged. Required verification and final build pass, along with nine focused reward-flow groups and sixteen drag regressions. Muted audio creates no nodes; two cues reuse one noise buffer and disconnect all fourteen created nodes. Milestone bonus text explicitly says it is included in the total. Screenshots: `screenshots/reward-polish/`. Deployment and physical-phone review remain pending.
+Local implementation: an earned-star receipt toward the selected decoration, distinct milestones, quieter no-new-reward replays, stationary jar completion highlight, shorter win pause and paper/ceramic pour audio. Rules, rewards and saves are unchanged. Required verification and final build pass, along with nine focused reward-flow groups and sixteen drag regressions. Muted audio creates no nodes; two cues reuse one noise buffer and disconnect all fourteen created nodes. Milestone bonus text explicitly says it is included in the total. Screenshots: `screenshots/reward-polish/`. [PR #21](https://github.com/ElBafo/tea-shop/pull/21), source `ba5a8ddcb817a3241e448f219c5e446ff6baeda6`, was hosted successfully in [Pages run 42285562569](https://github.com/ElBafo/tea-shop/actions/runs/42285562569). Physical-phone review remains pending; main stays 0.2.1.
 
 ## 0.3.0-preview.2 — whole-game visual pass
 
