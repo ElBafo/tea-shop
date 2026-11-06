@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Approved 3D puzzle comparison — 0.3.0-preview.1
+
+Evaluate Babylon.js vases and paper tea sachets on three existing sample boards before choosing a production rendering direction. Current and 3D presentations share in-memory board state and rules; normal progress and currency are untouched. Prioritize recognisable objects, clear four-/five-slot stacks, private hidden pieces, direct finger-following, accessible controls and low phone rendering cost. A fixed camera and authored movement preserve predictable sorting. Keep the normal game available. Device performance and family preference decide whether to continue, not the presence of 3D alone.
+
 ## Approved starting-room preview — 0.2.2-preview.1
 
 The first impression should read as a welcoming tea shop. A modest temporary serving workbench, tea props and shopkeeper are an explicit starter-scenery exception to the paid-furniture rule; they grant no catalogue ownership. The first counter remains a star purchase with style choices. Hide the temporary scene while editing and whenever its footprint/aisle is occupied; do not bring it back for an owned but stored counter. Improve base window readability and bare-room material depth without granting paid wall finishes. This supersedes the completely empty first-shop opening; shabby restoration fixtures for later venues remain future work. Main stays 0.2.1 pending review.

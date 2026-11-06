@@ -1,0 +1,58 @@
+.edition-two .play.puzzle-comparison { gap: 7px; }
+.comparison-header { display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:32px; flex:0 0 auto; }
+.comparison-header h2 { font:600 1.05rem Georgia,serif; margin:0; }
+.comparison-header small { color:#697b70; font-size:.62rem; white-space:nowrap; }
+.comparison-back { font-size:.78rem; text-decoration:none; color:#49614c; padding:6px 8px; border-radius:12px; background:#fff9ed; }
+.comparison-controls { display:flex; justify-content:space-between; align-items:center; gap:8px; flex:0 0 auto; }
+.comparison-switch { display:flex; padding:3px; gap:3px; background:#e3e9d9; border:1px solid #cbd5bf; border-radius:14px; }
+.comparison-switch button { min-height:32px; padding:5px 14px; border-radius:10px; background:transparent; box-shadow:none; font-size:.78rem; }
+.comparison-switch button[aria-pressed="true"] { color:#fffdf1; background:#527055; }
+.comparison-sample-label { display:flex; align-items:center; gap:5px; font-size:.72rem; color:#59705e; }
+.comparison-sample-label select { font-weight:600; font-family:inherit; font-size:.78rem; color:#3e5948; background:#fff9e9; border:1px solid #c6d1bd; border-radius:10px; padding:6px; min-height:35px; }
+.comparison-meta { display:flex; align-items:center; justify-content:space-between; gap:6px; flex:0 0 auto; min-height:24px; font-size:.68rem; }
+.comparison-meta p { margin:0; white-space:nowrap; }
+.comparison-name { text-align:center; font-size:.72rem; }
+.comparison-meta button { background:transparent; box-shadow:none; padding:4px; color:#526b55; font-size:.66rem; white-space:nowrap; }
+.comparison-shelf { isolation:isolate; }
+.comparison-canvas { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; touch-action:none; display:block; }
+.comparison-canvas[hidden] { display:none; }
+.edition-two .comparison-3d .jar { background:transparent; box-shadow:none; border-color:transparent; }
+.edition-two .comparison-3d .jar-neck,
+.edition-two .comparison-3d .jar-glass,
+.edition-two .comparison-3d .jar-check { opacity:0; }
+.edition-two .comparison-3d .slot.held { transform:none !important; filter:none !important; }
+.edition-two .comparison-3d .plank { opacity:0; }
+.edition-two .comparison-3d .jar:focus-visible { outline:3px solid #416a54; outline-offset:4px; }
+.edition-two .comparison-3d .jar.drag-over { outline:3px solid #a49349; outline-offset:4px; }
+.comparison-status { margin:0 3px; min-height:26px; color:#637365; font-size:.68rem; line-height:1.35; flex:0 0 auto; }
+.comparison-note { margin:0; color:#77816f; text-align:center; font-size:.62rem; flex:0 0 auto; }
+.comparison-result { display:flex; align-items:center; justify-content:space-between; gap:6px; border:1px solid #d1d9bf; background:#f6f7e5; padding:7px 9px; border-radius:12px; color:#45644b; font-size:.74rem; flex:0 0 auto; }
+.comparison-result[hidden] { display:none; }
+.comparison-result button { box-shadow:none; padding:5px 7px; background:#dfe8d1; color:#426048; font-size:.7rem; }
+.comparison-score { color:#8b733a; }
+.puzzle-comparison .play-bar { margin:0; }
+.puzzle-comparison .play-bar button { min-height:40px; padding:7px 10px; }
+@media (max-width:350px) {
+  .comparison-header h2 { font-size:.9rem; }
+  .comparison-header small { font-size:.55rem; }
+  .comparison-switch button { padding-inline:11px; }
+  .comparison-name { font-size:.64rem; }
+}
+@media (max-height:690px) and (orientation:portrait) {
+  .edition-two .play.puzzle-comparison { --slot-height:22px; gap:5px; }
+  .edition-two .puzzle-comparison .shelves[data-capacity="5"] { --slot-height:19px; padding-block:7px; }
+  .edition-two .puzzle-comparison .shelf-row { gap:12px 8px; padding-top:8px; }
+  .comparison-status { min-height:23px; font-size:.64rem; }
+}
+@media (orientation:landscape) and (max-height:480px) {
+  .edition-two .play.puzzle-comparison { --slot-height:21px; gap:4px; padding-top:6px; padding-bottom:7px; }
+  .comparison-header { min-height:24px; }
+  .comparison-header h2 { font-size:.88rem; }
+  .comparison-controls { position:absolute; top:8px; left:50%; transform:translateX(-50%); width:310px; z-index:3; }
+  .comparison-header h2 { visibility:hidden; }
+  .comparison-meta { margin-top:8px; min-height:19px; }
+  .comparison-switch button { min-height:28px; padding:3px 14px; }
+  .comparison-status { min-height:16px; font-size:.64rem; }
+  .comparison-note { font-size:.55rem; }
+  .comparison-result { position:absolute; bottom:65px; left:50%; transform:translateX(-50%); width:min(430px,80%); z-index:4; }
+}
