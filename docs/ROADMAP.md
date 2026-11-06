@@ -2,9 +2,19 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
+## Current priority — 0.3.0-preview.1
+
+The owner said “Go with your rec”, authorizing the bounded Babylon.js puzzle comparison recommended below. Build a separate preview-only experiment on top of the reviewed room preview. Main remains 0.2.1; the ordinary preview keeps its existing game and saved progress.
+
+Scope: three samples from unchanged edition boards (1: standard, 18: five-slot, 5: hidden), a Current/3D view switch retaining the same board/history, fixed readable camera, stylized glass vases and paper tea sachets, legal whole-group drag/tap/keyboard controls, Undo/Restart, hidden-content privacy and skippable visual guidance. Use the existing rules and score calculation with ephemeral sample state; do not grant stars, write scores, unlock items, or mutate any normal/preview save. HTML controls remain accessible. Only the active renderer runs; fallback to Current if WebGL fails.
+
+The experiment lives at `/tea-shop/preview/?edition=2&puzzle3d=1` and must be ignored by production builds and paths. Compare touch accuracy, reading the stack, appearance, loading, frame pacing and sustained use on the owner's iPhone before selecting a production renderer. Automated browser checks cannot establish physical-device performance or preference. Preserve the current game as the comparison/fallback. No full renderer conversion, physics simulation, new economy or production merge is authorized by this prototype task.
+
+Local package verification and final production build passed (`work/puzzle-comparison-verify.log`, `work/puzzle-comparison-build.log`). The isolated browser suite passed 15 groups with zero exceptions or console errors: both renderers win the same sample, native touch/tap/keyboard, Undo/Restart, state-preserving view changes, whole-group capacity, interrupted drag recovery, hidden contents, four viewport sizes, eight engine-disposal cycles, reduced motion and real WebGL context-loss fallback. All saved-key sentinels remained unchanged; ordinary and classic preview routes remain separate. A production-build smoke test also confirms the experiment flag is ignored and existing progress, preferences, unfinished puzzles and Undo survive (`work/comparison-production.json`). Root reviewed matched Current/3D phone captures, tall small-phone, hidden/drag and landscape views. Physical-iPhone sustained performance and preference remain unmeasured. Hosting is pending. The review backlog below remains planned; this pass does not silently implement all its items. The night-lamp glow defect remains a separate pre-merge correction.
+
 ## Next improvements — review backlog and renderer decision
 
-Recorded 2026-11-06 at the owner's request following the honest review of 0.2.2-preview.2. All six enhancement recommendations and the lamp defect below are now planned backlog items. Recording them does not start implementation or authorize merging PR #18. The owner also requested consideration of Babylon.js 3D vases/jars and tea bags before proceeding; the renderer decision remains open.
+Recorded 2026-11-06 at the owner's request following the honest review of 0.2.2-preview.2. All six enhancement recommendations and the lamp defect below are now planned backlog items. Recording them does not start implementation or authorize merging PR #18. The owner also requested consideration of Babylon.js 3D vases/jars and tea bags before proceeding; the renderer decision remains open. The subsequent bounded-prototype authorization is recorded above.
 
 ### Review recommendations to carry forward
 
@@ -20,7 +30,7 @@ Suggested order: correct the lamp defect; resolve the puzzle-rendering/art direc
 
 ### Babylon.js 3D puzzle rendering — evaluate before committing
 
-**Status:** owner-requested option for consideration; no renderer replacement or prototype implementation is authorized by this planning update. This explicitly reopens the earlier conditional 3D-renderer option after the DOM/CSS drag and art pass. The current renderer remains available throughout evaluation.
+**Status:** the owner subsequently authorized the bounded comparison prototype recorded above. A production renderer replacement remains undecided. This explicitly reopens the earlier conditional 3D-renderer option after the DOM/CSS drag and art pass. The current renderer remains available throughout evaluation.
 
 **Potential value:** real rounded glass rims, dimensional paper sachets, coherent lighting/materials with the shop, and authored lift/tilt/settle movement could give the puzzle stronger object identity and tactile appeal. Babylon.js is already a dependency for the shop, so adopting it for puzzles would reuse the rendering technology. Better models and art direction are still necessary; switching engines alone does not ensure better graphics or engagement.
 
@@ -36,7 +46,7 @@ Suggested order: correct the lamp defect; resolve the puzzle-rendering/art direc
 
 **Decision gate:** choose 3D only if the playable comparison produces a clear visual/tactile gain without regressing readability, input, accessibility, saves or acceptable phone performance. If it does not, apply the successful art ideas to the existing renderer or evaluate pre-rendered artwork. Device targets and measured performance budgets are to be established in the prototype plan, not claimed as achieved here.
 
-## Current priority — 0.2.2-preview.2
+## Previous preview — 0.2.2-preview.2
 
 Owner approved finishing the keeper idle animation and broader lighting pass. Add gentle head turns, breathing and blinking with a neutral pose during Edit/reduced motion. Rebalance existing ambient, sun and window lights for warmer day fill and readable cool nights; retain paid lamps as warm accents without extra lights or shadow-map refresh loops. Preserve progress and counter placement. Production build and package verification passed (`work/final-room-build.log`, `work/final-room-verify.log`). The browser suite passed with zero exceptions, including idle movement without placement drift, neutral Edit/reduced-motion poses, unchanged light count, full starter/counter transitions and save preservation. Day, night, purchase, small phone and desktop screenshots were reviewed. Physical iPhone performance remains unmeasured. Hosted successfully in [Pages run 42254037195](https://github.com/ElBafo/tea-shop/actions/runs/42254037195) for source `306cbf53449fcd0473cb5ba68e8441585e4c6edd` in [PR #18](https://github.com/ElBafo/tea-shop/pull/18). CI logs confirm preview 0.2.2-preview.2 and unchanged main 0.2.1. Furnished day/night views also passed visual review. Owner phone review and merge approval remain pending.
 
