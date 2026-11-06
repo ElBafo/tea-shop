@@ -1,5 +1,9 @@
 # Decopu releases
 
+## 0.3.0-preview.2 — whole-game visual pass
+
+Implemented in [PR #20](https://github.com/ElBafo/tea-shop/pull/20), source `f99f028ec05f721005a99612656bea077aea2c61`. Required verification/build, 11 first-session/guide groups, 15 comparison groups and current catalogue regressions passed. Phone/desktop screenshots are in `screenshots/ui-pass/`. Initial deployment 42281976875 succeeded. Final home sizing correction `1808e649f6fc323b7a2a985677c6a784980277f3` passed a rebuild and explicit Play visibility checks on both phone sizes and themes, and was hosted successfully in [Pages run 42282511705](https://github.com/ElBafo/tea-shop/actions/runs/42282511705). Main remains 0.2.1. Shared visual language, responsive board composition, capacity labels, decoration state clarity, compact editor and home hierarchy. Preserves 3D comparison, gameplay and saves. Family usability review pending.
+
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
 Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.md) scope and records whether it is in progress, hosted for review, approved or released. A preview suffix is not a release approval.

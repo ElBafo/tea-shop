@@ -223,7 +223,7 @@ export class Diorama {
     }
     for (const mesh of ["lamp", "lamp:2"].flatMap(id => this.visuals.items[id as UpgradeId]?.getChildMeshes() ?? [])) {
       const material = mesh.material;
-      if (material instanceof StandardMaterial && material.name === "lamp-shade") {
+      if (material instanceof StandardMaterial && (material.name === "lamp-shade" || material.name === "edition-lamp-shade")) {
         material.emissiveColor = Color3.FromHexString(C.gold).scale(night ? 0.65 : 0.22);
       }
     }

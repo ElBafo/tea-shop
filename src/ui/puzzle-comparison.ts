@@ -26,7 +26,7 @@ export async function mountPuzzleComparison(root: HTMLElement): Promise<void> {
   let generation = 0, suppress3DClick = false;
   let stopGuide = () => {};
   let stopMotion = () => {};
-  let message = 'Drag matching tea pieces, or tap a jar and its destination.';
+  let message = '';
   const controller = new AbortController();
   const signal = controller.signal;
   const back = new URL(location.href);
@@ -66,7 +66,7 @@ export async function mountPuzzleComparison(root: HTMLElement): Promise<void> {
       }).join('');
       const done = isCompleteTube(tube, board.capacity);
       const valid = selected !== null && canPour(board,selected,index) > 0;
-      return `<button type="button" class="jar ${held ? 'selected' : ''} ${done ? 'done' : ''} ${valid ? 'valid-target' : ''}" data-jar="${index}" aria-pressed="${held}" aria-label="Jar ${index+1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}${labels.length ? ', bottom to top: '+labels.join(', ') : ', empty'}"><span class="jar-neck"></span><span class="jar-glass"><span class="stack" style="--slots:${board.capacity}">${slots}</span></span>${done ? '<span class="jar-check" aria-hidden="true">✓</span>' : ''}</button>`;
+      return `<button type="button" class="jar ${held ? 'selected' : ''} ${done ? 'done' : ''} ${valid ? 'valid-target' : ''}" data-jar="${index}" aria-pressed="${held}" aria-label="Jar ${index+1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}${labels.length ? ', bottom to top: '+labels.join(', ') : ', empty'}"><span class="jar-neck"></span><span class="jar-glass"><span class="stack" style="--slots:${board.capacity}">${slots}</span></span>${done ? '<span class="jar-check" aria-hidden="true">✓</span>' : ''}<span class="jar-capacity" aria-hidden="true">${done ? "Full ✓" : `${tube.length} / ${board.capacity}`}</span></button>`;
     }).join('');
   }
 
@@ -130,7 +130,7 @@ export async function mountPuzzleComparison(root: HTMLElement): Promise<void> {
     history.push(previous);
     selected = null;
     busy = true;
-    message = isWon(board) ? 'Sample complete. Switch views to compare, or try another sample.' : 'Nice pour. Keep matching the top pieces.';
+    message = isWon(board) ? 'Sample complete. Switch views to compare, or try another sample.' : '';
     const token = ++generation;
     shelf.setAttribute('aria-busy','true');
     stopGuide(); stopGuide = () => {};
@@ -269,7 +269,7 @@ export async function mountPuzzleComparison(root: HTMLElement): Promise<void> {
   function reset(nextSample=sample) {
     cancelTransient();sample=nextSample;level=EDITION_LEVELS.find(item=>item.id===SAMPLES[sample].id)!;
     board=boardFromLevel(level);history=[];selected=null;
-    message='Drag matching tea pieces, or tap a jar and its destination.';
+    message='';
     renderBoard();
   }
   sampleSelect.addEventListener('change',()=>reset(SAMPLES.findIndex(item=>item.id===Number(sampleSelect.value))),{signal});

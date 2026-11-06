@@ -228,12 +228,12 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     }
 
     const toggle = root.querySelector("#edit-toggle");
-    if (toggle) toggle.textContent = edit ? "Done" : "Edit";
+    if (toggle) { toggle.textContent = edit ? "Done" : `Edit${isSecondEdition && available ? " · " + available : ""}`; toggle.setAttribute("aria-label", edit ? "Finish decorating" : `Edit shop, ${available} decorations affordable`); }
     root.querySelector("h2")!.textContent = edit ? "Decorate" : "Tea Shop";
     root.querySelector("#decorate-panel")?.classList.toggle("hidden", !edit);
     root.querySelector(".shop-actions")?.classList.toggle("hidden", edit);
     const notice = root.querySelector("#upgrade-notice");
-    notice?.classList.toggle("hidden", edit || available === 0);
+    notice?.classList.toggle("hidden", edit || available === 0 || isSecondEdition);
     if (notice) notice.textContent = `${available} ${available === 1 ? "decoration" : "decorations"} available · Browse`;
     root.querySelector(".shop-room")?.classList.toggle("decorating", edit);
     if (!edit) root.querySelector("#placement-status")?.classList.add("hidden");
@@ -251,7 +251,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       return `
         <button aria-pressed="${active}" class="upgrade-chip ${owned ? "owned" : ""} ${active ? "active" : ""}" data-upgrade="${upgrade.id}" type="button">
           <span class="deco-icon" aria-hidden="true">${styleThumbnail(upgrade.id,styleOf(progress.shop,upgrade.id))}</span><strong>${label(upgrade.id)}</strong>
-          <span>${owned ? `${isStored(progress.shop, upgrade.id) ? "Stored" : "In shop"} · ${UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name}` : `${upgrade.cost} ${STAR}${!collectionUnlocked(upgrade.id,progress.bestStars) ? ` · ${isSecondEdition ? 'Unlock at ' : ''}${upgrade.unlockAfter} puzzles` : upgrade.collection ? ` · ${upgrade.collection}` : ""}`}</span>
+          <span>${owned ? `${isStored(progress.shop, upgrade.id) ? "Stored" : "In shop"} · ${UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name}` : `${upgrade.cost} ${STAR}${!collectionUnlocked(upgrade.id,progress.bestStars) ? ` · ${isSecondEdition ? 'Unlock at ' : ''}${upgrade.unlockAfter} puzzles` : isSecondEdition ? (upgrade.cost <= spendable ? " · Ready to buy" : ` · Need ${upgrade.cost - spendable} more`) : upgrade.collection ? ` · ${upgrade.collection}` : ""}`}</span>
         </button>`;
     }).join("");
 
@@ -638,7 +638,7 @@ function taskDetail(progress: Progress, focus: UpgradeId | null, draft: Decorati
   const unlocked = collectionUnlocked(id,progress.bestStars);
   const affordable = spendableStars(progress) >= def.cost;
   const fits = draft?.id === id && draft.place !== null;
-  return `<div class="detail-copy"><strong>${label(id)}</strong>
+  return `<div class="detail-copy"><strong>${label(id)}</strong>${isSecondEdition ? `<span class="decoration-state">${chosen === null ? "Not owned" : "Preview · Not purchased"}</span>` : ""}
     <p class="detail-note">${chosen === null ? "Choose a style to preview in your shop." : def.variants[chosen].blurb}</p></div>
     ${isSecondEdition ? `<button class="goal-pin" type="button" data-act="pin-goal">${readGoal(progress)?.id===id && readGoal(progress)?.style===(chosen??0) ? "Your goal ✓ · Clear" : "Make this my goal"}</button>` : ""}
     <div class="style-row">${def.variants.map((variant, index) => `<button class="style-chip ${chosen === index ? "active" : ""}" aria-pressed="${chosen === index}" data-act="preview" data-id="${id}" data-style="${index}" type="button">${styleThumbnail(id, index)}<span>${variant.name}</span></button>`).join("")}</div>
@@ -666,7 +666,7 @@ function editDetail(shop: ShopState, selected: UpgradeId | null): string {
     : "";
   return `
     <div class="detail-copy">
-      <strong>${label(selected)}</strong>
+      <strong>${label(selected)}</strong>${isSecondEdition ? `<span class="decoration-state">${stored ? "Owned · Stored" : "Owned · In shop"}</span>` : ""}
       <p class="detail-note">${def.variants[current]?.blurb ?? def.blurb}</p>
     </div>
 

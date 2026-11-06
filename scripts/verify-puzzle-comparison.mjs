@@ -10,7 +10,7 @@ const checks=[],errors=[],consoleErrors=[],shots=[],evidence={checks,errors,cons
 const pause=(ms=100)=>new Promise(r=>setTimeout(r,ms));
 await fs.mkdir('work',{recursive:true});
 const profile=await fs.mkdtemp('/tmp/decopu-3d-qa-');
-const server=await createServer({base,server:{host:'127.0.0.1',port,strictPort:true},plugins:[{name:'qa-seed',configureServer(vite){vite.middlewares.use((req,res,next)=>{if(req.url?.includes('qa-seed.html')){res.setHeader('Content-Type','text/html');res.end('<!doctype html><title>QA seed</title>');}else next();});}}]});
+const server=await createServer({base,cacheDir:'node_modules/.vite-comparison-qa',server:{host:'127.0.0.1',port,strictPort:true},plugins:[{name:'qa-seed',configureServer(vite){vite.middlewares.use((req,res,next)=>{if(req.url?.includes('qa-seed.html')){res.setHeader('Content-Type','text/html');res.end('<!doctype html><title>QA seed</title>');}else next();});}}]});
 const log=createWriteStream('work/puzzle-comparison-chromium.log');
 let browser,ws,send,ev;
 try {
@@ -44,7 +44,7 @@ try {
  const transfer=async(from,to)=>{await tap(jar(from));await tap(jar(to));await idle();};
  const begin=async(from,to)=>{const a=await point(jar(from)+' .jar-glass'),b=await point(jar(to)+' .jar-glass');await touch('touchStart',[a]);for(let i=1;i<=8;i++){await touch('touchMove',[{x:a.x+(b.x-a.x)*i/10,y:a.y+(b.y-a.y)*i/10}]);await pause(16);}return{a,b};};
  const release=async p=>{await touch('touchMove',[p]);await pause(100);await touch('touchMove',[p]);await pause(20);await touch('touchEnd');await idle();};
- const scene=async()=>ev(`(async()=>{const {Engine}=await import('${base}node_modules/.vite/deps/@babylonjs_core_Engines_engine.js');window.qaPuzzleEngines=()=>Engine.Instances.filter(e=>e.getRenderingCanvas()?.classList.contains('comparison-canvas'));})()`);
+ const scene=async()=>ev(`(async()=>{const {Engine}=await import('${base}node_modules/.vite-comparison-qa/deps/@babylonjs_core_Engines_engine.js');window.qaPuzzleEngines=()=>Engine.Instances.filter(e=>e.getRenderingCanvas()?.classList.contains('comparison-canvas'));})()`);
  const resources=()=>page(()=>qaPuzzleEngines().map(e=>({scenes:e.scenes.length,meshes:e.scenes[0]?.meshes.length,materials:e.scenes[0]?.materials.length,textures:e.scenes[0]?.textures.length})));
  await send('Page.enable');await send('Runtime.enable');await send('Network.enable');await send('Network.setBypassServiceWorker',{bypass:true});await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:2});await viewport(390,844);
  await send('Page.navigate',{url:origin+base+'qa-seed.html'});await until(()=>document.title==='QA seed');
