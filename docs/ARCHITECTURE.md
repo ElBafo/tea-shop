@@ -24,7 +24,7 @@ Decopu is a static, client-side TypeScript application built with Vite. Babylon.
 
 ## Production mode and fresh-start storage — 0.2.0
 
-The activation implementation makes the normal `/tea-shop/` page select the second edition: twenty-four authored boards and eighteen paid designs. Preview mode still requires the preview build/path and `edition=2`; an explicit production `?edition=1` route retains the classic runtime for regression checks. Headless Node verification falls back to the classic mode when there is no browser context. The production-mode regression and browser checks pass for these boundaries.
+The activation implementation makes the normal `/tea-shop/` page select the second edition: twenty-four authored boards and eighteen paid designs. Preview mode requires the preview build/path and now selects the current edition by default (preview.4); `edition=2` is a compatible alias and `edition=1` selects classic tooling; an explicit production `?edition=1` route retains the classic runtime for regression checks. Headless Node verification falls back to the classic mode when there is no browser context. The production-mode regression and browser checks pass for these boundaries.
 
 Production uses `tea-shop-edition2-progress-v1` and `tea-shop-edition2-appearance-v1`. Recovery, unfinished-puzzle, guide and goal keys derive from the new progress key. The preview keeps `tea-shop-preview-edition2-progress-v1` and its existing appearance key; the classic keys also stay unchanged.
 
