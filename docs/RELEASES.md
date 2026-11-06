@@ -12,6 +12,16 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
+## 0.2.2-preview.1 — welcoming starting room; local validation
+
+An owner-approved first-impression pass adds a temporary serving workbench, tea props and shopkeeper before the first counter purchase, with an unmistakable window and lighter bare plaster. The bench grants no inventory item or stars. It hides in Edit and where existing furniture blocks its footprint/aisle; counter previews show the regular keeper, cancellation restores the opening, and owned/stored counters prevent the starter fixture returning. Main remains 0.2.1 pending review.
+
+Window sky, greenery, glass and framing are separated to avoid coplanar surfaces. Day and night have distinct outdoor colours. No added lights, timers, storage keys, prices or board changes. Existing scene disposal owns the new nodes/materials.
+
+Final production build and package verification pass (`work/starter-build.log`, `work/starter-verify.log`). The browser suite passes with zero exceptions: opening bench/keeper, day/night, Edit hiding, counter preview/cancellation/purchase, reload persistence, retained starter after paint, stored-counter suppression, occupied-footprint suppression and reduced-motion steam. Screenshots checked at 390×844, 320×568, 844×390 and 1280×900. These Chromium checks do not establish physical iPhone performance. Hosted preview is pending.
+
+[Day](screenshots/starter-room/day.webp) · [Night](screenshots/starter-room/night.webp) · [Counter purchase](screenshots/starter-room/bought.webp) · [Small phone](screenshots/starter-room/small.webp) · [Desktop](screenshots/starter-room/desktop.webp)
+
 ## 0.2.1 — released
 
 The owner explicitly requested “Merge to main” for [PR #17](https://github.com/ElBafo/tea-shop/pull/17). Promote the reviewed `0.2.1-preview.1` application to `0.2.1`: drag tea pieces between jars alongside tap/keyboard controls, refined rounded pieces and glass, and an animated hand with nearby bubbles in the first guided puzzle. The promotion changes version/release metadata only.

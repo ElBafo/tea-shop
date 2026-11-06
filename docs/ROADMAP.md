@@ -2,7 +2,19 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.2.1
+## Current priority — 0.2.2-preview.1
+
+### A welcoming starting room
+
+Family feedback, 2026-11-06: the starting room feels too plain, and the window was not immediately recognizable as a window. The owner proposed a simple bench/table with the shopkeeper present from the start and clearer window graphics, and requested an opinion. The owner approved implementation with “Ok let’s do it.” Build a review preview; production publication still follows review.
+
+Recommendation: start with a modest temporary serving workbench, a small tea prop and the shopkeeper behind it facing the front. Replace the workbench when the first paid counter is bought, retaining counter style previews and the existing price. This would deliberately revise the earlier empty-start decision and make the temporary bench an explicit exception to the rule that furniture costs stars; it would not grant a catalogue item or ownership. Keep most floor space available and preserve a strong visual improvement from the first purchase. The earlier shabby-counter restoration idea for later venues remains a separate plan.
+
+Make the base window readable before any purchase: distinct frame/recess and sill, cool daylight with a simple outdoor silhouette, restrained glass highlights, and an appropriate night view. The existing wall-coloured panes and shallow backing weaken its silhouette. Improve base-room lighting and material depth while keeping paid wall finishes and decorations visibly rewarding. Avoid extra free furnishings as a substitute for a clear opening composition.
+
+Scope the approved preview to the initial room, first counter preview/purchase and day/night at actual phone size. Resolve temporary-bench placement/editing and restoration behavior without blocking decoration placement, duplicating the shopkeeper or changing existing paid ownership, progress or economy. Implementation: a temporary workbench and keeper appear before counter ownership when the default counter footprint and rear aisle are free. Hide both during Edit; a counter style preview shows its keeper and cancellation restores the starting scene. Purchased or stored counters never restore the temporary bench. Use existing placement rules to avoid covering other furniture. The window has separated sky/glass layers, outdoor greenery, deeper framing and day/night colours. Bare edition plaster is lighter; paid finishes remain distinct. Existing saves, prices and puzzle rules are unchanged. Final production build and package verification pass (`work/starter-build.log`, `work/starter-verify.log`). The browser suite passes with zero exceptions: opening bench/keeper, day/night, Edit hiding, counter preview/cancellation/purchase, reload persistence, retained starter after paint, stored-counter suppression, occupied-footprint suppression and reduced-motion steam. Screenshots checked at 390×844, 320×568, 844×390 and 1280×900. These Chromium checks do not establish physical iPhone performance. Hosted preview is pending.
+
+## Released milestone — 0.2.1
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 

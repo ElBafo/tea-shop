@@ -217,7 +217,8 @@ export class Diorama {
     this.scene.ambientColor = night ? new Color3(0.28, 0.33, 0.45) : new Color3(0.55, 0.48, 0.42);
     const sky = this.scene.getMeshByName("sky")?.material;
     if (sky instanceof StandardMaterial) {
-      sky.emissiveColor = Color3.FromHexString("#ffd397").scale(night ? 0.8 : 0.22);
+      sky.emissiveColor = Color3.FromHexString(isSecondEdition ? (night ? "#52729f" : "#bce5ed") : "#ffd397").scale(night ? 0.55 : 0.22);
+      if (isSecondEdition) sky.diffuseColor = Color3.FromHexString(night ? "#344c75" : "#a8d5df");
     }
     for (const mesh of ["lamp", "lamp:2"].flatMap(id => this.visuals.items[id as UpgradeId]?.getChildMeshes() ?? [])) {
       const material = mesh.material;
@@ -233,6 +234,7 @@ export class Diorama {
   setEditMode(on: boolean): void {
     if (this.edit !== on) this.cancelDrag();
     this.edit = on;
+    this.positionShopkeeper();
     this.updateTraffic();
     if (!on) {
       this.drag = null;
@@ -328,10 +330,9 @@ export class Diorama {
       if (opts.animate === id) this.popIn(root, id);
     }
 
-    this.steam = Object.values(this.visuals.items).flatMap(root => root?.getChildMeshes().filter(mesh => mesh.metadata?.steam) ?? []);
-    // The edition's keeper belongs to a placed counter, including a temporary
-    // purchase preview. Waiting for the whole-shop finale leaves new shops empty.
-    if (isSecondEdition && isPlaced(shop, "counter") && !this.customer) this.spawnCustomer(true);
+    this.steam = [...Object.values(this.visuals.items), this.visuals.starterBench].flatMap(root => root?.getChildMeshes().filter(mesh => mesh.metadata?.steam) ?? []);
+    // Reuse one keeper for the opening workbench and owned/preview counters.
+    if (isSecondEdition && !this.customer) this.spawnCustomer(true);
     this.positionShopkeeper();
     this.updateTraffic();
     this.setNight(this.night);
@@ -491,7 +492,15 @@ export class Diorama {
 
   private positionShopkeeper(place = placeOf(this.shop, "counter")): void {
     if (!this.customer) return;
-    this.customer.setEnabled(isPlaced(this.shop, "counter"));
+    // Starter scenery never enters inventory or overlaps placed furniture.
+    const starter = isSecondEdition && !this.shop.owned.includes("counter") && !this.edit && canPlace("counter", UPGRADE_BY_ID.counter.defaultPlace, this.shop);
+    this.visuals.starterBench?.setEnabled(starter);
+    this.customer.setEnabled(isPlaced(this.shop, "counter") || starter);
+    if (starter) {
+      this.customer.position.set(2.5, 0, .5);
+      this.customer.rotation.y = 0;
+      return;
+    }
     const center = floorCenter(UPGRADE_BY_ID.counter.size, place);
     const angle = place.rot * Math.PI / 2;
     this.customer.position.set(center.x - Math.sin(angle), 0, center.z - Math.cos(angle));

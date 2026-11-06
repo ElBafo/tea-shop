@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Approved starting-room preview — 0.2.2-preview.1
+
+The first impression should read as a welcoming tea shop. A modest temporary serving workbench, tea props and shopkeeper are an explicit starter-scenery exception to the paid-furniture rule; they grant no catalogue ownership. The first counter remains a star purchase with style choices. Hide the temporary scene while editing and whenever its footprint/aisle is occupied; do not bring it back for an owned but stored counter. Improve base window readability and bare-room material depth without granting paid wall finishes. This supersedes the completely empty first-shop opening; shabby restoration fixtures for later venues remain future work. Main stays 0.2.1 pending review.
+
 ## Experience
 
 Decopu is a cozy, phone-first sorting puzzle that funds the restoration of a tiny isometric 3D tea shop. It should feel like a quiet moment: no clock, no fail state, unlimited Undo, and a welcoming room that becomes more personal through play.
