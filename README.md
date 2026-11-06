@@ -6,6 +6,8 @@ A cozy sorting puzzle that earns stars for a small isometric tea shop. Fill jars
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+**Completion preview: 0.3.0-preview.3.** New earnings visibly advance the chosen decoration’s savings; repeat wins stay quiet, milestones stand out and pours have a soft paper/ceramic cue. Local checks are passing; hosting is pending.
+
 **Hosted design preview: 0.3.0-preview.2.** The shared layout, colours, decoration states and first-session flow passed verification and deployment for the [phone preview](https://elbafo.github.io/tea-shop/preview/?edition=2).  A separate [puzzle-rendering comparison](https://elbafo.github.io/tea-shop/preview/?edition=2&puzzle3d=1) has passed local checks: the same three sample boards in Current and 3D views, with no saved-progress changes. The ordinary preview retains the reviewed room, keeper and lighting work in PR #18. Hosting and review evidence is recorded in [RELEASES.md](docs/RELEASES.md). Main stays at 0.2.1 until approval.
 
 ## Progress since the 0.2.0 fresh start

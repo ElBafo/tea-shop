@@ -107,3 +107,19 @@
 .edition-two .launch-mark { border-left:3px solid #b99451; border-radius:8px 20px 20px 8px; }
 .edition-two .launch-tagline { color:var(--muted); }
 .edition-two #launch-screen #launch-start { background:var(--tea); color:#fffdf7; border-radius:14px; }
+
+/* A brief receipt connects real earned currency to the chosen decoration. */
+.edition-two .result-card .result-reward { margin:4px 0 12px; font-size:16px; }
+.edition-two .result-card[data-earned="false"] .result-confetti { display:none; }
+.edition-two .result-card[data-earned="false"] .big-stars .on { animation:none; }
+.edition-two .result-card[data-earned="false"] .result-reward { color:var(--muted); font-size:14px; }
+.edition-two .result-card[data-milestone="true"] .result-seal { background:#f2e0ac; color:#76531a; }
+.edition-two .result-card .has-reward-track progress { position:absolute; width:1px; height:1px; clip-path:inset(50%); overflow:hidden; }
+.edition-two .reward-track { display:block; height:6px; margin-top:7px; overflow:hidden; border-radius:4px; background:#e8e3d5; }
+.edition-two .reward-track i { display:block; width:var(--reward-fill); height:100%; background:#537450; transform-origin:left; animation:goal-receipt 500ms 160ms cubic-bezier(.2,.7,.3,1) both; }
+@keyframes goal-receipt { from { transform:scaleX(var(--reward-from)); } to { transform:scaleX(1); } }
+.edition-two .play .jar.just-completed .jar-glass { animation:jar-finish 360ms ease-out; }
+@keyframes jar-finish { 0% { box-shadow:0 0 0 4px #d1ad5599,inset 0 -7px 8px #8ca18e19; } 100% { box-shadow:0 0 0 2px #acc59c55,inset 0 -7px 8px #8ca18e19; } }
+@media (prefers-reduced-motion:reduce) {
+ .edition-two .reward-track i,.edition-two .play .jar.just-completed .jar-glass { animation:none; }
+}
