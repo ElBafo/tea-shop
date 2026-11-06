@@ -71,7 +71,7 @@
  .edition-two .play .shelves[data-count="3"] { --slot-height:clamp(48px,7dvh,66px); }
  .edition-two .play .shelves[data-count="3"] .shelf-row { max-width:400px; }
  .edition-two .play .shelves[data-count="3"] .jar { max-width:116px; }
- .edition-two .shop-room:not(.decorating) .shop-stage { flex-grow:1; }
+ .edition-two .shop-room:not(.decorating) .shop-stage { flex:1 1 0; min-height:0; }
  .edition-two .decorating.has-selection:not(.has-guide):not(.tray-collapsed) .shop-dock { flex:0 1 auto; max-height:48dvh; }
 }
 @media (max-height:690px) and (orientation:portrait) {
