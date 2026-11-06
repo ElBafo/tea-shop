@@ -1,3 +1,4 @@
+import { animateEditionKeeper } from "./edition-art";
 import { isSecondEdition } from "../game/mode";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { Engine } from "@babylonjs/core/Engines/engine";
@@ -226,7 +227,12 @@ export class Diorama {
         material.emissiveColor = Color3.FromHexString(C.gold).scale(night ? 0.65 : 0.22);
       }
     }
-    this.windowLight.intensity = night ? 0.85 : 0;
+    this.windowLight.intensity = isSecondEdition ? (night ? 0.52 : 0.32) : night ? 0.85 : 0;
+    if (isSecondEdition) {
+      this.windowLight.diffuse = Color3.FromHexString(night ? "#b3c7ed" : "#ffe8c6");
+      this.hemi.groundColor = Color3.FromHexString(night ? "#535568" : "#b7a28e");
+      this.shadows.setDarkness(night ? 0.58 : 0.68);
+    }
     this.sun.diffuse = Color3.FromHexString(night ? "#9aafe0" : "#ffedc7");
     this.updateLamp();
   }
@@ -570,6 +576,7 @@ export class Diorama {
     if (this.tweens.length || this.walk) this.lampShadowsDirty = true;
     this.elapsed += dt;
     this.tickTraffic(dt);
+    if (isSecondEdition && this.customer) animateEditionKeeper(this.customer,this.elapsed,!this.edit && !this.reducedMotion.matches && !document.hidden && this.customer.isEnabled());
     for (const mesh of this.steam) {
       mesh.setEnabled(!this.reducedMotion.matches);
       if (this.reducedMotion.matches) continue;
@@ -610,9 +617,9 @@ export class Diorama {
 
     const wantWarm = this.shop.finaleSeen || Boolean(this.walk) || shopComplete(this.shop) ? 1 : this.shop.owned.includes("lamp") ? 0.35 : 0;
     this.warm += (wantWarm - this.warm) * Math.min(1, dt * 1.4);
-    this.hemi.intensity = this.night ? 0.52 : 0.72 + this.warm * 0.16;
-    this.sun.intensity = this.night ? 0.22 : 0.70 + this.warm * 0.12;
-    this.hemi.diffuse = this.night ? new Color3(0.72, 0.79, 1) : Color3.Lerp(new Color3(1, 0.9, 0.82), new Color3(1, 0.86, 0.7), this.warm);
+    this.hemi.intensity = isSecondEdition ? (this.night ? 0.57 : 0.88 + this.warm * 0.08) : this.night ? 0.52 : 0.72 + this.warm * 0.16;
+    this.sun.intensity = isSecondEdition ? (this.night ? 0.18 : 0.62 + this.warm * 0.08) : this.night ? 0.22 : 0.70 + this.warm * 0.12;
+    this.hemi.diffuse = isSecondEdition ? Color3.FromHexString(this.night ? "#bbc8e6" : "#fff0dc") : this.night ? new Color3(0.72, 0.79, 1) : Color3.Lerp(new Color3(1, 0.9, 0.82), new Color3(1, 0.86, 0.7), this.warm);
     this.updateLamp();
     this.scene.render();
   }

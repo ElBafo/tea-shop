@@ -2,7 +2,9 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.2.2-preview.1
+## Current priority — 0.2.2-preview.2
+
+Owner approved finishing the keeper idle animation and broader lighting pass. Add gentle head turns, breathing and blinking with a neutral pose during Edit/reduced motion. Rebalance existing ambient, sun and window lights for warmer day fill and readable cool nights; retain paid lamps as warm accents without extra lights or shadow-map refresh loops. Preserve progress and counter placement. Production build and package verification passed (`work/final-room-build.log`, `work/final-room-verify.log`). The browser suite passed with zero exceptions, including idle movement without placement drift, neutral Edit/reduced-motion poses, unchanged light count, full starter/counter transitions and save preservation. Day, night, purchase, small phone and desktop screenshots were reviewed. Physical iPhone performance remains unmeasured. Preview deployment is pending.
 
 ### A welcoming starting room
 

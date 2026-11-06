@@ -110,7 +110,14 @@ export function buildEditionKeeper(scene:Scene):TransformNode{
  soft(scene,'apron',root,cream,.28,.43,.06,.04,0,.64,.18);soft(scene,'apron-pocket',root,coat,.13,.1,.018,.015,0,.6,.218);
  for(const x of [-.22,.22]){const a=orb(scene,'sleeve',root,coat,.09,x,.7,.03,.8,1.8,.85);a.rotation.z=x<0?-.3:.3;orb(scene,'hand',root,skin,.065,x,.53,.09);}
  const eyes=mat(scene,'eyes',E.ink),cheek=mat(scene,'cheek','#d9917c');for(const x of [-.065,.065])orb(scene,'eye',root,eyes,.016,x,1.13,.19,.7,1,.4);for(const x of [-.12,.12])orb(scene,'cheek',root,cheek,.032,x,1.075,.166,1,.55,.25);
- orb(scene,'nose',root,skin,.025,0,1.09,.205);root.scaling.setAll(1.12);return root;
+ orb(scene,'nose',root,skin,.025,0,1.09,.205);
+ const headRig=new TransformNode('keeper-head-idle',scene);headRig.parent=root;headRig.position.y=1;
+ const faceNames=new Set(['head','hair-cap','hair-bun','eye','cheek','nose']);
+ const eyeMeshes=root.getChildMeshes().filter(mesh=>mesh.name==='eye');
+ for(const mesh of root.getChildMeshes())if(faceNames.has(mesh.name)){mesh.parent=headRig;mesh.position.y-=1;}
+ const body=root.getChildMeshes().find(mesh=>mesh.name==='body')!;
+ root.metadata={keeperIdle:{head:headRig,eyes:eyeMeshes,body,bodyY:body.scaling.y,eyeY:eyeMeshes.map(eye=>eye.scaling.y)}};
+ root.scaling.setAll(1.12);return root;
 }
 export function decorateEditionRoom(scene:Scene,room:TransformNode):TransformNode{
  const trim=mat(scene,'room-joinery',E.cream),wood=mat(scene,'room-foundation',E.dark);
@@ -121,3 +128,14 @@ export function decorateEditionRoom(scene:Scene,room:TransformNode):TransformNod
  return finish;
 }
 export function editionFloorMaterial(scene:Scene):StandardMaterial{const m=mat(scene,'pale-oak','#ffffff',.04);m.diffuseTexture=editionOakTexture(scene);return m;}
+
+/** Small local gestures leave the keeper's placement, feet and serving direction fixed. */
+export function animateEditionKeeper(root:TransformNode,time:number,active:boolean):void {
+ const rig=root.metadata?.keeperIdle;if(!rig)return;
+ rig.head.rotation.y=active?Math.sin(time*.55)*.065:0;
+ rig.head.rotation.x=active?Math.sin(time*.85)*.018:0;
+ rig.body.scaling.y=rig.bodyY*(active?1+Math.sin(time*1.6)*.008:1);
+ const phase=time%6.5;
+ const blink=active&&phase<.18?1-.9*Math.sin(phase/.18*Math.PI):1;
+ rig.eyes.forEach((eye:{scaling:{y:number}},i:number)=>{eye.scaling.y=rig.eyeY[i]*blink;});
+}

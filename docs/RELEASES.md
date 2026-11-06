@@ -12,6 +12,10 @@ Versions identify reviewable builds. Each entry links to its [roadmap](ROADMAP.m
 - Record release scope, save compatibility, validation, PR/commit and deployment status. Do not infer deployed status from a successful local build.
 - Historical work before this record is grouped under the existing `0.1.0` package baseline. Its version was not consistently displayed in the app; the entries below do not invent earlier visible version labels or release dates.
 
+## 0.2.2-preview.2 — final keeper and lighting polish; in validation
+
+Owner-approved continuation of PR #18. The keeper gently turns/nods, breathes and blinks while keeping its placement and serving direction fixed. Edit and reduced motion restore a neutral pose. The existing lighting rig gains softer warm day fill, restrained sunlight, readable cool night fill and a day/night window light. Paid lamps remain warm accents. No added lights, timers, storage or currency changes. Main remains 0.2.1. Production build and package verification passed (`work/final-room-build.log`, `work/final-room-verify.log`). The browser suite passed with zero exceptions, including idle movement without placement drift, neutral Edit/reduced-motion poses, unchanged light count, full starter/counter transitions and save preservation. Day, night, purchase, small phone and desktop screenshots were reviewed. Physical iPhone performance remains unmeasured. Preview deployment is pending.
+
 ## 0.2.2-preview.1 — welcoming starting room; hosted for review
 
 An owner-approved first-impression pass adds a temporary serving workbench, tea props and shopkeeper before the first counter purchase, with an unmistakable window and lighter bare plaster. The bench grants no inventory item or stars. It hides in Edit and where existing furniture blocks its footprint/aisle; counter previews show the regular keeper, cancellation restores the opening, and owned/stored counters prevent the starter fixture returning. Main remains 0.2.1 pending review.

@@ -8,7 +8,7 @@ import path from 'node:path';
 
 const base='/tea-shop/',origin='http://127.0.0.1:5196',cdp=9262;
 const key='tea-shop-edition2-progress-v1',appearance='tea-shop-edition2-appearance-v1';
-const checks=[],errors=[],evidence={version:'0.2.2-preview.1',origin,disposableProfile:true,syntheticSave:true,checks,errors};
+const checks=[],errors=[],evidence={version:'0.2.2-preview.2',origin,disposableProfile:true,syntheticSave:true,checks,errors};
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 const profile=await fs.mkdtemp('/tmp/decopu-release-021-smoke-');
 const {createServer}=await import('vite');
@@ -48,10 +48,12 @@ try {
   const scene=async()=>ev(`(async()=>{const {Engine}=await import('/tea-shop/node_modules/.vite/deps/@babylonjs_core_Engines_engine.js');window.starterScene=()=>Engine.Instances.find(e=>e.getRenderingCanvas()?.id==='shop-canvas')?.scenes[0];})()`);
   await scene();
   const state=()=>page(()=>{const s=starterScene(),bench=s.getTransformNodeByName('starter-workbench'),keeper=s.getTransformNodeByName('shopkeeper');return {bench:bench?.isEnabled(),keeper:keeper?.isEnabled(),position:keeper?.position.asArray(),benchPickable:bench?.getChildMeshes().some(m=>m.isPickable),meshes:s.meshes.length,materials:s.materials.length,sky:s.getMeshByName('sky').material.diffuseColor.toHexString()};});
-  assert.equal((await state()).bench,true);assert.equal((await state()).keeper,true);assert.equal((await state()).benchPickable,false);await shot('day');
+  assert.equal((await state()).bench,true);assert.equal((await state()).keeper,true);assert.equal((await state()).benchPickable,false);
+  const idle=()=>page(()=>{const k=starterScene().getTransformNodeByName('shopkeeper'),r=k.metadata.keeperIdle;return {head:r.head.rotation.asArray(),body:r.body.scaling.y,position:k.position.asArray(),lights:starterScene().lights.length};});
+  const first=await idle();await pause(700);const second=await idle();assert.notDeepEqual(first.head,second.head);assert.deepEqual(first.position,second.position);assert.equal(first.lights,second.lights);await shot('day');
   await tap('#theme-toggle');await pause(400);await shot('night');
   await tap('#theme-toggle');
-  await tap('#edit-toggle');assert.equal((await state()).bench,false);assert.equal((await state()).keeper,false);
+  await tap('#edit-toggle');await pause(100);assert.equal((await state()).bench,false);assert.equal((await state()).keeper,false);assert.deepEqual((await idle()).head,[0,0,0]);
   await tap('[data-upgrade="counter"]');await tap('[data-act="preview"][data-style="1"]');assert.equal((await state()).bench,false);assert.equal((await state()).keeper,true);assert.deepEqual((await page(key=>JSON.parse(localStorage.getItem(key)),key)).shop.owned,[]);await shot('preview');
   await tap('#edit-toggle');assert.equal((await state()).bench,true);assert.equal((await state()).keeper,true);
   await tap('#edit-toggle');await tap('[data-upgrade="counter"]');await tap('[data-act="preview"][data-style="1"]');await tap('[data-act="buy"]');await tap('#edit-toggle');
@@ -66,10 +68,13 @@ try {
     await page((key,shop)=>localStorage.setItem(key,JSON.stringify({muted:true,bestStars:Array(24).fill(3),bestMoves:Array(24).fill(3),shop})),key,shop);
     await send('Page.reload');await enter();await scene();assert.equal((await state()).bench,visible,label);
   }
+  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+  await page(key=>localStorage.setItem(key,JSON.stringify({muted:true,bestStars:Array(24).fill(3),bestMoves:Array(24).fill(3),shop:{owned:['counter','paint','sign','shelves','plant','rug','lamp','table'],stored:[],style:{},place:{},finaleSeen:false}})),key);
+  await send('Page.reload');await enter();await scene();await pause(500);await shot('furnished-day');await tap('#theme-toggle');await pause(400);await shot('furnished-night');assert.equal((await idle()).lights,5);await tap('#theme-toggle');
   await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
   await page((key,progress)=>localStorage.setItem(key,JSON.stringify(progress)),key,progress);await send('Page.reload');await enter();await scene();await pause(100);
-  assert.equal(await page(()=>starterScene().getMeshByName('starter-steam-puff').isEnabled()),false);
-  assert.deepEqual(errors,[]);evidence.passed=true;evidence.checks=['opening bench and keeper','day/night','edit hides temporary scenery','preview/cancel','purchase replaces bench','reload preserves progress','phone/small/landscape/desktop','paint retains starter','stored counter suppresses starter','occupied footprint suppresses starter','reduced-motion steam hidden'];console.log('PASS',JSON.stringify(evidence));
+  assert.equal(await page(()=>starterScene().getMeshByName('starter-steam-puff').isEnabled()),false);assert.deepEqual((await idle()).head,[0,0,0]);const still=await idle();await pause(400);assert.deepEqual(await idle(),still);
+  assert.deepEqual(errors,[]);evidence.passed=true;evidence.checks=['opening bench and keeper','day/night','edit hides temporary scenery','preview/cancel','purchase replaces bench','reload preserves progress','phone/small/landscape/desktop','paint retains starter','stored counter suppresses starter','occupied footprint suppresses starter','reduced-motion steam hidden','keeper animates without placement drift','Edit and reduced-motion neutral pose','no additional lights'];console.log('PASS',JSON.stringify(evidence));
 
 } catch(error) {
   evidence.passed=false;evidence.error=String(error);evidence.stack=error.stack;
