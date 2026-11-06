@@ -1,5 +1,9 @@
 # Decopu releases
 
+## 0.3.0-preview.5 — room-first home redesign
+
+Local implementation: a branded compact header, room title and puzzle-progress entry, unboxed room, one decoration goal, and side-by-side Play/Continue and Decorate. Keeps the same saved progress, editor actions and reward rules. Responsive day/night home composition; editing and Showcase retain their own layouts. Required verification/build and nine browser-check groups pass with zero runtime exceptions. Phone, small-phone, landscape, desktop, day/night, guide and simulated safe areas are checked; Play/resume, goal preview/cancel, first purchase, keyboard focus, Showcase and save isolation pass. [Before](screenshots/home-redesign/before.webp) · [After](screenshots/home-redesign/phone-day.webp) · [Night](screenshots/home-redesign/phone-night.webp) · [Furnished](screenshots/home-redesign/furnished.webp). Physical-phone review and deployment pending; main unchanged.
+
 ## 0.3.0-preview.4 — preview shortcut routing
 
 Plain `/tea-shop/preview/` now opens the current edition, matching its installed manifest start URL. Existing `?edition=2` links and preview progress remain valid; `?edition=1` explicitly opens classic tooling. Main and all progress namespaces are unchanged. Required verification/build and the compiled mobile-browser shortcut test pass, including existing progress, puzzle resume/Undo, edition aliases, production isolation and no normal-preview worker. Hosted successfully in [Pages run 42287012894](https://github.com/ElBafo/tea-shop/actions/runs/42287012894) from source `cd5da8196694d0a3c57d3d6ad45290aa673863fc`, [PR #22](https://github.com/ElBafo/tea-shop/pull/22). All preceding room, UI and reward work is available through the stable plain preview URL. Main remains 0.2.1; existing physical-phone shortcuts should be closed and reopened for review.
