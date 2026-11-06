@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Home composition — 0.3.0-preview.5
+
+`home.css` owns the second-edition home layout, scoped away from Edit and Showcase. `mountShop` creates a home action container and reuses the existing Play and Edit buttons; `paintChrome` moves the same Edit node into the toolbar when editing and back home afterward, preserving its event listener. Play labels derive from validated `readPuzzle` state and current completion; the puzzle-count button opens the existing level browser. Goal navigation and purchases still use the existing editor flow. No new scene, account, storage key or progression rule is introduced.
+
 ## Completion feedback — 0.3.0-preview.3
 
 `rewardCard(progress, earnedStars)` adds an optional decorative savings track only for actual new currency and an unlocked decoration. Native progress values always expose the final authoritative amount; the CSS track animates from the pre-award fraction and becomes static under reduced motion. The result card distinguishes milestones and zero-new-reward replays. Reward bookkeeping still happens before visual effects in the existing transfer path; the shorter edition win pause does not move or defer persistence. Completed-jar highlighting affects the glass only, keeping input targets stationary.

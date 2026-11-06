@@ -6,6 +6,8 @@ A cozy sorting puzzle that earns stars for a small isometric tea shop. Fill jars
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+**Hosted home preview: 0.3.0-preview.5.** A room-first home with one goal and clear Play/Continue and Decorate actions. Required verification/build and browser checks pass. [Before](docs/screenshots/home-redesign/before.webp) · [After](docs/screenshots/home-redesign/phone-day.webp). [Deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/42293909180). Open the [regular preview](https://elbafo.github.io/tea-shop/preview/) and check v0.3.0-preview.5.
+
 **Shortcut routing preview: 0.3.0-preview.4.** The plain [preview address](https://elbafo.github.io/tea-shop/preview/) now selects the current edition and its existing saved progress. [Deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/42287012894). Close and reopen the preview shortcut to load this build.
 
 **Hosted completion preview: 0.3.0-preview.3.** New earnings visibly advance the chosen decoration’s savings; repeat wins stay quiet, milestones stand out and pours have a soft paper/ceramic cue. Verification, browser checks and [deployment](https://github.com/ElBafo/tea-shop/actions/runs/42285562569) passed. [Open in Safari](https://elbafo.github.io/tea-shop/preview/?edition=2).

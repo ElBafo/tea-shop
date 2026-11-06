@@ -53,6 +53,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     <div class="frame shop-room">
       <header class="topbar shop-overlay shop-toolbar">
         <h2 class="visually-hidden">Tea Shop</h2>
+        ${isSecondEdition ? '<span class="home-wordmark" aria-hidden="true">Decopu<span>✦</span></span>' : ""}
         <p class="shop-stars" id="shop-stars"></p>
         <div class="room-actions">
           ${themeToggle(false)}
@@ -64,14 +65,16 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
               ${isSecondEdition ? '<button id="browse-puzzles" type="button">All puzzles</button>' : ""}
               ${!isShowroom && !isGuidePreview ? '<button id="backup-progress" type="button">Progress & backups</button>' : ''}
               ${isPreview ? '<button id="reset-preview" type="button">Reset preview progress</button>' : ""}
+              ${isPreview && isSecondEdition ? `<a class="home-demo-link" href="${import.meta.env.BASE_URL}?showroom=1">See finished shop</a>` : ""}
               <button id="showcase-toggle" class="icon-btn" type="button">Showcase</button>
             </div>
           </details>
-          <button id="edit-toggle" class="icon-btn" type="button">Edit</button>
+          <span id="toolbar-edit-slot"><button id="edit-toggle" class="icon-btn" type="button">Edit</button></span>
         </div>
       </header>
       ${isPreview ? `<aside class="preview-bar"><span>${isGuidePreview ? "Tour · temporary" : isShowroom ? "Showroom · temporary" : isOfflinePreview ? "Offline preview" : isSecondEdition ? "Second edition · v" + APP_VERSION : "Preview · v" + APP_VERSION}</span><a href="${import.meta.env.BASE_URL}${isSecondEdition ? (isShowroom ? "?edition=2" : "?edition=2&showroom=1") : isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
       <div id="shop-guide"></div>
+      ${isSecondEdition ? '<div class="home-intro"><div><span class="home-eyebrow">A little place of your own</span><p class="home-title">Your tea shop</p></div><button id="home-puzzles" type="button" aria-label="Browse all puzzles"><span>Puzzles</span><strong></strong></button></div>' : ""}
       <div class="shop-stage">
         <canvas id="shop-canvas" aria-label="The tea shop room. Pinch to zoom."></canvas>
       ${isSecondEdition ? '<button id="undo-move" class="move-undo" type="button" disabled>Undo move</button>' : ""}
@@ -104,6 +107,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
         </div>
         </section>
         <div class="shop-actions">
+          ${isSecondEdition ? '<div class="home-play-actions"></div>' : ""}
           <button class="shop-card open" id="play-tea" type="button">
             <span class="home-play-icon" aria-hidden="true">▤</span>
             <span class="card-copy">
@@ -124,6 +128,10 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       <div class="overlay hidden" id="shop-modal" role="dialog" aria-label="Shop note"></div>
     </div>`;
 
+  if (isSecondEdition) {
+    root.querySelector('.home-play-actions')!.append(root.querySelector('#play-tea')!);
+    root.querySelector('.preview-bar')?.classList.toggle('home-preview-notice', !isShowroom && !isGuidePreview && !isOfflinePreview);
+  }
   const canvas = root.querySelector<HTMLCanvasElement>("#shop-canvas");
   if (!canvas) throw new Error("Missing shop canvas");
 
@@ -185,6 +193,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   diorama.setNight(night);
 
   const paintChrome = () => {
+    const restoreEditFocus = document.activeElement === root.querySelector("#edit-toggle");
     setBrowserNight(night);
     const undoMove = root.querySelector<HTMLButtonElement>('#undo-move');
     if (undoMove) { undoMove.disabled = !lastMove; undoMove.classList.toggle('hidden', !edit); }
@@ -215,8 +224,12 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       const unfinished = readPuzzle(progress);
       const complete = progress.bestStars.every(stars => stars > 0);
       const maxed = progress.bestStars.every(stars => stars === 3);
-      root.querySelector('#play-tea strong')!.textContent = unfinished ? 'Continue puzzle' : maxed ? 'Revisit puzzles' : complete ? 'Improve your scores' : 'Play next puzzle';
-    root.querySelector('#play-tea em')!.textContent = unfinished ? 'Pick up where you left off' : maxed ? 'All puzzles finished · Play a favourite' : complete ? 'Earn more stars for your favourite pieces' : 'Earn stars to decorate';
+      const completed = progress.bestStars.filter(stars => stars > 0).length;
+      const nextLevel = unfinished?.save.levelId ?? progress.bestStars.findIndex(stars => stars === 0) + 1;
+      root.querySelector('#play-tea strong')!.textContent = unfinished ? 'Continue' : complete ? 'Play again' : 'Play';
+      root.querySelector('#play-tea em')!.textContent = unfinished ? `Puzzle ${nextLevel} · In progress` : maxed ? 'All stars collected' : complete ? 'Improve your best' : `Puzzle ${nextLevel}`;
+      root.querySelector('#home-puzzles strong')!.textContent = `${completed} / ${progress.bestStars.length}`;
+      root.querySelector('#home-puzzles')!.setAttribute('aria-label', `All puzzles, ${completed} of ${progress.bestStars.length} completed`);
     }
     const available = DECORATIONS.filter((item) => collectionUnlocked(item.id,progress.bestStars) && !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
     updateAudioToggle(root.querySelector("#mute"), progress.muted);
@@ -228,7 +241,14 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     }
 
     const toggle = root.querySelector("#edit-toggle");
-    if (toggle) { toggle.textContent = edit ? "Done" : `Edit${isSecondEdition && available ? " · " + available : ""}`; toggle.setAttribute("aria-label", edit ? "Finish decorating" : `Edit shop, ${available} decorations affordable`); }
+    if (toggle) {
+      if (isSecondEdition) {
+        const slot = root.querySelector(edit || showcasing ? '#toolbar-edit-slot' : '.home-play-actions')!;
+        if (toggle.parentElement !== slot) slot.append(toggle);
+        toggle.innerHTML = edit ? 'Done' : `<span class="home-decor-icon" aria-hidden="true">✧</span><strong>Decorate</strong>${available ? `<small>${available} ready to buy</small>` : '<small>Make it yours</small>'}`;
+      } else toggle.textContent = edit ? 'Done' : 'Edit';
+      toggle.setAttribute("aria-label", edit ? "Finish decorating" : `Decorate shop, ${available} decorations affordable`);
+    }
     root.querySelector("h2")!.textContent = edit ? "Decorate" : "Tea Shop";
     root.querySelector("#decorate-panel")?.classList.toggle("hidden", !edit);
     root.querySelector(".shop-actions")?.classList.toggle("hidden", edit);
@@ -296,6 +316,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       else if (bakeryNote) modal.innerHTML = bakeryModal();
       modal.classList.toggle("hidden", !finaleOpen && !bakeryNote);
     }
+    if (restoreEditFocus) root.querySelector<HTMLButtonElement>("#edit-toggle")?.focus({preventScroll:true});
   };
 
   const exportImage = async (share: boolean) => {
@@ -350,6 +371,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
 
   const bind = () => {
     root.querySelector('#browse-puzzles')?.addEventListener('click',()=>host.goLevels());
+    root.querySelector('#home-puzzles')?.addEventListener('click',()=>host.goLevels());
     root.querySelector('#undo-move')?.addEventListener('click',()=>{
       if (!lastMove) return;
       const {id,place}=lastMove;
