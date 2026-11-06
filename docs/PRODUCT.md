@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Completion feedback preview — 0.3.0-preview.3
+
+Continuation takes up the accepted reward/audio polish: show the stars actually earned leading toward the chosen decoration, distinguish milestones, keep no-new-reward replays quiet and shorten ordinary completion pauses. Preserve exactly-once rewards, direct Edit navigation, full-jar rules, reduced motion and mute. Physical-device sound and family preference remain for preview review; this does not adopt the experimental 3D renderer for normal play.
+
 ## Approved 3D puzzle comparison — 0.3.0-preview.1
 
 Evaluate Babylon.js vases and paper tea sachets on three existing sample boards before choosing a production rendering direction. Current and 3D presentations share in-memory board state and rules; normal progress and currency are untouched. Prioritize recognisable objects, clear four-/five-slot stacks, private hidden pieces, direct finger-following, accessible controls and low phone rendering cost. A fixed camera and authored movement preserve predictable sorting. Keep the normal game available. Device performance and family preference decide whether to continue, not the presence of 3D alone.

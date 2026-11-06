@@ -5,7 +5,7 @@ import { nextReward } from '../game/journey';
 import type { Progress } from '../game/types';
 import { styleThumbnail } from '../shop/icons';
 
-export function rewardCard(progress: Progress): string {
+export function rewardCard(progress: Progress, earnedStars = 0): string {
   const goal = nextReward(progress);
   if (!goal) return `<p class="journey-goal">${isSecondEdition ? 'Your little shop is ready. Make it feel like you.' : 'All special pieces collected. Try a new arrangement.'}</p>`;
   const { item, done } = goal;
@@ -23,7 +23,11 @@ export function rewardCard(progress: Progress): string {
     const meter = puzzles
       ? `<progress max="${item.unlockAfter}" value="${done}" aria-label="Puzzles toward this decoration’s unlock"></progress>`
       : `<progress max="${item.cost}" value="${Math.min(stars,item.cost)}" aria-label="Stars saved toward this decoration"></progress>`;
-    return `<button class="reward-card personal-goal" data-reward="${item.id}" type="button" aria-label="Preview ${item.moveName}. ${status}. Costs ${item.cost} stars."><span class="reward-art" aria-hidden="true">${styleThumbnail(item.id,pinned?.style??0)}</span><span class="reward-copy"><small>${pinned ? 'Your next piece' : 'A little inspiration'}</small><strong>${item.moveName[0].toUpperCase()+item.moveName.slice(1)}</strong><small>${status}</small>${meter}</span><span class="reward-price">${item.cost} ✦<small>Try it →</small></span></button>`;
+    const after = Math.min(stars,item.cost) / item.cost;
+    const before = Math.min(Math.max(0,stars-earnedStars),item.cost) / item.cost;
+    const receipt = earnedStars > 0 && !puzzles
+      ? `<span class="reward-track" aria-hidden="true"><i style="--reward-from:${after ? before/after : 1};--reward-fill:${after*100}%"></i></span>` : '';
+    return `<button class="reward-card personal-goal ${receipt ? 'has-reward-track' : ''}" data-reward="${item.id}" type="button" aria-label="Preview ${item.moveName}. ${status}. Costs ${item.cost} stars."><span class="reward-art" aria-hidden="true">${styleThumbnail(item.id,pinned?.style??0)}</span><span class="reward-copy"><small>${pinned ? 'Your next piece' : 'A little inspiration'}</small><strong>${item.moveName[0].toUpperCase()+item.moveName.slice(1)}</strong><small>${status}</small>${meter}${receipt}</span><span class="reward-price">${item.cost} ✦<small>Try it →</small></span></button>`;
   }
   const remaining = Math.max(0, item.unlockAfter! - done);
   return `<button class="reward-card" data-reward="${item.id}" type="button" aria-label="Preview ${item.moveName}. ${remaining ? `${remaining} puzzles to unlock` : 'Unlocked, available to buy'}. ${item.cost} stars.">
