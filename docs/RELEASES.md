@@ -2,7 +2,7 @@
 
 ## 0.3.0-preview.4 — preview shortcut routing
 
-Plain `/tea-shop/preview/` now opens the current edition, matching its installed manifest start URL. Existing `?edition=2` links and preview progress remain valid; `?edition=1` explicitly opens classic tooling. Main and all progress namespaces are unchanged. Required verification/build and the compiled mobile-browser shortcut test pass, including existing progress, puzzle resume/Undo, edition aliases, production isolation and no normal-preview worker. Hosting pending.
+Plain `/tea-shop/preview/` now opens the current edition, matching its installed manifest start URL. Existing `?edition=2` links and preview progress remain valid; `?edition=1` explicitly opens classic tooling. Main and all progress namespaces are unchanged. Required verification/build and the compiled mobile-browser shortcut test pass, including existing progress, puzzle resume/Undo, edition aliases, production isolation and no normal-preview worker. Hosted successfully in [Pages run 42287012894](https://github.com/ElBafo/tea-shop/actions/runs/42287012894) from source `cd5da8196694d0a3c57d3d6ad45290aa673863fc`, [PR #22](https://github.com/ElBafo/tea-shop/pull/22). All preceding room, UI and reward work is available through the stable plain preview URL. Main remains 0.2.1; existing physical-phone shortcuts should be closed and reopened for review.
 
 ## 0.3.0-preview.3 — completion and reward polish
 
