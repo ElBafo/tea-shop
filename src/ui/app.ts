@@ -326,6 +326,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
       } else {
         shake(index);
       }
+      rejectMove(from,index);
       return;
     }
 
@@ -410,6 +411,16 @@ export function mountApp(root: HTMLElement): Promise<void> {
     } else present();
   };
 
+  const rejectMove = (from: number, to: number) => {
+    if (!play || !isSecondEdition) return;
+    root.querySelector('.move-feedback')?.remove();
+    const tube=play.board.tubes[to], run=topRun(play.board.tubes[from]);
+    const bubble=document.createElement('span'); bubble.className='move-feedback'; bubble.setAttribute('role','status');
+    bubble.textContent=run && play.board.capacity-tube.length < run.count ? 'The whole group needs room' : 'Match the top flavour';
+    root.querySelector(`[data-jar="${to}"]`)?.append(bubble);
+    window.setTimeout(()=>bubble.remove(),1800);
+  };
+
   const shake = (index: number) => {
     playClick(progress.muted);
     const jar = root.querySelector(`[data-jar="${index}"]`);
@@ -422,6 +433,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
     board: () => screen === 'play' && play && !play.busy && !play.won ? play.board : null,
     lift: () => { playClick(progress.muted); navigator.vibrate?.(12); },
     drop: transfer,
+    reject: rejectMove,
   });
   cancelDrag = drag.cancel;
   render();
@@ -503,7 +515,7 @@ function playMarkup(
           <span class="jar-glass">
             <span class="stack" style="--slots:${board.capacity}">${slots.join("")}</span>
           </span>
-          ${done ? '<span class="jar-check" aria-hidden="true">✓</span>' : ''}
+          ${done ? '<span class="jar-check" aria-hidden="true">✓</span>' : ''}${isSecondEdition ? `<span class="jar-capacity" aria-hidden="true">${done ? "Full ✓" : `${tube.length} / ${board.capacity}`}</span>` : ""}
           ${puff}
         </button>`;
     })
@@ -511,7 +523,7 @@ function playMarkup(
 
   const hint = guideStage() === 'puzzle'
     ? `<aside class="guide-card puzzle-guide-heading" aria-label="Getting started"><strong>Fill each jar with one kind</strong><button type="button" data-guide-skip aria-label="Skip the getting-started guide">Skip</button></aside>`
-    : isSecondEdition ? `<p class="hint">${level.blurb}</p>`
+    : isSecondEdition ? ""
     : play.hint
     ? `<p class="hint">Fill each jar with one kind. Drag treats, or tap two jars.</p>`
     : "";

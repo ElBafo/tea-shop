@@ -2,7 +2,11 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.3.0-preview.1
+## Current priority — 0.3.0-preview.2
+
+Owner authorized the complete visual-direction pass and final four design criteria with “Let’s do them all”. Implement on the hosted preview branch for direct Safari review. Shared paper/porcelain/tea-green controls, board composition and capacity cues, consolidated home goal, compact contextual editor, explicit decoration states and tea-tag details are in progress. Preserve rules, saves and the isolated Current/3D comparison. Automated first-session checks precede an unassisted family test; that human test cannot be claimed complete by automation. Main remains unchanged.
+
+### Previous comparison — 0.3.0-preview.1
 
 The owner said “Go with your rec”, authorizing the bounded Babylon.js puzzle comparison recommended below. Build a separate preview-only experiment on top of the reviewed room preview. Main remains 0.2.1; the ordinary preview keeps its existing game and saved progress.
 

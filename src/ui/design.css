@@ -1,0 +1,109 @@
+/* Shared second-edition presentation: paper, porcelain, tea and brass. */
+.edition-two {
+ --cream:#f6f1e7; --foam:#fffdf7; --ink:#293e35; --muted:#59675d;
+ --tea:#36594a; --paper:#fffdf7; --line:#d6d9c9; --gold:#916410;
+ --shadow:0 5px 18px #293e3510;
+ background:#f6f1e7; color:var(--ink);
+}
+.edition-two .frame { gap:12px; }
+.edition-two button { transition:background-color 120ms,box-shadow 120ms; }
+.edition-two button:focus-visible,.edition-two a:focus-visible,.edition-two select:focus-visible { outline:3px solid #916410; outline-offset:3px; }
+.edition-two .shop-room { background:linear-gradient(#f8f4ec,#f0ebdf); }
+.edition-two .shop-stage { background:transparent; border-radius:16px; }
+.edition-two .shop-actions { gap:12px; }
+.edition-two .shop-actions .reward-card { order:-1; }
+.edition-two .reward-card { border:1px solid var(--line); background:var(--paper); border-radius:16px; padding:10px; gap:10px; }
+.edition-two .reward-copy small { color:var(--muted); font-size:12px; }
+.edition-two .reward-copy strong { font:600 17px Georgia,serif; }
+.edition-two .reward-price { color:#705015; font-size:14px; }
+.edition-two .reward-price small { font-size:12px; }
+.edition-two #play-tea,.edition-two .primary-action,.edition-two .buy-decoration,.edition-two #launch-start,.edition-two .continue-card { background:var(--tea); color:#fffdf7; border-radius:14px; box-shadow:none; }
+.edition-two #play-tea { padding:12px 16px; }
+.edition-two .shop-toolbar .toolbar-toggle,.edition-two .shop-toolbar .settings-menu summary,.edition-two .screen-toolbar .toolbar-toggle { width:44px; height:44px; min-width:44px; min-height:44px; padding:8px; }
+.edition-two #edit-toggle { min-height:44px; font-size:14px; border-radius:12px; }
+.edition-two .screen-toolbar h2 { font:600 19px Georgia,serif; }
+.edition-two .screen-toolbar .icon-btn { min-height:44px; font-size:14px; }
+.edition-two .level-btn { border:1px solid var(--line); background:var(--paper); border-radius:14px; }
+.edition-two .level-btn.is-current { border:2px solid var(--tea); }
+.edition-two .level-name { font-size:14px; }
+.edition-two .level-num { background:#eee5d3; color:#654d26; }
+.edition-two .play .shelves { background:radial-gradient(ellipse at 35% 20%,#fffef9,#eee9dc); border:0; box-shadow:none; border-radius:16px; }
+.edition-two .play .play-meta { color:var(--muted); }
+.edition-two .play-meta .moves,.edition-two .play-meta .par { font-size:13px; }
+.edition-two .play .shelf-row { padding-bottom:20px; }
+.edition-two .play .jar { position:relative; }
+.edition-two .jar-capacity { position:absolute; bottom:-19px; left:50%; transform:translateX(-50%); font:600 12px/16px system-ui,sans-serif; color:#455e50; white-space:nowrap; pointer-events:none; }
+.edition-two .jar.done .jar-capacity { color:#36594a; }
+.edition-two .comparison-3d .jar-check { opacity:1; z-index:2; }
+.edition-two .play-bar button { min-height:44px; font-size:14px; padding:8px 12px; border-radius:12px; }
+.edition-two .play-bar #undo,.edition-two #comparison-undo { background:#dce6d9; color:#294d39; }
+.edition-two .play-bar #restart,.edition-two #comparison-restart { background:#eee7d9; color:#4d554c; }
+.edition-two .play .result-card { background:var(--paper); border:1px solid var(--line); border-radius:22px; }
+.edition-two .result-card .big-stars { color:#a97819; }
+.edition-two .result-card .primary-action { background:var(--tea); color:#fffdf7; }
+.edition-two .result-card .result-seal,.edition-two .launch-art { border-radius:8px 18px 18px 8px; border-left:3px solid #b99451; }
+.edition-two .launch-card h1 { color:var(--ink); }
+.edition-two .launch-card .lede { color:var(--muted); }
+.edition-two .guide-card,.edition-two .puzzle-guide-bubble { background:var(--paper); color:var(--ink); border-color:#b99451; border-radius:8px 16px 16px 8px; }
+.edition-two #decorate-panel { background:var(--paper); border:1px solid var(--line); border-radius:18px; }
+.edition-two .catalog-tabs { padding:2px; background:#e9ecdf; }
+.edition-two .catalog-tabs button,.edition-two .editor-nav button { min-height:44px; font-size:13px; padding:6px 8px; }
+.edition-two .catalog-tabs button[aria-pressed=true] { background:var(--tea); color:#fffdf7; }
+.edition-two .editor-nav .tray-toggle { text-align:right; }
+.edition-two .decorating .upgrade-chip { min-height:128px; background:#f1f0e7; border-radius:12px; padding:8px; }
+.edition-two .upgrade-chip strong { font-size:14px; }
+.edition-two .upgrade-chip > span:last-child { font-size:12px; color:var(--muted); }
+.edition-two .detail-copy strong { font:600 18px Georgia,serif; }
+.edition-two .detail-note { color:var(--muted); font-size:13px; line-height:1.4; margin:6px 0; }
+.edition-two .goal-pin,.edition-two .inventory-actions button,.edition-two .rotate-action,.edition-two .return-item { min-height:44px; font-size:13px; }
+.edition-two .style-chip { min-height:44px; }
+.edition-two .style-chip.active { outline:2px solid #537450; outline-offset:-2px; }
+.edition-two .decoration-state { display:inline-block; margin-left:8px; font:600 12px system-ui,sans-serif; color:#52634e; }
+.edition-two .is-night { --paper:#253b3b; --ink:#f5f0df; --muted:#c3d0c5; --line:#526664; --tea:#385c49; }
+.edition-two .is-night .detail-note,.edition-two .is-night .decoration-state,.edition-two .is-night .upgrade-chip > span:last-child { color:#c3d0c5; }
+.edition-two .is-night .reward-price { color:#efd293; }
+.edition-two .comparison-header small { font-size:11px; color:#59675d; }
+.edition-two .comparison-back,.edition-two .comparison-switch button,.edition-two .comparison-sample-label select,.edition-two .comparison-meta button { min-height:44px; display:inline-flex; align-items:center; justify-content:center; font-size:13px; }
+.edition-two .comparison-meta,.edition-two .comparison-name,.edition-two .comparison-status { font-size:12px; color:#455c50; }
+.edition-two .comparison-note { font-size:11px; color:#59675d; }
+.edition-two .comparison-switch button[aria-pressed=true] { background:var(--tea); }
+@media (min-height:700px) and (orientation:portrait) {
+ .edition-two .play .shelves[data-count="3"] { --slot-height:clamp(48px,7dvh,66px); }
+ .edition-two .play .shelves[data-count="3"] .shelf-row { max-width:400px; }
+ .edition-two .play .shelves[data-count="3"] .jar { max-width:116px; }
+ .edition-two .shop-room:not(.decorating) .shop-stage { flex-grow:1; }
+ .edition-two .decorating.has-selection:not(.has-guide):not(.tray-collapsed) .shop-dock { flex:0 1 auto; max-height:48dvh; }
+}
+@media (max-height:690px) and (orientation:portrait) {
+ .edition-two .play.puzzle-comparison { gap:3px; }
+ .edition-two .comparison-header { min-height:28px; }
+ .edition-two .comparison-header small { font-size:10px; }
+ .edition-two .comparison-meta { min-height:44px; }
+ .edition-two .comparison-status { min-height:16px; margin:0; }
+ .edition-two .comparison-note { font-size:10px; }
+ .edition-two .play.puzzle-comparison .shelves[data-capacity="5"] { --slot-height:16px; padding-block:2px; }
+ .edition-two .play.puzzle-comparison .shelf-row { gap:24px 8px; padding-top:3px; }
+}
+@media (orientation:landscape) and (max-height:480px) {
+ .edition-two .comparison-controls { top:0; }
+ .edition-two .comparison-meta { margin-top:0; }
+ .edition-two .comparison-status { min-height:16px; }
+}
+@media (prefers-reduced-motion:reduce) { .edition-two button { transition:none; } }
+
+.edition-two .comparison-status:empty { min-height:0; display:none; }
+@media (min-height:700px) and (orientation:portrait) {
+ .edition-two .shop-room:not(.decorating) .shop-stage canvas { height:0; min-height:0; flex:1; aspect-ratio:auto; }
+}
+@media (orientation:landscape) and (max-height:480px) {
+ .edition-two .play { --slot-height:20px; gap:4px; padding-block:6px; }
+ .edition-two .play .shelves { padding-block:4px; }
+ .edition-two .play .shelf-row { padding-top:4px; padding-bottom:20px; }
+}
+
+.edition-two .move-feedback { position:absolute; bottom:100%; left:50%; transform:translateX(-50%); width:110px; z-index:10; padding:8px; border:1px solid #916410; border-radius:8px; background:#fffdf7; color:#293e35; font:600 12px/1.3 system-ui,sans-serif; pointer-events:none; }
+
+.edition-two #launch-screen { background:radial-gradient(ellipse at 50% 30%,#fffdf7,#eee8d9); color:var(--ink); }
+.edition-two .launch-mark { border-left:3px solid #b99451; border-radius:8px 20px 20px 8px; }
+.edition-two .launch-tagline { color:var(--muted); }
+.edition-two #launch-screen #launch-start { background:var(--tea); color:#fffdf7; border-radius:14px; }

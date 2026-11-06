@@ -5,6 +5,7 @@ import { mountApp } from "./ui/app";
 import "./style.css";
 import "./ui/edition.css";
 import "./ui/edition-puzzle.css";
+import "./ui/design.css";
 document.body.classList.toggle("edition-two", isSecondEdition);
 const versionLabel = document.createElement("small");
 versionLabel.className = "launch-version";
