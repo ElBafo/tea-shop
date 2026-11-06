@@ -6,6 +6,8 @@ A cozy sorting puzzle that earns stars for a small isometric tea shop. Fill jars
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+**Shortcut routing preview: 0.3.0-preview.4.** The plain [preview address](https://elbafo.github.io/tea-shop/preview/) now selects the current edition and its existing saved progress. [Deployment passed](https://github.com/ElBafo/tea-shop/actions/runs/42287012894). Close and reopen the preview shortcut to load this build.
+
 **Hosted completion preview: 0.3.0-preview.3.** New earnings visibly advance the chosen decoration’s savings; repeat wins stay quiet, milestones stand out and pours have a soft paper/ceramic cue. Verification, browser checks and [deployment](https://github.com/ElBafo/tea-shop/actions/runs/42285562569) passed. [Open in Safari](https://elbafo.github.io/tea-shop/preview/?edition=2).
 
 **Hosted design preview: 0.3.0-preview.2.** The shared layout, colours, decoration states and first-session flow passed verification and deployment for the [phone preview](https://elbafo.github.io/tea-shop/preview/?edition=2).  A separate [puzzle-rendering comparison](https://elbafo.github.io/tea-shop/preview/?edition=2&puzzle3d=1) has passed local checks: the same three sample boards in Current and 3D views, with no saved-progress changes. The ordinary preview retains the reviewed room, keeper and lighting work in PR #18. Hosting and review evidence is recorded in [RELEASES.md](docs/RELEASES.md). Main stays at 0.2.1 until approval.
@@ -41,7 +43,7 @@ npm run dev      # http://localhost:5173/tea-shop/
 npm run build
 ```
 
-GitHub Actions verifies and builds main and the preview before deploying both to Pages. The hosted second-edition preview remains https://elbafo.github.io/tea-shop/preview/?edition=2 and keeps its own progress. Ordinary preview uses the preserved classic mode. The explicit production `?edition=1` route is retained for classic regression checks; no edition-switching UI is part of this release.
+GitHub Actions verifies and builds main and the preview before deploying both to Pages. The hosted preview is https://elbafo.github.io/tea-shop/preview/ and keeps its own progress. The plain preview URL opens the current edition; `?edition=1` explicitly opens preserved classic tooling. The explicit production `?edition=1` route is retained for classic regression checks; no edition-switching UI is part of this release.
 
 - [Roadmap](docs/ROADMAP.md): current work, accepted decisions and backlog.
 - [Product direction](docs/PRODUCT.md): player experience and established rules.

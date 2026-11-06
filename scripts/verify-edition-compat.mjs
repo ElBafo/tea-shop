@@ -27,7 +27,7 @@ async function mode(name,base,search){
 }
 
 for(const [name,base] of [['released','/tea-shop/'],['ordinary-preview','/tea-shop/preview/']]){
-  const {api}=await mode(name,base,name==='released'?'?edition=1':'');
+  const {api}=await mode(name,base,'?edition=1');
   assert.equal(api.LEVEL_COUNT,38);
   assert.equal(api.STORAGE_KEY,name==='released'?'tea-shop-progress-v1':'tea-shop-preview-progress-v1');
   const original=progress(38);
