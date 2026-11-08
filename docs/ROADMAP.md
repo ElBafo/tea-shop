@@ -2,7 +2,13 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.3.0-preview.5
+## Current priority — 0.3.0-preview.6
+
+The owner said “Let’s go” for the next roadmap milestone, the decoration editor. Redesign the ordinary preview's browsing and selected-item tray: visually distinct item images, readable price/availability states, a persistent plain Browse route, three named style previews with a checkmarked selection, explicit unpurchased state, a pinned Buy & place action and Cancel, and clear free owned-style/Rotate/Store/Place controls. Preserve the separate unowned and owned collections, free previews, goal style handoff, immediate room movement, unlock boundaries, optional-item refund confirmation and all saved scores/layouts. Main stays unchanged; use the stable preview URL for review.
+
+Implementation and required verification/build pass. Six compiled-browser check groups cover exact purchases/refunds, free preview/cancel, owned/unowned separation, goal style handoff, keyboard style focus, reload preservation, first-decoration guide, night label contrast and four responsive sizes (390×844, 320×568, 844×390, 1280×900). Real touch checks pass for all three lamp styles in day/night, including multi-cell movement immediately after style selection and Undo; a newly purchased counter is immediately draggable. Zero runtime exceptions. Collection tabs remain in browsing; selected-item mode gives their space to styles and keeps plain Browse visible. Before/after captures are in `docs/screenshots/editor-redesign/`; evidence is in `work/editor-redesign.json`, `work/editor-movement.json`, `work/editor-redesign-verify.log` and `work/editor-redesign-build.log`. Deployment pending. Physical iPhone review remains pending. The next roadmap milestone is puzzle readability/art direction; the 3D sample remains an experiment.
+
+### Previous home preview — 0.3.0-preview.5
 
 The owner asks to work through the roadmap and add a better home page. The prior UI pass was incremental styling, not a substantial redesign; this milestone changes the regular preview's home composition. Room-first home: compact Decopu/balance/theme/audio header, a clear room title and puzzle-progress entry, an unboxed diorama, one decoration goal and a persistent Play/Continue + Decorate action area. Move the existing Edit control between the home action area and editing toolbar without replacing its listener or creating a second editor. Existing goals, prices, saves, guide, Showcase and puzzle rules remain authoritative. Keep preview tooling in More; temporary tour/showroom notices stay visible. All changes are reviewed through the same plain preview URL; main stays unchanged.
 
@@ -10,8 +16,8 @@ Acceptance: a visible before/after at phone size; fresh, resumed, completed and 
 
 ### Ordered follow-through
 
-1. **Home redesign (this preview):** distinct room-first composition and clear play/decorate navigation. Owner phone review remains the approval step.
-2. **Editor design follow-up:** review browsing, style preview, purchase and placement as a complete flow; build on the existing owned/unowned separation and direct movement. Preview and phone review before main.
+1. **Home redesign (preview.5, hosted):** distinct room-first composition and clear play/decorate navigation. Owner phone review remains the approval step.
+2. **Editor design follow-up (current preview.6):** review browsing, style preview, purchase and placement as a complete flow; build on the existing owned/unowned separation and direct movement. Preview and phone review before main.
 3. **Puzzle readability and art direction:** review normal gameplay at actual phone size, then decide whether to carry the Babylon prototype into the full game. The separate 3D sample is not a completed full-game conversion.
 4. **Human puzzle pacing and first-session review:** observe an uncoached tester through first solve, reward and first decoration; evaluate later boards before changing authored levels or star targets.
 5. **Remaining art and reliability backlog:** readable keeper/material cohesion, phone performance and accessibility checks. Bigger rooms, Bakery, cloud saves and monetisation retain their later-roadmap status.

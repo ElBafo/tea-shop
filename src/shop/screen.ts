@@ -94,7 +94,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       <button id="upgrade-notice" class="upgrade-notice hidden" type="button"></button>
       <div class="shop-dock">
         <section id="decorate-panel" class="hidden" aria-label="Decorations">
-        <div class="editor-nav"><button id="editor-back" class="collection-back hidden" data-act="browse" type="button">← Browse</button><button id="tray-toggle" class="tray-toggle" type="button" aria-expanded="true" aria-controls="editor-body">Hide panel <span aria-hidden="true">⌄</span></button></div>
+        <div class="editor-nav">${isSecondEdition ? '<span class="editor-caption" id="editor-caption">Find your next piece</span>' : ""}<button id="editor-back" class="collection-back hidden" data-act="browse" type="button">← Browse</button><button id="tray-toggle" class="tray-toggle" type="button" aria-expanded="true" aria-controls="editor-body">Hide panel <span aria-hidden="true">⌄</span></button></div>
         <div id="editor-body">
         <div class="catalog-tabs" role="group" aria-label="Decoration collection">
           <button data-filter="all" type="button">Decorations</button>
@@ -194,6 +194,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
 
   const paintChrome = () => {
     const restoreEditFocus = document.activeElement === root.querySelector("#edit-toggle");
+    const focusedAction = document.activeElement instanceof HTMLElement && document.activeElement.closest('#upgrade-detail')
+      ? {...document.activeElement.dataset} : null;
     setBrowserNight(night);
     const undoMove = root.querySelector<HTMLButtonElement>('#undo-move');
     if (undoMove) { undoMove.disabled = !lastMove; undoMove.classList.toggle('hidden', !edit); }
@@ -260,6 +262,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
 
     root.querySelector('.shop-room')?.classList.toggle('has-selection',Boolean(focus));
     root.querySelector('#editor-back')?.classList.toggle('hidden',!focus);
+    const caption = root.querySelector('#editor-caption');
+    if (caption) { caption.textContent = filter === 'owned' ? 'Your collection' : 'Find your next piece'; caption.classList.toggle('hidden',Boolean(focus)); }
     const rail = root.querySelector("#upgrade-rail");
     root.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(button => {
       button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
@@ -268,6 +272,13 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     if (rail) rail.innerHTML = collection.map((upgrade) => {
       const owned = isOwned(progress.shop, upgrade.id);
       const active = focus === upgrade.id;
+      const unlocked = collectionUnlocked(upgrade.id,progress.bestStars);
+      const ready = unlocked && upgrade.cost <= spendable;
+      if (isSecondEdition) return `<button aria-pressed="${active}" class="upgrade-chip ${owned ? 'owned' : ''} ${active ? 'active' : ''}" data-upgrade="${upgrade.id}" data-availability="${owned ? 'owned' : !unlocked ? 'locked' : ready ? 'ready' : 'saving'}" type="button">
+        <span class="deco-icon" aria-hidden="true">${styleThumbnail(upgrade.id,styleOf(progress.shop,upgrade.id))}</span>
+        <span class="catalog-card-title"><strong>${label(upgrade.id)}</strong>${!owned ? `<span class="catalog-price">${upgrade.cost} ${STAR}</span>` : ''}</span>
+        <span class="catalog-status">${owned ? (isStored(progress.shop,upgrade.id) ? 'Stored' : 'In your shop') : !unlocked ? `Unlock at ${upgrade.unlockAfter} puzzles` : ready ? 'Ready to buy' : `Need ${upgrade.cost-spendable} more stars`}</span>
+      </button>`;
       return `
         <button aria-pressed="${active}" class="upgrade-chip ${owned ? "owned" : ""} ${active ? "active" : ""}" data-upgrade="${upgrade.id}" type="button">
           <span class="deco-icon" aria-hidden="true">${styleThumbnail(upgrade.id,styleOf(progress.shop,upgrade.id))}</span><strong>${label(upgrade.id)}</strong>
@@ -317,6 +328,11 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       modal.classList.toggle("hidden", !finaleOpen && !bakeryNote);
     }
     if (restoreEditFocus) root.querySelector<HTMLButtonElement>("#edit-toggle")?.focus({preventScroll:true});
+    else if (focusedAction?.act) {
+      [...root.querySelectorAll<HTMLButtonElement>('#upgrade-detail [data-act]')].find(button =>
+        button.dataset.act === focusedAction.act && button.dataset.id === focusedAction.id && button.dataset.style === focusedAction.style
+      )?.focus({preventScroll:true});
+    }
   };
 
   const exportImage = async (share: boolean) => {
@@ -660,6 +676,14 @@ function taskDetail(progress: Progress, focus: UpgradeId | null, draft: Decorati
   const unlocked = collectionUnlocked(id,progress.bestStars);
   const affordable = spendableStars(progress) >= def.cost;
   const fits = draft?.id === id && draft.place !== null;
+  if (isSecondEdition) {
+    const pinned = readGoal(progress)?.id === id && readGoal(progress)?.style === (chosen ?? 0);
+    const status = !unlocked ? `Complete ${def.unlockAfter} puzzles to unlock` : !fits ? 'Move or store a piece to make room' : !affordable ? `${def.cost-spendableStars(progress)} more stars needed` : 'All 3 styles included · Free to change';
+    return `<div class="detail-copy"><div class="editor-item-heading"><strong>${label(id)}</strong><span class="editor-price">${def.cost} ✦</span></div><span class="decoration-state">Preview · Not purchased</span></div>
+      <div class="style-row" role="group" aria-label="${label(id)} styles">${def.variants.map((variant,index) => `<button class="style-chip ${chosen===index ? 'active' : ''}" aria-pressed="${chosen===index}" data-act="preview" data-id="${id}" data-style="${index}" type="button">${styleThumbnail(id,index)}<span>${variant.name}</span></button>`).join('')}</div>
+      <div class="editor-secondary">${draft?.place && def.movable ? `<button class="rotate-action" data-act="rotate" type="button">${def.surface==='wall' ? 'Other wall' : 'Rotate'}</button>` : ''}<button class="goal-pin" type="button" data-act="pin-goal" aria-pressed="${pinned}">${pinned ? 'Goal saved ✓' : 'Save as goal'}</button></div>
+      <div class="purchase-row"><p class="purchase-summary" role="status">${status}</p><button class="cancel-preview" data-act="cancel-preview" type="button">Cancel</button><button class="buy-decoration" data-act="buy" data-id="${id}" data-style="${chosen ?? 0}" type="button" ${chosen===null || !unlocked || !affordable || !fits ? 'disabled' : ''}>${!unlocked ? 'Locked' : !fits ? 'Make room to buy' : !affordable ? `Need ${def.cost-spendableStars(progress)} more ✦` : `Buy & place · ${def.cost} ✦`}</button></div>`;
+  }
   return `<div class="detail-copy"><strong>${label(id)}</strong>${isSecondEdition ? `<span class="decoration-state">${chosen === null ? "Not owned" : "Preview · Not purchased"}</span>` : ""}
     <p class="detail-note">${chosen === null ? "Choose a style to preview in your shop." : def.variants[chosen].blurb}</p></div>
     ${isSecondEdition ? `<button class="goal-pin" type="button" data-act="pin-goal">${readGoal(progress)?.id===id && readGoal(progress)?.style===(chosen??0) ? "Your goal ✓ · Clear" : "Make this my goal"}</button>` : ""}
@@ -692,7 +716,8 @@ function editDetail(shop: ShopState, selected: UpgradeId | null): string {
       <p class="detail-note">${def.variants[current]?.blurb ?? def.blurb}</p>
     </div>
 
-    <div class="style-row">${styles}</div>
+    ${isSecondEdition ? '<p class="owned-style-note">Your styles · Free to change</p>' : ''}
+    <div class="style-row" role="group" aria-label="${label(selected)} styles">${styles}</div>
     <div class="inventory-actions">${rotate}${def.movable ? `<button class="style-chip" data-act="${stored ? "place" : "store"}" type="button" ${stored && !canRestore ? "disabled" : ""}>${stored ? "Place" : "Store"}</button>` : ""}</div>
     ${stored && !canRestore ? '<p class="editor-saved" role="status">Make room to place this item.</p>' : ''}
     ${returnValue(shop, selected) ? `<button class="return-item" data-act="return" type="button">Return for ${returnValue(shop, selected)} ✦</button>` : ''}`;

@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Editor composition — 0.3.0-preview.6
+
+`editor.css` scopes the new catalogue/detail layout to second-edition Edit mode. The existing `screen.ts` draft, purchase, goal and placement paths remain authoritative. A selected unowned item exposes style buttons and secondary draft controls inside the scrollable middle, while purchase status, Cancel and Buy remain outside it in the footer. Collection tabs appear while browsing; a selected item retains the plain Browse control and uses the freed space for styles. The same detail-container event delegation handles these actions. Repainting a style or arrangement action restores focus by its action/item/style identity; Browse cancels the draft and restores the collection scroll position. Owned/unowned filtering remains unchanged.
+
 ## Home composition — 0.3.0-preview.5
 
 `home.css` owns the second-edition home layout, scoped away from Edit and Showcase. `mountShop` creates a home action container and reuses the existing Play and Edit buttons; `paintChrome` moves the same Edit node into the toolbar when editing and back home afterward, preserving its event listener. Play labels derive from validated `readPuzzle` state and current completion; the puzzle-count button opens the existing level browser. Goal navigation and purchases still use the existing editor flow. No new scene, account, storage key or progression rule is introduced.

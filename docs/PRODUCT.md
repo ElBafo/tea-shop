@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Decoration editor — 0.3.0-preview.6
+
+Make the full browse → choose a style → preview in room → buy and place flow clear on a phone. Prices and unlock/affordability states must be visible before selection. Keep one persistent Browse route, an explicit temporary preview state and Cancel, and separate unowned/owned collections. Style variants are included, free to change; ownership is granted only by the existing star purchase. Owned furniture remains movable immediately in the same editing session.
+
 ## Home redesign — 0.3.0-preview.5
 
 The regular game home should visibly centre the player’s room, then show one decoration goal and clear Play/Continue and Decorate actions. Puzzle completion count opens the existing level browser. Keep the star balance and theme/audio controls compact and accessible. Do not add a new currency, another obligatory landing screen, or a second editor. This is the next roadmap milestone after the incremental visual pass; phone review is still required.
