@@ -88,6 +88,36 @@ The tea sorting minigame is inspired by classic logic sorting (like *Water Sort 
 
 ---
 
+## Tea Book — follow-up design detail (2026-11-08)
+
+The owner supplied this further description for the v1.0.0 notes. **Tea Book**, the proposed 📖 bottom-navigation tab, is the character's master botanical compendium and guest relationship journal. It has two connected roles, with the blending workshop supporting recipe creation. These are design concepts, not released features. Counts, quantities, percentages, ranks and reward amounts below are draft values/examples, not a balanced economy or confirmed content inventory.
+
+### Tea Grimoire / Recipe Compendium — crafting and master recipes
+
+- **Recipe catalogue and formulas:** track a proposed catalogue of **42 blends**, including unlocked and undiscovered entries. Named examples: **Sencha**, **Smoked Cedar Hojicha**, **Midnight Bloom Tisane**, **Sunset Berry**, **Matcha Cloud Supreme** and **Golden Pear Oolong**.
+- **Botanical ingredients and harvesting requirements:** show required ingredients and available/required tallies, for example **Sun Hibiscus 3/3**, **Wild Rose 2/2** and **Honeycomb 1/1**, plus exact steeping conditions such as temperature, time and tipping bonuses. No final steeping durations, temperature table or bonus formulas were supplied.
+- **Direct “Brew for Tea Bar” action:** after pure canisters have been sorted in the diorama or ingredients mortar-ground in the workshop, brew from the Grimoire to serve in the teahouse. The relationship between this action and the earlier **Brew & Infuse** action, and the eligibility/consumption rules for each input, remain to be specified.
+- **Botanist mastery progression:** a completion bar toward **Master Herbalist**; the supplied example is **42% Complete** and a **+500 Star Coins** reward. The 42% display is an example progress value, distinct from the proposed 42-blend catalogue size. The final milestone threshold and reward accounting are unresolved.
+
+### Guest Scrapbook & Story Log — patron friendships and lore
+
+- **Villager and patron profiles:** friendship ranks/meters, including **Pippa Hedgehog — Soul Teammate**, **Grandma Willow** and **Poet Matsuo**.
+- **Patron favourites and rare decor gifts:** favourite brews could grant a **+25% coin tip multiplier**; record memorable gifts such as the **Hand-carved Acorn Stirrer**. Gift ownership, whether gifts are usable decorations or journal keepsakes, and their relationship to the current star-priced catalogue remain unresolved.
+- **Memory snapshots:** a storybook photo album with moments such as **“First Sip in Rain”** and **“Midnight Poetry.”**
+- **Village Tea Mailbox:** a postal drawer for personalized thank-you letters and herbal gifts from animal and human patrons. Whether letters are authored or generated is not settled by this description; the earlier Stitch map separately proposes AI-generated correspondence.
+
+### Supplied Stitch canvas screen references
+
+The source reports these screens as already created on the Stitch canvas. Their titles and identifiers are recorded as references only: no canvas access, screenshots, exports or playable implementations were supplied or independently verified in this note-taking task.
+
+| Screen reference | Supplied title | Described content |
+| --- | --- | --- |
+| `SCREEN_44` | Decopu — Tea Book Compendium | Botanical grimoire with master recipes, ingredient tallies, lore snippets, **All Blends / Herbal / Ceremonial** filter tabs and rarity tiers |
+| `SCREEN_19` | Decopu — Guest Friendship & Story Log | Storybook scrapbook with guest friendship meters, photo polaroids and letter mailbox |
+| `SCREEN_24` | Decopu — Artisanal Blending Workshop | Tactile apothecary workbench where mortar and pestles crush dried leaves into compendium recipes |
+
+No recipe, ingredient, friendship, gift, mastery, tipping or brewing system is implemented by retaining these notes. Steeping time is proposed recipe context; it does not authorize a timed puzzle/failure mechanic or alter unlimited Undo. New currency/serving rewards remain subject to the economy decisions below, and existing local saves are unchanged.
+
 ## Reconciliation with the released game — project notes
 
 The supplied draft adds a direct visitor → sort → brew/serve → upgrade loop and a more specific Japanese/botanical setting. Preserve these ideas for v1.0.0 exploration. The following differences need explicit design decisions before implementation; the source wording above is retained so those decisions remain traceable.

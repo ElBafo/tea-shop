@@ -26,6 +26,8 @@ Future v1.0.0 design input: the owner supplied a Stitch Living Diorama/game-syst
 
 The follow-up [V1_GAME_DESIGN_DRAFT.md](V1_GAME_DESIGN_DRAFT.md) preserves the supplied five-section GDD, with the visitor/sort/brew/upgrade loop, screens and venue tiers. Read its reconciliation table before implementation: Undo tokens, new currencies/serving rewards, single-layer transfers and four-slot/all-jars-full wording are not settled replacements for current rules.
 
+The same draft includes the Tea Book follow-up: recipe compendium, guest scrapbook/mailbox, workshop linkage and supplied Stitch screen IDs `SCREEN_44` / `SCREEN_19` / `SCREEN_24`. No actual Stitch exports were inspected. Recipe counts, mastery/tip rewards, gifts and brewing conditions are draft design inputs, not implemented or final economy values.
+
 1. Resolve any remaining device-specific startup failure before further feature expansion.
 2. Observe an uncoached first session; use PLAYTEST.md. Human pacing/retention evidence remains pending. Do not change boards or star targets based only on solver minima.
 3. Broader material cohesion, physical-phone performance and remaining accessibility review. The latest material pass was bounded to representative furniture and shared cup details.
