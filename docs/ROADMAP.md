@@ -2,6 +2,12 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
+## v1.0.0 planning input — Stitch Living Diorama (2026-11-08)
+
+The owner requested retaining Stitch's complete Living Diorama product map in the v1.0.0 notes. [V1_STITCH_PRODUCT_MAP.md](V1_STITCH_PRODUCT_MAP.md) records the portrait hub, proposed My Shop / Brew & Sort / Decorate / Tea Book tabs, contextual festivals/community surfaces, and four proposed AI context layers: guest memories/dialogue, artisanal tea generation, adaptive puzzles and a Village Chronicle. It preserves the supplied names and examples and identifies the new systems involved.
+
+**Agreed now:** save this as future product/design input. **Proposed, not implemented or a committed v1.0.0 feature list:** orders, revenue/staff, harvesting/brewing, themed venues, friendship/story systems, seasonal events, village visits/gifts/co-op, telemetry and generated content. Navigation, scope, economy, AI/data architecture and delivery order remain unresolved. The source's move-limit suggestion does not supersede no clock/fail state, unlimited Undo or current star targets. This documentation update does not authorize a UI rewrite, save migration or live rollout. Existing reliability and human/device validation priorities remain.
+
 ## Current priority — 0.3.1
 
 ### Agreed direction — normal puzzles in 3D (2026-11-08)
