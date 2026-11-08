@@ -125,7 +125,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
           </button>
         </div>
       </div>
-      <div class="overlay hidden" id="shop-modal" role="dialog" aria-label="Shop note"></div>
+      <div class="overlay hidden" id="shop-modal" role="dialog" aria-labelledby="shop-note-title"></div>
     </div>`;
 
   if (isSecondEdition) {
@@ -146,6 +146,13 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   let selected: UpgradeId | null = null;
   let finaleOpen = false;
   let bakeryNote = false;
+  let shownModal: 'finale' | 'bakery' | null = null;
+  let modalReturnFocus: HTMLElement | null = null;
+  const modalInert = new Map<HTMLElement, boolean>();
+  const focusVisible = (element: HTMLElement | null) => {
+    if (!element?.isConnected || !element.getClientRects().length || element.closest('[inert]') || element.hasAttribute('disabled')) return false;
+    element.focus({preventScroll:true}); return document.activeElement === element;
+  };
   let filter: "all" | "owned" = "all";
   let draft: DecorationDraft | null = null;
   let lastMove: {id: UpgradeId; place: Placement} | null = null;
@@ -193,7 +200,9 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   diorama.setNight(night);
 
   const paintChrome = () => {
-    const restoreEditFocus = document.activeElement === root.querySelector("#edit-toggle");
+    const active = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const focusedUpgrade = active?.dataset.upgrade;
+    const restoreEditFocus = active === root.querySelector("#edit-toggle");
     const focusedAction = document.activeElement instanceof HTMLElement && document.activeElement.closest('#upgrade-detail')
       ? {...document.activeElement.dataset} : null;
     setBrowserNight(night);
@@ -321,17 +330,39 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       actions.querySelector('[data-resume-shop]')?.remove();
       if(!isSecondEdition && readPuzzle(progress)) {const button=document.createElement('button');button.dataset.resumeShop='';button.className='resume-card';button.textContent='Resume unfinished puzzle →';button.onclick=()=>host.resumePuzzle();actions.prepend(button);}
     }
-    const modal = root.querySelector("#shop-modal");
-    if (modal) {
-      if (finaleOpen) modal.innerHTML = finaleModal();
-      else if (bakeryNote) modal.innerHTML = bakeryModal();
-      modal.classList.toggle("hidden", !finaleOpen && !bakeryNote);
+    const modal = root.querySelector<HTMLElement>("#shop-modal")!;
+    const nextModal = finaleOpen ? 'finale' : bakeryNote ? 'bakery' : null;
+    const closingModal = shownModal !== null && nextModal === null;
+    if (nextModal !== shownModal) {
+      if (nextModal) {
+        modalReturnFocus = active;
+        modal.innerHTML = nextModal === 'finale' ? finaleModal() : bakeryModal();
+        modal.setAttribute('aria-modal','true');
+        for (const sibling of Array.from(modal.parentElement!.children)) {
+          if (sibling === modal || !(sibling instanceof HTMLElement)) continue;
+          modalInert.set(sibling,sibling.inert); sibling.inert = true;
+        }
+      } else {
+        for (const [element,inert] of modalInert) element.inert = inert;
+        modalInert.clear(); modal.removeAttribute('aria-modal');
+      }
+      modal.classList.toggle('hidden',!nextModal);
+      shownModal = nextModal;
+      if (nextModal) focusVisible(modal.querySelector('button'));
     }
-    if (restoreEditFocus) root.querySelector<HTMLButtonElement>("#edit-toggle")?.focus({preventScroll:true});
-    else if (focusedAction?.act) {
-      [...root.querySelectorAll<HTMLButtonElement>('#upgrade-detail [data-act]')].find(button =>
+    if (nextModal) return;
+    if (closingModal) {
+      if (!focusVisible(modalReturnFocus)) focusVisible(root.querySelector('#upgrade-detail [data-act="style"][aria-pressed="true"]') ?? root.querySelector('#edit-toggle'));
+      modalReturnFocus = null;
+    } else if (restoreEditFocus) focusVisible(root.querySelector('#edit-toggle'));
+    else if (focusedAction?.act || focusedUpgrade) {
+      const sameAction = focusedAction?.act ? [...root.querySelectorAll<HTMLButtonElement>('#upgrade-detail [data-act]')].find(button =>
         button.dataset.act === focusedAction.act && button.dataset.id === focusedAction.id && button.dataset.style === focusedAction.style
-      )?.focus({preventScroll:true});
+      ) : null;
+      const oppositeAction = focusedAction?.act === 'store' ? 'place' : focusedAction?.act === 'place' ? 'store' : null;
+      if (!focusVisible(sameAction ?? null) && !(oppositeAction && focusVisible(root.querySelector(`#upgrade-detail [data-act="${oppositeAction}"]`)))) {
+        focusVisible(root.querySelector('#upgrade-detail .style-row [aria-pressed="true"]') ?? root.querySelector(`[data-filter="${filter}"]`));
+      }
     }
   };
 
@@ -430,7 +461,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector("#showcase-back")?.addEventListener("click", () => {
       showcasing = false;
       paintChrome();
-      root.querySelector<HTMLButtonElement>("#showcase-toggle")?.focus({preventScroll:true});
+      if (!focusVisible(root.querySelector('#showcase-toggle'))) focusVisible(root.querySelector('.settings-menu summary'));
     });
     root.querySelector("#share-shop")?.addEventListener("click", () => { void exportImage(true); });
     root.querySelector("#save-shop")?.addEventListener("click", () => { void exportImage(false); });
@@ -479,6 +510,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector("#upgrade-rail")?.addEventListener("click", (event) => {
       const button = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-upgrade]");
       if (!button) return;
+      const restoreSelectionFocus = document.activeElement === button;
       playClick(host.progress.muted);
       clearPreview();
       if (isSecondEdition) browseScroll[filter] = root.querySelector(".editor-content")!.scrollTop;
@@ -489,6 +521,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       diorama.setEditMode(edit);
       root.querySelector(".editor-content")!.scrollTop = 0;
       paintChrome();
+      if (restoreSelectionFocus) focusVisible(root.querySelector('#upgrade-detail .style-row [aria-pressed="true"]'));
     });
     root.querySelectorAll("[data-filter]").forEach(button => button.addEventListener("click", () => {
       browse((button as HTMLElement).dataset.filter as "all" | "owned");
@@ -530,6 +563,16 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
         }
       }
     });
+    root.querySelector("#shop-modal")?.addEventListener("keydown", (event) => {
+      const key = event as KeyboardEvent;
+      if (key.key === 'Escape') {
+        key.preventDefault();key.stopPropagation();finaleOpen=false;bakeryNote=false;paintChrome();
+      } else if (key.key === 'Tab') {
+        const buttons=[...root.querySelectorAll<HTMLButtonElement>('#shop-modal button:not(:disabled)')];
+        const index=buttons.indexOf(document.activeElement as HTMLButtonElement);
+        key.preventDefault();buttons[(index+(key.shiftKey?-1:1)+buttons.length)%buttons.length]?.focus();
+      }
+    });
     root.querySelector("#shop-modal")?.addEventListener("click", (event) => {
       if((event.target as HTMLElement).closest('[data-finale-showcase]')) {
         finaleOpen=false;edit=false;showcasing=true;clearPreview();diorama.setEditMode(false);paintChrome();
@@ -554,6 +597,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   };
 
   const browse = (tab: "all" | "owned") => {
+    const previous = focus;
+    const returnToCard = document.activeElement === root.querySelector('#editor-back') || (document.activeElement as HTMLElement | null)?.dataset.act === 'cancel-preview';
     trayCollapsed = false;
     clearPreview();
     filter = tab;
@@ -563,6 +608,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector(".editor-content")!.scrollTop = 0;
     paintChrome();
     if(isSecondEdition) root.querySelector(".editor-content")!.scrollTop=browseScroll[tab];
+    if (returnToCard && previous) focusVisible(root.querySelector(`[data-upgrade="${previous}"]`) ?? root.querySelector(`[data-filter="${tab}"]`));
   };
 
   const previewShop = (): ShopState => {
@@ -592,6 +638,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   };
 
   const buy = (id: UpgradeId, variant: number) => {
+    const restorePurchaseFocus = (document.activeElement as HTMLElement | null)?.dataset.act === 'buy';
     const progress = host.progress;
     const def = UPGRADE_BY_ID[id];
     if (!collectionUnlocked(id,progress.bestStars) || isOwned(progress.shop, id) || !canPurchaseCopy(progress.shop, id) || spendableStars(progress) < def.cost) return;
@@ -616,7 +663,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       diorama.playFinale();
       playFinale(progress.muted);
       paintChrome();
-    }
+    } else if (restorePurchaseFocus) focusVisible(root.querySelector('#upgrade-detail [data-act="style"][aria-pressed="true"]'));
   };
 
   const restyle = (id: UpgradeId, variant: number) => {
@@ -727,7 +774,7 @@ function finaleModal(): string {
   return `
     <div class="modal">
       <p class="kicker">All tidy</p>
-      <h3>Your tea shop is open</h3>
+      <h3 id="shop-note-title">Your tea shop is open</h3>
       <p class="lede tight">The lamps warm up, the shopkeeper is ready to serve, and this little corner is yours. Keep collecting, try a new arrangement, or share your finished shop.</p>
       <div class="modal-actions">
         <button data-finale-showcase type="button">Show my shop</button><button data-dismiss type="button">Keep decorating</button>
@@ -739,7 +786,7 @@ function bakeryModal(): string {
   return `
     <div class="modal">
       <p class="kicker">Coming next</p>
-      <h3>The bakery is airing out</h3>
+      <h3 id="shop-note-title">The bakery is airing out</h3>
       <p class="lede tight">The ovens are warm, but the cakes are still a later visit. Thank you for finishing the tea shop.</p>
       <div class="modal-actions">
         <button data-dismiss type="button">Back to the tea shop</button>

@@ -2,6 +2,14 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Editor focus and modal lifecycle — 0.3.0-preview.10
+
+`shop/screen.ts` restores focus to visible successors after controls are replaced. Card selection and purchase also restore at the end of their action, because preview/scene callbacks can render intermediate states. `paintChrome` restores matching style/action controls and Store/Place counterparts. Browse remembers the prior item and returns to its card when available.
+
+The existing shop modal renders only when its mode changes. Opening records sibling inert states, disables background interaction and focuses its primary action; closing restores those states and a connected visible editor control. Tab/Shift+Tab stay within the dialog; Escape shares the normal dismissal path. No global listener, scene, save schema, purchase rule or layout change is introduced.
+
+Selected styles retain their selection checkmark and a separate keyboard focus ring; the night ring uses a lighter colour for visibility. The ring sits inside the style card to avoid clipping in the scrolling tray. Leaving Showcase returns to the visible More control when its original menu item is hidden.
+
 ## Keeper pose correction — 0.3.0-preview.9
 
 Upper and lower arm ellipsoids are aligned between explicit shoulder/elbow/wrist points using quaternions, so each arm remains connected. A separate fixed `keeper-serving-cup` child scales and places the existing porcelain geometry below and beside the face. Existing head/eye/body animation, root placement, material ownership and scene disposal stay unchanged; no new timer, light or texture is introduced.

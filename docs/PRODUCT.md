@@ -2,6 +2,12 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Editor focus — 0.3.0-preview.10
+
+Keyboard users should stay oriented as editor controls change: card → selected style, Buy → owned style, Store ↔ Place, and Cancel/Browse → the relevant card. A shop-completion dialog should isolate the room controls, keep Tab navigation inside, offer Escape and return focus to a usable editor action. This pass preserves the compact touch layout and gameplay. Physical iPhone VoiceOver review remains pending; browser keyboard checks are separate evidence.
+
+Selected styles retain their selection checkmark and a separate keyboard focus ring; the night ring uses a lighter colour for visibility. The ring sits inside the style card to avoid clipping in the scrolling tray. Leaving Showcase returns to the visible More control when its original menu item is hidden.
+
 ## Keeper pose correction — 0.3.0-preview.9
 
 Owner feedback supersedes the raised two-hand serving pose: the cup obscured the face and the arms looked awkward. Keep the clearer face, but hold a smaller cup lower and to one side with one bent supporting arm; let the other arm rest. Existing idle motion remains subtle. This is a pose correction, not a new activity or service mechanic.

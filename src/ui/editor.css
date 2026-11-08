@@ -72,3 +72,6 @@
   .edition-two .decorating .upgrade-detail { gap:5px; }
   .edition-two .decorating .editor-content { padding:8px; }
 }
+/* Selection and keyboard focus are separate states, including on the active style. */
+.edition-two .decorating .style-row .style-chip:focus-visible { outline:3px solid #78510b; outline-offset:-3px; }
+.edition-two .decorating.is-night .style-row .style-chip:focus-visible { outline-color:#f7d78f; }
