@@ -17,6 +17,7 @@ import { canPour, cloneBoard, isCompleteTube, topRun } from '../game/engine';
 import { ITEMS } from '../game/items';
 
 export interface Puzzle3DView {
+  ready: Promise<void>;
   sync(board: Board, selected: number | null): void;
   resize(): void;
   lift(from: number | null, point?: {x: number; y: number}): void;
@@ -26,7 +27,7 @@ export interface Puzzle3DView {
 interface JarGeometry { x:number; y:number; width:number; height:number; slots:{x:number;y:number;width:number;height:number}[]; }
 interface Piece {root:TransformNode; width:number;height:number; item:ItemId|null; jar:number;slot:number;}
 
-/** Preview renderer only. Native jar buttons own input; engine.ts owns all rules. */
+/** Native jar buttons own input; engine.ts owns all rules and saved state. */
 export function createPuzzle3D(canvas: HTMLCanvasElement, shelf: HTMLElement): Puzzle3DView {
   let engine:Engine;
   try { engine=new Engine(canvas,true,{alpha:true,stencil:true,preserveDrawingBuffer:true}); }
@@ -53,6 +54,8 @@ export function createPuzzle3D(canvas: HTMLCanvasElement, shelf: HTMLElement): P
   let ghostSource:number|null=null,ghostPieces:Piece[]=[];
   let width=1,height=1;
   let settleAnimation:{parts:{root:TransformNode;y:number}[];start:number;resolve:()=>void}|null=null;
+  let markReady = () => {};
+  const ready = new Promise<void>(resolve => { markReady = resolve; });
 
   const mat=(name:string,hex:string,alpha=1,spec=.12)=>{
     const existing=materials.get(name);if(existing)return existing;
@@ -80,7 +83,14 @@ export function createPuzzle3D(canvas: HTMLCanvasElement, shelf: HTMLElement): P
       for(const part of a.parts)if(!part.root.isDisposed()){part.root.position.y=part.y+(1-ease)*9;part.root.scaling.set(1+.025*Math.sin(t*Math.PI),1-.025*Math.sin(t*Math.PI),1);}
       if(t>=1)clearAnimation();
     }
-    engine.beginFrame();scene.render();engine.endFrame();if(settleAnimation)frame=requestAnimationFrame(draw);
+    try {
+      engine.beginFrame();scene.render();engine.endFrame();
+      if (scene.isReady()) markReady();
+      if(settleAnimation)frame=requestAnimationFrame(draw);
+    } catch {
+      clearAnimation();
+      canvas.dispatchEvent(new CustomEvent('puzzle3d-unavailable'));
+    }
   };
   const requestDraw=()=>{if(!disposed&&!document.hidden&&!frame)frame=requestAnimationFrame(draw);};
   const attach=(mesh:Mesh,parent:TransformNode,material:StandardMaterial,x=0,y=0,z=0,group=1)=>{
@@ -189,6 +199,7 @@ export function createPuzzle3D(canvas: HTMLCanvasElement, shelf: HTMLElement): P
   document.addEventListener('visibilitychange',visibility);reduced.addEventListener('change',motion);canvas.addEventListener('webglcontextlost',lost);
   resize();
   return {
+    ready,
     sync(next,selected){
       if(disposed)return;
       const old=board;lastArrival=null;

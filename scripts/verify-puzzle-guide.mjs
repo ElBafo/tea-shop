@@ -33,7 +33,7 @@ await send('Page.enable');await send('Runtime.enable');await send('Network.enabl
 const traceScript = await send('Page.addScriptToEvaluateOnNewDocument',{source:`window.__guideTrace=[];for(const name of ['pointerdown','pointerup','pointercancel','click'])document.addEventListener(name,e=>{window.__guideTrace.push({name,id:e.pointerId,detail:e.detail,x:e.clientX,y:e.clientY,target:e.target.closest?.('[data-jar]')?.dataset.jar??e.target.id,prevented:e.defaultPrevented,time:performance.now()});},true);`});
 try{
  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
- await send('Storage.clearDataForOrigin',{origin:'http://127.0.0.1:5174',storageTypes:'all'});await open();
+ await send('Storage.clearDataForOrigin',{origin:new URL(url).origin,storageTypes:'all'});await open();
  assert.deepEqual((({from,to})=>({from,to}))(await step()),{from:0,to:2});
  const initial=await geometry();assert.ok(initial.bubbleFits&&initial.passThrough&&!initial.overflow&&!initial.shelfOverflow);assert.ok(initial.animations>0);
  assert.ok(await evaluate(`document.querySelector('.puzzle-guide-instruction').textContent.includes('jar 1 to jar 3')`),'the visual instruction has accessible text');

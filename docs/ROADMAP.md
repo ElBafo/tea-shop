@@ -2,11 +2,19 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.3.0
+## Current priority — 0.3.1
+
+### Agreed direction — normal puzzles in 3D (2026-11-08)
+
+During the Stitch UI-design exploration, the owner clarified: “puzzles should be 3d, if not yet”. Design normal puzzle screens around 3D jars and tea pieces, and adopt 3D as the intended normal puzzle-rendering direction. This supersedes earlier statements that choosing 3D for normal puzzles remains undecided; those sections describe the earlier comparison gate and delivery history.
+
+The 0.3.0 baseline uses HTML/CSS for ordinary puzzles and isolates the Babylon comparison. Version 0.3.1 integrates the 3D renderer with normal puzzle play; the accessible native jar controls and HTML/CSS recovery presentation remain. This does not claim physical-iPhone validation. The owner subsequently explicitly requested bringing 3D puzzles to both preview and main while continuing the Stitch exploration. This authorizes this renderer integration, merge and deployment; physical-iPhone startup and sustained-performance validation remain pending. Preserve puzzle rules, stationary jars, whole-group drag/tap controls, hidden-content privacy, accessible controls, unlimited Undo, rewards and separate existing saves. Exact camera, materials, performance budget and recovery/fallback behavior remain implementation choices to validate on a physical iPhone.
+
+### Previous release — 0.3.0
 
 The owner requested merging all accumulated preview work to main. Merged through [PR #29](https://github.com/ElBafo/tea-shop/pull/29) as `702fe1599da885d381bab83088f608ebe35bc777` and hosted successfully in [Pages run 42494900818](https://github.com/ElBafo/tea-shop/actions/runs/42494900818). Main and preview serve 0.3.0. All prior stacked PRs #19–28 were verified fully included and closed as integrated. Existing main and preview saves remain separate and preserved.
 
-Startup recovery now bounds scene readiness and offers Reload on timeout, context loss or startup failure. Production startup success/error/stall tests and real onboarding pass. The underlying reported physical-iPhone loading failure remains unconfirmed; do not claim it resolved by desktop checks. Start further work with that device issue, followed by the uncoached playtest in PLAYTEST.md, remaining physical-device/accessibility/material review and the existing later backlog. See [HANDOFF.md](HANDOFF.md). No new feature expansion has started.
+Startup recovery now bounds scene readiness and offers Reload on timeout, context loss or startup failure. Production startup success/error/stall tests and real onboarding pass. The underlying reported physical-iPhone loading failure remains unconfirmed; do not claim it resolved by desktop checks. Start further work with that device issue, followed by the uncoached playtest in PLAYTEST.md, remaining physical-device/accessibility/material review and the existing later backlog. See [HANDOFF.md](HANDOFF.md). The subsequent owner-authorized 0.3.1 renderer integration is recorded above; other feature expansion remains deferred.
 
 ### Last material preview — 0.3.0-preview.11
 

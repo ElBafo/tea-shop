@@ -1,7 +1,13 @@
 # Architecture
 
-**Release baseline: Decopu 0.3.0.** Consolidates the reviewed preview work. See [HANDOFF.md](HANDOFF.md) for the new-chat context and the unresolved physical-iPhone startup investigation. Merged through [PR #29](https://github.com/ElBafo/tea-shop/pull/29) as `702fe1599da885d381bab83088f608ebe35bc777` and hosted successfully in [Pages run 42494900818](https://github.com/ElBafo/tea-shop/actions/runs/42494900818). Main and preview serve 0.3.0.
+**Release baseline: Decopu 0.3.1.** Adds normal 3D puzzles to the consolidated 0.3.0 release. See [HANDOFF.md](HANDOFF.md) for continuation and the unresolved physical-iPhone startup investigation. Validation and deployment status are recorded in [RELEASES.md](RELEASES.md).
 
+
+## Normal 3D puzzles — 0.3.1
+
+`normal-puzzle-3d.ts` lazily loads `puzzle-3d.ts` during ordinary second-edition play on both main and preview. The native jar buttons, geometry and accessible descriptions remain authoritative for input. The controller retains its canvas, observed shelf and scene across DOM repaints; it synchronizes board/selection and receives movement/release callbacks from the existing drag binder. Logical moves and rewards still use `app.ts` transfer/persistence paths. On 3D moves, the view supplies the landing animation instead of a DOM flight. Leaving play disposes the scene; returning creates a new one.
+
+Native artwork stays visible until a successful ready frame. An eight-second module/first-frame timeout, initialization failure or context loss disposes the renderer and restores native artwork/drag ghosts without writing game state. Rendering is on demand; the existing scene caps DPR and pauses while hidden. The separate preview comparison remains available. No save key/schema, rule, board identity, shop UI or keeper change is introduced. These mechanics do not establish physical-iPhone startup or sustained performance.
 
 ## Furniture materials — 0.3.0-preview.11
 

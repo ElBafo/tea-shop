@@ -6,7 +6,7 @@ import {createWriteStream} from 'node:fs';
 import path from 'node:path';
 
 // Run after npm run build -- --base=/tea-shop/preview/ --outDir=work/access-build
-const buildDir='work/release030-main';
+const buildDir=process.env.STARTUP_BUILD ?? 'work/release030-main';
 const manifest=JSON.parse(await fs.readFile(buildDir+'/manifest.webmanifest','utf8'));
 assert.equal(manifest.start_url,'/tea-shop/');
 assert.equal(manifest.scope,'/tea-shop/');
@@ -32,7 +32,7 @@ let browser,ws,send,ev;
 const log=createWriteStream('work/release030-startup.chromium.log');
 try {
   await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(5196,'127.0.0.1',resolve);});
-  browser=spawn('/usr/bin/chromium',['--headless','--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--no-first-run','--no-default-browser-check',`--remote-debugging-port=${cdp}`,`--user-data-dir=${profile}`,'about:blank'],{stdio:['ignore','pipe','pipe']});
+  browser=spawn(process.env.CHROME_BIN ?? (process.platform === 'darwin' ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : '/usr/bin/chromium'),['--headless','--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--no-first-run','--no-default-browser-check',`--remote-debugging-port=${cdp}`,`--user-data-dir=${profile}`,'about:blank'],{stdio:['ignore','pipe','pipe']});
   browser.stdout.pipe(log);browser.stderr.pipe(log);
   let tab;
   for(let i=0;i<120;i++){
