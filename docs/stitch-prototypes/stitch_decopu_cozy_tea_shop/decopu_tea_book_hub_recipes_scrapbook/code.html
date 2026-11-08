@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "outline": "#837563", "on-primary-container": "#5f3f00", "tertiary": "#9c4328", "secondary": "#376847", "surface-variant": "#e7e2d8", "on-primary-fixed-variant": "#614000", "surface-tint": "#805600", "tertiary-fixed": "#ffdbd1", "surface-bright": "#fef9ef", "on-tertiary": "#ffffff", "surface": "#fef9ef", "on-secondary-fixed": "#00210e", "on-background": "#1d1c16", "on-error": "#ffffff", "error": "#ba1a1a", "on-surface-variant": "#504535", "secondary-container": "#b6edc2", "surface-container-highest": "#e7e2d8", "on-tertiary-fixed": "#3a0a00", "primary": "#805600", "on-error-container": "#93000a", "on-primary": "#ffffff", "secondary-fixed": "#b9efc5", "on-primary-fixed": "#281800", "on-secondary": "#ffffff", "inverse-surface": "#32302a", "tertiary-container": "#ff997b", "on-surface": "#1d1c16", "inverse-on-surface": "#f5f0e6", "surface-dim": "#dedad0", "on-tertiary-container": "#7c2b12", "primary-fixed-dim": "#fdba49", "inverse-primary": "#fdba49", "surface-container-high": "#ece8de", "primary-fixed": "#ffddaf", "primary-container": "#e8a838", "surface-container-lowest": "#ffffff", "surface-container": "#f2ede3", "secondary-fixed-dim": "#9dd3aa", "error-container": "#ffdad6", "on-secondary-fixed-variant": "#1e5031", "tertiary-fixed-dim": "#ffb59f", "on-tertiary-fixed-variant": "#7d2c13", "on-secondary-container": "#3b6d4b", "outline-variant": "#d5c4af", "surface-container-low": "#f8f3e9", "background": "#fef9ef" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "gutter-lg": "1.5rem", "margin-sm": "0.75rem", "space-sm": "0.5rem", "space-md": "0.75rem", "margin-lg": "2rem", "space-lg": "1rem", "gutter": "1rem", "margin": "1rem", "space-xl": "1.5rem", "gutter-sm": "0.75rem", "space-xs": "0.25rem" }, fontFamily: { "headline-md": ["Bricolage Grotesque"], "label-md": ["Be Vietnam Pro"], "headline-lg": ["Bricolage Grotesque"], "body-md": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "headline-sm": ["Bricolage Grotesque"], "headline-lg-mobile": ["Bricolage Grotesque"], "display-lg": ["Bricolage Grotesque"], "label-sm": ["Be Vietnam Pro"], "label-lg": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"] }, fontSize: { "headline-md": ["22px", { lineHeight: "28px", fontWeight: "700" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-lg": ["32px", { lineHeight: "38px", letterSpacing: "-0.01em", fontWeight: "700" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "headline-sm": ["18px", { lineHeight: "24px", fontWeight: "600" }], "headline-lg-mobile": ["26px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }], "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "800" }], "label-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "700" }], "label-lg": ["14px", { lineHeight: "18px", letterSpacing: "0.01em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }] } } } };</script><style>@layer base{body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-bold">Tea Book</span></div><div class="flex items-center gap-space-xs"><div class="flex items-center gap-1 bg-surface-container-high px-space-md py-1 rounded-full shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]"><span class="material-symbols-outlined text-primary text-[18px]">stars</span><span class="font-label-md text-label-md text-on-surface">1,420</span></div><div class="flex items-center gap-1 bg-surface-container-high px-space-md py-1 rounded-full shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]"><span class="material-symbols-outlined text-secondary text-[18px]">water_drop</span><span class="font-label-md text-label-md text-on-surface">85</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_0_#614000]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full">
+<!-- Interactive Tea Book Hub -->
+<div class="px-margin space-y-space-md pb-space-lg">
+<!-- Sub-tab Toggle Pill Control -->
+<div class="p-1 bg-surface-container-high rounded-full flex shadow-[inset_0_2px_4px_rgba(44,62,80,0.06)] relative">
+<button class="flex-1 py-2.5 px-space-xs rounded-full flex items-center justify-center gap-1.5 transition-all text-on-primary-container bg-primary-container shadow-[0_3px_0_#BD7E16] cursor-pointer" id="tab-recipes" onclick="switchBookTab('recipes')">
+<span class="material-symbols-outlined text-[18px]">psychiatry</span>
+<span class="font-label-md text-label-md truncate">Recipes &amp; Botanicals <span class="opacity-80">(18/42)</span></span>
+</button>
+<button class="flex-1 py-2.5 px-space-xs rounded-full flex items-center justify-center gap-1.5 transition-all text-on-surface-variant hover:text-on-surface cursor-pointer" id="tab-scrapbook" onclick="switchBookTab('scrapbook')">
+<span class="material-symbols-outlined text-[18px]">mark_email_unread</span>
+<span class="font-label-md text-label-md truncate">Guest Scrapbook <span class="bg-tertiary text-on-tertiary px-1.5 py-0.5 rounded-full text-[10px] ml-0.5 font-bold">3</span></span>
+</button>
+</div>
+<!-- Mailbox Dispatch Banner (Grandma Willow) -->
+<div class="cursor-pointer group relative bg-tertiary-fixed-dim/60 hover:bg-tertiary-fixed-dim transition-all rounded-lg p-space-md shadow-[0_4px_0_#9c4328] flex items-center justify-between overflow-hidden" onclick="openLetterModal()">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-11 h-11 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary shadow-[0_2px_0_#7c2b12] shrink-0">
+<span class="material-symbols-outlined text-[22px]">mail</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-tertiary-fixed-variant font-bold">Pigeon Post</span>
+<span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-tertiary-fixed truncate font-bold">Grandma Willow sent a dried blossom!</p>
+<p class="font-body-sm text-body-sm text-on-tertiary-fixed-variant truncate">"Warm cider, cedar bark &amp; hearth wisdom for autumn..."</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest/80 px-space-sm py-1 rounded-full flex items-center gap-0.5 shrink-0 shadow-sm ml-2">
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Read</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary">arrow_forward</span>
+</div>
+</div>
+<!-- VIEW 1: Recipes & Botanicals (Default Active View) -->
+<div class="space-y-space-md" id="recipes-view">
+<!-- Master Progression Card (Storybook Wooden Ledger) -->
+<div class="bg-surface-container-low rounded-lg p-space-md shadow-[0_3px_10px_rgba(0,0,0,0.03)] space-y-space-sm relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px]">auto_stories</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Herbal Grimoire Codex</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Apprentice Herbalist</h2>
+</div>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-primary font-bold">42%</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant">18 of 42 Blends</span>
+</div>
+</div>
+<!-- Chunky Tactile Progress Bar -->
+<div class="w-full bg-surface-container-highest h-3.5 rounded-full overflow-hidden p-0.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]">
+<div class="bg-primary-container h-full rounded-full transition-all duration-500 shadow-[0_1px_0_#BD7E16]" style="width: 42%;"></div>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant pt-0.5">
+<span class="font-body-sm text-body-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary">local_florist</span> Next Perk: Hearth Kettle Recipe
+          </span>
+<span class="font-label-sm text-label-sm font-semibold text-primary">3 Blends to Master</span>
+</div>
+</div>
+<!-- Search & Tactile Filter Ribbon -->
+<div class="space-y-space-xs">
+<div class="relative">
+<input class="w-full h-11 pl-11 pr-4 rounded-full bg-surface-container-high text-on-surface font-body-md placeholder:text-on-surface-variant focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_2px_8px_rgba(128,86,0,0.15)] transition-all" placeholder="Search dry leaves, infusions, or notes..." type="text"/>
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+</div>
+<!-- Filter Chips Horizontal Scroller -->
+<div class="flex gap-2 overflow-x-auto py-1.5 no-scrollbar -mx-margin px-margin">
+<button class="filter-chip h-8 px-4 rounded-full flex items-center gap-1.5 shrink-0 bg-primary text-on-primary shadow-[0_2px_0_#614000] cursor-pointer" onclick="setFilter('all', this)">
+<span class="material-symbols-outlined text-[16px]">all_inclusive</span>
+<span class="font-label-md text-label-md">All (42)</span>
+</button>
+<button class="filter-chip h-8 px-3.5 rounded-full flex items-center gap-1.5 shrink-0 bg-surface-container-high text-on-surface-variant hover:text-on-surface cursor-pointer" onclick="setFilter('herbal', this)">
+<span class="material-symbols-outlined text-[16px]">spa</span>
+<span class="font-label-md text-label-md">Herbal</span>
+</button>
+<button class="filter-chip h-8 px-3.5 rounded-full flex items-center gap-1.5 shrink-0 bg-surface-container-high text-on-surface-variant hover:text-on-surface cursor-pointer" onclick="setFilter('roasted', this)">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+<span class="font-label-md text-label-md">Roasted</span>
+</button>
+<button class="filter-chip h-8 px-3.5 rounded-full flex items-center gap-1.5 shrink-0 bg-surface-container-high text-on-surface-variant hover:text-on-surface cursor-pointer" onclick="setFilter('ceremonial', this)">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span class="font-label-md text-label-md">Ceremonial</span>
+</button>
+<button class="filter-chip h-8 px-3.5 rounded-full flex items-center gap-1.5 shrink-0 bg-surface-container-high text-on-surface-variant hover:text-on-surface cursor-pointer" onclick="setFilter('moon', this)">
+<span class="material-symbols-outlined text-[16px]">nights_stay</span>
+<span class="font-label-md text-label-md">Moon Brews</span>
+</button>
+</div>
+</div>
+<!-- Botanical Recipes Grid -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<!-- Recipe Card 1: Smoked Cedar Hojicha -->
+<div class="group cursor-pointer bg-surface-container-lowest rounded-lg p-space-sm shadow-[0_4px_0_#dedad0] hover:shadow-[0_2px_0_#dedad0] hover:translate-y-0.5 transition-all flex flex-col justify-between relative overflow-hidden" onclick="inspectTea('Smoked Cedar Hojicha', 'Roasted', 'Woodsy, Toast, Caramel', 'Rare', 4)">
+<div class="relative w-full h-32 rounded-lg overflow-hidden bg-surface-container-high mb-2">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Close up artisanal watercolor painting of roasted brown hojicha tea twigs and aromatic cedar wood shavings in an open handmade ceramic saucer with soft golden afternoon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjevRIvlCMfZhnWVcymbXWODVbtTwJlvjZOMKAYfBlxmv8f0YkYSTasDy6Gsg4QUv28XvURd8dcoNiZlG3j9S12YfykSl3L6kDJwmwpwCmO1B2I85Lg8wYwHQ7F_P5a7CXze-SXSO8JV46fK9wd7X9XwPyCMrLZPLBBTmsm0srm5ossjYHimXjyXWxUeY9cQ-K_31jWWXHUITzxPtAAgOOy8EBV7R3Dp1PCm_jvrIQ"/>
+<span class="absolute top-2 left-2 bg-surface-container-lowest/90 backdrop-blur-md px-2 py-0.5 rounded-full font-label-sm text-label-sm text-secondary font-bold shadow-sm">
+              Roasted
+            </span>
+<span class="absolute top-2 right-2 bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 rounded-full font-label-sm text-label-sm font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">check</span> Made
+            </span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant font-medium">Blend No. 14</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight font-bold group-hover:text-primary transition-colors">Smoked Cedar Hojicha</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-0.5">Woodsy, toast &amp; caramel</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low rounded-lg px-2 py-1.5 flex items-center justify-between">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[14px]">eco</span>
+<span class="font-label-md text-label-md font-bold">4 Leaves</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-bold">Tier III</span>
+</div>
+</div>
+<!-- Recipe Card 2: Midnight Genmaicha -->
+<div class="group cursor-pointer bg-surface-container-lowest rounded-lg p-space-sm shadow-[0_4px_0_#dedad0] hover:shadow-[0_2px_0_#dedad0] hover:translate-y-0.5 transition-all flex flex-col justify-between relative overflow-hidden" onclick="inspectTea('Midnight Genmaicha', 'Moon Brews', 'Toasted Rice, Nori, Umami', 'Epic', 5)">
+<div class="relative w-full h-32 rounded-lg overflow-hidden bg-surface-container-high mb-2">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Artisanal botanical illustration of deep emerald green tea leaves with puffed toasted brown rice grains and starry night petals on vintage parchment paper background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2bi6Z5lIM5cHhOU64VJwaELH3vHE7zUtVHWtDCWMGnRGr-k6FzIdPD5p-MQOCYbHIc6aPHBKSy-lVKAffEaZFudwpsKvO0o2TSQCagPJWia2hy-i9t4j9jpvueV9EPXSNPHijau6zqFt9xyJOC1B6leNj9SjkY-iWJkNJJo-8ong5kfs-e1UeZDq9gridsDLFvIkVG4QUE7z6IA_9RAt22FU_n_8VQsn8z0m-IZyT"/>
+<span class="absolute top-2 left-2 bg-inverse-surface/85 backdrop-blur-md text-inverse-on-surface px-2 py-0.5 rounded-full font-label-sm text-label-sm font-bold shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] text-primary-fixed-dim">bedtime</span> Moon Brew
+            </span>
+<span class="absolute top-2 right-2 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded-full font-label-sm text-label-sm text-tertiary font-bold">
+              ★ Rare
+            </span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant font-medium">Blend No. 24</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight font-bold group-hover:text-primary transition-colors">Midnight Genmaicha</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-0.5">Toasted rice, nori &amp; night dew</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low rounded-lg px-2 py-1.5 flex items-center justify-between">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[14px]">eco</span>
+<span class="font-label-md text-label-md font-bold">5 Leaves</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-bold">Tier IV</span>
+</div>
+</div>
+<!-- Recipe Card 3: Sakura Blossom Dew -->
+<div class="group cursor-pointer bg-surface-container-lowest rounded-lg p-space-sm shadow-[0_4px_0_#dedad0] hover:shadow-[0_2px_0_#dedad0] hover:translate-y-0.5 transition-all flex flex-col justify-between relative overflow-hidden" onclick="inspectTea('Sakura Blossom Dew', 'Herbal', 'Sweet Cherry, Vanilla, Honey', 'Common', 3)">
+<div class="relative w-full h-32 rounded-lg overflow-hidden bg-surface-container-high mb-2">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Charming hand-drawn botanical study of preserved salted sakura cherry blossoms floating in translucent golden tea with delicate dried floral sketches around it" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAgbJKzDDNelxCZJYEl5DE7SLj2LFfnjwBGspMwVPwgmYrAEeSymTb7vmddcvFIdf9Hfo4zhalaWUo-1qumBX7pnL_5h6qnmtP88W8eJbNhwGL0YkBmJ73TBSU8CWaa4u8dlY-FQA4WMQS41jVs0o5oZCwdYPnEN49UQ1rRYggsseoltVO5EBTgsgfzkOBargupBrISH23VIn4HvGAS_Pb_jg9El3Ip7O-SPJeIjwb"/>
+<span class="absolute top-2 left-2 bg-surface-container-lowest/90 backdrop-blur-md px-2 py-0.5 rounded-full font-label-sm text-label-sm text-secondary font-bold shadow-sm">
+              Herbal
+            </span>
+<span class="absolute top-2 right-2 bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 rounded-full font-label-sm text-label-sm font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">check</span> Made
+            </span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant font-medium">Blend No. 06</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight font-bold group-hover:text-primary transition-colors">Sakura Blossom Dew</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-0.5">Sweet cherry, vanilla &amp; honey</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low rounded-lg px-2 py-1.5 flex items-center justify-between">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[14px]">eco</span>
+<span class="font-label-md text-label-md font-bold">3 Leaves</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-bold">Tier II</span>
+</div>
+</div>
+<!-- Recipe Card 4: Golden Pear Oolong -->
+<div class="group cursor-pointer bg-surface-container-lowest rounded-lg p-space-sm shadow-[0_4px_0_#dedad0] hover:shadow-[0_2px_0_#dedad0] hover:translate-y-0.5 transition-all flex flex-col justify-between relative overflow-hidden" onclick="inspectTea('Golden Pear Oolong', 'Ceremonial', 'Roasted Pear, Orchid, Nutmeg', 'Legendary', 6)">
+<div class="relative w-full h-32 rounded-lg overflow-hidden bg-surface-container-high mb-2">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Cozy illustrated storybook page displaying rolled mountain oolong leaves, dried golden autumn pear slices, and star anise in warm glowing candlelight style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5xPFtlDXnKopaL0jT-TpIZKb4MX3JC4tp1tsoWcpu9OKkFQdCMXCVJJgId86fBE3IMGR7sTtlFEPgT8TNGTXHrg1nqZJsN9cRYrU3hCKJlLOLC1o4A9g4mxJgA59lF5eapAkzNcxP0YyyxqzwdnFlP9842VG0a2CjRmzwd7lHd2mIsJr0uUeSA9rswqbCcJS8eLu9ntSdZFIqYJpBFQHQH09AC5IBmJEYG9RoXcOp"/>
+<span class="absolute top-2 left-2 bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded-full font-label-sm text-label-sm font-bold shadow-sm">
+              Ceremonial
+            </span>
+<span class="absolute top-2 right-2 bg-primary-container text-on-primary-container px-1.5 py-0.5 rounded-full font-label-sm text-label-sm font-bold">
+              ★ Master
+            </span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant font-medium">Blend No. 31</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight font-bold group-hover:text-primary transition-colors">Golden Pear Oolong</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-0.5">Roasted pear, orchid &amp; honey</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low rounded-lg px-2 py-1.5 flex items-center justify-between">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[14px]">eco</span>
+<span class="font-label-md text-label-md font-bold">6 Leaves</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-bold">Tier V</span>
+</div>
+</div>
+</div>
+<!-- Quick Tea Crafting Tray Callout -->
+<div class="bg-surface-container rounded-lg p-space-md shadow-[0_2px_6px_rgba(0,0,0,0.04)] flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-[0_2px_0_#BD7E16]">
+<span class="material-symbols-outlined text-[20px]">blender</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">Experiment at the Counter</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Combine collected roots &amp; dried petals</p>
+</div>
+</div>
+<button class="h-10 px-4 rounded-full bg-primary text-on-primary shadow-[0_3px_0_#614000] hover:translate-y-0.5 active:translate-y-1 transition-all font-label-md text-label-md shrink-0 flex items-center gap-1" onclick="triggerBrewAnimation()">
+<span class="material-symbols-outlined text-[16px]">kettle</span>
+<span>Brew</span>
+</button>
+</div>
+</div>
+<!-- VIEW 2: Guest Scrapbook & Letters (Sub-tab content, toggleable) -->
+<div class="space-y-space-md hidden" id="scrapbook-view">
+<!-- Scrapbook Header Note -->
+<div class="bg-surface-container-low rounded-lg p-space-md space-y-space-xs shadow-sm">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Village Memory Journal</h2>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold">3 Guests Met</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Polaroid memories, favorite blends, and handwritten letters delivered by woodland visitors.</p>
+</div>
+<!-- Guest Polaroid Cards (Style inspired by reference image) -->
+<div class="space-y-space-md">
+<!-- Pippa Hedgehog -->
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-[0_4px_0_#dedad0] space-y-space-sm">
+<div class="flex gap-space-md">
+<div class="w-24 h-28 bg-surface-container-high rounded p-1.5 shadow-[0_2px_4px_rgba(0,0,0,0.08)] -rotate-2 shrink-0 overflow-hidden">
+<img class="w-full h-20 object-cover rounded-sm mb-1" data-alt="Charming toy craft miniature diorama photograph of Pippa the cozy hedgehog sitting in a tiny tea cafe drinking from a floral porcelain cup with warm autumn lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGMON75bbSjkyGrz3aDUUfEzvwfzeDVTOCDg_-RagliLKaJoo1OOquVwBL0xwI6KDFhjLd-GdB_3Ib5FHONJhNAJTnQ3Qq6wLrbB736u-Lad1bSULhPKEtiCOegatm2RJxDcedbWpQcqFy5aEWxOaEkBpOaLIwN5efkccImH7rosbAQLpiXYhl8h1wm3s2Z9eDUyJwvXU-fXqi4vWhCbn4m8_tE60MkGKt6Lgz-Vs4"/>
+<p class="font-label-sm text-label-sm text-center text-on-surface font-bold truncate">Pippa</p>
+</div>
+<div class="min-w-0 flex-1 space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Pippa Hedgehog</span>
+<span class="text-tertiary font-label-sm text-label-sm font-bold flex items-center">
+<span class="material-symbols-outlined text-[14px]">favorite</span> Bestie
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">"Sweet tea lover! Met at Autumn Festival over honey scones."</p>
+<div class="pt-1 flex flex-wrap gap-1.5">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-bold">Prefers: Sakura Dew</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant">Shared 4 Teas</span>
+</div>
+</div>
+</div>
+<!-- Scrapbook tape memo -->
+<div class="bg-surface-container p-2.5 rounded text-on-surface font-body-sm text-body-sm flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0">history_edu</span>
+<span>"Friendship is the warmest tea on an autumn morning!" - Written Oct 4th</span>
+</div>
+</div>
+<!-- Barnaby Bear & Mia Fox -->
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-[0_4px_0_#dedad0] space-y-space-sm">
+<div class="flex gap-space-md">
+<div class="w-24 h-28 bg-surface-container-high rounded p-1.5 shadow-[0_2px_4px_rgba(0,0,0,0.08)] rotate-1 shrink-0 overflow-hidden">
+<img class="w-full h-20 object-cover rounded-sm mb-1" data-alt="Miniature felt and carved wood figures of Barnaby bear and a cozy fox chatting over steamy tea cups on a tiny wooden table with dried maple leaves scattered" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpBm-pLMCdgjWRpgHJDavnWFboEdsGAsbEnD0cjucllUw-8PMzpt5H8malohgfrwtFgj7M6moGgKZlh5dCc45EZK0hmlCojVilqYVJi8vb9tikKVUwZdZwS5BP_CZxukpzvaAdvk22wMp73gr4zq8tlpZmG6sa-36BbFWVV-eWrqvfl4qwxB8_D7ER2RVlA9VvYuvUPv_DeeVWxHOFUqIfcipoM7z0RHR9N3tfQtvO"/>
+<p class="font-label-sm text-label-sm text-center text-on-surface font-bold truncate">Barnaby &amp; Mia</p>
+</div>
+<div class="min-w-0 flex-1 space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Barnaby &amp; Mia</span>
+<span class="text-secondary font-label-sm text-label-sm font-bold flex items-center">
+<span class="material-symbols-outlined text-[14px]">local_cafe</span> Regulars
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">"Village storytellers who always request extra roasted hojicha."</p>
+<div class="pt-1 flex flex-wrap gap-1.5">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold">Favorite: Smoked Cedar</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant">2 Letters Saved</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Detail Modal: Tea Inspect Drawer -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm hidden flex items-end justify-center transition-all p-2" id="recipe-modal">
+<div class="bg-surface-bright w-full max-w-md rounded-t-xl rounded-b-lg p-space-lg space-y-space-md shadow-[0_-4px_24px_rgba(0,0,0,0.15)] animate-in slide-in-from-bottom-6 duration-300">
+<div class="w-12 h-1.5 bg-outline-variant rounded-full mx-auto mb-1"></div>
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold" id="modal-category">Roasted Blend</span>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold" id="modal-title">Smoked Cedar Hojicha</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5" id="modal-notes">Woodsy notes, toast &amp; amber caramel</p>
+</div>
+<button class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface" onclick="closeModal('recipe-modal')">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Botanical Ingredients Pill List -->
+<div class="bg-surface-container-low p-space-md rounded-lg space-y-2">
+<span class="font-label-sm text-label-sm uppercase text-on-surface font-bold">Botanical Requirements</span>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container-lowest p-2 rounded-md flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">grass</span>
+<span class="font-body-sm text-body-sm font-semibold">2x Roasted Stems</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded-md flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">forest</span>
+<span class="font-body-sm text-body-sm font-semibold">1x Cedar Bark</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">drive_file_rename</span>
+<span class="font-body-sm text-body-sm font-semibold">1x Wild Honey Drop</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded-md flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]">water_drop</span>
+<span class="font-body-sm text-body-sm font-semibold">90°C Steeped</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-sm pt-2">
+<button class="flex-1 h-12 rounded-full bg-primary-container text-on-primary-container font-headline-sm text-headline-sm flex items-center justify-center gap-2 shadow-[0_4px_0_#BD7E16] active:translate-y-1 transition-all cursor-pointer" onclick="steepInteractiveTea()">
+<span class="material-symbols-outlined text-[22px]">water_full</span>
+<span>Steep &amp; Serve</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Letter from Grandma Willow Modal -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm hidden flex items-center justify-center p-4" id="letter-modal">
+<div class="bg-surface-bright w-full max-w-sm rounded-xl p-space-lg space-y-space-md shadow-[0_8px_30px_rgba(0,0,0,0.2)] relative">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[24px]">mark_as_unread</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Pigeon Post Delivery</h3>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant" onclick="closeModal('letter-modal')">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-lg space-y-2 text-on-surface font-body-md text-body-md leading-relaxed">
+<p class="font-label-sm text-label-sm text-tertiary font-bold uppercase">From the Cottage in the Woods</p>
+<p>"My dearest apprentice,</p>
+<p>The first autumn frost has touched the cedar needles. Be sure to steep them gently with roasted barks—too high a flame turns the amber tea bitter.</p>
+<p>Enclosed is a pressed valerian blossom for your Tea Book."</p>
+<p class="text-right font-headline-sm text-headline-sm pt-2 text-primary font-bold">— Grandma Willow</p>
+</div>
+<div class="bg-secondary-fixed/50 p-space-sm rounded-lg flex items-center gap-2 text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined text-secondary text-[20px]">card_giftcard</span>
+<span class="font-body-sm text-body-sm font-semibold">Attached Gift: 1x Dried Valerian Flower</span>
+</div>
+<button class="w-full h-11 rounded-full bg-primary text-on-primary font-label-lg text-label-lg shadow-[0_3px_0_#614000] cursor-pointer flex items-center justify-center gap-1.5" id="claim-btn" onclick="claimLetterGift()">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+<span>Collect &amp; Press into Codex</span>
+</button>
+</div>
+</div>
+<!-- Toast Notification -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-4 py-2 rounded-full font-label-md text-label-md shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 flex items-center gap-2" id="toast">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[18px]">arrow_back_ios_new</span>
+<span id="toast-msg">Tea steeped happily!</span>
+</div>
+<script>
+    // Tab switching between Recipes and Scrapbook
+    function switchBookTab(tab) {
+      const recipesView = document.getElementById('recipes-view');
+      const scrapbookView = document.getElementById('scrapbook-view');
+      const tabRecipes = document.getElementById('tab-recipes');
+      const tabScrapbook = document.getElementById('tab-scrapbook');
+
+      if (tab === 'recipes') {
+        recipesView.classList.remove('hidden');
+        scrapbookView.classList.add('hidden');
+        
+        tabRecipes.className = "flex-1 py-2.5 px-space-xs rounded-full flex items-center justify-center gap-1.5 transition-all text-on-primary-container bg-primary-container shadow-[0_3px_0_#BD7E16] cursor-pointer";
+        tabScrapbook.className = "flex-1 py-2.5 px-space-xs rounded-full flex items-center justify-center gap-1.5 transition-all text-on-surface-variant hover:text-on-surface cursor-pointer";
+      } else {
+        recipesView.classList.add('hidden');
+        scrapbookView.classList.remove('hidden');
+
+        tabScrapbook.className = "flex-1 py-2.5 px-space-xs rounded-full flex items-center justify-center gap-1.5 transition-all text-on-primary-container bg-primary-container shadow-[0_3px_0_#BD7E16] cursor-pointer";
+        tabRecipes.className = "flex-1 py-2.5 px-space-xs rounded-full flex items-center justify-center gap-1.5 transition-all text-on-surface-variant hover:text-on-surface cursor-pointer";
+      }
+    }
+
+    // Filter Chips Toggle
+    function setFilter(type, btn) {
+      document.querySelectorAll('.filter-chip').forEach(el => {
+        el.className = "filter-chip h-8 px-3.5 rounded-full flex items-center gap-1.5 shrink-0 bg-surface-container-high text-on-surface-variant hover:text-on-surface cursor-pointer";
+      });
+      btn.className = "filter-chip h-8 px-4 rounded-full flex items-center gap-1.5 shrink-0 bg-primary text-on-primary shadow-[0_2px_0_#614000] cursor-pointer";
+      showToast('Filtered by ' + type);
+    }
+
+    // Inspect tea recipe
+    function inspectTea(title, cat, notes, rarity, leaves) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-category').innerText = cat;
+      document.getElementById('modal-notes').innerText = notes;
+      document.getElementById('recipe-modal').classList.remove('hidden');
+    }
+
+    function openLetterModal() {
+      document.getElementById('letter-modal').classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function steepInteractiveTea() {
+      closeModal('recipe-modal');
+      showToast('Steeped with care! Served to room counter.');
+    }
+
+    function claimLetterGift() {
+      const btn = document.getElementById('claim-btn');
+      btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span> Added to Botanical Herbarium!';
+      btn.classList.remove('bg-primary');
+      btn.classList.add('bg-secondary');
+      setTimeout(() => {
+        closeModal('letter-modal');
+        showToast('+1 Valerian Flower added to Herbarium');
+      }, 700);
+    }
+
+    function triggerBrewAnimation() {
+      showToast('Diorama Tea Kettle bubbling gently...');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.innerText = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 2200);
+    }
+  </script>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(44,62,80,0.05)]" data-active-classes="bg-primary-container text-on-primary-container font-bold shadow-[0_3px_0_#BD7E16]"><div class="h-20 px-margin flex items-center justify-around"><a class="min-w-[44px] min-h-[44px] px-space-md py-space-xs rounded-full flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="tea-room-diorama" href="#"><span class="material-symbols-outlined text-[22px]">cottage</span><span class="font-label-sm text-label-sm">Room</span></a><a class="min-w-[44px] min-h-[44px] px-space-md py-space-xs rounded-full flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="tea-sorter" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-sm text-label-sm">Sort</span></a><a aria-current="page" class="min-w-[44px] min-h-[44px] px-space-md py-space-xs rounded-full flex flex-col items-center justify-center gap-0.5 transition-all bg-primary-container text-on-primary-container font-bold shadow-[0_3px_0_#BD7E16]" data-path="tea-book" href="#"><span class="material-symbols-outlined text-[22px]">menu_book</span><span class="font-label-sm text-label-sm">Tea Book</span></a><a class="min-w-[44px] min-h-[44px] px-space-md py-space-xs rounded-full flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="tea-pantry" href="#"><span class="material-symbols-outlined text-[22px]">inventory_2</span><span class="font-label-sm text-label-sm">Pantry</span></a></div></nav></body></html>

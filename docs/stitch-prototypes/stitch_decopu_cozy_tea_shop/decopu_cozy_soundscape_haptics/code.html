@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#fef9ef;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-surface-variant": "#504535", "on-primary-container": "#5f3f00", "error": "#ba1a1a", "surface-bright": "#fef9ef", "surface-tint": "#805600", "surface-container-lowest": "#ffffff", "on-tertiary": "#ffffff", "outline-variant": "#d5c4af", "primary-fixed": "#ffddaf", "tertiary-container": "#ff997b", "on-error-container": "#93000a", "on-surface": "#1d1c16", "on-primary-fixed-variant": "#614000", "surface-container": "#f2ede3", "on-tertiary-container": "#7c2b12", "on-secondary": "#ffffff", "secondary-fixed-dim": "#9dd3aa", "primary-container": "#e8a838", "on-secondary-fixed-variant": "#1e5031", "surface-container-highest": "#e7e2d8", "surface-container-low": "#f8f3e9", "secondary-fixed": "#b9efc5", "on-primary": "#ffffff", "on-tertiary-fixed": "#3a0a00", "inverse-surface": "#32302a", "on-secondary-container": "#3b6d4b", "on-secondary-fixed": "#00210e", "secondary": "#376847", "surface-dim": "#dedad0", "tertiary-fixed-dim": "#ffb59f", "on-tertiary-fixed-variant": "#7d2c13", "error-container": "#ffdad6", "inverse-primary": "#fdba49", "on-error": "#ffffff", "secondary-container": "#b6edc2", "surface-container-high": "#ece8de", "background": "#fef9ef", "primary-fixed-dim": "#fdba49", "tertiary-fixed": "#ffdbd1", "outline": "#837563", "surface": "#fef9ef", "on-primary-fixed": "#281800", "tertiary": "#9c4328", "primary": "#805600", "inverse-on-surface": "#f5f0e6", "surface-variant": "#e7e2d8", "on-background": "#1d1c16" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "margin-lg": "2rem", "space-md": "0.75rem", "gutter-sm": "0.75rem", "space-xl": "1.5rem", "margin-sm": "0.75rem", "space-lg": "1rem", "margin": "1rem", "gutter": "1rem", "gutter-lg": "1.5rem", "space-xs": "0.25rem", "space-sm": "0.5rem" }, "fontFamily": { "body-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "headline-md": ["Bricolage Grotesque"], "headline-sm": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "label-lg": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "headline-lg-mobile": ["Bricolage Grotesque"], "body-lg": ["Be Vietnam Pro"], "display-lg": ["Bricolage Grotesque"] }, "fontSize": { "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "700" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }] } } } }</script></head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen selection:bg-primary-fixed"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/90 backdrop-blur-xl shadow-[0_4px_16px_rgba(44,62,80,0.05)]"><div class="h-16 px-space-md flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><button class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-on-surface shadow-[0_2px_0_#d5c4af] active:translate-y-0.5 transition-all" onclick="history.back()"><span class="material-symbols-outlined text-[20px]">arrow_back</span></button><img alt="Decopu Game Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkhKOM2ao3IEwNOeP_cK1d10C9jVkvJ5bDGUNpCLPAwBnLpwNDSAI9eNZ22SUmR52VxGiNaDaqC1x6qFpO8SfbE-Uz0Qf9dVWeSsd71oDAPuzQIlXnzcOATq1NSULU75Qyhnjhg_aAivI0W2fE6RjbIwXLrf19T_xDda8UgAsh2JlQRER7vRMy_Q7f3dBKvx-ISoUdE6dwpw8vmCtMSR9fTPywHgUQAR4yykqMf4pj"/><div class="flex flex-col min-w-0"><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Decopu</span><h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Order Detail</h1></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-safe bg-surface min-h-screen"><div class="flex flex-col w-full px-margin space-y-space-lg pb-space-xl">
+<!-- Wooden Hero Card with Image -->
+<div class="relative w-full rounded-lg bg-surface-container overflow-hidden shadow-[0_4px_16px_rgba(44,62,80,0.06)] flex flex-col">
+<div class="relative w-full h-48 sm:h-56 overflow-hidden bg-surface-variant">
+<img alt="Decopu Handcrafted Wood Soundscape Console" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBROlOk1BGlXmWCKMvJ8gtdQqgUGxFSDpyWQwMfcw_J0kHkn2G5F1_acsZ8qbBs3z4pC3uum2jI4h08MN3kBrQStHlewUQKX7HB5NQQ1XKZeGMhLsZuXztL2zjw9LfjAae23kzq-BlcXCjXeQvYFs8OwwGw_1C62lsNRdkFbRKu20EoBcNwDypI89TZrHSmRf-iJINyBo54hHDMwn_55uXIQjIriE3TZ0e8uHcKWOAi"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-black/20"></div>
+<!-- Top Floating Badge -->
+<div class="absolute top-space-sm left-space-sm flex items-center gap-1.5 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1 rounded-full shadow-[0_2px_8px_rgba(44,62,80,0.08)]">
+<span class="material-symbols-outlined text-primary text-[14px]" style="font-variation-settings: 'FILL' 1;">spa</span>
+<span class="font-label-sm text-label-sm text-on-surface">432Hz Binaural Tea Acoustics</span>
+</div>
+<!-- Live Vacuum Tube Pulse Indicator -->
+<div class="absolute bottom-space-sm right-space-sm flex items-center gap-1.5 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-[0_2px_6px_rgba(44,62,80,0.08)]">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span class="w-2 h-2 rounded-full bg-primary -ml-2.5"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Tubes Lit</span>
+</div>
+</div>
+<!-- Hero Title & Subtext -->
+<div class="p-space-lg pt-space-md flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-primary font-bold uppercase tracking-wider">Acoustic Hearth</span>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">graphic_eq</span>
+<span>5 Channels Active</span>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-0.5">Tactile Soundboard &amp; Comfort Settings</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Fine-tune handcrafted nature ambiances, resonant pottery acoustics, and haptic motor feedback for tea-craft rituals.</p>
+</div>
+</div>
+<!-- Master Output Console & Knobs -->
+<div class="w-full bg-surface-container-lowest rounded-lg p-space-lg shadow-[0_4px_16px_rgba(44,62,80,0.04)] space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed shadow-[0_2px_0_#d5c4af]">
+<span class="material-symbols-outlined text-[20px]">volume_up</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Master Ambience</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Analog cedar master potentiometer</p>
+</div>
+</div>
+<span class="font-headline-sm text-headline-sm text-primary bg-primary-fixed/40 px-3 py-1 rounded-full" id="master-val-badge">80%</span>
+</div>
+<!-- Custom Tactile Track Slider -->
+<div class="relative flex items-center py-1">
+<input class="w-full h-3 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-primary focus:outline-none" id="master-slider" max="100" min="0" type="range" value="80"/>
+</div>
+<!-- 3 Dial Visualizers (Ceramic Toy Knobs) -->
+<div class="grid grid-cols-3 gap-space-sm pt-space-xs">
+<!-- Knob 1 -->
+<div class="bg-surface-container rounded-DEFAULT p-space-sm flex flex-col items-center justify-center text-center shadow-[0_2px_0_#d5c4af]">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest shadow-[0_3px_0_#d5c4af,inset_0_2px_4px_rgba(255,255,255,0.8)] flex items-center justify-center relative">
+<div class="w-1.5 h-3 bg-primary rounded-full absolute top-1"></div>
+<span class="w-4 h-4 rounded-full bg-surface-container-high"></span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface mt-1.5 font-bold">WARMTH</span>
+<span class="font-body-sm text-[10px] text-primary">Vintage Tube</span>
+</div>
+<!-- Knob 2 -->
+<div class="bg-surface-container rounded-DEFAULT p-space-sm flex flex-col items-center justify-center text-center shadow-[0_2px_0_#d5c4af]">
+<div class="w-10 h-10 rounded-full bg-secondary-container shadow-[0_3px_0_#9dd3aa,inset_0_2px_4px_rgba(255,255,255,0.8)] flex items-center justify-center relative rotate-45">
+<div class="w-1.5 h-3 bg-secondary rounded-full absolute top-1"></div>
+<span class="w-4 h-4 rounded-full bg-secondary-container"></span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface mt-1.5 font-bold">RESONANCE</span>
+<span class="font-body-sm text-[10px] text-secondary">Glazed Clay</span>
+</div>
+<!-- Knob 3 -->
+<div class="bg-surface-container rounded-DEFAULT p-space-sm flex flex-col items-center justify-center text-center shadow-[0_2px_0_#d5c4af]">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed shadow-[0_3px_0_#ffb59f,inset_0_2px_4px_rgba(255,255,255,0.8)] flex items-center justify-center relative -rotate-45">
+<div class="w-1.5 h-3 bg-tertiary rounded-full absolute top-1"></div>
+<span class="w-4 h-4 rounded-full bg-tertiary-fixed"></span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface mt-1.5 font-bold">CLARITY</span>
+<span class="font-body-sm text-[10px] text-tertiary">Morning Dew</span>
+</div>
+</div>
+</div>
+<!-- Soundscape Layer Mixer -->
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">tune</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Layer Mixer</h3>
+</div>
+<button class="font-label-sm text-label-sm text-primary hover:underline" id="toggle-all-btn">Mute All</button>
+</div>
+<div class="flex flex-col space-y-space-sm">
+<!-- Sound Layer 1 -->
+<div class="sound-card bg-surface-container-lowest rounded-lg p-space-md shadow-[0_2px_8px_rgba(44,62,80,0.04)] flex flex-col gap-space-sm transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shadow-[0_2px_0_#9dd3aa] flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">rainy</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Gentle Eaves Rain</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Soft raindrops on cedar shingles</span>
+</div>
+</div>
+<button class="channel-toggle w-11 h-6 rounded-full bg-secondary-container p-0.5 flex items-center justify-end shadow-inner transition-colors" data-layer="rain" onclick="toggleChannel(this)">
+<div class="w-5 h-5 rounded-full bg-secondary shadow-[0_2px_0_#1e5031] transition-transform"></div>
+</button>
+</div>
+<div class="flex items-center gap-space-md pl-12 pr-1">
+<input class="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-secondary" max="100" min="0" oninput="updateChannelVal(this, 'rain-badge')" type="range" value="90"/>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold w-8 text-right" id="rain-badge">90%</span>
+</div>
+</div>
+<!-- Sound Layer 2 -->
+<div class="sound-card bg-surface-container-lowest rounded-lg p-space-md shadow-[0_2px_8px_rgba(44,62,80,0.04)] flex flex-col gap-space-sm transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed shadow-[0_2px_0_#d5c4af] flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">water_drop</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Bamboo Shishi-Odoshi</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Resonant hollow wood clack &amp; trickle</span>
+</div>
+</div>
+<button class="channel-toggle w-11 h-6 rounded-full bg-primary-fixed p-0.5 flex items-center justify-end shadow-inner transition-colors" data-layer="bamboo" onclick="toggleChannel(this)">
+<div class="w-5 h-5 rounded-full bg-primary shadow-[0_2px_0_#5f3f00] transition-transform"></div>
+</button>
+</div>
+<div class="flex items-center gap-space-md pl-12 pr-1">
+<input class="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-primary" max="100" min="0" oninput="updateChannelVal(this, 'bamboo-badge')" type="range" value="75"/>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold w-8 text-right" id="bamboo-badge">75%</span>
+</div>
+</div>
+<!-- Sound Layer 3 -->
+<div class="sound-card bg-surface-container-lowest rounded-lg p-space-md shadow-[0_2px_8px_rgba(44,62,80,0.04)] flex flex-col gap-space-sm transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shadow-[0_2px_0_#ffb59f] flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">local_cafe</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Steaming Kettle &amp; Pour</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Bubbling hot water &amp; ceramic pour</span>
+</div>
+</div>
+<button class="channel-toggle w-11 h-6 rounded-full bg-tertiary-fixed p-0.5 flex items-center justify-end shadow-inner transition-colors" data-layer="kettle" onclick="toggleChannel(this)">
+<div class="w-5 h-5 rounded-full bg-tertiary shadow-[0_2px_0_#7c2b12] transition-transform"></div>
+</button>
+</div>
+<div class="flex items-center gap-space-md pl-12 pr-1">
+<input class="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-tertiary" max="100" min="0" oninput="updateChannelVal(this, 'kettle-badge')" type="range" value="60"/>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold w-8 text-right" id="kettle-badge">60%</span>
+</div>
+</div>
+<!-- Sound Layer 4 -->
+<div class="sound-card bg-surface-container-lowest rounded-lg p-space-md shadow-[0_2px_8px_rgba(44,62,80,0.04)] flex flex-col gap-space-sm transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant shadow-[0_2px_0_#d5c4af] flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">nature</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Wind Chimes &amp; Momiji</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Gentle bamboo reeds in breeze</span>
+</div>
+</div>
+<button class="channel-toggle w-11 h-6 rounded-full bg-primary-fixed p-0.5 flex items-center justify-end shadow-inner transition-colors" data-layer="wind" onclick="toggleChannel(this)">
+<div class="w-5 h-5 rounded-full bg-primary shadow-[0_2px_0_#5f3f00] transition-transform"></div>
+</button>
+</div>
+<div class="flex items-center gap-space-md pl-12 pr-1">
+<input class="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-primary" max="100" min="0" oninput="updateChannelVal(this, 'wind-badge')" type="range" value="40"/>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold w-8 text-right" id="wind-badge">40%</span>
+</div>
+</div>
+<!-- Sound Layer 5 -->
+<div class="sound-card bg-surface-container-lowest rounded-lg p-space-md shadow-[0_2px_8px_rgba(44,62,80,0.04)] flex flex-col gap-space-sm transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shadow-[0_2px_0_#9dd3aa] flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">music_note</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Lo-Fi Acoustic Koto</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Calming wooden fingerpicked strings</span>
+</div>
+</div>
+<button class="channel-toggle w-11 h-6 rounded-full bg-secondary-container p-0.5 flex items-center justify-end shadow-inner transition-colors" data-layer="koto" onclick="toggleChannel(this)">
+<div class="w-5 h-5 rounded-full bg-secondary shadow-[0_2px_0_#1e5031] transition-transform"></div>
+</button>
+</div>
+<div class="flex items-center gap-space-md pl-12 pr-1">
+<input class="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-secondary" max="100" min="0" oninput="updateChannelVal(this, 'koto-badge')" type="range" value="50"/>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold w-8 text-right" id="koto-badge">50%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tactile Haptics Engine Panel -->
+<div class="w-full bg-surface-container rounded-lg p-space-lg shadow-[0_4px_16px_rgba(44,62,80,0.05)] space-y-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-[0_2px_0_#614000]">
+<span class="material-symbols-outlined text-[18px]">vibration</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Tactile Haptics &amp; Vibration</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Toy-like physical weight with micro-pulse motors</p>
+</div>
+</div>
+<!-- Porcelain Tap Segmented Switch -->
+<div class="bg-surface-container-lowest p-space-sm rounded-DEFAULT flex flex-col gap-space-xs shadow-[0_2px_0_#d5c4af]">
+<div class="flex justify-between items-center px-1">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Porcelain Tap Vibration</span>
+<span class="font-label-sm text-label-sm text-primary">Placing jars &amp; knobs</span>
+</div>
+<div class="grid grid-cols-3 gap-1.5 p-1 bg-surface-container rounded-full">
+<button class="haptic-chip py-1.5 rounded-full font-label-sm text-label-sm bg-primary-container text-on-primary-container shadow-[0_2px_0_#614000] font-bold text-center" onclick="setHapticTap(this, 'high')">Crisp High</button>
+<button class="haptic-chip py-1.5 rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface text-center" onclick="setHapticTap(this, 'soft')">Soft Muted</button>
+<button class="haptic-chip py-1.5 rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface text-center" onclick="setHapticTap(this, 'off')">Off</button>
+</div>
+</div>
+<!-- Continuous Haptic Switches -->
+<div class="space-y-space-sm">
+<!-- Herb Mortar Rumbler -->
+<div class="bg-surface-container-lowest p-space-md rounded-DEFAULT flex items-center justify-between shadow-[0_2px_0_#d5c4af]">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">hardware</span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Pestle Grinding Rumbler</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Continuous rough wood friction haptic</span>
+</div>
+</div>
+<button class="w-11 h-6 rounded-full bg-secondary-container p-0.5 flex items-center justify-end shadow-inner transition-colors" onclick="toggleSwitch(this)">
+<div class="w-5 h-5 rounded-full bg-secondary shadow-[0_2px_0_#1e5031]"></div>
+</button>
+</div>
+<!-- Pour & Steep Sensation -->
+<div class="bg-surface-container-lowest p-space-md rounded-DEFAULT flex items-center justify-between shadow-[0_2px_0_#d5c4af]">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">waves</span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Pour &amp; Steep Fluid Haptics</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Subtle wave pulses during tea infusion</span>
+</div>
+</div>
+<button class="w-11 h-6 rounded-full bg-primary-container p-0.5 flex items-center justify-end shadow-inner transition-colors" onclick="toggleSwitch(this)">
+<div class="w-5 h-5 rounded-full bg-primary shadow-[0_2px_0_#614000]"></div>
+</button>
+</div>
+</div>
+</div>
+<!-- Bedtime Drift Sleep Timer -->
+<div class="w-full bg-surface-container-lowest rounded-lg p-space-lg shadow-[0_4px_16px_rgba(44,62,80,0.04)] space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface shadow-[0_2px_0_#d5c4af]">
+<span class="material-symbols-outlined text-[18px]">bedtime</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Cozy Bedtime Drift</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Soft ambient fade with natural room taper</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[22px]">auto_mode</span>
+</div>
+<!-- Sleep Duration Pill Badges -->
+<div class="grid grid-cols-4 gap-space-xs pt-1">
+<button class="timer-pill py-2.5 rounded-full font-label-md text-label-md text-center bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-all shadow-[0_2px_0_#d5c4af] active:translate-y-0.5" onclick="selectTimer(this)">
+        15m
+      </button>
+<button class="timer-pill py-2.5 rounded-full font-label-md text-label-md text-center bg-primary-container text-on-primary-container font-bold shadow-[0_3px_0_#614000] active:translate-y-0.5" onclick="selectTimer(this)">
+        30m
+      </button>
+<button class="timer-pill py-2.5 rounded-full font-label-md text-label-md text-center bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-all shadow-[0_2px_0_#d5c4af] active:translate-y-0.5" onclick="selectTimer(this)">
+        45m
+      </button>
+<button class="timer-pill py-2.5 rounded-full font-label-md text-label-md text-center bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-all shadow-[0_2px_0_#d5c4af] flex items-center justify-center gap-1 active:translate-y-0.5" onclick="selectTimer(this)">
+<span class="material-symbols-outlined text-[14px]">nightlight</span> All Night
+      </button>
+</div>
+</div>
+<!-- Primary CTAs (Pill-shaped Tactile Buttons) -->
+<div class="flex flex-col space-y-space-sm pt-space-xs">
+<!-- Honey Amber Primary Button -->
+<button class="w-full py-3.5 px-space-lg rounded-full bg-primary-container text-on-primary-container font-label-lg text-label-lg font-bold flex items-center justify-center gap-space-sm shadow-[0_4px_0_#614000,0_8px_16px_rgba(44,62,80,0.08)] active:translate-y-1 active:shadow-[0_1px_0_#614000] transition-all" id="save-preset-btn">
+<span class="material-symbols-outlined text-[20px]">bookmark_heart</span>
+<span>Save Preset as "Midnight Tea Lounge"</span>
+</button>
+<!-- Matcha Secondary Button -->
+<button class="w-full py-3 px-space-lg rounded-full bg-surface-container text-on-surface-variant font-label-lg text-label-lg font-semibold flex items-center justify-center gap-space-sm shadow-[0_3px_0_#d5c4af] active:translate-y-0.5 active:shadow-[0_1px_0_#d5c4af] transition-all" id="reset-default-btn">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+<span>Reset to Village Default</span>
+</button>
+</div>
+<!-- Tactile Soundboard Quote / Footer Note -->
+<div class="text-center py-space-sm">
+<p class="font-body-sm text-[11px] text-outline italic">Crafted with binaural field recordings from Kyoto cedar shrines and handcrafted Kiyomizu-yaki teaware.</p>
+</div>
+</div>
+<script>
+  // Master Slider Reactivity
+  const masterSlider = document.getElementById('master-slider');
+  const masterBadge = document.getElementById('master-val-badge');
+  if (masterSlider && masterBadge) {
+    masterSlider.addEventListener('input', (e) => {
+      masterBadge.textContent = e.target.value + '%';
+    });
+  }
+
+  // Update channel badge text
+  function updateChannelVal(slider, badgeId) {
+    const badge = document.getElementById(badgeId);
+    if (badge) {
+      badge.textContent = slider.value + '%';
+    }
+  }
+
+  // Toggle individual channels
+  function toggleChannel(button) {
+    const knob = button.querySelector('div');
+    const isMuted = button.classList.contains('bg-surface-container-highest');
+    
+    if (isMuted) {
+      // Re-enable
+      button.classList.remove('bg-surface-container-highest');
+      button.classList.add('bg-primary-container', 'justify-end');
+      button.classList.remove('justify-start');
+      if (knob) {
+        knob.classList.remove('bg-outline');
+        knob.classList.add('bg-primary');
+      }
+    } else {
+      // Mute
+      button.classList.add('bg-surface-container-highest', 'justify-start');
+      button.classList.remove('bg-primary-container', 'bg-secondary-container', 'bg-tertiary-fixed', 'justify-end');
+      if (knob) {
+        knob.classList.remove('bg-primary', 'bg-secondary', 'bg-tertiary');
+        knob.classList.add('bg-outline');
+      }
+    }
+  }
+
+  // Generic Switch Toggle for Haptics
+  function toggleSwitch(btn) {
+    const knob = btn.querySelector('div');
+    const isOn = btn.classList.contains('justify-end');
+    if (isOn) {
+      btn.classList.remove('justify-end', 'bg-primary-container', 'bg-secondary-container');
+      btn.classList.add('justify-start', 'bg-surface-container-highest');
+      knob.classList.remove('bg-primary', 'bg-secondary');
+      knob.classList.add('bg-outline');
+    } else {
+      btn.classList.remove('justify-start', 'bg-surface-container-highest');
+      btn.classList.add('justify-end', 'bg-primary-container');
+      knob.classList.remove('bg-outline');
+      knob.classList.add('bg-primary');
+    }
+  }
+
+  // Haptic Tap Chip Selection
+  function setHapticTap(clickedBtn, mode) {
+    const parent = clickedBtn.parentElement;
+    parent.querySelectorAll('.haptic-chip').forEach(btn => {
+      btn.classList.remove('bg-primary-container', 'text-on-primary-container', 'shadow-[0_2px_0_#614000]', 'font-bold');
+      btn.classList.add('text-on-surface-variant');
+    });
+    clickedBtn.classList.remove('text-on-surface-variant');
+    clickedBtn.classList.add('bg-primary-container', 'text-on-primary-container', 'shadow-[0_2px_0_#614000]', 'font-bold');
+  }
+
+  // Sleep Timer Selection
+  function selectTimer(btn) {
+    document.querySelectorAll('.timer-pill').forEach(b => {
+      b.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold', 'shadow-[0_3px_0_#614000]');
+      b.classList.add('bg-surface-container', 'text-on-surface-variant', 'shadow-[0_2px_0_#d5c4af]');
+    });
+    btn.classList.remove('bg-surface-container', 'text-on-surface-variant', 'shadow-[0_2px_0_#d5c4af]');
+    btn.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold', 'shadow-[0_3px_0_#614000]');
+  }
+
+  // Save Preset Micro-interaction
+  const saveBtn = document.getElementById('save-preset-btn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const originalHTML = saveBtn.innerHTML;
+      saveBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">done</span> Saved to Shelf!';
+      saveBtn.classList.replace('bg-primary-container', 'bg-secondary-container');
+      saveBtn.classList.replace('text-on-primary-container', 'text-on-secondary-container');
+      setTimeout(() => {
+        saveBtn.innerHTML = originalHTML;
+        saveBtn.classList.replace('bg-secondary-container', 'bg-primary-container');
+        saveBtn.classList.replace('text-on-secondary-container', 'text-on-primary-container');
+      }, 2000);
+    });
+  }
+
+  // Mute All Button
+  const toggleAllBtn = document.getElementById('toggle-all-btn');
+  if (toggleAllBtn) {
+    let muted = false;
+    toggleAllBtn.addEventListener('click', () => {
+      muted = !muted;
+      toggleAllBtn.textContent = muted ? 'Unmute All' : 'Mute All';
+      document.querySelectorAll('.channel-toggle').forEach(btn => {
+        if (muted) {
+          btn.classList.add('bg-surface-container-highest', 'justify-start');
+          btn.classList.remove('bg-primary-container', 'bg-secondary-container', 'bg-tertiary-fixed', 'justify-end');
+          const knob = btn.querySelector('div');
+          if (knob) {
+            knob.classList.remove('bg-primary', 'bg-secondary', 'bg-tertiary');
+            knob.classList.add('bg-outline');
+          }
+        } else {
+          btn.classList.remove('bg-surface-container-highest', 'justify-start');
+          btn.classList.add('bg-primary-container', 'justify-end');
+          const knob = btn.querySelector('div');
+          if (knob) {
+            knob.classList.add('bg-primary');
+            knob.classList.remove('bg-outline');
+          }
+        }
+      });
+    });
+  }
+</script></main></body></html>

@@ -14,7 +14,7 @@ Keep this source unchanged. Put interpretation, decisions and any future derived
 - Mobile four-column/tablet eight-column grids, bottom-anchored interactions, spacing and rounded-shape tokens.
 - Layered button shadows, press travel, translucent drawers and component styling for buttons, chips, trays, toggles, inputs and modals.
 
-This is a v1.0.0 visual reference, not a runtime stylesheet or proof of implemented UI. No font assets, screen exports, 3D models or working components accompany this file. The live game remains 0.3.1; importing the document does not change gameplay, saves or deployments.
+This is a v1.0.0 visual reference, not a runtime stylesheet or proof of implemented UI. This original file arrived without font assets, screen exports, 3D models or working components. The owner has since supplied a separate [Stitch prototype export archive](../stitch-prototypes/README.md), with original HTML and PNG references; the original design.md remains unchanged. The live game remains 0.3.1; importing the document does not change gameplay, saves or deployments.
 
 ## Separate integration observations
 

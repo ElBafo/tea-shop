@@ -1,0 +1,447 @@
+{
+  "received": "2026-11-08",
+  "status": "original user-supplied Stitch export; all source bytes preserved",
+  "files": [
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_cheerful_celebration_reward_illustration_for_a_cozy_tea_puzzle_game._three/screen.png",
+      "bytes": 1568412,
+      "sha256": "d31bf548f88443d940036202fd124d1b751f3087db59231807f186ea050783e1",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_cozy_illustrated_scene_for_a_mobile_game_story_event_in_decopu._a_warm/screen.png",
+      "bytes": 1417672,
+      "sha256": "5e9cb102fcdbb860c63d4db6f9abc0f2fffbe4790f659c05969790e4496a1b79",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_cozy_tactile_illustration_of_an_artisanal_tea_blending_workshop_counter_for/screen.png",
+      "bytes": 1490817,
+      "sha256": "627f978c80dfa514b8e1d49fc4f9694d20305ecf9976f8f2e518dc35d90e06e4",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_cozy_tactile_scrapbook_illustration_for_mobile_game_decopu_guest_friendship/screen.png",
+      "bytes": 1753093,
+      "sha256": "fe19f426a92bc1bbd6b04f8f330f63324d6ca7fbeb8c756bb70394dd4fcd17cc",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_diorama_illustration_of_an_alternative_cozy_tea_room_theme_for/screen.png",
+      "bytes": 1731265,
+      "sha256": "2bab1289ad816000fe973f2862851cdbd18cb68fc6c45b9f5aacd3393d524fa3",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_diorama_of_a_grand_two_story_cozy_japanese_and_european_botanical/screen.png",
+      "bytes": 1872159,
+      "sha256": "a9148841abb58ca2f2c72e9cb35679ffca9e33fbb3c0b471514af61a7cea5cc5",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_miniature_diorama_illustration_for_mobile_game_decopu_autumn/screen.png",
+      "bytes": 1728149,
+      "sha256": "1c04aaf57eb3738583c5c25e0267cd91aed83c082838d83bbc97ff532a00a71b",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_miniature_diorama_illustration_for_mobile_game_decopu_botanical_1/screen.png",
+      "bytes": 1508832,
+      "sha256": "e76cd7095466445c0a4d1d1309d08cbde0f09d7481dd20debe178f97b581a3e8",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_miniature_diorama_illustration_for_mobile_game_decopu_botanical_2/screen.png",
+      "bytes": 1683733,
+      "sha256": "741b1df1e826cbc087789161910f5f868785b4244029c70e5d613f07e3afa04f",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_miniature_diorama_illustration_for_mobile_game_decopu_kyoto_bamboo/screen.png",
+      "bytes": 1664746,
+      "sha256": "998659d6908550e383b78ce4fcd0f55629860951e7a89cf63f838ba73dbf3935",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_miniature_diorama_illustration_of_a_cozy_pastel_tea_shop_interior/screen.png",
+      "bytes": 1297855,
+      "sha256": "46bbfa4429846b209b9ab0e5d6ba18812e6de79b61ea926c9bf6d4c0469dbdde",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_miniature_diorama_illustration_of_a_cozy_traditional_japanese_tea/screen.png",
+      "bytes": 1717710,
+      "sha256": "e29912241e7eee821e6b1be888b0faab94af5dbc4ca8e0c4ce0925343dc3d4e2",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_miniature_diorama_illustration_of_a_peaceful_storybook_village_map/screen.png",
+      "bytes": 1648273,
+      "sha256": "f8606274113aaaa5a04e0a6edea0aa8f175f9c21dd1bde420bc8f50fed71b579",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_isometric_room_decorating_interior_view_of_a_miniature_cozy_japanese_tea/screen.png",
+      "bytes": 1425808,
+      "sha256": "18f1efe947c50c4e79ba2b0f1876c1b8b82a7a51086e582a9f927e49d462e49c",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_stylized_game_viewport_render_of_cozy_glass_jars_with_cork_lids_on_a_sunlit/screen.png",
+      "bytes": 1377009,
+      "sha256": "29772b512a105dbe881b2f56515641292e04390b656d3470d91e11ed74284e33",
+      "width": 768,
+      "height": 1376
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_stylized_illustration_of_a_mobile_puzzle_game_level_for_tea_sorting._on_a/screen.png",
+      "bytes": 1295437,
+      "sha256": "0bcdde1d42a3e62b90aec455549aca1b9869736074ce6a251680041a13cc6f2d",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_stylized_illustration_showing_the_step_by_step_mechanics_of_an_artisanal_tea/screen.png",
+      "bytes": 1662829,
+      "sha256": "819abe6d5fd0efa493427e484ce71d224ef13f778ae8c674ba4cb4a96c4059d2",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_stylized_mobile_game_viewport_render_capturing_the_dynamic_pouring_action_in/screen.png",
+      "bytes": 1403328,
+      "sha256": "ab27290a93bd92e19c1acd9aa70f4bac79dec91752f56be55a63397863e04b18",
+      "width": 768,
+      "height": 1376
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_stylized_mobile_puzzle_game_viewport_render_for_decopu_tea_sorting_stage/screen.png",
+      "bytes": 1503039,
+      "sha256": "767f829bd3a7858f5fa1d48696539c9620104053e40a65e5114c473b937cd4e5",
+      "width": 768,
+      "height": 1376
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_tactile_cozy_soundboard_and_audio_controls_illustration_for_mobile_game/screen.png",
+      "bytes": 1366385,
+      "sha256": "4711518793ac31bfc521d1d46792e253e8f479ca9482d4a7d206967c3f7e3ef7",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/3d_tactile_open_botanical_encyclopedia_tea_recipe_book_for_decopu_mobile_game./screen.png",
+      "bytes": 1777944,
+      "sha256": "4cb98968e58bbdb4afa55715c00198ddb4bcf055dbb3d5455d8a755073da4ed1",
+      "width": 1200,
+      "height": 896
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu/DESIGN.md",
+      "bytes": 9655,
+      "sha256": "a0c17c104f491f3a0de24f9803a4a411c0036cf09f0cb34de6d2681f9574c60c"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_3d_babylon.js_tea_sorting_stage/code.html",
+      "bytes": 25936,
+      "sha256": "e8ced963a2d23af6932ea5bd242e9280b1a36205480d70e860b794454a4ce19e"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_3d_babylon.js_tea_sorting_stage/screen.png",
+      "bytes": 741689,
+      "sha256": "02b11a9f2808750316732bd93b20f40f3c611eecf2cf9771dfff2f0be2aa0ea8",
+      "width": 706,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_3d_pouring_animation_stage/code.html",
+      "bytes": 18217,
+      "sha256": "7ee4b79106e6a0d85245dffcba9504d596fd2aaf18edc3799adeff4f040b7008"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_3d_pouring_animation_stage/screen.png",
+      "bytes": 715554,
+      "sha256": "ae01bc6b8c4af465f2bcc38bc6fbec11893148f32d4f98dada2f27bc1370eb80",
+      "width": 672,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_3d_tea_sort_kyoto_bamboo_garden/code.html",
+      "bytes": 23933,
+      "sha256": "bb2d04d769d267c06755df8f0affbf447500463c4ae85e90e4406115a4f571f2"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_3d_tea_sort_kyoto_bamboo_garden/screen.png",
+      "bytes": 774773,
+      "sha256": "e9a265036941f820c7c109ddac41e8fcaedb1cc838deb558789346f68f74ab6e",
+      "width": 706,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_3d_tea_sort_puzzle/code.html",
+      "bytes": 23702,
+      "sha256": "644e751cf0d2be07897b0133e77e10b906c3ed69d4707a5c4327e605e3306d51"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_artisanal_blending_workshop/code.html",
+      "bytes": 23129,
+      "sha256": "ec84c1f0417f7f2b5fe542d2a10d962367e740f3ca8a26279e4a933cabde289d"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_artisanal_blending_workshop/screen.png",
+      "bytes": 348901,
+      "sha256": "0dcc66aef562e54d5bbdd506c652ced5c4f5882474e91a12e9c9d3ba707efeb6",
+      "width": 440,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_autumn_harvest_moon_festival/code.html",
+      "bytes": 25188,
+      "sha256": "aaf6fbe63aafd0ad922d4120d4f4dac17028c0dd08b6a0c5726eb7701b5530b1"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_autumn_harvest_moon_festival/screen.png",
+      "bytes": 344425,
+      "sha256": "851cbc8c50169f36536442e4ce04f7fcead0eb2d6d3a4f6ea023fb225d8cb93e",
+      "width": 359,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_botanical_greenhouse_theme/code.html",
+      "bytes": 26538,
+      "sha256": "20e5700a40e6cf96fbd01d6e327b36341a0e9261ff9b7a696539ceacec0b895d"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_botanical_greenhouse_theme/screen.png",
+      "bytes": 306744,
+      "sha256": "b93bc8c88a3e49e43d7413405258fcc4ea9df1be1ae286f339a4621d4e8b860d",
+      "width": 369,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_cozy_soundscape_haptics/code.html",
+      "bytes": 31866,
+      "sha256": "8f09a1b407694d6970ab46cced9b5a2f3d93a44244b74926dd0dd6d74424c46b"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_cozy_soundscape_haptics/screen.png",
+      "bytes": 280847,
+      "sha256": "e79501226ffc56e09f6f015f3b15d8ecffdbcad156e79fb65879936eeb5d44bd",
+      "width": 347,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_decorate_tea_room/code.html",
+      "bytes": 31880,
+      "sha256": "73f9dd71b592338e1b6753d87d0925bff40791e21ee88046c90af86bcb036e5b"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_decorate_tea_room/screen.png",
+      "bytes": 492314,
+      "sha256": "b0021709fb89f6132f5537478352c78e536258bf6b5239c5d82728dc3cc6bf52",
+      "width": 461,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_game_design_document_gameplay_brief.md",
+      "bytes": 6014,
+      "sha256": "52ce6c8fb93b581f65e3040fbeb51631badb4e82d0fde070d4a03c78904c9ff0"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_grand_tea_conservatory/code.html",
+      "bytes": 23999,
+      "sha256": "01e0c847b1aca5d1c9546f152b36d4f8f0e04cedac2e5a1c981080a3d94daac6"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_grand_tea_conservatory/screen.png",
+      "bytes": 403291,
+      "sha256": "1e5d191815ef6c26fa07ae868ce7f9dd9bf439f43d861d7f1adc10316fb3bf10",
+      "width": 394,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_guest_friendship_story_log/code.html",
+      "bytes": 23194,
+      "sha256": "b664d318b60951bdc92d36e7186052172322c86470e21a51611745ef03fe4518"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_guest_friendship_story_log/screen.png",
+      "bytes": 522574,
+      "sha256": "71b07131d09e28e4a105c833942497635ba5fc057003292c1a8020309a75fcf3",
+      "width": 465,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_kyoto_bamboo_garden_theme/code.html",
+      "bytes": 28489,
+      "sha256": "80d3c9c1d05d5e3720bf01805525d45c3c0e1295b6a49fd4d932dfb90c6dfff3"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_kyoto_bamboo_garden_theme/screen.png",
+      "bytes": 375859,
+      "sha256": "e1de1f7eb34f29b96bb1e577c245ea96203a514c98ffcd6c86886c618a62895d",
+      "width": 374,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_level_complete_rewards/code.html",
+      "bytes": 18869,
+      "sha256": "2c90c9bfd6c9bb930034861481f20b02282a7498c7972d582a88f1dd5cb9fc98"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_level_complete_rewards/screen.png",
+      "bytes": 501716,
+      "sha256": "3a6a54b5951011efec4100cbe5a200c7b46ea51b4fdd8275843c42101e8ae07a",
+      "width": 566,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_living_diorama_portrait_mobile/code.html",
+      "bytes": 24065,
+      "sha256": "4e895c93444755743d216ba0ae9d9a4691cacd3473502e2d3e8f4285e51f92ea"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_living_diorama_portrait_mobile/screen.png",
+      "bytes": 215520,
+      "sha256": "f9e40ec84fd2eedf62b6b3affdd2bdf7eb1fa26f27cf869941774f67b83b4268",
+      "width": 706,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_my_shop/code.html",
+      "bytes": 22262,
+      "sha256": "749285912938bf2bc1da327d128c3ea355f91851b95fa00936ae2b835ca16b49"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_my_shop/screen.png",
+      "bytes": 494801,
+      "sha256": "445fc693063409bfb6a410a01e8abe3f757b30838c374c42dbf4706103a59e33",
+      "width": 528,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_rainy_evening_theme/code.html",
+      "bytes": 23844,
+      "sha256": "1a2d555e539e4f3f3b54239177f6273704b164ae49cc87dcb9bdeb8031991533"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_rainy_evening_theme/screen.png",
+      "bytes": 509776,
+      "sha256": "dedc2356f3711f513f8b3c16f042dfb89b819beee677f2d66049e5aab26998a9",
+      "width": 537,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_recipe_detail_smoked_cedar_hojicha/code.html",
+      "bytes": 18601,
+      "sha256": "6a7d1fb86c2e7dc7b73703a6398dbaeed13a2bcc289f18d8a5b57b2956f19cd9"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_recipe_detail_smoked_cedar_hojicha/screen.png",
+      "bytes": 403501,
+      "sha256": "cf996fbc3d61497d5abca721072bb4877ce15798b828ea63b039c1c0fde5bc97",
+      "width": 575,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_starry_midnight_living_diorama/code.html",
+      "bytes": 22095,
+      "sha256": "e5d25225ff6e54e1c19f5d9931602eba4f547c317fb51526795afb94ff583931"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_tea_book_compendium/code.html",
+      "bytes": 24979,
+      "sha256": "63735473fd66aec6881bb2033f7ff54d5e12075e751c4db53d54f70d335e0414"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_tea_book_compendium/screen.png",
+      "bytes": 347423,
+      "sha256": "34f9ce0542d9f4b4df2214fe5356e5b7e6658e7a2a940fc5b4bd81ee2986a64c",
+      "width": 398,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_tea_book_hub_recipes_scrapbook/code.html",
+      "bytes": 38529,
+      "sha256": "34f0c29b2f3a13272ba67ca4d7d7e9ed1dc0cf2132d8841b87cfae9a5f2c7a3a"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_tea_book_hub_recipes_scrapbook/screen.png",
+      "bytes": 459017,
+      "sha256": "094c04a10cf8e3779ff3eab39dc43efa3ceb041f32d7f11e64bdc6de43f8e7e2",
+      "width": 504,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_tea_harvesting_garden/code.html",
+      "bytes": 23580,
+      "sha256": "14ca72124247dd71fc802d350645e086856c203e5bec26306745a9518eff8944"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_tea_harvesting_garden/screen.png",
+      "bytes": 493402,
+      "sha256": "c3c0452bb53e76068d20af728663268f66f64475abe722919dbb21518f448c0b",
+      "width": 513,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_tea_mailbox_letter_from_grandma_willow/code.html",
+      "bytes": 22794,
+      "sha256": "b56765438b6f57641b67bfecfbb6f8739da383af371bdc3c5e0fbf10503f284d"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_tea_mailbox_letter_from_grandma_willow/screen.png",
+      "bytes": 377806,
+      "sha256": "2b8165155cf50714943ed04d429017ece366a55e5e536bb7a59aab1e593fb9a6",
+      "width": 534,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_tea_sorting_mechanics_step_by_step_guide/code.html",
+      "bytes": 9614,
+      "sha256": "b1c66ebee5aae6f6d3686605d5730b7c344e3aa52be02413c7f981d7f6f3196d"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_village_guest_sanctuary/code.html",
+      "bytes": 22218,
+      "sha256": "f9ac392f2031e2845aa71f6587af94d1fb55ad8d88ba31f34b1b01473daab60c"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_village_guest_sanctuary/screen.png",
+      "bytes": 390624,
+      "sha256": "c4d77c7cdc3936f773b170da21b0b0849626a3d8e789c06f8a1a2fc70620b7c0",
+      "width": 424,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_visitor_tea_ceremony/code.html",
+      "bytes": 22510,
+      "sha256": "69703357e291373f8c0f8e22253dd895b1eef2ef68ec15a1a7636da19786b6a9"
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop/decopu_visitor_tea_ceremony/screen.png",
+      "bytes": 351301,
+      "sha256": "131a324aee0c4790c8c0eb89a2e446ed59ad49b563cb99a416e031e1774781a7",
+      "width": 411,
+      "height": 1600
+    },
+    {
+      "path": "stitch_decopu_cozy_tea_shop.zip",
+      "bytes": 42721931,
+      "sha256": "3509d3fa3bb4376922cc47ec72723b2402b8007811aebd0c7ae08669570e4fe7"
+    }
+  ]
+}

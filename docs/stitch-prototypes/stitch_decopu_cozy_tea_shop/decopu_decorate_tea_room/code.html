@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#fef9ef;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-surface-variant": "#504535", "on-primary-container": "#5f3f00", "error": "#ba1a1a", "surface-bright": "#fef9ef", "surface-tint": "#805600", "surface-container-lowest": "#ffffff", "on-tertiary": "#ffffff", "outline-variant": "#d5c4af", "primary-fixed": "#ffddaf", "tertiary-container": "#ff997b", "on-error-container": "#93000a", "on-surface": "#1d1c16", "on-primary-fixed-variant": "#614000", "surface-container": "#f2ede3", "on-tertiary-container": "#7c2b12", "on-secondary": "#ffffff", "secondary-fixed-dim": "#9dd3aa", "primary-container": "#e8a838", "on-secondary-fixed-variant": "#1e5031", "surface-container-highest": "#e7e2d8", "surface-container-low": "#f8f3e9", "secondary-fixed": "#b9efc5", "on-primary": "#ffffff", "on-tertiary-fixed": "#3a0a00", "inverse-surface": "#32302a", "on-secondary-container": "#3b6d4b", "on-secondary-fixed": "#00210e", "secondary": "#376847", "surface-dim": "#dedad0", "tertiary-fixed-dim": "#ffb59f", "on-tertiary-fixed-variant": "#7d2c13", "error-container": "#ffdad6", "inverse-primary": "#fdba49", "on-error": "#ffffff", "secondary-container": "#b6edc2", "surface-container-high": "#ece8de", "background": "#fef9ef", "primary-fixed-dim": "#fdba49", "tertiary-fixed": "#ffdbd1", "outline": "#837563", "surface": "#fef9ef", "on-primary-fixed": "#281800", "tertiary": "#9c4328", "primary": "#805600", "inverse-on-surface": "#f5f0e6", "surface-variant": "#e7e2d8", "on-background": "#1d1c16" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "margin-lg": "2rem", "space-md": "0.75rem", "gutter-sm": "0.75rem", "space-xl": "1.5rem", "margin-sm": "0.75rem", "space-lg": "1rem", "margin": "1rem", "gutter": "1rem", "gutter-lg": "1.5rem", "space-xs": "0.25rem", "space-sm": "0.5rem" }, "fontFamily": { "body-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "headline-md": ["Bricolage Grotesque"], "headline-sm": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "label-lg": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "headline-lg-mobile": ["Bricolage Grotesque"], "body-lg": ["Be Vietnam Pro"], "display-lg": ["Bricolage Grotesque"] }, "fontSize": { "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "700" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }] } } } }</script></head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen selection:bg-primary-fixed"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/90 backdrop-blur-xl shadow-[0_4px_16px_rgba(44,62,80,0.05)]"><div class="h-20 px-space-lg flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-sm min-w-0 flex-shrink"><img alt="Decopu Game Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkhKOM2ao3IEwNOeP_cK1d10C9jVkvJ5bDGUNpCLPAwBnLpwNDSAI9eNZ22SUmR52VxGiNaDaqC1x6qFpO8SfbE-Uz0Qf9dVWeSsd71oDAPuzQIlXnzcOATq1NSULU75Qyhnjhg_aAivI0W2fE6RjbIwXLrf19T_xDda8UgAsh2JlQRER7vRMy_Q7f3dBKvx-ISoUdE6dwpw8vmCtMSR9fTPywHgUQAR4yykqMf4pj"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface truncate tracking-tight">Decopu</span><span class="px-space-xs py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm shadow-[0_1px_2px_rgba(95,63,0,0.2)] flex-shrink-0">Lv. 4</span></div><span class="font-label-sm text-label-sm text-on-surface-variant truncate opacity-80">Decorate</span></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><div class="h-9 px-space-sm flex items-center gap-1 rounded-full bg-surface-container-high shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_2px_4px_rgba(44,62,80,0.06)]"><span class="material-symbols-outlined text-primary text-[18px]">star</span><span class="font-label-md text-label-md text-on-surface font-bold">1,420</span></div><div class="h-9 px-space-sm flex items-center gap-1 rounded-full bg-secondary-container text-on-secondary-container shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_2px_4px_rgba(44,62,80,0.06)]"><span class="material-symbols-outlined text-secondary text-[18px]">eco</span><span class="font-label-md text-label-md font-bold">38</span></div><a class="w-9 h-9 min-w-[36px] rounded-full bg-surface-container-lowest flex items-center justify-center text-on-surface shadow-[0_2px_0_#d5c4af,0_4px_8px_rgba(44,62,80,0.06)] active:translate-y-0.5 transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 shadow-[0_2px_4px_rgba(128,86,0,0.25)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-20 pb-28 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Top Harmony & Room Mood Metric Strip -->
+<div class="px-space-lg pt-space-sm pb-space-xs">
+<div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-[0_4px_16px_rgba(44,62,80,0.06)] flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[16px]">cottage</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Tea Room Atelier</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm">Tatami Stage</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container px-space-sm py-1 rounded-full">
+<span class="material-symbols-outlined text-primary text-[16px]">auto_awesome</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">320 / 400 pts</span>
+</div>
+</div>
+<!-- Cozy Harmony Progress Bar -->
+<div class="flex flex-col gap-1 mt-0.5">
+<div class="flex justify-between items-center text-on-surface-variant font-label-sm text-label-sm">
+<span>Cozy Harmony Level</span>
+<span class="text-secondary font-bold">80 pts until Master Sen no Rikyu visits!</span>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden p-0.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.08)]">
+<div class="h-full rounded-full bg-gradient-to-r from-primary-container via-secondary to-secondary rounded-full transition-all duration-500 shadow-[0_1px_3px_rgba(55,104,71,0.4)]" style="width: 80%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Live 3D Miniature Isometric Room Canvas Area -->
+<div class="relative px-space-lg py-space-xs">
+<div class="relative w-full rounded-3xl overflow-hidden bg-surface-container-high shadow-[0_8px_24px_rgba(44,62,80,0.12),inset_0_1px_0_rgba(255,255,255,0.8)]">
+<!-- Miniature Room Visual from Reference -->
+<div class="relative w-full aspect-[4/3] max-h-[340px] overflow-hidden bg-surface-dim">
+<img alt="Isometric wooden tea room diorama" class="w-full h-full object-cover select-none pointer-events-none transform scale-[1.03] transition-transform duration-300" id="roomDioramaImg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTsNStwFrvfE49hySdvHRlPabn__N04IG1FtzX-b3gZCLlb3Xa2c9yACkFldwSE8ycb6KH-yxEX_Hl1lQl_EkCU2Qb0zRhZ_hDyaJSabhcIKA4y2n3v3KJjFobdB2-CnR7cND3KtdvHyAHFvhCdF4cFcmfFHPX2Ag3M3iHCX3snjvl6aV04L0Tzl_yVpeVqSpaVpQunogt8lWYDxr1xYPgL0Xx-ZYtgAQy6jPh5euO"/>
+<!-- Ambient Vignette & Lighting Rim -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-variant/30 via-transparent to-transparent pointer-events-none"></div>
+<!-- Camera Angle & Grid Toggles Floating Pill -->
+<div class="absolute top-3 left-3 flex items-center gap-1.5 z-20">
+<button class="h-8 px-2.5 rounded-full bg-surface-container-lowest/95 backdrop-blur-md text-on-surface font-label-sm text-label-sm flex items-center gap-1 shadow-[0_2px_6px_rgba(44,62,80,0.14)] active:scale-95 transition-all" id="toggleCameraBtn">
+<span class="material-symbols-outlined text-[16px] text-primary">view_in_ar</span>
+<span id="cameraModeText">3D Iso</span>
+</button>
+<button class="h-8 px-2.5 rounded-full bg-surface-container-lowest/95 backdrop-blur-md text-on-surface font-label-sm text-label-sm flex items-center gap-1 shadow-[0_2px_6px_rgba(44,62,80,0.14)] active:scale-95 transition-all" id="toggleGridBtn">
+<span class="material-symbols-outlined text-[16px] text-secondary">grid_on</span>
+<span id="gridStatusText">Grid: On</span>
+</button>
+</div>
+<!-- Snap Tile Highlight Overlay Box (Simulated Interactive Hotspot) -->
+<div class="absolute left-[38%] top-[42%] w-28 h-20 -translate-x-1/2 -translate-y-1/2 rounded-xl pointer-events-auto cursor-pointer transition-all duration-200" id="interactiveSnapBox">
+<!-- Tactile Glowing Snap Border -->
+<div class="w-full h-full rounded-xl border-2 border-dashed border-primary-container bg-primary-container/20 flex items-center justify-center animate-pulse shadow-[0_0_12px_rgba(232,168,56,0.4)]">
+<span class="material-symbols-outlined text-primary text-[20px] drop-shadow">pan_tool</span>
+</div>
+<!-- Active Furniture Gizmo Floating Dialog -->
+<div class="absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap bg-surface-container-lowest/95 backdrop-blur-md px-3 py-1.5 rounded-full shadow-[0_4px_16px_rgba(44,62,80,0.18)] flex items-center gap-2 z-30" id="gizmoBubble">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Honey Oak Low Table</span>
+</div>
+</div>
+</div>
+<!-- Placement Micro-Actions Floating Gizmo Toolbar (Attached Bottom Center of Viewport) -->
+<div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2 py-1.5 bg-surface-container-lowest/95 backdrop-blur-xl rounded-full shadow-[0_6px_20px_rgba(44,62,80,0.18)] z-20">
+<button class="h-9 px-3 rounded-full bg-surface-container flex items-center gap-1 text-on-surface font-label-sm text-label-sm shadow-[0_2px_0_#d5c4af] active:translate-y-0.5 transition-all" id="btnRotate" title="Rotate Item">
+<span class="material-symbols-outlined text-[18px] text-primary">rotate_right</span>
+<span>90°</span>
+</button>
+<button class="h-9 px-3 rounded-full bg-surface-container flex items-center gap-1 text-on-surface font-label-sm text-label-sm shadow-[0_2px_0_#d5c4af] active:translate-y-0.5 transition-all" id="btnStore" title="Store in Bag">
+<span class="material-symbols-outlined text-[18px] text-tertiary">inventory_2</span>
+<span>Pack</span>
+</button>
+<button class="h-9 px-3.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-bold flex items-center gap-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_3px_0_#805600] active:translate-y-0.5 transition-all" id="btnConfirm" title="Confirm Snap">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>Snap Tile</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Catalog Drawer Bottom Sheet Area -->
+<div class="w-full px-space-lg pt-space-xs pb-space-lg flex flex-col gap-space-md">
+<!-- Drawer Header & Harmony Filter -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Tea Master Catalog</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Tap piece to spawn on tatami grid</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container px-space-sm py-1 rounded-full text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+<span>Storage (14/30)</span>
+</div>
+</div>
+<!-- Scrollable Tactile Category Pills Carousel -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none select-none">
+<button class="cat-pill active flex-shrink-0 h-8 px-3.5 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_2px_0_#805600] flex items-center gap-1.5 transition-all">
+<span>All</span>
+<span class="px-1.5 py-0.2 rounded-full bg-on-primary-container/20 text-[10px]">12</span>
+</button>
+<button class="cat-pill flex-shrink-0 h-8 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-[0_2px_0_#d5c4af] flex items-center gap-1.5 active:translate-y-0.5 transition-all">
+<span class="material-symbols-outlined text-[16px] text-tertiary">chair</span>
+<span>Seating</span>
+</button>
+<button class="cat-pill flex-shrink-0 h-8 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-[0_2px_0_#d5c4af] flex items-center gap-1.5 active:translate-y-0.5 transition-all">
+<span class="material-symbols-outlined text-[16px] text-primary">table_restaurant</span>
+<span>Tea Tables</span>
+</button>
+<button class="cat-pill flex-shrink-0 h-8 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-[0_2px_0_#d5c4af] flex items-center gap-1.5 active:translate-y-0.5 transition-all">
+<span class="material-symbols-outlined text-[16px] text-secondary">potted_plant</span>
+<span>Plants</span>
+</button>
+<button class="cat-pill flex-shrink-0 h-8 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-[0_2px_0_#d5c4af] flex items-center gap-1.5 active:translate-y-0.5 transition-all">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">shelves</span>
+<span>Shelves</span>
+</button>
+<button class="cat-pill flex-shrink-0 h-8 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-[0_2px_0_#d5c4af] flex items-center gap-1.5 active:translate-y-0.5 transition-all">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">texture</span>
+<span>Mats &amp; Rugs</span>
+</button>
+</div>
+<!-- Items Grid (Tactile Diorama Cards) -->
+<div class="grid grid-cols-2 gap-space-md">
+<!-- Card 1: Selected / Previewing -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-[0_4px_16px_rgba(44,62,80,0.08)] flex flex-col justify-between gap-space-sm relative overflow-hidden ring-2 ring-primary-container">
+<!-- Live Status Ribbon -->
+<div class="absolute top-2 right-2 bg-primary-container/20 text-on-primary-container px-2 py-0.5 rounded-full font-label-sm text-label-sm font-bold flex items-center gap-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+<span>Previewing</span>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Tactile Ceramic Socket -->
+<div class="w-full aspect-[4/3] rounded-xl bg-surface-container flex items-center justify-center relative overflow-hidden shadow-[inset_0_2px_6px_rgba(44,62,80,0.08)]">
+<img class="w-full h-full object-cover" data-alt="A charming miniature handcrafted low ceramic matcha tea table toy piece, glazed sage green and toasted beige pottery texture, soft warm ambient lighting, cozy isometric craft diorama style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUZfgEmS2p4HAUHJTyCO9PdcIcLz64lzXUY8WbgsQwAFY2-fm1BoXMj_yBZujahKKOaYdjJW0Lqi0EgHXZXJy1ww_VEvUfQ6iDeKACDPSXe6DsbPIgB7giX0HK4mGTkw-zjPaGRd8NyEqEUUw1Cy3eeFy2gEJtLI9KtwWLxib6Y4mF4MkB1pj7Y3QcI8JIJ3r_jrhttbJd8u1iL8grh8YYLsPipkJi1cDOK7nC94sL"/>
+<span class="absolute bottom-1.5 left-2 px-1.5 py-0.5 rounded-md bg-surface-container-lowest/90 font-label-sm text-label-sm text-secondary font-bold flex items-center gap-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[12px]">favorite</span> +35 Cozy
+            </span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[16px] leading-tight text-on-surface">Ceramic Matcha Table</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-primary text-[14px]">star</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold">3 Stars</span>
+</div>
+</div>
+</div>
+<button class="w-full h-9 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_2px_0_#805600] active:translate-y-0.5 transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">place</span>
+<span>Place in Room</span>
+</button>
+</div>
+<!-- Card 2: Owned Item -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-[0_4px_16px_rgba(44,62,80,0.06)] flex flex-col justify-between gap-space-sm relative overflow-hidden">
+<div class="absolute top-2 right-2 bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full font-label-sm text-label-sm font-bold">
+          Owned
+        </div>
+<div class="flex flex-col gap-2">
+<div class="w-full aspect-[4/3] rounded-xl bg-surface-container flex items-center justify-center relative overflow-hidden shadow-[inset_0_2px_6px_rgba(44,62,80,0.08)]">
+<img class="w-full h-full object-cover" data-alt="A miniature woven rattan armchair craft model with tiny linen cushion, handcrafted wooden joints, warm cozy afternoon sunlight, toy diorama asset." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQU0DYINYH9t-f-N1bDs7DWvFdJNtqX0jFOXiTOwTZciMBDHtb0cunXWYHfTqh54UfAac2gvUgelzRYBESYgLacz5brvNu-eB8gyzINGzpp0RDLWrpg9QXFKS-EiByPc_mCsmoGOXEHUUxXkMcZQoGOjxlVMddiABnVv2eSmwIzEKrDLGhUnWys2mklElXhuo3iUxqRzX-RJDJBttR-84NPABuYJcTpzY9N6tu4EAk"/>
+<span class="absolute bottom-1.5 left-2 px-1.5 py-0.5 rounded-md bg-surface-container-lowest/90 font-label-sm text-label-sm text-secondary font-bold flex items-center gap-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[12px]">favorite</span> +20 Cozy
+            </span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[16px] leading-tight text-on-surface">Woven Rattan Armchair</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-primary text-[14px]">star</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold">2 Stars</span>
+</div>
+</div>
+</div>
+<button class="w-full h-9 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold shadow-[0_2px_0_#d5c4af] active:translate-y-0.5 transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">open_with</span>
+<span>Move / Relocate</span>
+</button>
+</div>
+<!-- Card 3: Buy with Stars -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-[0_4px_16px_rgba(44,62,80,0.06)] flex flex-col justify-between gap-space-sm relative overflow-hidden">
+<div class="flex flex-col gap-2">
+<div class="w-full aspect-[4/3] rounded-xl bg-surface-container flex items-center justify-center relative overflow-hidden shadow-[inset_0_2px_6px_rgba(44,62,80,0.08)]">
+<img class="w-full h-full object-cover" data-alt="A delicate miniature bonsai pine in a tiny terracotta pot, hand-carved leaves, polished river pebbles in soil, warm studio lighting for isometric game asset." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHvZDdFFRc5pqGKpV840diTQpZTS6I0coe4CUHYGlkbkrbMlOljGaShhDMvOLv34rkPqeTVer_eFujELUV5GVeXyHKvobuY_2aIMqOO_wY9ZWuQ5EH3Z0swyWmwPHH8tKpgyZeNTzJWZXbfGH5y5L3PYGy_1fmUdtt8KCvPvjHPW2bW5Em5pIHP6eBELkjrwZIr2S3Vkn5E9rLd1UY3fCecQ4hNofuStV-sve0BNOV"/>
+<span class="absolute bottom-1.5 left-2 px-1.5 py-0.5 rounded-md bg-surface-container-lowest/90 font-label-sm text-label-sm text-secondary font-bold flex items-center gap-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[12px]">favorite</span> +15 Cozy
+            </span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[16px] leading-tight text-on-surface">Mini Bonsai Pine</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-primary text-[14px]">star</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold">1 Star</span>
+</div>
+</div>
+</div>
+<button class="w-full h-9 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_2px_0_#1e5031] active:translate-y-0.5 transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+<span>Buy (1 ★)</span>
+</button>
+</div>
+<!-- Card 4: Locked Item -->
+<div class="bg-surface-container-low rounded-2xl p-space-md shadow-sm flex flex-col justify-between gap-space-sm relative overflow-hidden opacity-85">
+<div class="absolute top-2 right-2 bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">lock</span> Lv. 5
+        </div>
+<div class="flex flex-col gap-2">
+<div class="w-full aspect-[4/3] rounded-xl bg-surface-container-high flex items-center justify-center relative overflow-hidden shadow-[inset_0_2px_6px_rgba(44,62,80,0.08)] filter grayscale-[0.4]">
+<img class="w-full h-full object-cover" data-alt="A toy glazed amber cast-iron kettle stand miniature, antique copper luster, warm amber gloss glaze, artisan craft diorama prop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANUGGKmFEv1aEQ-hrDeyf7F-vj1SPvP5lSUJ6gMQ-byyRXFYeMZWUpy3dwVzETWhO3jcCJLV3aPgSPJ_eRh1sd2RQJNCxjPzia_ni9Pvoo5-6dgZpkF-ykwjN25MT8HYXpp8MSS3bg6nA_gudNCd4yaAkK3_8UkYFmZQeBhyhCAkbviS0-NP3kuyzm8lKZCgyIBjMevd7DcgCetMyTxryWF1Ej0bI6vd6ljNw5GAR3"/>
+<div class="absolute inset-0 bg-surface-variant/40 backdrop-blur-[1px] flex items-center justify-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest/90 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">lock</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[16px] leading-tight text-on-surface opacity-80">Amber Kettle Stand</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-outline text-[14px]">star</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 Stars</span>
+</div>
+</div>
+</div>
+<button class="w-full h-9 rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-label-sm cursor-not-allowed flex items-center justify-center gap-1 opacity-70" disabled="">
+<span>Unlocks at Lv. 5</span>
+</button>
+</div>
+</div>
+<!-- Quick Floating Action Deck (Save & Reset Layout) -->
+<div class="w-full pt-space-xs flex items-center gap-3">
+<button class="h-12 px-space-lg rounded-full bg-surface-container-lowest text-on-surface-variant font-label-lg text-label-lg shadow-[0_2px_0_#d5c4af] active:translate-y-0.5 transition-all flex items-center justify-center gap-1.5 flex-1" id="btnResetRoom">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">restart_alt</span>
+<span>Reset</span>
+</button>
+<button class="h-12 px-space-lg rounded-full bg-secondary text-on-secondary font-label-lg text-label-lg font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_4px_0_#1e5031] active:translate-y-0.5 transition-all flex items-center justify-center gap-2 flex-[2]" id="btnSaveRoom">
+<span class="material-symbols-outlined text-[20px]">check</span>
+<span>Save Room Layout</span>
+</button>
+</div>
+<!-- Delightful Mini Tea Tip Toast / Fun Fact -->
+<div class="bg-surface-container rounded-2xl p-space-md flex items-start gap-3 shadow-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Decorating Charm Tip</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+          Placing low tables near natural tatami light increases customer relaxation and earns +15% more tea tips from wandering visitors!
+        </span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initRoomEditor() {
+    const gizmo = document.getElementById('interactiveSnapBox');
+    const dImg = document.getElementById('roomDioramaImg');
+    const toggleCam = document.getElementById('toggleCameraBtn');
+    const camText = document.getElementById('cameraModeText');
+    const toggleGrid = document.getElementById('toggleGridBtn');
+    const gridText = document.getElementById('gridStatusText');
+    const btnRotate = document.getElementById('btnRotate');
+    const btnConfirm = document.getElementById('btnConfirm');
+    const btnStore = document.getElementById('btnStore');
+    const btnSave = document.getElementById('btnSaveRoom');
+    const btnReset = document.getElementById('btnResetRoom');
+
+    let currentRotation = 0;
+    let isIso = true;
+    let gridVisible = true;
+
+    // Rotate Gizmo Animation
+    if (btnRotate && gizmo) {
+      btnRotate.addEventListener('click', () => {
+        currentRotation = (currentRotation + 90) % 360;
+        gizmo.style.transform = `translate(-50%, -50%) rotate(${currentRotation}deg)`;
+        
+        // Haptic feel
+        btnRotate.classList.add('scale-95');
+        setTimeout(() => btnRotate.classList.remove('scale-95'), 150);
+      });
+    }
+
+    // Camera Switch Toggle
+    if (toggleCam && dImg) {
+      toggleCam.addEventListener('click', () => {
+        isIso = !isIso;
+        if (!isIso) {
+          camText.textContent = 'Top View';
+          dImg.style.transform = 'scale(1.15) rotate(12deg)';
+        } else {
+          camText.textContent = '3D Iso';
+          dImg.style.transform = 'scale(1.03) rotate(0deg)';
+        }
+      });
+    }
+
+    // Grid Snap Visibility Toggle
+    if (toggleGrid && gizmo) {
+      toggleGrid.addEventListener('click', () => {
+        gridVisible = !gridVisible;
+        gridText.textContent = gridVisible ? 'Grid: On' : 'Grid: Off';
+        gizmo.style.opacity = gridVisible ? '1' : '0.2';
+      });
+    }
+
+    // Snap tile confirmation
+    if (btnConfirm) {
+      btnConfirm.addEventListener('click', () => {
+        btnConfirm.innerHTML = '<span class="material-symbols-outlined text-[18px]">verified</span><span>Snapped!</span>';
+        setTimeout(() => {
+          btnConfirm.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span><span>Snap Tile</span>';
+        }, 1200);
+      });
+    }
+
+    // Store Item
+    if (btnStore && gizmo) {
+      btnStore.addEventListener('click', () => {
+        gizmo.classList.add('scale-0');
+        setTimeout(() => {
+          gizmo.classList.remove('scale-0');
+        }, 1500);
+      });
+    }
+
+    // Save Toast Simulation
+    if (btnSave) {
+      btnSave.addEventListener('click', () => {
+        const originalHtml = btnSave.innerHTML;
+        btnSave.classList.replace('bg-secondary', 'bg-primary-container');
+        btnSave.classList.replace('text-on-secondary', 'text-on-primary-container');
+        btnSave.innerHTML = '<span class="material-symbols-outlined text-[20px]">celebration</span><span>Tea Room Saved!</span>';
+        setTimeout(() => {
+          btnSave.classList.replace('bg-primary-container', 'bg-secondary');
+          btnSave.classList.replace('text-on-primary-container', 'text-on-secondary');
+          btnSave.innerHTML = originalHtml;
+        }, 1600);
+      });
+    }
+
+    // Category Tabs Switching
+    const catPills = document.querySelectorAll('.cat-pill');
+    catPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        catPills.forEach(p => {
+          p.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold');
+          p.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+        });
+        pill.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+        pill.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold');
+      });
+    });
+
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(44,62,80,0.08)]" data-active-classes="bg-primary-container text-on-primary-container shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_3px_0_#805600] scale-105"><div class="flex justify-around items-center h-20 px-space-sm max-w-md mx-auto"><a class="flex flex-col items-center justify-center min-w-[64px] h-14 px-space-sm rounded-lg text-on-surface-variant transition-all" data-path="my-shop" href="#"><span class="material-symbols-outlined text-[22px]">storefront</span><span class="font-label-sm text-label-sm mt-0.5">My Shop</span></a><a class="flex flex-col items-center justify-center min-w-[64px] h-14 px-space-sm rounded-lg text-on-surface-variant transition-all" data-path="brew-and-sort" href="#"><span class="material-symbols-outlined text-[22px]">bubble_chart</span><span class="font-label-sm text-label-sm mt-0.5">Brew &amp; Sort</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[64px] h-14 px-space-sm rounded-lg transition-all bg-primary-container text-on-primary-container shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_3px_0_#805600] scale-105" data-path="decorate" href="#"><span class="material-symbols-outlined text-[22px]">chair</span><span class="font-label-sm text-label-sm mt-0.5">Decorate</span></a><a class="flex flex-col items-center justify-center min-w-[64px] h-14 px-space-sm rounded-lg text-on-surface-variant transition-all" data-path="tea-book" href="#"><span class="material-symbols-outlined text-[22px]">menu_book</span><span class="font-label-sm text-label-sm mt-0.5">Tea Book</span></a></div></nav></body></html>

@@ -26,7 +26,7 @@ Future v1.0.0 design input: the owner supplied a Stitch Living Diorama/game-syst
 
 The follow-up [V1_GAME_DESIGN_DRAFT.md](V1_GAME_DESIGN_DRAFT.md) preserves the supplied five-section GDD, with the visitor/sort/brew/upgrade loop, screens and venue tiers. Read its reconciliation table before implementation: new currencies/serving rewards and four-slot/all-jars-full wording are not settled replacements for current rules. The later puzzle-flow notes clarify free Undo and matching top groups.
 
-The same draft includes the Tea Book follow-up: recipe compendium, guest scrapbook/mailbox, workshop linkage and supplied Stitch screen IDs `SCREEN_44` / `SCREEN_19` / `SCREEN_24`. No actual Stitch exports were inspected. Recipe counts, mastery/tip rewards, gifts and brewing conditions are draft design inputs, not implemented or final economy values.
+The same draft includes the Tea Book follow-up: recipe compendium, guest scrapbook/mailbox, workshop linkage and supplied Stitch screen IDs `SCREEN_44` / `SCREEN_19` / `SCREEN_24`. The subsequent [Stitch export index](stitch-prototypes/README.md) now provides original HTML, images and inspection status for these references. Recipe counts, mastery/tip rewards, gifts and brewing conditions remain draft design inputs, not implemented or final economy values.
 
 The latest [V1_PUZZLE_FLOW.md](V1_PUZZLE_FLOW.md) clarifies free Undo (superseding the earlier token wording) and consecutive matching top groups. It also proposes moving/tilting jars, completed-jar locks, extra canisters, general hints and serving rewards. Those mechanics are not implemented or approved replacements for current rules; read its reconciliation table before making changes.
 
@@ -41,6 +41,10 @@ Original Stitch visual source: [stitch/design.md](stitch/design.md) is preserved
 ## Repository caution
 
 Remote GitHub branches are authoritative. The current /workspace/tea-shop git index is stale and shows many pre-existing modifications/untracked files; do not bulk commit/reset it. Prior changes were published using explicit trees based on remote heads. Prefer a fresh controlled checkout for the next chat if available. Preserve the deployed workflow, which builds main and preview separately; the local workflow copy is older.
+
+## Stitch prototype export archive
+
+The owner supplied `docs/stitch-prototypes/`: the original ZIP plus 70 matching extracted source files (25 HTML, 43 PNG, 2 Markdown). [The index](stitch-prototypes/README.md) and hash manifest preserve originals and distinguish paired captures, standalone artwork and three missing screenshots. Five images were visually inspected. The Living Diorama capture has a missing room image; the HTML uses external CDN/image references and contains no canvas/engine initialization or editable 3D models. These are v1 design references, not a running replacement for the released game. Existing original `stitch/design.md` remains unchanged and matches the exported DESIGN.md exactly.
 
 ## Validation and release status
 

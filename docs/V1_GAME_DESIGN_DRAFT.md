@@ -110,7 +110,7 @@ The owner supplied this further description for the v1.0.0 notes. **Tea Book**, 
 
 ### Supplied Stitch canvas screen references
 
-The source reports these screens as already created on the Stitch canvas. Their titles and identifiers are recorded as references only: no canvas access, screenshots, exports or playable implementations were supplied or independently verified in this note-taking task.
+The source originally reported these screens as already created on the Stitch canvas. The owner subsequently supplied [HTML exports and screenshots](stitch-prototypes/README.md). Tea Book Compendium and Guest Friendship Story Log captures were visually inspected; the Artisanal Blending Workshop files are inventoried. The IDs below remain supplied chat references associated by screen description, not independently verified export metadata. These files do not establish playable implementations.
 
 | Screen reference | Supplied title | Described content |
 | --- | --- | --- |
