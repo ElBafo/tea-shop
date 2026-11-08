@@ -1,6 +1,6 @@
 # Decopu: product direction
 
-**Release baseline: Decopu 0.3.0.** Consolidates the reviewed preview work. See [HANDOFF.md](HANDOFF.md) for the new-chat context and the unresolved physical-iPhone startup investigation. Main deployment verification is in progress.
+**Release baseline: Decopu 0.3.0.** Consolidates the reviewed preview work. See [HANDOFF.md](HANDOFF.md) for the new-chat context and the unresolved physical-iPhone startup investigation. Merged through [PR #29](https://github.com/ElBafo/tea-shop/pull/29) as `702fe1599da885d381bab83088f608ebe35bc777` and hosted successfully in [Pages run 42494900818](https://github.com/ElBafo/tea-shop/actions/runs/42494900818). Main and preview serve 0.3.0.
 
 
 ## Room/puzzle material cohesion — 0.3.0-preview.11

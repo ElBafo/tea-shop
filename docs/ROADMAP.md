@@ -4,7 +4,9 @@ Record every agreed product decision here in the same work session. Distinguish 
 
 ## Current priority — 0.3.0
 
-Owner requests merging all accumulated preview work to main and a clean handoff for a new chat. Promote the reviewed preview stack (home/editor redesigns, puzzle sachets/rewards, keeper/material polish, accessibility and separate 3D comparison). A reported iPhone startup hang is a release concern: bound scene readiness and show a recoverable error rather than indefinite preparation. The underlying device-specific cause remains unconfirmed. Main/preview progress namespaces stay separate; do not reset or copy saves. Complete startup checks, package verification and both builds before merging. See [HANDOFF.md](HANDOFF.md) for continuation. Required package checks, both builds and compiled startup recovery/onboarding tests pass. Merge and hosted deployment verification are in progress. Further work begins with the iPhone startup investigation and the handoff backlog.
+The owner requested merging all accumulated preview work to main. Merged through [PR #29](https://github.com/ElBafo/tea-shop/pull/29) as `702fe1599da885d381bab83088f608ebe35bc777` and hosted successfully in [Pages run 42494900818](https://github.com/ElBafo/tea-shop/actions/runs/42494900818). Main and preview serve 0.3.0. All prior stacked PRs #19–28 were verified fully included and closed as integrated. Existing main and preview saves remain separate and preserved.
+
+Startup recovery now bounds scene readiness and offers Reload on timeout, context loss or startup failure. Production startup success/error/stall tests and real onboarding pass. The underlying reported physical-iPhone loading failure remains unconfirmed; do not claim it resolved by desktop checks. Start further work with that device issue, followed by the uncoached playtest in PLAYTEST.md, remaining physical-device/accessibility/material review and the existing later backlog. See [HANDOFF.md](HANDOFF.md). No new feature expansion has started.
 
 ### Last material preview — 0.3.0-preview.11
 

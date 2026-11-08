@@ -35,3 +35,5 @@ Remote GitHub branches are authoritative. The current /workspace/tea-shop git in
 ## Validation and release status
 
 Package verification and production/preview builds are required. This release adds a compiled startup check covering success, failure, stalled initialization and real production onboarding. Earlier preview browser evidence covers touch dragging, keyboard/dialog flows, purchases, save preservation, day/night/mixed styles and scene disposal. See RELEASES.md for the final consolidation PR and deployment status. Physical iPhone validation remains pending.
+
+Final release status: Merged through [PR #29](https://github.com/ElBafo/tea-shop/pull/29) as `702fe1599da885d381bab83088f608ebe35bc777` and hosted successfully in [Pages run 42494900818](https://github.com/ElBafo/tea-shop/actions/runs/42494900818). Main and preview serve 0.3.0. Old stacked PRs #19–28 were verified included and closed. No new chat was started; the owner asked for a copyable continuation prompt in the current chat.

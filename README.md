@@ -4,7 +4,7 @@ A cozy sorting puzzle that earns stars for a small isometric tea shop. Fill jars
 
 **Play:** https://elbafo.github.io/tea-shop/
 
-**Current release candidate: 0.3.0.** Consolidates the reviewed preview work and adds startup timeout/error recovery. Main release verification and deployment are in progress. Read [HANDOFF.md](docs/HANDOFF.md) when continuing in a new chat.
+**Released: Decopu 0.3.0.** Consolidates the reviewed preview work and adds startup timeout/error recovery. Merged through [PR #29](https://github.com/ElBafo/tea-shop/pull/29) as `702fe1599da885d381bab83088f608ebe35bc777` and hosted successfully in [Pages run 42494900818](https://github.com/ElBafo/tea-shop/actions/runs/42494900818). Main and preview serve 0.3.0. Read [HANDOFF.md](docs/HANDOFF.md) when continuing in a new chat.
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
