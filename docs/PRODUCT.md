@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Keeper readability — 0.3.0-preview.8
+
+The keeper should read as a welcoming person serving tea at normal phone framing: a clear face, soft hair silhouette and a raised cup. Retain the same starter bench and counter ownership/placement rules, with quiet head movement, breathing and blinking. No new customer-service mechanic, free decoration or gameplay reward is attached. The owner approved preview.7's puzzle appearance; an uncoached first-session/pacing observation remains pending, with a short guide in [PLAYTEST.md](PLAYTEST.md).
+
 ## Puzzle readability — 0.3.0-preview.7
 
 Ordinary second-edition puzzles use folded paper sachets for tea flavours, with a distinct motif and letter in addition to colour. Concealed pieces stay neutral and centered; empty slots show subtle capacity guides. Jar descriptions announce contents from bottom to top, replacing concealed flavours with “hidden”. Selection lifts only the visible top piece in a sealed jar. Existing full-jar completion, whole-group movement, star targets, onboarding and progress remain authoritative. Cups and macarons keep their shapes. This is the regular HTML/CSS renderer; adoption of the separate Babylon comparison still needs device review.

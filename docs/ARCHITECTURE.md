@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Keeper presentation — 0.3.0-preview.8
+
+`buildEditionKeeper` retains the existing root, footprint and idle rig. A static face child carries a small upward tilt; the existing head animation still returns to its neutral rotation during Edit and reduced motion. Enlarged facial geometry and a tube smile share existing materials, and the cup uses the room's existing porcelain helper. Raised arms and lower-body geometry are presentation only. No extra light, texture, timer or render loop is introduced. `ownedVisual` continues to dispose the keeper's materials with its root; the scene owns all child meshes and transforms. `positionShopkeeper` and placement/collision rules are unchanged.
+
 ## Puzzle presentation — 0.3.0-preview.7
 
 `ui/items.ts` supplies shared sachet markup for ordinary jars, tap flights, drag clones and the comparison's Current view. The edition gate preserves classic tins. Inline SVG motifs add no asset requests; `ui/tea-pieces.css` scopes paper, label, glass and capacity treatments to the second edition. Hidden markup contains no flavour class, style, text or motif. `ui/app.ts` adds a separate `aria-describedby` contents string while preserving existing jar labels; it substitutes “hidden” below the sealed top piece. Sealed-jar selection marks only that visible top slot as held. No puzzle engine, level definition, storage schema or rendering lifecycle changes.

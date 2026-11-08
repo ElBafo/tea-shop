@@ -1,6 +1,7 @@
 import { buildEditionExtra, editionExtraIds } from './edition-extras';
 import { buildEditionSpecial, editionSpecialIds } from './edition-specials';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
+import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { Color3 } from '@babylonjs/core/Maths/math.color';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
@@ -104,18 +105,39 @@ export function buildEditionPaintSample(scene:Scene,style:number):TransformNode{
  const root=new TransformNode('paint-sample',scene),m=mat(scene,'wall-sample',['#eadfcd','#bccbb9','#dcbab0'][style]),trim=mat(scene,'wall-trim',E.cream);
  soft(scene,'paint-wall',root,m,1.5,1.5,.12,.08,0,.75,0);soft(scene,'paint-dado',root,trim,1.5,.08,.16,.02,0,.55,.02);for(const x of [-.55,0,.55])soft(scene,'wall-batten',root,trim,.025,.5,.025,.008,x,.25,.08);return root;
 }
-export function buildEditionKeeper(scene:Scene):TransformNode{
- const root=new TransformNode('shopkeeper',scene),skin=mat(scene,'skin','#e7bd9c'),hair=mat(scene,'hair','#604636'),coat=mat(scene,'coat',E.sage),cream=mat(scene,'apron',E.cream);
- orb(scene,'body',root,coat,.23,0,.65,0,.9,1.4,.75);orb(scene,'head',root,skin,.205,0,1.12,.02,1,1.04,.9);orb(scene,'hair-cap',root,hair,.21,0,1.22,-.03,1,.73,.9);orb(scene,'hair-bun',root,hair,.1,0,1.33,-.13);
- soft(scene,'apron',root,cream,.28,.43,.06,.04,0,.64,.18);soft(scene,'apron-pocket',root,coat,.13,.1,.018,.015,0,.6,.218);
- for(const x of [-.22,.22]){const a=orb(scene,'sleeve',root,coat,.09,x,.7,.03,.8,1.8,.85);a.rotation.z=x<0?-.3:.3;orb(scene,'hand',root,skin,.065,x,.53,.09);}
- const eyes=mat(scene,'eyes',E.ink),cheek=mat(scene,'cheek','#d9917c');for(const x of [-.065,.065])orb(scene,'eye',root,eyes,.016,x,1.13,.19,.7,1,.4);for(const x of [-.12,.12])orb(scene,'cheek',root,cheek,.032,x,1.075,.166,1,.55,.25);
- orb(scene,'nose',root,skin,.025,0,1.09,.205);
- const headRig=new TransformNode('keeper-head-idle',scene);headRig.parent=root;headRig.position.y=1;
- const faceNames=new Set(['head','hair-cap','hair-bun','eye','cheek','nose']);
- const eyeMeshes=root.getChildMeshes().filter(mesh=>mesh.name==='eye');
- for(const mesh of root.getChildMeshes())if(faceNames.has(mesh.name)){mesh.parent=headRig;mesh.position.y-=1;}
- const body=root.getChildMeshes().find(mesh=>mesh.name==='body')!;
+export function buildEditionKeeper(scene:Scene):TransformNode {
+ const root=new TransformNode('shopkeeper',scene);
+ const skin=mat(scene,'skin','#edc4a1'),hair=mat(scene,'hair','#634838'),coat=mat(scene,'coat',E.sage),cream=mat(scene,'apron',E.cream);
+ const eyes=mat(scene,'eyes','#34312d',0),cheek=mat(scene,'cheek','#d9917c');
+ // Lift the shoulders and hands above the counter, without moving the keeper's footprint.
+ const body=orb(scene,'body',root,coat,.24,0,.76,0,.96,1.4,.79);
+ soft(scene,'apron',root,cream,.31,.46,.06,.04,0,.76,.19);
+ soft(scene,'apron-pocket',root,coat,.15,.11,.018,.015,0,.7,.228);
+ for(const x of [-.14,.14]) {
+  orb(scene,'keeper-shoe',root,hair,.10,x,.07,.025,.75,.65,1.3);
+  cylinder(scene,'keeper-trouser',root,coat,.38,.065,x,.29,0);
+ }
+ for(const x of [-.23,.23]) {
+  const sleeve=orb(scene,'sleeve',root,coat,.095,x,.95,.08,.9,1.5,.95);
+  sleeve.rotation.x=-.6;sleeve.rotation.z=x<0?-.35:.35;
+  const forearm=orb(scene,'keeper-forearm',root,coat,.075,x*.8,1.045,.22,1,1,1.65);
+  forearm.rotation.y=x<0?.35:-.35;
+  orb(scene,'hand',root,skin,.064,x*.64,1.10,.32,1,.75,1);
+ }
+ // A held porcelain cup gives the silhouette a clear serving action.
+ cup(scene,root,cream,hair,-.035,1.105,.33);
+ const headRig=new TransformNode('keeper-head-idle',scene);headRig.parent=root;headRig.position.y=1.04;
+ const face=new TransformNode('keeper-face',scene);face.parent=headRig;face.rotation.x=-.16;
+ orb(scene,'head',face,skin,.233,0,.16,.025,1,1.03,.9);
+ orb(scene,'hair-cap',face,hair,.24,0,.295,-.035,1,.59,.86);
+ orb(scene,'hair-bun',face,hair,.105,0,.395,-.145);
+ const fringe=orb(scene,'keeper-fringe',face,hair,.105,-.105,.31,.12,1.15,.42,.65);fringe.rotation.z=-.25;
+ for(const x of [-.225,.225])orb(scene,'keeper-ear',face,skin,.047,x,.16,.012,.65,1,.7);
+ const eyeMeshes=[-.078,.078].map(x=>orb(scene,'eye',face,eyes,.021,x,.19,.229,.85,1,.48));
+ for(const x of [-.135,.135])orb(scene,'cheek',face,cheek,.034,x,.125,.198,1,.58,.28);
+ orb(scene,'nose',face,skin,.032,0,.145,.242,1,.85,.8);
+ const smile=MeshBuilder.CreateTube('keeper-smile',{path:[new Vector3(-.048,.098,.229),new Vector3(-.024,.087,.239),new Vector3(0,.084,.242),new Vector3(.024,.087,.239),new Vector3(.048,.098,.229)],radius:.008,tessellation:6},scene);
+ attach(smile,face,hair);
  root.metadata={keeperIdle:{head:headRig,eyes:eyeMeshes,body,bodyY:body.scaling.y,eyeY:eyeMeshes.map(eye=>eye.scaling.y)}};
  root.scaling.setAll(1.12);return root;
 }
