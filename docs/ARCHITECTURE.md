@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Keeper pose correction — 0.3.0-preview.9
+
+Upper and lower arm ellipsoids are aligned between explicit shoulder/elbow/wrist points using quaternions, so each arm remains connected. A separate fixed `keeper-serving-cup` child scales and places the existing porcelain geometry below and beside the face. Existing head/eye/body animation, root placement, material ownership and scene disposal stay unchanged; no new timer, light or texture is introduced.
+
 ## Keeper presentation — 0.3.0-preview.8
 
 `buildEditionKeeper` retains the existing root, footprint and idle rig. A static face child carries a small upward tilt; the existing head animation still returns to its neutral rotation during Edit and reduced motion. Enlarged facial geometry and a tube smile share existing materials, and the cup uses the room's existing porcelain helper. Raised arms and lower-body geometry are presentation only. No extra light, texture, timer or render loop is introduced. `ownedVisual` continues to dispose the keeper's materials with its root; the scene owns all child meshes and transforms. `positionShopkeeper` and placement/collision rules are unchanged.

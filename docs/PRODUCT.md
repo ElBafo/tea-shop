@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Keeper pose correction — 0.3.0-preview.9
+
+Owner feedback supersedes the raised two-hand serving pose: the cup obscured the face and the arms looked awkward. Keep the clearer face, but hold a smaller cup lower and to one side with one bent supporting arm; let the other arm rest. Existing idle motion remains subtle. This is a pose correction, not a new activity or service mechanic.
+
 ## Keeper readability — 0.3.0-preview.8
 
 The keeper should read as a welcoming person serving tea at normal phone framing: a clear face, soft hair silhouette and a raised cup. Retain the same starter bench and counter ownership/placement rules, with quiet head movement, breathing and blinking. No new customer-service mechanic, free decoration or gameplay reward is attached. The owner approved preview.7's puzzle appearance; an uncoached first-session/pacing observation remains pending, with a short guide in [PLAYTEST.md](PLAYTEST.md).

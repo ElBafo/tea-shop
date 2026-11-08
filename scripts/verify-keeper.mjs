@@ -8,7 +8,7 @@ import path from 'node:path';
 
 const base='/tea-shop/preview/',origin='http://127.0.0.1:5196',cdp=9262;
 const key='tea-shop-preview-edition2-progress-v1',appearance='tea-shop-preview-edition2-appearance-v1';
-const checks=[],errors=[],evidence={version:process.env.KEEPER_BASELINE==='1'?'0.3.0-preview.7':'0.3.0-preview.8',origin,disposableProfile:true,syntheticSave:true,checks,errors};
+const checks=[],errors=[],evidence={version:process.env.KEEPER_BASELINE==='1'?'0.3.0-preview.7':'0.3.0-preview.9',origin,disposableProfile:true,syntheticSave:true,checks,errors};
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 const profile=await fs.mkdtemp('/tmp/decopu-release-021-smoke-');
 const {createServer}=await import('vite');

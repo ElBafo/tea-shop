@@ -1,7 +1,7 @@
 import { buildEditionExtra, editionExtraIds } from './edition-extras';
 import { buildEditionSpecial, editionSpecialIds } from './edition-specials';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
-import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import { Quaternion, Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { Color3 } from '@babylonjs/core/Maths/math.color';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
@@ -109,7 +109,7 @@ export function buildEditionKeeper(scene:Scene):TransformNode {
  const root=new TransformNode('shopkeeper',scene);
  const skin=mat(scene,'skin','#edc4a1'),hair=mat(scene,'hair','#634838'),coat=mat(scene,'coat',E.sage),cream=mat(scene,'apron',E.cream);
  const eyes=mat(scene,'eyes','#34312d',0),cheek=mat(scene,'cheek','#d9917c');
- // Lift the shoulders and hands above the counter, without moving the keeper's footprint.
+ // Keep the face clear: one relaxed arm and one bent arm supporting a small cup.
  const body=orb(scene,'body',root,coat,.24,0,.76,0,.96,1.4,.79);
  soft(scene,'apron',root,cream,.31,.46,.06,.04,0,.76,.19);
  soft(scene,'apron-pocket',root,coat,.15,.11,.018,.015,0,.7,.228);
@@ -117,15 +117,20 @@ export function buildEditionKeeper(scene:Scene):TransformNode {
   orb(scene,'keeper-shoe',root,hair,.10,x,.07,.025,.75,.65,1.3);
   cylinder(scene,'keeper-trouser',root,coat,.38,.065,x,.29,0);
  }
- for(const x of [-.23,.23]) {
-  const sleeve=orb(scene,'sleeve',root,coat,.095,x,.95,.08,.9,1.5,.95);
-  sleeve.rotation.x=-.6;sleeve.rotation.z=x<0?-.35:.35;
-  const forearm=orb(scene,'keeper-forearm',root,coat,.075,x*.8,1.045,.22,1,1,1.65);
-  forearm.rotation.y=x<0?.35:-.35;
-  orb(scene,'hand',root,skin,.064,x*.64,1.10,.32,1,.75,1);
- }
- // A held porcelain cup gives the silhouette a clear serving action.
- cup(scene,root,cream,hair,-.035,1.105,.33);
+ // Join each sleeve between authored shoulder, elbow and wrist points.
+ const arm=(shoulder:Vector3,elbow:Vector3,wrist:Vector3)=>{
+  for(const [name,start,end,radius] of [['sleeve',shoulder,elbow,.087],['keeper-forearm',elbow,wrist,.069]] as const){
+   const delta=end.subtract(start),middle=start.add(end).scale(.5);
+   const segment=orb(scene,name,root,coat,radius,middle.x,middle.y,middle.z,1,delta.length()/(2*radius)+.35,1);
+   segment.rotationQuaternion=Quaternion.FromUnitVectorsToRef(Vector3.Up(),delta.normalize(),new Quaternion());
+  }
+  orb(scene,'hand',root,skin,.057,wrist.x,wrist.y,wrist.z,1,.8,1);
+ };
+ arm(new Vector3(-.21,.96,0),new Vector3(-.29,.79,.03),new Vector3(-.25,.62,.09));
+ arm(new Vector3(.21,.97,0),new Vector3(.30,.83,.08),new Vector3(.31,.99,.25));
+ const servingCup=new TransformNode('keeper-serving-cup',scene);servingCup.parent=root;
+ servingCup.position.set(.31,1.025,.25);servingCup.scaling.setAll(.68);
+ cup(scene,servingCup,cream,hair,0,0,0);
  const headRig=new TransformNode('keeper-head-idle',scene);headRig.parent=root;headRig.position.y=1.04;
  const face=new TransformNode('keeper-face',scene);face.parent=headRig;face.rotation.x=-.16;
  orb(scene,'head',face,skin,.233,0,.16,.025,1,1.03,.9);
