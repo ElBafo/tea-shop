@@ -352,7 +352,19 @@ export class Diorama {
     this.spawnCustomer(false);
   }
 
-  ready(): Promise<void> { return this.scene.whenReadyAsync(); }
+  ready(): Promise<void> {
+    return new Promise((resolve,reject) => {
+      const canvas=this.engine.getRenderingCanvas();
+      const finish=(error?:Error) => {
+        clearTimeout(timer);canvas?.removeEventListener('webglcontextlost',lost);
+        error ? reject(error) : resolve();
+      };
+      const lost=()=>finish(new Error('WebGL context lost during room startup'));
+      const timer=setTimeout(()=>finish(new Error('Room startup timed out')),18000);
+      canvas?.addEventListener('webglcontextlost',lost,{once:true});
+      this.scene.whenReadyAsync().then(()=>finish(),error=>finish(error));
+    });
+  }
 
   resize(): void {
     if (this.disposed) return;

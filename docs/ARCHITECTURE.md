@@ -1,6 +1,7 @@
 # Architecture
 
-**Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
+**Release baseline: Decopu 0.3.0.** Consolidates the reviewed preview work. See [HANDOFF.md](HANDOFF.md) for the new-chat context and the unresolved physical-iPhone startup investigation. Main deployment verification is in progress.
+
 
 ## Furniture materials — 0.3.0-preview.11
 
