@@ -30,6 +30,8 @@ The same draft includes the Tea Book follow-up: recipe compendium, guest scrapbo
 
 The latest [V1_PUZZLE_FLOW.md](V1_PUZZLE_FLOW.md) clarifies free Undo (superseding the earlier token wording) and consecutive matching top groups. It also proposes moving/tilting jars, completed-jar locks, extra canisters, general hints and serving rewards. Those mechanics are not implemented or approved replacements for current rules; read its reconciliation table before making changes.
 
+Original Stitch visual source: [stitch/design.md](stitch/design.md) is preserved byte for byte at the owner's request. Keep it unchanged; put interpretations or derived tokens elsewhere. Read [stitch/README.md](stitch/README.md) for its hash and separate notes on differing front-matter/prose colour values, typography and future phone validation. No runtime UI changes were requested by importing it.
+
 1. Resolve any remaining device-specific startup failure before further feature expansion.
 2. Observe an uncoached first session; use PLAYTEST.md. Human pacing/retention evidence remains pending. Do not change boards or star targets based only on solver minima.
 3. Broader material cohesion, physical-phone performance and remaining accessibility review. The latest material pass was bounded to representative furniture and shared cup details.

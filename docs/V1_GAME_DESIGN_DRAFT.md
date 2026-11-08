@@ -4,6 +4,8 @@ Recorded 2026-11-08 from the owner's follow-up v1.0.0 design text. Sections 1–
 
 **Status:** v1.0.0 design draft, retained for planning. The live release remains 0.3.1. No gameplay, save, deployment or version change is made by recording it.
 
+Visual reference: the owner's original [Stitch design.md](stitch/design.md) is archived unchanged. Its [separate integration notes](stitch/README.md) retain provenance and distinguish the supplied colour/type/component specifications from implementation choices.
+
 ## 1. Executive Summary & Vision
 - **Title:** Decopu (デコプ)
 - **Genre:** Cozy Tactile Diorama + Color-Sort Puzzle + Room Customization
