@@ -83,6 +83,7 @@ try {
  assert.equal(await ev(`localStorage.getItem('${other}')`),'other-deployment-sentinel');assert.equal(await ev(`localStorage.getItem('tea-shop-progress-v1')`),'classic-sentinel');
  assert.deepEqual(errors,[]);check('other deployment/classic saves remain untouched; zero runtime exceptions');
 } finally {
- await send('Network.setBlockedURLs',{urls:[]});await clearStart();
+ await send('Fetch.disable');await send('Network.setBlockedURLs',{urls:[]});
+ await send('Emulation.setEmulatedMedia',{features:[]});await clearStart();
  await fs.writeFile('work/normal-3d-check.json',JSON.stringify({url,checks,errors},null,2));ws.close();
 }
