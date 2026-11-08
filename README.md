@@ -4,7 +4,7 @@ A cozy 3D sorting puzzle that earns stars for a small isometric tea shop. Fill j
 
 **Play:** https://elbafo.github.io/tea-shop/
 
-**Release candidate: Decopu 0.3.1.** Normal 3D puzzles on main and preview, preserving existing progress and controls with native rendering recovery if WebGL fails. See [release status](docs/RELEASES.md) and [handoff](docs/HANDOFF.md).
+**Released: Decopu 0.3.1.** Normal 3D puzzles are live on main and preview, preserving existing progress and controls with native rendering recovery if WebGL fails. Merged through [PR #30](https://github.com/ElBafo/tea-shop/pull/30) as `2b7312dcc0a1ddd36787d8ee0d26da6cef32c92c` and deployed successfully in [Pages run 42497266122](https://github.com/ElBafo/tea-shop/actions/runs/42497266122). Main and preview serve 0.3.1. Hosted phone-size smoke checks confirm the displayed version, normal first-session 3D puzzles, transfer and Undo on both links, with zero runtime exceptions and unchanged main progress while playing preview in the isolated test browser. No user saves were reset, copied or migrated. Physical-iPhone startup/performance and uncoached human-session validation remain pending. See [release details](docs/RELEASES.md) and [handoff](docs/HANDOFF.md).
 
 Earlier releases and reviewed preview milestones are recorded in [RELEASES.md](docs/RELEASES.md).
 

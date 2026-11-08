@@ -1,6 +1,6 @@
 # Decopu — new chat handoff
 
-The owner requested merging the accumulated preview work into main and continuing in a new chat. The next release is 0.3.1, adding normal 3D puzzles at the owner’s explicit request. Read ROADMAP.md, PRODUCT.md, ARCHITECTURE.md and AGENTS.md before further work.
+The owner requested merging the accumulated preview work into main and continuing in a new chat. The current release is 0.3.1, adding normal 3D puzzles at the owner’s explicit request. Read ROADMAP.md, PRODUCT.md, ARCHITECTURE.md and AGENTS.md before further work.
 
 ## Links and workflow
 
@@ -36,4 +36,8 @@ Remote GitHub branches are authoritative. The current /workspace/tea-shop git in
 
 Package verification and production/preview builds are required. This release adds a compiled startup check covering success, failure, stalled initialization and real production onboarding. Earlier preview browser evidence covers touch dragging, keyboard/dialog flows, purchases, save preservation, day/night/mixed styles and scene disposal. See RELEASES.md for the final consolidation PR and deployment status. Physical iPhone validation remains pending.
 
-Final release status: Merged through [PR #29](https://github.com/ElBafo/tea-shop/pull/29) as `702fe1599da885d381bab83088f608ebe35bc777` and hosted successfully in [Pages run 42494900818](https://github.com/ElBafo/tea-shop/actions/runs/42494900818). Main and preview serve 0.3.0. Old stacked PRs #19–28 were verified included and closed. No new chat was started; the owner asked for a copyable continuation prompt in the current chat.
+0.3.0 consolidation status: Merged through [PR #29](https://github.com/ElBafo/tea-shop/pull/29) as `702fe1599da885d381bab83088f608ebe35bc777` and hosted successfully in [Pages run 42494900818](https://github.com/ElBafo/tea-shop/actions/runs/42494900818). Main and preview serve 0.3.0. Old stacked PRs #19–28 were verified included and closed. No new chat was started; the owner asked for a copyable continuation prompt in the current chat.
+
+## 0.3.1 final release status
+
+Merged through [PR #30](https://github.com/ElBafo/tea-shop/pull/30) as `2b7312dcc0a1ddd36787d8ee0d26da6cef32c92c` and deployed successfully in [Pages run 42497266122](https://github.com/ElBafo/tea-shop/actions/runs/42497266122). Main and preview serve 0.3.1. Hosted phone-size smoke checks confirm the displayed version, normal first-session 3D puzzles, transfer and Undo on both links, with zero runtime exceptions and unchanged main progress while playing preview in the isolated test browser. No user saves were reset, copied or migrated. Physical-iPhone startup/performance and uncoached human-session validation remain pending. All required package/build checks, eight normal-3D groups on each compiled build, sixteen drag groups, eleven fresh-browser guide/editor groups and startup recovery checks pass. The owner is exploring UI designs in Stitch and will provide further direction; do not start another UI redesign based on that exploration alone.
