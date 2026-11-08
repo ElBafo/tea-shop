@@ -87,7 +87,8 @@ assert.equal(classic.api.isSecondEdition,false);assert.equal(classic.api.LEVEL_C
 assert.equal(classic.api.STORAGE_KEY,originalKey);assert.equal(classic.api.APPEARANCE_KEY,'tea-shop-appearance-v1');
 assert.equal(classic.api.loadProgress().bestStars.length,38);assert.equal(classic.api.spendableStars(classic.api.loadProgress()),130);
 for(const [search,key,count,nightKey] of [
-  ['',previewKey,38,'tea-shop-preview-appearance-v1'],
+  ['',editionPreviewKey,24,'tea-shop-preview-edition2-appearance-v1'],
+  ['?edition=1',previewKey,38,'tea-shop-preview-appearance-v1'],
   ['?edition=2',editionPreviewKey,24,'tea-shop-preview-edition2-appearance-v1'],
 ]) {
   const {api}=await mode({base:'/tea-shop/preview/',search,values});

@@ -1,3 +1,4 @@
+import { ITEMS } from "../game/items";
 import { isSecondEdition } from "../game/mode";
 import { nextReward } from "../game/journey";
 import { rewardCard } from "./reward";
@@ -13,6 +14,7 @@ import {
   playClick,
   playComplete,
   playDrop,
+  playTeaDrop,
   playWin,
   unlockAudio,
 } from "../game/audio";
@@ -326,6 +328,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
       } else {
         shake(index);
       }
+      rejectMove(from,index);
       return;
     }
 
@@ -351,7 +354,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
     play.busy = true;
     pendingComplete = [];
     landed = { jar: index, count: move.count };
-    playDrop(progress.muted);
+    if (isSecondEdition) playTeaDrop(progress.muted); else playDrop(progress.muted);
 
     const destNowComplete =
       !destWasComplete && isCompleteTube(play.board.tubes[index], play.board.capacity);
@@ -381,7 +384,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
       void motion.finished.then(() => {
         if (play !== activePlay || screen !== "play") return;
         stopMotion = () => {};
-        if (destNowComplete) playComplete(progress.muted);
+        if (destNowComplete && (!isSecondEdition || !won)) playComplete(progress.muted);
         if (won) {
           landed = null;
           play.celebrating = true;
@@ -393,7 +396,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
             play.busy = false;
             pendingComplete = [];
             render();
-          }, reducedMotion() ? 0 : 420);
+          }, reducedMotion() ? 0 : isSecondEdition ? 260 : 420);
         } else {
           play.busy = false;
           render();
@@ -410,6 +413,16 @@ export function mountApp(root: HTMLElement): Promise<void> {
     } else present();
   };
 
+  const rejectMove = (from: number, to: number) => {
+    if (!play || !isSecondEdition) return;
+    root.querySelector('.move-feedback')?.remove();
+    const tube=play.board.tubes[to], run=topRun(play.board.tubes[from]);
+    const bubble=document.createElement('span'); bubble.className='move-feedback'; bubble.setAttribute('role','status');
+    bubble.textContent=run && play.board.capacity-tube.length < run.count ? 'The whole group needs room' : 'Match the top flavour';
+    root.querySelector(`[data-jar="${to}"]`)?.append(bubble);
+    window.setTimeout(()=>bubble.remove(),1800);
+  };
+
   const shake = (index: number) => {
     playClick(progress.muted);
     const jar = root.querySelector(`[data-jar="${index}"]`);
@@ -422,6 +435,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
     board: () => screen === 'play' && play && !play.busy && !play.won ? play.board : null,
     lift: () => { playClick(progress.muted); navigator.vibrate?.(12); },
     drop: transfer,
+    reject: rejectMove,
   });
   cancelDrag = drag.cancel;
   render();
@@ -481,7 +495,7 @@ function playMarkup(
           continue;
         }
         const hidden = hiddenStart >= 0 && slot < hiddenStart;
-        const held = Boolean(run && slot >= tube.length - run.count);
+        const held = Boolean(run && slot >= tube.length - (board.sealed[index] ? 1 : run.count));
         const justLanded = Boolean(
           landed &&
             landed.jar === index &&
@@ -491,6 +505,7 @@ function playMarkup(
           `<div class="slot ${held ? "held" : ""} ${justLanded ? "landed" : ""}">${treatMarkup(item, hidden)}${board.sealed[index] && slot === tube.length - 2 ? '<span class="lid" aria-hidden="true"></span>' : ""}</div>`,
         );
       }
+      const contents = tube.length ? tube.map((item,slot) => hiddenStart >= 0 && slot < hiddenStart ? 'hidden' : ITEMS[item].label).join(', ') : 'Empty';
       const done = isCompleteTube(tube, board.capacity);
       const celebrate = pendingComplete.includes(index) || play.celebrating;
       const validTarget = selected !== null && selected !== index && canPour(board, selected, index) > 0;
@@ -498,12 +513,13 @@ function playMarkup(
         ? `<span class="puff" aria-hidden="true">${sparkles()}</span>`
         : "";
       return `
-        <button class="jar ${lifted ? "selected" : ""} ${done ? "done" : ""} ${validTarget ? "valid-target" : ""} ${celebrate ? "just-completed" : ""} ${guideStage() === 'puzzle' && !play.busy && suggestedJar(board, selected) === index ? 'guide-target' : ''}" style="--jar-order:${index}" data-jar="${index}" type="button" aria-pressed="${lifted}" aria-label="Jar ${index + 1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}">
+        <button class="jar ${lifted ? "selected" : ""} ${done ? "done" : ""} ${validTarget ? "valid-target" : ""} ${celebrate ? "just-completed" : ""} ${guideStage() === 'puzzle' && !play.busy && suggestedJar(board, selected) === index ? 'guide-target' : ''}" style="--jar-order:${index}" data-jar="${index}" type="button" aria-pressed="${lifted}" aria-label="Jar ${index + 1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}" ${isSecondEdition ? `aria-describedby="jar-contents-${index}"` : ''}>
+          ${isSecondEdition ? `<span class="visually-hidden" id="jar-contents-${index}">Bottom to top: ${contents}</span>` : ''}
           <span class="jar-neck"></span>
           <span class="jar-glass">
             <span class="stack" style="--slots:${board.capacity}">${slots.join("")}</span>
           </span>
-          ${done ? '<span class="jar-check" aria-hidden="true">✓</span>' : ''}
+          ${done ? '<span class="jar-check" aria-hidden="true">✓</span>' : ''}${isSecondEdition ? `<span class="jar-capacity" aria-hidden="true">${done ? "Full ✓" : `${tube.length} / ${board.capacity}`}</span>` : ""}
           ${puff}
         </button>`;
     })
@@ -511,7 +527,7 @@ function playMarkup(
 
   const hint = guideStage() === 'puzzle'
     ? `<aside class="guide-card puzzle-guide-heading" aria-label="Getting started"><strong>Fill each jar with one kind</strong><button type="button" data-guide-skip aria-label="Skip the getting-started guide">Skip</button></aside>`
-    : isSecondEdition ? `<p class="hint">${level.blurb}</p>`
+    : isSecondEdition ? ""
     : play.hint
     ? `<p class="hint">Fill each jar with one kind. Drag treats, or tap two jars.</p>`
     : "";
@@ -553,16 +569,16 @@ function winOverlay(play: PlayState, progress: Progress): string {
   const best = progress.bestMoves[play.level.id - 1];
   const next = LEVELS[play.level.id];
   return `<div class="overlay result-overlay" role="dialog" aria-modal="true" aria-labelledby="result-title">
-    <div class="modal result-card">
+    <div class="modal result-card" data-earned="${play.earnedStars > 0}" data-milestone="${Boolean(play.milestone)}">
       <div class="result-confetti" aria-hidden="true">${Array.from({length:16},(_,i)=>`<i style="--i:${i};--x:${(i*37)%100}%;--turn:${i%2?180:-160}deg"></i>`).join('')}</div>
       <span class="result-seal" aria-hidden="true">✓</span>
       <p class="kicker">Puzzle ${play.level.id} complete</p>
-      <h3 id="result-title">All tidy</h3>
+      <h3 id="result-title">${isSecondEdition && play.milestone ? "A little milestone" : "All tidy"}</h3>
       <p class="big-stars" aria-label="${stars} of 3 stars">${starText(stars)}</p>
-      ${isSecondEdition ? rewardCard(progress) : ""}
       <p class="result-reward">${play.earnedStars ? `+${play.earnedStars} ${STAR} for your shop` : "Best stars already collected"}</p>
+      ${isSecondEdition ? rewardCard(progress,play.earnedStars) : ""}
       ${guideStage() === 'decorate' ? '<p class="guide-reward">These stars are yours to spend. Try Decorate shop to choose your first piece.</p>' : ''}
-      ${play.milestone?`<p class="milestone-reward">${play.milestone}</p>`:""}
+      ${play.milestone?`<p class="milestone-reward">${isSecondEdition && play.milestone.startsWith("+") ? "Includes " : ""}${play.milestone}</p>`:""}
       <p class="result-stats">${play.moves} moves · Best ${best}</p>
       <div class="modal-actions">
         <button class="primary-action" data-next type="button">${next ? "Next puzzle →" : "All puzzles"}</button>

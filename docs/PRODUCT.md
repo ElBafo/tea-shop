@@ -1,6 +1,49 @@
 # Decopu: product direction
 
-**Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
+**Release baseline: Decopu 0.3.0.** Consolidates the reviewed preview work. See [HANDOFF.md](HANDOFF.md) for the new-chat context and the unresolved physical-iPhone startup investigation. Main deployment verification is in progress.
+
+
+## Room/puzzle material cohesion — 0.3.0-preview.11
+
+Start with the paid counter, table and shelves: subtle warm joinery grain, soft porcelain highlights and clearer cup rims. Small folded tea packets echo the puzzle sachets; shelf glazes use the same rose, matcha and jasmine colours. Retain wood, cream and painted options so mixed styles remain compatible. These are included details of existing paid decorations. The reviewed UI, keeper pose, prices, progression and saved layouts remain authoritative. This bounded slice does not claim a complete catalogue rework or measured physical-phone performance.
+
+## Editor focus — 0.3.0-preview.10
+
+Keyboard users should stay oriented as editor controls change: card → selected style, Buy → owned style, Store ↔ Place, and Cancel/Browse → the relevant card. A shop-completion dialog should isolate the room controls, keep Tab navigation inside, offer Escape and return focus to a usable editor action. This pass preserves the compact touch layout and gameplay. Physical iPhone VoiceOver review remains pending; browser keyboard checks are separate evidence.
+
+Selected styles retain their selection checkmark and a separate keyboard focus ring; the night ring uses a lighter colour for visibility. The ring sits inside the style card to avoid clipping in the scrolling tray. Leaving Showcase returns to the visible More control when its original menu item is hidden.
+
+## Keeper pose correction — 0.3.0-preview.9
+
+Owner feedback supersedes the raised two-hand serving pose: the cup obscured the face and the arms looked awkward. Keep the clearer face, but hold a smaller cup lower and to one side with one bent supporting arm; let the other arm rest. Existing idle motion remains subtle. This is a pose correction, not a new activity or service mechanic.
+
+## Keeper readability — 0.3.0-preview.8
+
+The keeper should read as a welcoming person serving tea at normal phone framing: a clear face, soft hair silhouette and a raised cup. Retain the same starter bench and counter ownership/placement rules, with quiet head movement, breathing and blinking. No new customer-service mechanic, free decoration or gameplay reward is attached. The owner approved preview.7's puzzle appearance; an uncoached first-session/pacing observation remains pending, with a short guide in [PLAYTEST.md](PLAYTEST.md).
+
+## Puzzle readability — 0.3.0-preview.7
+
+Ordinary second-edition puzzles use folded paper sachets for tea flavours, with a distinct motif and letter in addition to colour. Concealed pieces stay neutral and centered; empty slots show subtle capacity guides. Jar descriptions announce contents from bottom to top, replacing concealed flavours with “hidden”. Selection lifts only the visible top piece in a sealed jar. Existing full-jar completion, whole-group movement, star targets, onboarding and progress remain authoritative. Cups and macarons keep their shapes. This is the regular HTML/CSS renderer; adoption of the separate Babylon comparison still needs device review.
+
+## Decoration editor — 0.3.0-preview.6
+
+Make the full browse → choose a style → preview in room → buy and place flow clear on a phone. Prices and unlock/affordability states must be visible before selection. Keep one persistent Browse route, an explicit temporary preview state and Cancel, and separate unowned/owned collections. Style variants are included, free to change; ownership is granted only by the existing star purchase. Owned furniture remains movable immediately in the same editing session.
+
+## Home redesign — 0.3.0-preview.5
+
+The regular game home should visibly centre the player’s room, then show one decoration goal and clear Play/Continue and Decorate actions. Puzzle completion count opens the existing level browser. Keep the star balance and theme/audio controls compact and accessible. Do not add a new currency, another obligatory landing screen, or a second editor. This is the next roadmap milestone after the incremental visual pass; phone review is still required.
+
+## Completion feedback preview — 0.3.0-preview.3
+
+Continuation takes up the accepted reward/audio polish: show the stars actually earned leading toward the chosen decoration, distinguish milestones, keep no-new-reward replays quiet and shorten ordinary completion pauses. Preserve exactly-once rewards, direct Edit navigation, full-jar rules, reduced motion and mute. Physical-device sound and family preference remain for preview review; this does not adopt the experimental 3D renderer for normal play.
+
+## Approved 3D puzzle comparison — 0.3.0-preview.1
+
+Evaluate Babylon.js vases and paper tea sachets on three existing sample boards before choosing a production rendering direction. Current and 3D presentations share in-memory board state and rules; normal progress and currency are untouched. Prioritize recognisable objects, clear four-/five-slot stacks, private hidden pieces, direct finger-following, accessible controls and low phone rendering cost. A fixed camera and authored movement preserve predictable sorting. Keep the normal game available. Device performance and family preference decide whether to continue, not the presence of 3D alone.
+
+## Approved starting-room preview — 0.2.2-preview.1
+
+The first impression should read as a welcoming tea shop. A modest temporary serving workbench, tea props and shopkeeper are an explicit starter-scenery exception to the paid-furniture rule; they grant no catalogue ownership. The first counter remains a star purchase with style choices. Hide the temporary scene while editing and whenever its footprint/aisle is occupied; do not bring it back for an owned but stored counter. Improve base window readability and bare-room material depth without granting paid wall finishes. This supersedes the completely empty first-shop opening; shabby restoration fixtures for later venues remain future work. Main stays 0.2.1 pending review.
 
 ## Experience
 

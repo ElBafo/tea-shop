@@ -1,6 +1,53 @@
 # Architecture
 
-**Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
+**Release baseline: Decopu 0.3.0.** Consolidates the reviewed preview work. See [HANDOFF.md](HANDOFF.md) for the new-chat context and the unresolved physical-iPhone startup investigation. Main deployment verification is in progress.
+
+
+## Furniture materials — 0.3.0-preview.11
+
+`editionJoineryTexture` creates a deterministic neutral 128px grain map per counter/table/shelf wood material, multiplied by the existing tint. `ownedVisual` disposes each material and its texture with the item's root. No shared mutable texture cache is introduced. The existing cup helper adds a porcelain lip; folded packet geometry stays under its paid item's root and inherits upgrade picking metadata. Packet and shelf colours read `game/items.ts`. No lights, render loops, placement rules or save keys change. Catalogue thumbnails for counter/table/shelves and the trolley/cabinet tea sets are regenerated from runtime geometry.
+
+## Editor focus and modal lifecycle — 0.3.0-preview.10
+
+`shop/screen.ts` restores focus to visible successors after controls are replaced. Card selection and purchase also restore at the end of their action, because preview/scene callbacks can render intermediate states. `paintChrome` restores matching style/action controls and Store/Place counterparts. Browse remembers the prior item and returns to its card when available.
+
+The existing shop modal renders only when its mode changes. Opening records sibling inert states, disables background interaction and focuses its primary action; closing restores those states and a connected visible editor control. Tab/Shift+Tab stay within the dialog; Escape shares the normal dismissal path. No global listener, scene, save schema, purchase rule or layout change is introduced.
+
+Selected styles retain their selection checkmark and a separate keyboard focus ring; the night ring uses a lighter colour for visibility. The ring sits inside the style card to avoid clipping in the scrolling tray. Leaving Showcase returns to the visible More control when its original menu item is hidden.
+
+## Keeper pose correction — 0.3.0-preview.9
+
+Upper and lower arm ellipsoids are aligned between explicit shoulder/elbow/wrist points using quaternions, so each arm remains connected. A separate fixed `keeper-serving-cup` child scales and places the existing porcelain geometry below and beside the face. Existing head/eye/body animation, root placement, material ownership and scene disposal stay unchanged; no new timer, light or texture is introduced.
+
+## Keeper presentation — 0.3.0-preview.8
+
+`buildEditionKeeper` retains the existing root, footprint and idle rig. A static face child carries a small upward tilt; the existing head animation still returns to its neutral rotation during Edit and reduced motion. Enlarged facial geometry and a tube smile share existing materials, and the cup uses the room's existing porcelain helper. Raised arms and lower-body geometry are presentation only. No extra light, texture, timer or render loop is introduced. `ownedVisual` continues to dispose the keeper's materials with its root; the scene owns all child meshes and transforms. `positionShopkeeper` and placement/collision rules are unchanged.
+
+## Puzzle presentation — 0.3.0-preview.7
+
+`ui/items.ts` supplies shared sachet markup for ordinary jars, tap flights, drag clones and the comparison's Current view. The edition gate preserves classic tins. Inline SVG motifs add no asset requests; `ui/tea-pieces.css` scopes paper, label, glass and capacity treatments to the second edition. Hidden markup contains no flavour class, style, text or motif. `ui/app.ts` adds a separate `aria-describedby` contents string while preserving existing jar labels; it substitutes “hidden” below the sealed top piece. Sealed-jar selection marks only that visible top slot as held. No puzzle engine, level definition, storage schema or rendering lifecycle changes.
+
+## Editor composition — 0.3.0-preview.6
+
+`editor.css` scopes the new catalogue/detail layout to second-edition Edit mode. The existing `screen.ts` draft, purchase, goal and placement paths remain authoritative. A selected unowned item exposes style buttons and secondary draft controls inside the scrollable middle, while purchase status, Cancel and Buy remain outside it in the footer. Collection tabs appear while browsing; a selected item retains the plain Browse control and uses the freed space for styles. The same detail-container event delegation handles these actions. Repainting a style or arrangement action restores focus by its action/item/style identity; Browse cancels the draft and restores the collection scroll position. Owned/unowned filtering remains unchanged.
+
+## Home composition — 0.3.0-preview.5
+
+`home.css` owns the second-edition home layout, scoped away from Edit and Showcase. `mountShop` creates a home action container and reuses the existing Play and Edit buttons; `paintChrome` moves the same Edit node into the toolbar when editing and back home afterward, preserving its event listener. Play labels derive from validated `readPuzzle` state and current completion; the puzzle-count button opens the existing level browser. Goal navigation and purchases still use the existing editor flow. No new scene, account, storage key or progression rule is introduced.
+
+## Completion feedback — 0.3.0-preview.3
+
+`rewardCard(progress, earnedStars)` adds an optional decorative savings track only for actual new currency and an unlocked decoration. Native progress values always expose the final authoritative amount; the CSS track animates from the pre-award fraction and becomes static under reduced motion. The result card distinguishes milestones and zero-new-reward replays. Reward bookkeeping still happens before visual effects in the existing transfer path; the shorter edition win pause does not move or defer persistence. Completed-jar highlighting affects the glass only, keeping input targets stationary.
+
+`playTeaDrop` reuses a short noise buffer and creates bounded one-shot paper/ceramic nodes that disconnect on completion. Muted or hidden-page calls return without creating sound nodes. Gesture-based audio unlocking remains the existing Safari-compatible path. Ordinary edition pours use this sound; classic mode and the isolated 3D comparison retain their existing audio behavior.
+
+## Isolated puzzle-rendering comparison — 0.3.0-preview.1
+
+`main.ts` dynamically mounts the comparison only for a preview build/path with `edition=2&puzzle3d=1`, bypassing normal app initialization. The comparison owns ephemeral board/history and uses existing engine functions; it must not call guide/progress/resume storage or record rewards. Native HTML jar controls provide layout, focus, labels and hit targets in both views. The 3D renderer uses their measured geometry for alignment, and the visual helper can keep its DOM anchors. Rendering, gesture cleanup and fallback are owned by the comparison screen; only the active scene is retained. The ordinary app and production routing are unchanged. The 3D scene uses shared material/texture caches, two lights, DPR capped at 1.75 and on-demand rendering with a retained drawing buffer. A post-shader-ready draw avoids a blank first frame. Keyboard/tap controls remain native HTML; interrupted drags restore the previous selection and accessible pressed state. WebGL context loss switches to Current with the same board/history. Hidden sachets use neutral materials, and a sealed-source drag lifts only its visible top piece.
+
+## Starting-room preview — 0.2.2-preview.2
+
+`ShopVisuals.starterBench` owns temporary scenery under the room node. `positionShopkeeper` reuses the existing keeper, showing the bench only before counter ownership, outside Edit, and when `canPlace` accepts the default counter footprint and rear aisle. Owned/stored counters suppress it. No inventory/save keys change. Preview.2 adds a keeper head pivot, breathing and blink poses through the existing render tick, resetting during Edit/reduced motion. Existing ambient, sunlight and window-light settings are rebalanced for warmer daytime fill and clearer cool nights; no additional lights or continuous lamp-shadow refresh is added. Steam uses the existing frame loop and reduced-motion handling; the new geometry adds no lights or timers. Separate sky, outdoor greenery, glass and frame depths remove the old coplanar window faces. Day/night updates the backdrop material; base glass clarity no longer depends on purchasing paint. All changes are scoped to the second edition.
 
 ## Runtime
 
@@ -10,7 +57,7 @@ Decopu is a static, client-side TypeScript application built with Vite. Babylon.
 
 ## Production mode and fresh-start storage — 0.2.0
 
-The activation implementation makes the normal `/tea-shop/` page select the second edition: twenty-four authored boards and eighteen paid designs. Preview mode still requires the preview build/path and `edition=2`; an explicit production `?edition=1` route retains the classic runtime for regression checks. Headless Node verification falls back to the classic mode when there is no browser context. The production-mode regression and browser checks pass for these boundaries.
+The activation implementation makes the normal `/tea-shop/` page select the second edition: twenty-four authored boards and eighteen paid designs. Preview mode requires the preview build/path and now selects the current edition by default (preview.4); `edition=2` is a compatible alias and `edition=1` selects classic tooling; an explicit production `?edition=1` route retains the classic runtime for regression checks. Headless Node verification falls back to the classic mode when there is no browser context. The production-mode regression and browser checks pass for these boundaries.
 
 Production uses `tea-shop-edition2-progress-v1` and `tea-shop-edition2-appearance-v1`. Recovery, unfinished-puzzle, guide and goal keys derive from the new progress key. The preview keeps `tea-shop-preview-edition2-progress-v1` and its existing appearance key; the classic keys also stay unchanged.
 

@@ -53,6 +53,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     <div class="frame shop-room">
       <header class="topbar shop-overlay shop-toolbar">
         <h2 class="visually-hidden">Tea Shop</h2>
+        ${isSecondEdition ? '<span class="home-wordmark" aria-hidden="true">Decopu<span>✦</span></span>' : ""}
         <p class="shop-stars" id="shop-stars"></p>
         <div class="room-actions">
           ${themeToggle(false)}
@@ -64,14 +65,16 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
               ${isSecondEdition ? '<button id="browse-puzzles" type="button">All puzzles</button>' : ""}
               ${!isShowroom && !isGuidePreview ? '<button id="backup-progress" type="button">Progress & backups</button>' : ''}
               ${isPreview ? '<button id="reset-preview" type="button">Reset preview progress</button>' : ""}
+              ${isPreview && isSecondEdition ? `<a class="home-demo-link" href="${import.meta.env.BASE_URL}?showroom=1">See finished shop</a>` : ""}
               <button id="showcase-toggle" class="icon-btn" type="button">Showcase</button>
             </div>
           </details>
-          <button id="edit-toggle" class="icon-btn" type="button">Edit</button>
+          <span id="toolbar-edit-slot"><button id="edit-toggle" class="icon-btn" type="button">Edit</button></span>
         </div>
       </header>
       ${isPreview ? `<aside class="preview-bar"><span>${isGuidePreview ? "Tour · temporary" : isShowroom ? "Showroom · temporary" : isOfflinePreview ? "Offline preview" : isSecondEdition ? "Second edition · v" + APP_VERSION : "Preview · v" + APP_VERSION}</span><a href="${import.meta.env.BASE_URL}${isSecondEdition ? (isShowroom ? "?edition=2" : "?edition=2&showroom=1") : isShowroom ? "" : "?showroom=1"}">${isShowroom ? "Back to my shop" : "See finished shop"}</a></aside>` : ""}
       <div id="shop-guide"></div>
+      ${isSecondEdition ? '<div class="home-intro"><div><span class="home-eyebrow">A little place of your own</span><p class="home-title">Your tea shop</p></div><button id="home-puzzles" type="button" aria-label="Browse all puzzles"><span>Puzzles</span><strong></strong></button></div>' : ""}
       <div class="shop-stage">
         <canvas id="shop-canvas" aria-label="The tea shop room. Pinch to zoom."></canvas>
       ${isSecondEdition ? '<button id="undo-move" class="move-undo" type="button" disabled>Undo move</button>' : ""}
@@ -91,7 +94,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       <button id="upgrade-notice" class="upgrade-notice hidden" type="button"></button>
       <div class="shop-dock">
         <section id="decorate-panel" class="hidden" aria-label="Decorations">
-        <div class="editor-nav"><button id="editor-back" class="collection-back hidden" data-act="browse" type="button">← Browse</button><button id="tray-toggle" class="tray-toggle" type="button" aria-expanded="true" aria-controls="editor-body">Hide panel <span aria-hidden="true">⌄</span></button></div>
+        <div class="editor-nav">${isSecondEdition ? '<span class="editor-caption" id="editor-caption">Find your next piece</span>' : ""}<button id="editor-back" class="collection-back hidden" data-act="browse" type="button">← Browse</button><button id="tray-toggle" class="tray-toggle" type="button" aria-expanded="true" aria-controls="editor-body">Hide panel <span aria-hidden="true">⌄</span></button></div>
         <div id="editor-body">
         <div class="catalog-tabs" role="group" aria-label="Decoration collection">
           <button data-filter="all" type="button">Decorations</button>
@@ -104,6 +107,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
         </div>
         </section>
         <div class="shop-actions">
+          ${isSecondEdition ? '<div class="home-play-actions"></div>' : ""}
           <button class="shop-card open" id="play-tea" type="button">
             <span class="home-play-icon" aria-hidden="true">▤</span>
             <span class="card-copy">
@@ -121,9 +125,13 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
           </button>
         </div>
       </div>
-      <div class="overlay hidden" id="shop-modal" role="dialog" aria-label="Shop note"></div>
+      <div class="overlay hidden" id="shop-modal" role="dialog" aria-labelledby="shop-note-title"></div>
     </div>`;
 
+  if (isSecondEdition) {
+    root.querySelector('.home-play-actions')!.append(root.querySelector('#play-tea')!);
+    root.querySelector('.preview-bar')?.classList.toggle('home-preview-notice', !isShowroom && !isGuidePreview && !isOfflinePreview);
+  }
   const canvas = root.querySelector<HTMLCanvasElement>("#shop-canvas");
   if (!canvas) throw new Error("Missing shop canvas");
 
@@ -138,6 +146,13 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   let selected: UpgradeId | null = null;
   let finaleOpen = false;
   let bakeryNote = false;
+  let shownModal: 'finale' | 'bakery' | null = null;
+  let modalReturnFocus: HTMLElement | null = null;
+  const modalInert = new Map<HTMLElement, boolean>();
+  const focusVisible = (element: HTMLElement | null) => {
+    if (!element?.isConnected || !element.getClientRects().length || element.closest('[inert]') || element.hasAttribute('disabled')) return false;
+    element.focus({preventScroll:true}); return document.activeElement === element;
+  };
   let filter: "all" | "owned" = "all";
   let draft: DecorationDraft | null = null;
   let lastMove: {id: UpgradeId; place: Placement} | null = null;
@@ -185,6 +200,11 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   diorama.setNight(night);
 
   const paintChrome = () => {
+    const active = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const focusedUpgrade = active?.dataset.upgrade;
+    const restoreEditFocus = active === root.querySelector("#edit-toggle");
+    const focusedAction = document.activeElement instanceof HTMLElement && document.activeElement.closest('#upgrade-detail')
+      ? {...document.activeElement.dataset} : null;
     setBrowserNight(night);
     const undoMove = root.querySelector<HTMLButtonElement>('#undo-move');
     if (undoMove) { undoMove.disabled = !lastMove; undoMove.classList.toggle('hidden', !edit); }
@@ -215,8 +235,12 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       const unfinished = readPuzzle(progress);
       const complete = progress.bestStars.every(stars => stars > 0);
       const maxed = progress.bestStars.every(stars => stars === 3);
-      root.querySelector('#play-tea strong')!.textContent = unfinished ? 'Continue puzzle' : maxed ? 'Revisit puzzles' : complete ? 'Improve your scores' : 'Play next puzzle';
-    root.querySelector('#play-tea em')!.textContent = unfinished ? 'Pick up where you left off' : maxed ? 'All puzzles finished · Play a favourite' : complete ? 'Earn more stars for your favourite pieces' : 'Earn stars to decorate';
+      const completed = progress.bestStars.filter(stars => stars > 0).length;
+      const nextLevel = unfinished?.save.levelId ?? progress.bestStars.findIndex(stars => stars === 0) + 1;
+      root.querySelector('#play-tea strong')!.textContent = unfinished ? 'Continue' : complete ? 'Play again' : 'Play';
+      root.querySelector('#play-tea em')!.textContent = unfinished ? `Puzzle ${nextLevel} · In progress` : maxed ? 'All stars collected' : complete ? 'Improve your best' : `Puzzle ${nextLevel}`;
+      root.querySelector('#home-puzzles strong')!.textContent = `${completed} / ${progress.bestStars.length}`;
+      root.querySelector('#home-puzzles')!.setAttribute('aria-label', `All puzzles, ${completed} of ${progress.bestStars.length} completed`);
     }
     const available = DECORATIONS.filter((item) => collectionUnlocked(item.id,progress.bestStars) && !isOwned(progress.shop, item.id) && canPurchaseCopy(progress.shop, item.id) && item.cost <= spendable).length;
     updateAudioToggle(root.querySelector("#mute"), progress.muted);
@@ -228,18 +252,27 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     }
 
     const toggle = root.querySelector("#edit-toggle");
-    if (toggle) toggle.textContent = edit ? "Done" : "Edit";
+    if (toggle) {
+      if (isSecondEdition) {
+        const slot = root.querySelector(edit || showcasing ? '#toolbar-edit-slot' : '.home-play-actions')!;
+        if (toggle.parentElement !== slot) slot.append(toggle);
+        toggle.innerHTML = edit ? 'Done' : `<span class="home-decor-icon" aria-hidden="true">✧</span><strong>Decorate</strong>${available ? `<small>${available} ready to buy</small>` : '<small>Make it yours</small>'}`;
+      } else toggle.textContent = edit ? 'Done' : 'Edit';
+      toggle.setAttribute("aria-label", edit ? "Finish decorating" : `Decorate shop, ${available} decorations affordable`);
+    }
     root.querySelector("h2")!.textContent = edit ? "Decorate" : "Tea Shop";
     root.querySelector("#decorate-panel")?.classList.toggle("hidden", !edit);
     root.querySelector(".shop-actions")?.classList.toggle("hidden", edit);
     const notice = root.querySelector("#upgrade-notice");
-    notice?.classList.toggle("hidden", edit || available === 0);
+    notice?.classList.toggle("hidden", edit || available === 0 || isSecondEdition);
     if (notice) notice.textContent = `${available} ${available === 1 ? "decoration" : "decorations"} available · Browse`;
     root.querySelector(".shop-room")?.classList.toggle("decorating", edit);
     if (!edit) root.querySelector("#placement-status")?.classList.add("hidden");
 
     root.querySelector('.shop-room')?.classList.toggle('has-selection',Boolean(focus));
     root.querySelector('#editor-back')?.classList.toggle('hidden',!focus);
+    const caption = root.querySelector('#editor-caption');
+    if (caption) { caption.textContent = filter === 'owned' ? 'Your collection' : 'Find your next piece'; caption.classList.toggle('hidden',Boolean(focus)); }
     const rail = root.querySelector("#upgrade-rail");
     root.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(button => {
       button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
@@ -248,10 +281,17 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     if (rail) rail.innerHTML = collection.map((upgrade) => {
       const owned = isOwned(progress.shop, upgrade.id);
       const active = focus === upgrade.id;
+      const unlocked = collectionUnlocked(upgrade.id,progress.bestStars);
+      const ready = unlocked && upgrade.cost <= spendable;
+      if (isSecondEdition) return `<button aria-pressed="${active}" class="upgrade-chip ${owned ? 'owned' : ''} ${active ? 'active' : ''}" data-upgrade="${upgrade.id}" data-availability="${owned ? 'owned' : !unlocked ? 'locked' : ready ? 'ready' : 'saving'}" type="button">
+        <span class="deco-icon" aria-hidden="true">${styleThumbnail(upgrade.id,styleOf(progress.shop,upgrade.id))}</span>
+        <span class="catalog-card-title"><strong>${label(upgrade.id)}</strong>${!owned ? `<span class="catalog-price">${upgrade.cost} ${STAR}</span>` : ''}</span>
+        <span class="catalog-status">${owned ? (isStored(progress.shop,upgrade.id) ? 'Stored' : 'In your shop') : !unlocked ? `Unlock at ${upgrade.unlockAfter} puzzles` : ready ? 'Ready to buy' : `Need ${upgrade.cost-spendable} more stars`}</span>
+      </button>`;
       return `
         <button aria-pressed="${active}" class="upgrade-chip ${owned ? "owned" : ""} ${active ? "active" : ""}" data-upgrade="${upgrade.id}" type="button">
           <span class="deco-icon" aria-hidden="true">${styleThumbnail(upgrade.id,styleOf(progress.shop,upgrade.id))}</span><strong>${label(upgrade.id)}</strong>
-          <span>${owned ? `${isStored(progress.shop, upgrade.id) ? "Stored" : "In shop"} · ${UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name}` : `${upgrade.cost} ${STAR}${!collectionUnlocked(upgrade.id,progress.bestStars) ? ` · ${isSecondEdition ? 'Unlock at ' : ''}${upgrade.unlockAfter} puzzles` : upgrade.collection ? ` · ${upgrade.collection}` : ""}`}</span>
+          <span>${owned ? `${isStored(progress.shop, upgrade.id) ? "Stored" : "In shop"} · ${UPGRADE_BY_ID[upgrade.id].variants[styleOf(progress.shop, upgrade.id)].name}` : `${upgrade.cost} ${STAR}${!collectionUnlocked(upgrade.id,progress.bestStars) ? ` · ${isSecondEdition ? 'Unlock at ' : ''}${upgrade.unlockAfter} puzzles` : isSecondEdition ? (upgrade.cost <= spendable ? " · Ready to buy" : ` · Need ${upgrade.cost - spendable} more`) : upgrade.collection ? ` · ${upgrade.collection}` : ""}`}</span>
         </button>`;
     }).join("");
 
@@ -290,11 +330,39 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       actions.querySelector('[data-resume-shop]')?.remove();
       if(!isSecondEdition && readPuzzle(progress)) {const button=document.createElement('button');button.dataset.resumeShop='';button.className='resume-card';button.textContent='Resume unfinished puzzle →';button.onclick=()=>host.resumePuzzle();actions.prepend(button);}
     }
-    const modal = root.querySelector("#shop-modal");
-    if (modal) {
-      if (finaleOpen) modal.innerHTML = finaleModal();
-      else if (bakeryNote) modal.innerHTML = bakeryModal();
-      modal.classList.toggle("hidden", !finaleOpen && !bakeryNote);
+    const modal = root.querySelector<HTMLElement>("#shop-modal")!;
+    const nextModal = finaleOpen ? 'finale' : bakeryNote ? 'bakery' : null;
+    const closingModal = shownModal !== null && nextModal === null;
+    if (nextModal !== shownModal) {
+      if (nextModal) {
+        modalReturnFocus = active;
+        modal.innerHTML = nextModal === 'finale' ? finaleModal() : bakeryModal();
+        modal.setAttribute('aria-modal','true');
+        for (const sibling of Array.from(modal.parentElement!.children)) {
+          if (sibling === modal || !(sibling instanceof HTMLElement)) continue;
+          modalInert.set(sibling,sibling.inert); sibling.inert = true;
+        }
+      } else {
+        for (const [element,inert] of modalInert) element.inert = inert;
+        modalInert.clear(); modal.removeAttribute('aria-modal');
+      }
+      modal.classList.toggle('hidden',!nextModal);
+      shownModal = nextModal;
+      if (nextModal) focusVisible(modal.querySelector('button'));
+    }
+    if (nextModal) return;
+    if (closingModal) {
+      if (!focusVisible(modalReturnFocus)) focusVisible(root.querySelector('#upgrade-detail [data-act="style"][aria-pressed="true"]') ?? root.querySelector('#edit-toggle'));
+      modalReturnFocus = null;
+    } else if (restoreEditFocus) focusVisible(root.querySelector('#edit-toggle'));
+    else if (focusedAction?.act || focusedUpgrade) {
+      const sameAction = focusedAction?.act ? [...root.querySelectorAll<HTMLButtonElement>('#upgrade-detail [data-act]')].find(button =>
+        button.dataset.act === focusedAction.act && button.dataset.id === focusedAction.id && button.dataset.style === focusedAction.style
+      ) : null;
+      const oppositeAction = focusedAction?.act === 'store' ? 'place' : focusedAction?.act === 'place' ? 'store' : null;
+      if (!focusVisible(sameAction ?? null) && !(oppositeAction && focusVisible(root.querySelector(`#upgrade-detail [data-act="${oppositeAction}"]`)))) {
+        focusVisible(root.querySelector('#upgrade-detail .style-row [aria-pressed="true"]') ?? root.querySelector(`[data-filter="${filter}"]`));
+      }
     }
   };
 
@@ -350,6 +418,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
 
   const bind = () => {
     root.querySelector('#browse-puzzles')?.addEventListener('click',()=>host.goLevels());
+    root.querySelector('#home-puzzles')?.addEventListener('click',()=>host.goLevels());
     root.querySelector('#undo-move')?.addEventListener('click',()=>{
       if (!lastMove) return;
       const {id,place}=lastMove;
@@ -392,7 +461,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector("#showcase-back")?.addEventListener("click", () => {
       showcasing = false;
       paintChrome();
-      root.querySelector<HTMLButtonElement>("#showcase-toggle")?.focus({preventScroll:true});
+      if (!focusVisible(root.querySelector('#showcase-toggle'))) focusVisible(root.querySelector('.settings-menu summary'));
     });
     root.querySelector("#share-shop")?.addEventListener("click", () => { void exportImage(true); });
     root.querySelector("#save-shop")?.addEventListener("click", () => { void exportImage(false); });
@@ -441,6 +510,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector("#upgrade-rail")?.addEventListener("click", (event) => {
       const button = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-upgrade]");
       if (!button) return;
+      const restoreSelectionFocus = document.activeElement === button;
       playClick(host.progress.muted);
       clearPreview();
       if (isSecondEdition) browseScroll[filter] = root.querySelector(".editor-content")!.scrollTop;
@@ -451,6 +521,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       diorama.setEditMode(edit);
       root.querySelector(".editor-content")!.scrollTop = 0;
       paintChrome();
+      if (restoreSelectionFocus) focusVisible(root.querySelector('#upgrade-detail .style-row [aria-pressed="true"]'));
     });
     root.querySelectorAll("[data-filter]").forEach(button => button.addEventListener("click", () => {
       browse((button as HTMLElement).dataset.filter as "all" | "owned");
@@ -492,6 +563,16 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
         }
       }
     });
+    root.querySelector("#shop-modal")?.addEventListener("keydown", (event) => {
+      const key = event as KeyboardEvent;
+      if (key.key === 'Escape') {
+        key.preventDefault();key.stopPropagation();finaleOpen=false;bakeryNote=false;paintChrome();
+      } else if (key.key === 'Tab') {
+        const buttons=[...root.querySelectorAll<HTMLButtonElement>('#shop-modal button:not(:disabled)')];
+        const index=buttons.indexOf(document.activeElement as HTMLButtonElement);
+        key.preventDefault();buttons[(index+(key.shiftKey?-1:1)+buttons.length)%buttons.length]?.focus();
+      }
+    });
     root.querySelector("#shop-modal")?.addEventListener("click", (event) => {
       if((event.target as HTMLElement).closest('[data-finale-showcase]')) {
         finaleOpen=false;edit=false;showcasing=true;clearPreview();diorama.setEditMode(false);paintChrome();
@@ -516,6 +597,8 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   };
 
   const browse = (tab: "all" | "owned") => {
+    const previous = focus;
+    const returnToCard = document.activeElement === root.querySelector('#editor-back') || (document.activeElement as HTMLElement | null)?.dataset.act === 'cancel-preview';
     trayCollapsed = false;
     clearPreview();
     filter = tab;
@@ -525,6 +608,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
     root.querySelector(".editor-content")!.scrollTop = 0;
     paintChrome();
     if(isSecondEdition) root.querySelector(".editor-content")!.scrollTop=browseScroll[tab];
+    if (returnToCard && previous) focusVisible(root.querySelector(`[data-upgrade="${previous}"]`) ?? root.querySelector(`[data-filter="${tab}"]`));
   };
 
   const previewShop = (): ShopState => {
@@ -554,6 +638,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
   };
 
   const buy = (id: UpgradeId, variant: number) => {
+    const restorePurchaseFocus = (document.activeElement as HTMLElement | null)?.dataset.act === 'buy';
     const progress = host.progress;
     const def = UPGRADE_BY_ID[id];
     if (!collectionUnlocked(id,progress.bestStars) || isOwned(progress.shop, id) || !canPurchaseCopy(progress.shop, id) || spendableStars(progress) < def.cost) return;
@@ -578,7 +663,7 @@ export function mountShop(root: HTMLElement, host: ShopHost, startInEdit = false
       diorama.playFinale();
       playFinale(progress.muted);
       paintChrome();
-    }
+    } else if (restorePurchaseFocus) focusVisible(root.querySelector('#upgrade-detail [data-act="style"][aria-pressed="true"]'));
   };
 
   const restyle = (id: UpgradeId, variant: number) => {
@@ -638,7 +723,15 @@ function taskDetail(progress: Progress, focus: UpgradeId | null, draft: Decorati
   const unlocked = collectionUnlocked(id,progress.bestStars);
   const affordable = spendableStars(progress) >= def.cost;
   const fits = draft?.id === id && draft.place !== null;
-  return `<div class="detail-copy"><strong>${label(id)}</strong>
+  if (isSecondEdition) {
+    const pinned = readGoal(progress)?.id === id && readGoal(progress)?.style === (chosen ?? 0);
+    const status = !unlocked ? `Complete ${def.unlockAfter} puzzles to unlock` : !fits ? 'Move or store a piece to make room' : !affordable ? `${def.cost-spendableStars(progress)} more stars needed` : 'All 3 styles included · Free to change';
+    return `<div class="detail-copy"><div class="editor-item-heading"><strong>${label(id)}</strong><span class="editor-price">${def.cost} ✦</span></div><span class="decoration-state">Preview · Not purchased</span></div>
+      <div class="style-row" role="group" aria-label="${label(id)} styles">${def.variants.map((variant,index) => `<button class="style-chip ${chosen===index ? 'active' : ''}" aria-pressed="${chosen===index}" data-act="preview" data-id="${id}" data-style="${index}" type="button">${styleThumbnail(id,index)}<span>${variant.name}</span></button>`).join('')}</div>
+      <div class="editor-secondary">${draft?.place && def.movable ? `<button class="rotate-action" data-act="rotate" type="button">${def.surface==='wall' ? 'Other wall' : 'Rotate'}</button>` : ''}<button class="goal-pin" type="button" data-act="pin-goal" aria-pressed="${pinned}">${pinned ? 'Goal saved ✓' : 'Save as goal'}</button></div>
+      <div class="purchase-row"><p class="purchase-summary" role="status">${status}</p><button class="cancel-preview" data-act="cancel-preview" type="button">Cancel</button><button class="buy-decoration" data-act="buy" data-id="${id}" data-style="${chosen ?? 0}" type="button" ${chosen===null || !unlocked || !affordable || !fits ? 'disabled' : ''}>${!unlocked ? 'Locked' : !fits ? 'Make room to buy' : !affordable ? `Need ${def.cost-spendableStars(progress)} more ✦` : `Buy & place · ${def.cost} ✦`}</button></div>`;
+  }
+  return `<div class="detail-copy"><strong>${label(id)}</strong>${isSecondEdition ? `<span class="decoration-state">${chosen === null ? "Not owned" : "Preview · Not purchased"}</span>` : ""}
     <p class="detail-note">${chosen === null ? "Choose a style to preview in your shop." : def.variants[chosen].blurb}</p></div>
     ${isSecondEdition ? `<button class="goal-pin" type="button" data-act="pin-goal">${readGoal(progress)?.id===id && readGoal(progress)?.style===(chosen??0) ? "Your goal ✓ · Clear" : "Make this my goal"}</button>` : ""}
     <div class="style-row">${def.variants.map((variant, index) => `<button class="style-chip ${chosen === index ? "active" : ""}" aria-pressed="${chosen === index}" data-act="preview" data-id="${id}" data-style="${index}" type="button">${styleThumbnail(id, index)}<span>${variant.name}</span></button>`).join("")}</div>
@@ -666,11 +759,12 @@ function editDetail(shop: ShopState, selected: UpgradeId | null): string {
     : "";
   return `
     <div class="detail-copy">
-      <strong>${label(selected)}</strong>
+      <strong>${label(selected)}</strong>${isSecondEdition ? `<span class="decoration-state">${stored ? "Owned · Stored" : "Owned · In shop"}</span>` : ""}
       <p class="detail-note">${def.variants[current]?.blurb ?? def.blurb}</p>
     </div>
 
-    <div class="style-row">${styles}</div>
+    ${isSecondEdition ? '<p class="owned-style-note">Your styles · Free to change</p>' : ''}
+    <div class="style-row" role="group" aria-label="${label(selected)} styles">${styles}</div>
     <div class="inventory-actions">${rotate}${def.movable ? `<button class="style-chip" data-act="${stored ? "place" : "store"}" type="button" ${stored && !canRestore ? "disabled" : ""}>${stored ? "Place" : "Store"}</button>` : ""}</div>
     ${stored && !canRestore ? '<p class="editor-saved" role="status">Make room to place this item.</p>' : ''}
     ${returnValue(shop, selected) ? `<button class="return-item" data-act="return" type="button">Return for ${returnValue(shop, selected)} ✦</button>` : ''}`;
@@ -680,7 +774,7 @@ function finaleModal(): string {
   return `
     <div class="modal">
       <p class="kicker">All tidy</p>
-      <h3>Your tea shop is open</h3>
+      <h3 id="shop-note-title">Your tea shop is open</h3>
       <p class="lede tight">The lamps warm up, the shopkeeper is ready to serve, and this little corner is yours. Keep collecting, try a new arrangement, or share your finished shop.</p>
       <div class="modal-actions">
         <button data-finale-showcase type="button">Show my shop</button><button data-dismiss type="button">Keep decorating</button>
@@ -692,7 +786,7 @@ function bakeryModal(): string {
   return `
     <div class="modal">
       <p class="kicker">Coming next</p>
-      <h3>The bakery is airing out</h3>
+      <h3 id="shop-note-title">The bakery is airing out</h3>
       <p class="lede tight">The ovens are warm, but the cakes are still a later visit. Thank you for finishing the tea shop.</p>
       <div class="modal-actions">
         <button data-dismiss type="button">Back to the tea shop</button>

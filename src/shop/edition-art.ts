@@ -1,6 +1,8 @@
+import { ITEMS } from '../game/items';
 import { buildEditionExtra, editionExtraIds } from './edition-extras';
 import { buildEditionSpecial, editionSpecialIds } from './edition-specials';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
+import { Quaternion, Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { Color3 } from '@babylonjs/core/Maths/math.color';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
@@ -10,7 +12,7 @@ import type { Scene } from '@babylonjs/core/scene';
 import type { ShopState, UpgradeId } from '../game/types';
 import { floorCenter, wallCenter } from './grid';
 import { UPGRADE_BY_ID, placeOf, isPlaced } from './upgrades';
-import { editionFabricTexture, editionSignTexture, editionOakTexture } from './textures';
+import { editionFabricTexture, editionSignTexture, editionOakTexture, editionJoineryTexture } from './textures';
 
 const E={cream:'#f6eedf',oak:'#c79b70',dark:'#725340',sage:'#8da496',rose:'#c78d82',brass:'#b69862',leaf:'#69896b',leafDeep:'#46664e',ink:'#414f49'};
 export const editionCoreIds: UpgradeId[]=['counter','sign','paint','shelves','plant','rug','lamp','table'];
@@ -35,13 +37,20 @@ function soft(s:Scene,n:string,p:TransformNode,m:StandardMaterial,w:number,h:num
  const normals:number[]=[];VertexData.ComputeNormals(positions,indices,normals);const v=new VertexData();Object.assign(v,{positions,indices,normals,uvs});v.applyToMesh(mesh);return attach(mesh,p,m,x,y,z);
 }
 function cup(s:Scene,p:TransformNode,body:StandardMaterial,tea:StandardMaterial,x:number,y:number,z:number){
- cylinder(s,'saucer',p,body,.025,.135,x,y,z);cylinder(s,'ceramic-cup',p,body,.15,.075,x,y+.085,z,.095);cylinder(s,'tea',p,tea,.009,.073,x,y+.165,z);
+ cylinder(s,'saucer',p,body,.025,.135,x,y,z);cylinder(s,'ceramic-cup',p,body,.15,.075,x,y+.085,z,.095);cylinder(s,'tea',p,tea,.009,.073,x,y+.165,z);ring(s,'porcelain-lip',p,body,.18,.014,x,y+.165,z);
  const h=ring(s,'cup-handle',p,body,.11,.025,x+.105,y+.1,z);h.rotation.x=Math.PI/2;
 }
 function pot(s:Scene,p:TransformNode,body:StandardMaterial,accent:StandardMaterial,x:number,y:number,z:number){
  orb(s,'teapot-belly',p,body,.16,x,y+.15,z,1.15,.95,1);cylinder(s,'teapot-lid',p,accent,.035,.115,x,y+.29,z);orb(s,'teapot-knob',p,accent,.035,x,y+.33,z);
  const sp=cylinder(s,'teapot-spout',p,body,.23,.035,x+.19,y+.2,z,.055);sp.rotation.z=-.8;
  const h=ring(s,'teapot-handle',p,accent,.24,.035,x-.18,y+.17,z);h.rotation.x=Math.PI/2;
+}
+function teaPacket(scene:Scene,p:TransformNode,paper:StandardMaterial,ink:StandardMaterial,x:number,y:number,z:number){
+ const packet=new TransformNode('folded-tea-packet',scene);packet.parent=p;packet.position.set(x,y,z);packet.rotation.y=-.18;
+ soft(scene,'tea-paper',packet,paper,.23,.035,.17,.025);
+ soft(scene,'packet-label',packet,ink,.12,.006,.09,.012,0,.021,0);
+ for(const xx of [-.09,.09])soft(scene,'packet-seam',packet,paper,.012,.008,.145,.004,xx,.023,0);
+ soft(scene,'packet-fold',packet,paper,.19,.009,.025,.008,0,.025,-.063);
 }
 function steam(s:Scene,p:TransformNode,x:number,y:number,z:number){const m=mat(s,'steam','#fff8e9');m.alpha=.26;m.emissiveColor=Color3.FromHexString('#fff1d6').scale(.18);for(let i=0;i<3;i++){const a=orb(s,'tea-steam',p,m,.045,x,y,z,1,1.4,1);a.isPickable=false;a.receiveShadows=false;a.metadata={steam:{x,y,phase:i/3}};}}
 function tag(root:TransformNode,id:UpgradeId){root.metadata={upgradeId:id};for(const m of root.getChildMeshes())m.metadata={...m.metadata,upgradeId:id};}
@@ -55,13 +64,16 @@ export function buildEditionItem(scene:Scene,id:UpgradeId,shop:ShopState,style:n
  if(editionSpecialIds.includes(id)) return buildEditionSpecial(scene,id,shop,style,{E,mat,attach,orb,cylinder,ring,soft,cup,pot,place,tag});
  if(editionExtraIds.includes(id)) return buildEditionExtra(scene,id,shop,style,{E,mat,attach,orb,cylinder,ring,soft,cup,pot,place,tag});
  const root=new TransformNode(id,scene);const wood=mat(scene,'oak',E.oak),cream=mat(scene,'porcelain',E.cream,.25),dark=mat(scene,'walnut',E.dark),brass=mat(scene,'brass',E.brass,.3),accent=mat(scene,'accent',[E.sage,E.cream,E.rose][style]);
+ cream.specularColor.setAll(.16);cream.specularPower=40;wood.specularColor.setAll(.045);wood.specularPower=12;
+ if(['counter','table','shelves'].includes(id))wood.diffuseTexture=editionJoineryTexture(scene);
  if(id==='counter'){
   const body=style===0?wood:accent;soft(scene,'counter-cabinet',root,body,2.88,1.02,.89,.13,0,.56,0);
   soft(scene,'counter-plinth',root,dark,2.74,.12,.78,.1,0,.09,0);soft(scene,'rounded-countertop',root,style===0?dark:cream,3,.13,1,.17,0,1.12,0);
   for(const x of [-.94,0,.94]){soft(scene,'cabinet-panel',root,cream,.8,.68,.035,.05,x,.57,.454);soft(scene,'panel-inset',root,body,.69,.56,.045,.05,x,.57,.475);orb(scene,'cabinet-handle',root,brass,.027,x+.22,.72,.507);}
   soft(scene,'serving-tray',root,dark,1.05,.035,.54,.15,-.7,1.2,.02);pot(scene,root,accent,cream,-.83,1.22,.02);cup(scene,root,cream,dark,-.36,1.22,.08);steam(scene,root,-.83,1.64,.02);
-  for(let i=0;i<3;i++){const x=.28+i*.28;cylinder(scene,'tea-canister',root,i===1?accent:cream,.26,.105,x,1.33,-.15);cylinder(scene,'canister-lid',root,wood,.035,.115,x,1.48,-.15);soft(scene,'tin-label',root,dark,.1,.09,.01,.003,x,1.34,-.038);}
+  for(let i=0;i<3;i++){const x=.28+i*.28;cylinder(scene,'tea-canister',root,i===1?accent:cream,.26,.105,x,1.33,-.15);cylinder(scene,'canister-lid',root,wood,.035,.115,x,1.48,-.15);soft(scene,'tin-label',root,cream,.12,.11,.014,.012,x,1.34,-.038);}
   soft(scene,'folded-cloth',root,accent,.38,.03,.35,.06,.92,1.205,.22);
+  const teaPaper=mat(scene,'tea-paper',ITEMS.jasmine.fill),teaInk=mat(scene,'tea-ink',ITEMS.jasmine.ink);teaPacket(scene,root,teaPaper,teaInk,.93,1.235,.22);
  }else if(id==='sign'){
   soft(scene,'rounded-sign',root,style===1?brass:wood,1.9,.78,.12,.15);const face=MeshBuilder.CreatePlane('sign-lettering',{width:1.7,height:.61},scene);attach(face,root,mat(scene,'sign-face','#ffffff'),0,0,.066);face.rotation.y=Math.PI;(face.material as StandardMaterial).diffuseTexture=editionSignTexture(scene,style);
   for(const x of [-.64,.64])cylinder(scene,'sign-hook',root,brass,.14,.025,x,.45,0);
@@ -69,7 +81,7 @@ export function buildEditionItem(scene:Scene,id:UpgradeId,shop:ShopState,style:n
   soft(scene,'shelf-back',root,style===2?accent:cream,2.78,.93,.05,.09,0,.08,.04);
   for(const y of [-.3,.32])soft(scene,'shelf-board',root,style===1?cream:wood,2.9,.09,.4,.045,0,y,.22);
   for(const x of [-1.32,1.32])soft(scene,'shelf-side',root,wood,.12,1,.32,.04,x,.14,.2);
-  const colors=[E.sage,E.rose,'#d8ba79'];for(let i=0;i<6;i++){const x=-.9+(i%3)*.9,y=i<3?.37:-.25;const jar=mat(scene,'shelf-glaze'+i,colors[(i+style)%3],.3);cylinder(scene,'tea-jar',root,jar,.31,.145,x,y+.16,.2,.13);cylinder(scene,'tea-jar-lid',root,cream,.045,.15,x,y+.34,.2);soft(scene,'jar-label',root,cream,.12,.13,.015,.005,x,y+.16,.335);}
+  const colors=[ITEMS.matcha.fill,ITEMS.rose.fill,ITEMS.jasmine.fill];for(let i=0;i<6;i++){const x=-.9+(i%3)*.9,y=i<3?.37:-.25;const jar=mat(scene,'shelf-glaze'+i,colors[(i+style)%3],.3);cylinder(scene,'tea-jar',root,jar,.31,.145,x,y+.16,.2,.13);cylinder(scene,'tea-jar-lid',root,cream,.045,.15,x,y+.34,.2);soft(scene,'jar-label',root,cream,.12,.13,.015,.005,x,y+.16,.335);}
  }else if(id==='plant'){
   cylinder(scene,'ceramic-planter',root,accent,.34,.22,0,.19,0,.28);ring(scene,'pot-rim',root,cream,.55,.035,0,.36,0);cylinder(scene,'soil',root,dark,.015,.24,0,.37,0);
   const leaf=mat(scene,'leaf',E.leaf),deep=mat(scene,'leaf-shadow',E.leafDeep);
@@ -92,6 +104,7 @@ export function buildEditionItem(scene:Scene,id:UpgradeId,shop:ShopState,style:n
   cylinder(scene,'table-pedestal',root,dark,.58,.085,0,.34,0);soft(scene,'table-foot',root,dark,.7,.07,.7,.2,0,.055,0);
   for(const x of [-.77,.77]){const chairRoot=new TransformNode('dining-chair',scene);chairRoot.parent=root;chairRoot.position.set(x,0,0);soft(scene,'seat-frame',chairRoot,dark,.39,.07,.43,.11,0,.37,0);soft(scene,'seat-cushion',chairRoot,accent,.36,.08,.39,.12,0,.43,0);for(const z of [-.15,.15])for(const xx of [-.13,.13])cylinder(scene,'chair-leg',chairRoot,dark,.32,.025,xx,.19,z);if(style!==0){soft(scene,'chair-back',chairRoot,body,.08,.39,.43,.04,x<0?-.17:.17,.61,0);}}
   cup(scene,root,cream,dark,-.28,.72,.1);cup(scene,root,cream,dark,.28,.72,.1);
+  const teaPaper=mat(scene,'tea-paper',ITEMS.matcha.fill),teaInk=mat(scene,'tea-ink',ITEMS.matcha.ink);teaPacket(scene,root,teaPaper,teaInk,.02,.735,.22);
   if(editionReadingNook(shop)){
    soft(scene,'open-book-cover',root,accent,.37,.035,.27,.025,0,.73,-.2);soft(scene,'book-pages',root,cream,.33,.025,.23,.015,0,.76,-.2);
    pot(scene,root,accent,cream,.12,.72,-.18);steam(scene,root,.12,1.14,-.18);root.metadata={readingNook:true};
@@ -104,13 +117,46 @@ export function buildEditionPaintSample(scene:Scene,style:number):TransformNode{
  const root=new TransformNode('paint-sample',scene),m=mat(scene,'wall-sample',['#eadfcd','#bccbb9','#dcbab0'][style]),trim=mat(scene,'wall-trim',E.cream);
  soft(scene,'paint-wall',root,m,1.5,1.5,.12,.08,0,.75,0);soft(scene,'paint-dado',root,trim,1.5,.08,.16,.02,0,.55,.02);for(const x of [-.55,0,.55])soft(scene,'wall-batten',root,trim,.025,.5,.025,.008,x,.25,.08);return root;
 }
-export function buildEditionKeeper(scene:Scene):TransformNode{
- const root=new TransformNode('shopkeeper',scene),skin=mat(scene,'skin','#e7bd9c'),hair=mat(scene,'hair','#604636'),coat=mat(scene,'coat',E.sage),cream=mat(scene,'apron',E.cream);
- orb(scene,'body',root,coat,.23,0,.65,0,.9,1.4,.75);orb(scene,'head',root,skin,.205,0,1.12,.02,1,1.04,.9);orb(scene,'hair-cap',root,hair,.21,0,1.22,-.03,1,.73,.9);orb(scene,'hair-bun',root,hair,.1,0,1.33,-.13);
- soft(scene,'apron',root,cream,.28,.43,.06,.04,0,.64,.18);soft(scene,'apron-pocket',root,coat,.13,.1,.018,.015,0,.6,.218);
- for(const x of [-.22,.22]){const a=orb(scene,'sleeve',root,coat,.09,x,.7,.03,.8,1.8,.85);a.rotation.z=x<0?-.3:.3;orb(scene,'hand',root,skin,.065,x,.53,.09);}
- const eyes=mat(scene,'eyes',E.ink),cheek=mat(scene,'cheek','#d9917c');for(const x of [-.065,.065])orb(scene,'eye',root,eyes,.016,x,1.13,.19,.7,1,.4);for(const x of [-.12,.12])orb(scene,'cheek',root,cheek,.032,x,1.075,.166,1,.55,.25);
- orb(scene,'nose',root,skin,.025,0,1.09,.205);root.scaling.setAll(1.12);return root;
+export function buildEditionKeeper(scene:Scene):TransformNode {
+ const root=new TransformNode('shopkeeper',scene);
+ const skin=mat(scene,'skin','#edc4a1'),hair=mat(scene,'hair','#634838'),coat=mat(scene,'coat',E.sage),cream=mat(scene,'apron',E.cream);
+ const eyes=mat(scene,'eyes','#34312d',0),cheek=mat(scene,'cheek','#d9917c');
+ // Keep the face clear: one relaxed arm and one bent arm supporting a small cup.
+ const body=orb(scene,'body',root,coat,.24,0,.76,0,.96,1.4,.79);
+ soft(scene,'apron',root,cream,.31,.46,.06,.04,0,.76,.19);
+ soft(scene,'apron-pocket',root,coat,.15,.11,.018,.015,0,.7,.228);
+ for(const x of [-.14,.14]) {
+  orb(scene,'keeper-shoe',root,hair,.10,x,.07,.025,.75,.65,1.3);
+  cylinder(scene,'keeper-trouser',root,coat,.38,.065,x,.29,0);
+ }
+ // Join each sleeve between authored shoulder, elbow and wrist points.
+ const arm=(shoulder:Vector3,elbow:Vector3,wrist:Vector3)=>{
+  for(const [name,start,end,radius] of [['sleeve',shoulder,elbow,.087],['keeper-forearm',elbow,wrist,.069]] as const){
+   const delta=end.subtract(start),middle=start.add(end).scale(.5);
+   const segment=orb(scene,name,root,coat,radius,middle.x,middle.y,middle.z,1,delta.length()/(2*radius)+.35,1);
+   segment.rotationQuaternion=Quaternion.FromUnitVectorsToRef(Vector3.Up(),delta.normalize(),new Quaternion());
+  }
+  orb(scene,'hand',root,skin,.057,wrist.x,wrist.y,wrist.z,1,.8,1);
+ };
+ arm(new Vector3(-.21,.96,0),new Vector3(-.29,.79,.03),new Vector3(-.25,.62,.09));
+ arm(new Vector3(.21,.97,0),new Vector3(.30,.83,.08),new Vector3(.31,.99,.25));
+ const servingCup=new TransformNode('keeper-serving-cup',scene);servingCup.parent=root;
+ servingCup.position.set(.31,1.025,.25);servingCup.scaling.setAll(.68);
+ cup(scene,servingCup,cream,hair,0,0,0);
+ const headRig=new TransformNode('keeper-head-idle',scene);headRig.parent=root;headRig.position.y=1.04;
+ const face=new TransformNode('keeper-face',scene);face.parent=headRig;face.rotation.x=-.16;
+ orb(scene,'head',face,skin,.233,0,.16,.025,1,1.03,.9);
+ orb(scene,'hair-cap',face,hair,.24,0,.295,-.035,1,.59,.86);
+ orb(scene,'hair-bun',face,hair,.105,0,.395,-.145);
+ const fringe=orb(scene,'keeper-fringe',face,hair,.105,-.105,.31,.12,1.15,.42,.65);fringe.rotation.z=-.25;
+ for(const x of [-.225,.225])orb(scene,'keeper-ear',face,skin,.047,x,.16,.012,.65,1,.7);
+ const eyeMeshes=[-.078,.078].map(x=>orb(scene,'eye',face,eyes,.021,x,.19,.229,.85,1,.48));
+ for(const x of [-.135,.135])orb(scene,'cheek',face,cheek,.034,x,.125,.198,1,.58,.28);
+ orb(scene,'nose',face,skin,.032,0,.145,.242,1,.85,.8);
+ const smile=MeshBuilder.CreateTube('keeper-smile',{path:[new Vector3(-.048,.098,.229),new Vector3(-.024,.087,.239),new Vector3(0,.084,.242),new Vector3(.024,.087,.239),new Vector3(.048,.098,.229)],radius:.008,tessellation:6},scene);
+ attach(smile,face,hair);
+ root.metadata={keeperIdle:{head:headRig,eyes:eyeMeshes,body,bodyY:body.scaling.y,eyeY:eyeMeshes.map(eye=>eye.scaling.y)}};
+ root.scaling.setAll(1.12);return root;
 }
 export function decorateEditionRoom(scene:Scene,room:TransformNode):TransformNode{
  const trim=mat(scene,'room-joinery',E.cream),wood=mat(scene,'room-foundation',E.dark);
@@ -121,3 +167,14 @@ export function decorateEditionRoom(scene:Scene,room:TransformNode):TransformNod
  return finish;
 }
 export function editionFloorMaterial(scene:Scene):StandardMaterial{const m=mat(scene,'pale-oak','#ffffff',.04);m.diffuseTexture=editionOakTexture(scene);return m;}
+
+/** Small local gestures leave the keeper's placement, feet and serving direction fixed. */
+export function animateEditionKeeper(root:TransformNode,time:number,active:boolean):void {
+ const rig=root.metadata?.keeperIdle;if(!rig)return;
+ rig.head.rotation.y=active?Math.sin(time*.55)*.065:0;
+ rig.head.rotation.x=active?Math.sin(time*.85)*.018:0;
+ rig.body.scaling.y=rig.bodyY*(active?1+Math.sin(time*1.6)*.008:1);
+ const phase=time%6.5;
+ const blink=active&&phase<.18?1-.9*Math.sin(phase/.18*Math.PI):1;
+ rig.eyes.forEach((eye:{scaling:{y:number}},i:number)=>{eye.scaling.y=rig.eyeY[i]*blink;});
+}

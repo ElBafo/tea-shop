@@ -7,7 +7,9 @@ export const isProduction = base === '/tea-shop/' && path.startsWith('/tea-shop/
   && !path.startsWith('/tea-shop/preview/');
 const previewBuild = base === '/tea-shop/preview/';
 const preview = previewBuild && path.startsWith('/tea-shop/preview/');
-export const isSecondEdition = isProduction ? edition !== '1' : preview && edition === '2';
+// Installed preview shortcuts open the manifest's plain start_url. They must
+// reach current work without needing a query parameter; classic is explicit.
+export const isSecondEdition = (isProduction || preview) && edition !== '1';
 export const APPEARANCE_KEY = isSecondEdition
   ? `tea-shop-${isProduction ? '' : 'preview-'}edition2-appearance-v1`
   : `tea-shop-${previewBuild ? 'preview-' : ''}appearance-v1`;

@@ -193,6 +193,20 @@ export function editionOakTexture(scene:Scene):DynamicTexture {
   }
  });
 }
+// Neutral grain multiplies the existing oak tint; no plank seams on furniture.
+export function editionJoineryTexture(scene:Scene):DynamicTexture {
+ return canvasTex(scene,'edition-joinery',128,(ctx,s)=>{
+  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,s,s);
+  ctx.strokeStyle='#795a3e';ctx.lineWidth=.8;ctx.globalAlpha=.10;
+  for(let row=0;row<14;row++){
+   const y=row*10-4;ctx.beginPath();ctx.moveTo(0,y);
+   ctx.bezierCurveTo(36,y+Math.sin(row*2)*4,88,y-3,s,y+2);ctx.stroke();
+  }
+  ctx.globalAlpha=.05;ctx.lineWidth=1;
+  for(let row=0;row<5;row++){ctx.beginPath();ctx.ellipse(28+row*21,14+row*24,18,2,.04,0,Math.PI*2);ctx.stroke();}
+  ctx.globalAlpha=1;
+ });
+}
 export function editionFabricTexture(scene:Scene,style:number):DynamicTexture {
  return canvasTex(scene,'edition-fabric-'+style,256,(ctx,s)=>{
   const base=['#d6b58e','#cbb2a5','#b8c4b0'][style];ctx.fillStyle=base;ctx.fillRect(0,0,s,s);

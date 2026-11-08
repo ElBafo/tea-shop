@@ -71,6 +71,30 @@ export async function playDrop(muted: boolean): Promise<void> {
   tone(ctx, 560, now + 0.03, 0.07, "triangle", 0.03);
 }
 
+// A short paper rustle and soft ceramic contact. Cached noise avoids allocating
+// a buffer on every pour; sources/filters are disconnected when their sound ends.
+let paperNoise: AudioBuffer | null = null;
+export async function playTeaDrop(muted: boolean): Promise<void> {
+  if (muted || document.hidden) return;
+  await unlockAudio();
+  const ctx = getContext();
+  if (!ctx || ctx.state !== "running" || document.hidden) return;
+  if (!paperNoise || paperNoise.sampleRate !== ctx.sampleRate) {
+    paperNoise = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * .065), ctx.sampleRate);
+    const data = paperNoise.getChannelData(0);
+    for (let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length);
+  }
+  const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),amp=ctx.createGain();
+  source.buffer=paperNoise;filter.type="bandpass";filter.frequency.value=1700;filter.Q.value=.6;
+  const now=ctx.currentTime;
+  amp.gain.setValueAtTime(.0001,now);amp.gain.linearRampToValueAtTime(.045,now+.008);amp.gain.exponentialRampToValueAtTime(.0001,now+.065);
+  source.connect(filter);filter.connect(amp);amp.connect(ctx.destination);
+  source.onended=()=>{source.disconnect();filter.disconnect();amp.disconnect();};
+  source.start(now);source.stop(now+.07);
+  tone(ctx,470,now+.02,.075,"sine",.025);
+  tone(ctx,940,now+.02,.045,"sine",.008);
+}
+
 export async function playComplete(muted: boolean): Promise<void> {
   if (muted) return;
   await unlockAudio();

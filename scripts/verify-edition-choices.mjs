@@ -44,7 +44,7 @@ const previewUrl = process.env.PREVIEW_URL ?? 'http://127.0.0.1:5174/tea-shop/pr
 const saved = () => evaluate(`JSON.parse(localStorage.getItem('${key}'))`);
 const available = () => evaluate(`Number(document.querySelector('#shop-stars strong').textContent)`);
 const empty = () => ({owned: [], stored: [], style: {}, place: {}, finaleSeen: true});
-const progress = (count, stars = 3, shop = empty()) => ({muted: true, bestStars: Array.from({length: 16}, (_, i) => i < count ? stars : 0), bestMoves: Array(16).fill(0), shop});
+const progress = (count, stars = 3, shop = empty()) => ({muted: true, bestStars: Array.from({length: 24}, (_, i) => i < count ? stars : 0), bestMoves: Array(16).fill(0), shop});
 const ready = async () => { await pause(500); await until(`document.querySelector('#launch-start')?.disabled === false`); };
 const seed = async (value, goal = null) => {
   await evaluate(`Object.keys(localStorage).filter(k => k.startsWith('tea-shop-preview-edition2')).forEach(k => localStorage.removeItem(k));
@@ -72,9 +72,9 @@ try {
 
   if (process.env.CHOICES_PHASE !== 'goals') {
   await seed(progress(0)); await tap('#edit-toggle');
-  assert.equal(await evaluate(`document.querySelectorAll('#upgrade-rail [data-upgrade]').length`), 16);
+  assert.equal(await evaluate(`document.querySelectorAll('#upgrade-rail [data-upgrade]').length`), 18);
   await evaluate(`document.querySelectorAll('#upgrade-rail img').forEach(img => img.loading = 'eager')`);
-  await until(`document.querySelectorAll('#upgrade-rail img').length === 16 && [...document.querySelectorAll('#upgrade-rail img')].every(img => img.complete && img.naturalWidth > 0)`);
+  await until(`document.querySelectorAll('#upgrade-rail img').length === 18 && [...document.querySelectorAll('#upgrade-rail img')].every(img => img.complete && img.naturalWidth > 0)`);
   await shot('catalogue-phone');
 
   // Six distinct locked/free-preview paths and their exact unlock boundaries.
@@ -129,20 +129,20 @@ try {
   const legacy = progress(1, 3, {owned: ['counter'], stored: [], style: {counter: 1}, place: {counter: {x: 1, z: 1, rot: 0}}, finaleSeen: false});
   legacy.bestStars.length = legacy.bestMoves.length = 10;
   const roundtrip = await evaluate(`(async () => {const {parseBackup} = await import('/tea-shop/preview/src/game/backup.ts'); return parseBackup(JSON.stringify({format:'decopu-save',version:1,exportedAt:'2026-11-04T00:00:00Z',progress:${JSON.stringify(legacy)},puzzle:null})).progress;})()`);
-  assert.deepEqual(roundtrip, {...legacy,bestStars:[...legacy.bestStars,...Array(6).fill(0)],bestMoves:[...legacy.bestMoves,...Array(6).fill(0)]}, 'old ten-board core backup pads without changing existing progress');
+  assert.deepEqual(roundtrip, {...legacy,bestStars:[...legacy.bestStars,...Array(14).fill(0)],bestMoves:[...legacy.bestMoves,...Array(14).fill(0)]}, 'old ten-board core backup pads without changing existing progress');
   await seed(legacy); assert.deepEqual(await saved(), legacy, 'old score, ownership, style and placement survive reload');
   assert.equal(await available(), 1);
 
-  await seed(progress(16, 1));
+  await seed(progress(24, 1));
   assert.match(await evaluate(`document.querySelector('#play-tea strong').textContent`), /Improve your scores/);
   await tap('#play-tea'); assert.ok(await evaluate(`!!document.querySelector('.play')`));
-  await seed(progress(16));
+  await seed(progress(24));
   assert.match(await evaluate(`document.querySelector('#play-tea strong').textContent`), /Revisit puzzles/);
-  await tap('#play-tea'); assert.equal(await evaluate(`document.querySelectorAll('.level-btn').length`), 16);
+  await tap('#play-tea'); assert.equal(await evaluate(`document.querySelectorAll('.level-btn').length`), 24);
   assert.equal(await evaluate(`document.querySelector('.play')`), null, 'perfect completion opens choice rather than forcing puzzle one');
 
-  const completedShop = await evaluate(`(async () => {const {EDITION_DECORATIONS} = await import('/tea-shop/preview/src/shop/upgrades.ts');const items = EDITION_DECORATIONS.filter(item => !item.optional || ['art','bench','clock','trolley'].includes(item.id));return {owned:items.map(item=>item.id),stored:[],style:{},place:Object.fromEntries(items.map(item=>[item.id,{...item.defaultPlace}])),finaleSeen:true};})()`);
-  await seed(progress(16, 3, completedShop), {id: 'basket', style: 2});
+  const completedShop = await evaluate(`(async () => {const {EDITION_DECORATIONS} = await import('/tea-shop/preview/src/shop/upgrades.ts');const items = EDITION_DECORATIONS.filter(item => !item.optional || ['art','bench','clock','trolley','cabinet','armchair'].includes(item.id));return {owned:items.map(item=>item.id),stored:[],style:{},place:Object.fromEntries(items.map(item=>[item.id,{...item.defaultPlace}])),finaleSeen:true};})()`);
+  await seed(progress(24, 3, completedShop), {id: 'basket', style: 2});
   assert.match(await evaluate(`document.querySelector('.personal-goal').textContent`), /Return an optional piece to free up stars/);
 
   for (const [width, height, name] of [[320,568,'small'], [390,844,'phone'], [1280,900,'desktop']]) {

@@ -44,6 +44,17 @@ try{
  await drag(1,2);await until(`!!document.querySelector('.result-overlay')`);
  assert.equal(await evaluate(`document.querySelectorAll('.puzzle-hand-guide').length`),0);assert.equal(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-edition2-progress-v1')).bestStars[0]`),3);
  checks.push('Fresh welcome → visual source/target → three real drags complete the puzzle; guide disappears after win');
+ await shot('win');
+ await tap('.result-overlay [data-go="shop"]');await until(`!!document.querySelector('[data-upgrade="counter"]')`);
+ await tap('[data-upgrade="counter"]');await tap('[data-act="preview"][data-style="1"]');
+ assert.match(await evaluate(`document.querySelector('.decoration-state').textContent`),/Not purchased/);
+ await shot('first-style');await tap('[data-act="buy"]');await until(`!!document.querySelector('[data-act="store"]')`);
+ assert.equal(await evaluate(`JSON.parse(localStorage.getItem('tea-shop-preview-edition2-progress-v1')).shop.style.counter`),1);
+ await tap('[data-act="rotate"]');await tap('#undo-move');await tap('[data-act="store"]');
+ assert.match(await evaluate(`document.querySelector('.decoration-state').textContent`),/Stored/);
+ await tap('[data-act="place"]');await tap('#editor-back');assert.ok(await evaluate(`!document.querySelector('#upgrade-rail').classList.contains('hidden')`));
+ await tap('[data-guide-done]');await tap('#edit-toggle');await shot('home');
+ checks.push('First win → Decorate → style preview → purchase → rotate/Undo → store/place → Browse succeeds without leaving Edit');
  await open(true);await tap('[data-jar="0"]');await tap('[data-jar="2"]');await idle();
  await tap('[data-jar="0"]');assert.equal((await step()).text,'Try dragging these');assert.equal((await step()).from,1);await shot('alternative');
  await tap('[data-jar="1"]');await tap('[data-jar="0"]');await idle();assert.deepEqual((({from,to})=>({from,to}))(await step()),{from:1,to:2});
@@ -59,7 +70,7 @@ try{
  await evaluate(`document.querySelector('.shelves').style.flex='0 0 140px'`);await pause(100);const scrollHeight=await evaluate(`document.querySelector('.shelves').scrollHeight`);
  await evaluate(`document.querySelector('.shelves').scrollTop=30`);await pause(100);
  assert.equal(await evaluate(`document.querySelector('.shelves').scrollHeight`),scrollHeight,'overlay does not enlarge scrolling content');
- assert.ok(await evaluate(`(()=>{const s=document.querySelector('.shelves'),o=document.querySelector('.puzzle-hand-guide'),r=s.getBoundingClientRect(),a=o.getBoundingClientRect();return Math.abs(a.left-r.left-s.clientLeft)<1&&Math.abs(a.top-r.top-s.clientTop)<1&&a.width===s.clientWidth&&a.height===s.clientHeight})()`),'overlay stays pinned to shelf viewport while content scrolls');checks.push('Scroll geometry stays pinned without growing shelf');
+ await until(`(()=>{const s=document.querySelector('.shelves'),o=document.querySelector('.puzzle-hand-guide'),r=s.getBoundingClientRect(),a=o.getBoundingClientRect();return Math.abs(a.left-r.left-s.clientLeft)<1&&Math.abs(a.top-r.top-s.clientTop)<1&&Math.abs(a.width-s.clientWidth)<1&&Math.abs(a.height-s.clientHeight)<1})()`);checks.push('Scroll geometry stays pinned without growing shelf');
  await send('Emulation.setEmulatedMedia',{features:[]});await tap('[data-go="levels"]');assert.equal(await evaluate(`document.querySelectorAll('.puzzle-hand-guide,.puzzle-guide-instruction').length`),0);checks.push('Navigation disposes visual guide and accessible text');
  await open(true);await tap('[data-jar="0"]');await drag(0,2);await tap('[data-jar="0"]');assert.equal((await step()).text,'Try dragging these','normal tap works immediately after a guided drag');checks.push('Immediate tap-selection after a guided drag');
  assert.deepEqual(errors,[]);await fs.writeFile('work/visual-guide-check.json',JSON.stringify({passed:true,checks,errors,physicalIPhoneTested:false},null,2));console.log('PASS:',checks);

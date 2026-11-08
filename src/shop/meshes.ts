@@ -25,6 +25,7 @@ import { UPGRADE_BY_ID, placeOf, styleOf, kindOf } from "./upgrades";
 export interface ShopVisuals {
   wallStyleKey?: string;
   wallFinish?: TransformNode;
+  starterBench?: TransformNode;
   floor: Mesh;
   backWall: Mesh;
   leftWall: Mesh;
@@ -145,7 +146,7 @@ export function createShopVisuals(scene: Scene): ShopVisuals {
   const trimMat = paint(scene, "trim", C.woodDeep);
   const glassMat = paint(scene, "glass", "#9eb6c4", { spec: 0.45, alpha: 0.32 });
   const stainMat = paint(scene, "stain", "#b79a80");
-  const skyMat = paint(scene, "sky", "#f7e6c4", { emit: "#f3d7a0" });
+  const skyMat = paint(scene, "sky", isSecondEdition ? "#a8d5df" : "#f7e6c4", { emit: isSecondEdition ? "#bce5ed" : "#f3d7a0" });
   const frameMat = paint(scene, "frame", "#fff6ee");
 
   const room = new TransformNode("room", scene);
@@ -160,12 +161,12 @@ export function createShopVisuals(scene: Scene): ShopVisuals {
 
   box(scene, "sky", 1.72, 1.55, 0.04, room, skyMat, 4.85, 1.92, 0.015);
   box(scene, "win-sill", 1.9, 0.1, 0.36, room, frameMat, 4.85, 1.1, 0.16);
-  box(scene, "win-top", 1.9, 0.1, 0.12, room, frameMat, 4.85, 2.72, 0.04);
-  box(scene, "win-l", 0.12, 1.62, 0.12, room, frameMat, 3.96, 1.91, 0.04);
-  box(scene, "win-r", 0.12, 1.62, 0.12, room, frameMat, 5.74, 1.91, 0.04);
-  box(scene, "win-bar-h", 1.66, 0.06, 0.06, room, frameMat, 4.85, 1.91, 0.05);
-  box(scene, "win-bar-v", 0.06, 1.5, 0.06, room, frameMat, 4.85, 1.91, 0.05);
-  const glass = box(scene, "win-glass", 1.66, 1.5, 0.03, room, glassMat, 4.85, 1.91, 0.02);
+  box(scene, "win-top", 1.9, 0.1, isSecondEdition ? 0.22 : 0.12, room, frameMat, 4.85, 2.72, isSecondEdition ? 0.10 : 0.04);
+  box(scene, "win-l", 0.12, 1.62, isSecondEdition ? 0.22 : 0.12, room, frameMat, 3.96, 1.91, isSecondEdition ? 0.10 : 0.04);
+  box(scene, "win-r", 0.12, 1.62, isSecondEdition ? 0.22 : 0.12, room, frameMat, 5.74, 1.91, isSecondEdition ? 0.10 : 0.04);
+  box(scene, "win-bar-h", 1.66, 0.06, 0.06, room, frameMat, 4.85, 1.91, isSecondEdition ? 0.16 : 0.05);
+  box(scene, "win-bar-v", 0.06, 1.5, 0.06, room, frameMat, 4.85, 1.91, isSecondEdition ? 0.16 : 0.05);
+  const glass = box(scene, "win-glass", 1.66, 1.5, 0.03, room, glassMat, 4.85, 1.91, isSecondEdition ? 0.10 : 0.02);
 
   const stain = new TransformNode("stains", scene);
   stain.parent = room;
@@ -182,9 +183,38 @@ export function createShopVisuals(scene: Scene): ShopVisuals {
   box(scene, "curtain-r", 0.36, 1.7, 0.08, curtains, curtainMat, 5.72, 1.9, 0.14);
   box(scene, "curtain-rod", 2.05, 0.06, 0.06, curtains, paint(scene, "rod", C.woodDeep), 4.85, 2.8, 0.14);
 
+  let starterBench: TransformNode | undefined;
+  if (isSecondEdition) {
+    const greenery = paint(scene, "outside-greenery", "#648f79");
+    box(scene, "outside-garden", 1.64, .24, .025, room, greenery, 4.85, 1.3, .055);
+    for (const x of [4.22, 4.6, 5.2, 5.5]) {
+      const crown = sphere(scene, "outside-tree", .22, room, greenery, x, 1.48, .055);
+      crown.scaling.z = .09;
+    }
+    const glint = paint(scene, "window-reflection", "#eefaff", {alpha:.45});
+    const reflection = box(scene, "window-glint", .055, .48, .008, room, glint, 4.35, 2.28, .12);
+    reflection.rotation.z = -.3;
+    starterBench = new TransformNode("starter-workbench", scene);
+    starterBench.parent = room;
+    starterBench.position.set(2.5, 0, 1.5);
+    const timber = paint(scene, "starter-timber", "#bb926c");
+    box(scene, "starter-top", 2.15, .12, .78, starterBench, timber, 0, .94, 0);
+    for (const x of [-.85,.85]) for (const z of [-.26,.26])
+      box(scene, "starter-leg", .12, .9, .12, starterBench, timber, x, .45, z);
+    box(scene, "starter-brace", 1.8, .1, .1, starterBench, timber, 0, .3, -.26);
+    const ceramic = paint(scene, "starter-ceramic", "#e9e2cf");
+    const steamMat = paint(scene, "starter-steam", "#fff4df", {alpha:.3});
+    for (let i=0;i<3;i++) {
+      const puff = sphere(scene, "starter-steam-puff", .035, starterBench, steamMat, -.35, 1.43, 0);
+      puff.metadata = {steam:{x:-.35,y:1.43,phase:i/3}};
+    }
+    teapot(scene, starterBench, {body:ceramic, lid:ceramic}, -.35, 1, 0);
+    cyl(scene, "starter-cup", .13, .09, starterBench, ceramic, .25, 1.065, .08);
+    for (const mesh of starterBench.getChildMeshes()) mesh.isPickable = false;
+  }
   let wallFinish: TransformNode | undefined;
   if (isSecondEdition) { floorMat.dispose(false,true); floor.material=editionFloorMaterial(scene); wallFinish=decorateEditionRoom(scene,room); }
-  return { floor, backWall, leftWall, glass, curtains, stain, wallFinish, items: {} };
+  return { floor, backWall, leftWall, glass, curtains, stain, wallFinish, starterBench, items: {} };
 }
 
 function placeFloorItem(root: TransformNode, id: UpgradeId, shop: ShopState, lift = 0): void {
@@ -510,7 +540,7 @@ function buildCustomerMeshes(scene: Scene): TransformNode {
 export function applyRoomStyle(visuals: ShopVisuals, shop: ShopState, scene: Scene): void {
   const painted = shop.owned.includes("paint");
   const style = styleOf(shop, "paint");
-  const hex = isSecondEdition ? (painted ? ["#eadfcd","#bccbb9","#dcbab0"][style] : "#ded3c0") : painted ? [C.creamWall, C.sageWall, C.roseWall][style] ?? C.creamWall : C.plaster;
+  const hex = isSecondEdition ? (painted ? ["#eadfcd","#bccbb9","#dcbab0"][style] : "#eee1cc") : painted ? [C.creamWall, C.sageWall, C.roseWall][style] ?? C.creamWall : C.plaster;
   const key = `${painted}:${style}`;
   if (visuals.wallStyleKey !== key) {
     const wallTex = plasterTexture(scene, hex, `wall-${painted ? style : "bare"}`);
@@ -524,8 +554,8 @@ export function applyRoomStyle(visuals: ShopVisuals, shop: ShopState, scene: Sce
     visuals.wallStyleKey = key;
   }
   const glass = visuals.glass.material as StandardMaterial;
-  glass.diffuseColor = Color3.FromHexString(painted ? C.glass : C.dirtyGlass);
-  glass.alpha = painted ? 0.28 : 0.42;
+  glass.diffuseColor = Color3.FromHexString(isSecondEdition ? "#c5e6ed" : painted ? C.glass : C.dirtyGlass);
+  glass.alpha = isSecondEdition ? 0.16 : painted ? 0.28 : 0.42;
   visuals.curtains.setEnabled(painted);
   visuals.wallFinish?.setEnabled(painted);
   visuals.stain.setEnabled(!painted && !isSecondEdition);

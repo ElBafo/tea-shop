@@ -24,10 +24,10 @@ const key=point=>`${Math.floor(point.x)},${Math.floor(point.z)}`;
 const normals=[{x:0,z:1},{x:1,z:0},{x:0,z:-1},{x:-1,z:0}];
 const stopOf=layout=>layout.stops.find(stop=>stop.key==='armchair:rest');
 
-for(const [name,base,search] of [['original','/tea-shop/','?edition=1'],['ordinary-preview','/tea-shop/preview/','']]) {
+for(const [name,base,search] of [['original','/tea-shop/','?edition=1'],['classic-preview','/tea-shop/preview/','?edition=1']]) {
   const api=await mode(name,base,search);
   const original=shop({armchair:p(2,2)});
-  assert.equal(stopOf(api.buildGuestLayout(original)),undefined,'Original and ordinary-preview chair behavior stays unchanged');
+  assert.equal(stopOf(api.buildGuestLayout(original)),undefined,'Explicit classic chair behavior stays unchanged');
   const traffic=new api.GuestTraffic(original,()=>.5);
   for(let i=0;i<60;i++)traffic.tick(.1,true);
   const visits=traffic.snapshot();

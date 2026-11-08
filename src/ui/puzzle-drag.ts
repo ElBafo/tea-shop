@@ -6,6 +6,7 @@ import './puzzle-drag.css';
 interface DragOptions {
   board(): Board | null;
   lift(): void;
+  reject?(from: number, to: number): void;
   drop(from: number, to: number, origins: DOMRect[]): void;
 }
 
@@ -203,7 +204,14 @@ export function bindPuzzleDrag(root: HTMLElement, options: DragOptions) {
       const starts = Array.from({ length: count }, (_, i) => origins[Math.min(i, origins.length - 1)]);
       removeGhost(g);
       options.drop(g.from, to, starts);
-    } else returnHome(g);
+    } else {
+      returnHome(g);
+      if (options.board() === g.board) {
+        const target = g.jars.find(jar => { const r=jar.getBoundingClientRect(); return event.clientX>=r.left && event.clientX<=r.right && event.clientY>=r.top && event.clientY<=r.bottom; });
+        const index = target ? Number(target.dataset.jar) : null;
+        if (index !== null && index !== g.from) options.reject?.(g.from,index);
+      }
+    }
   }, { capture: true, passive: true, signal });
 
   document.addEventListener('pointercancel', event => {

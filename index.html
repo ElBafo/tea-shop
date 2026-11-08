@@ -51,10 +51,24 @@
         const start = document.getElementById('launch-start');
         const status = document.getElementById('launch-status');
         const retry = document.getElementById('launch-retry');
-        const slow = setTimeout(() => { if(start.disabled) { status.textContent = 'Still preparing. You can reload if loading has stalled.'; retry.hidden = false; } }, 15000);
+        let settled = false;
+        let slow;
+        const fail = () => {
+          if (settled) return;
+          settled = true; clearTimeout(slow);
+          status.textContent = 'The shop could not finish loading. Reload to try again. Your saved progress is kept.';
+          start.disabled = true; retry.hidden = false; retry.focus();
+        };
+        slow = setTimeout(fail, 20000);
         retry.addEventListener('click', () => location.reload());
-        window.addEventListener('decopu-ready', () => { clearTimeout(slow); start.disabled = false; status.textContent = 'Your little shop awaits.'; retry.hidden = true; start.focus(); }, {once:true});
-        window.addEventListener('decopu-error', () => { clearTimeout(slow); status.textContent = 'We couldn’t open the shop. Check your connection and try again.'; start.disabled = true; retry.hidden = false; retry.focus(); }, {once:true});
+        window.addEventListener('decopu-ready', () => {
+          if (settled) return;
+          settled = true; clearTimeout(slow); start.disabled = false;
+          status.textContent = 'Your little shop awaits.'; retry.hidden = true; start.focus();
+        }, {once:true});
+        window.addEventListener('decopu-error', fail, {once:true});
+        window.addEventListener('unhandledrejection', fail, {once:true});
+        window.addEventListener('error', fail, {once:true});
       })();
     </script>
     <script type="module" src="/src/main.ts" onerror="window.dispatchEvent(new Event('decopu-error'))"></script>
