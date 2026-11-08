@@ -8,6 +8,8 @@ The owner requested retaining Stitch's complete Living Diorama product map in th
 
 **Agreed now:** save this as future product/design input. **Proposed, not implemented or a committed v1.0.0 feature list:** orders, revenue/staff, harvesting/brewing, themed venues, friendship/story systems, seasonal events, village visits/gifts/co-op, telemetry and generated content. Navigation, scope, economy, AI/data architecture and delivery order remain unresolved. The source's move-limit suggestion does not supersede no clock/fail state, unlimited Undo or current star targets. This documentation update does not authorize a UI rewrite, save migration or live rollout. Existing reliability and human/device validation priorities remain.
 
+**Follow-up game-design draft, 2026-11-08:** [V1_GAME_DESIGN_DRAFT.md](V1_GAME_DESIGN_DRAFT.md) preserves the owner's complete five-section specification: visitor → sort → Brew & Infuse → upgrade, Japanese/botanical styling, animal/human patrons, a hub sorting drawer and full-screen stages, Star Coins/Moon Dew, Tea Book friendships/recipes, three venue tiers and three seasonal events. This extends the planning notes; it does not start implementation. Its Undo-token wording, single-layer transfers, four-slot-only boards, all-jars-full wording and serving/currency changes remain unresolved against existing unlimited Undo, whole-group drag/tap, variable board sizes/four- and five-slot capacities, empty-jar allowance and puzzle-earned stars. No existing rule, save, economy or release is changed. No monetisation model or native-app distribution decision is selected by the draft headings.
+
 ## Current priority — 0.3.1
 
 ### Agreed direction — normal puzzles in 3D (2026-11-08)

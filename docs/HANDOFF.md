@@ -24,6 +24,8 @@ Next device check: reopen the installed shortcut and record the displayed versio
 
 Future v1.0.0 design input: the owner supplied a Stitch Living Diorama/game-systems map and asked to keep it in the notes. Read [V1_STITCH_PRODUCT_MAP.md](V1_STITCH_PRODUCT_MAP.md) and the corresponding [roadmap entry](ROADMAP.md). Its navigation, new gameplay/community systems and four AI context layers are recorded proposals; no implementation or live redesign was requested by that note-taking task.
 
+The follow-up [V1_GAME_DESIGN_DRAFT.md](V1_GAME_DESIGN_DRAFT.md) preserves the supplied five-section GDD, with the visitor/sort/brew/upgrade loop, screens and venue tiers. Read its reconciliation table before implementation: Undo tokens, new currencies/serving rewards, single-layer transfers and four-slot/all-jars-full wording are not settled replacements for current rules.
+
 1. Resolve any remaining device-specific startup failure before further feature expansion.
 2. Observe an uncoached first session; use PLAYTEST.md. Human pacing/retention evidence remains pending. Do not change boards or star targets based only on solver minima.
 3. Broader material cohesion, physical-phone performance and remaining accessibility review. The latest material pass was bounded to representative furniture and shared cup details.

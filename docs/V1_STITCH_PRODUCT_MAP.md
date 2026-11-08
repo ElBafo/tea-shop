@@ -4,6 +4,8 @@ Recorded 2026-11-08 from the owner's supplied Stitch concept. The owner requeste
 
 **Status: future product/design input.** This captures the proposed experience and systems; it is not an implementation specification, a committed v1.0.0 feature list, or evidence that these systems exist. The current release is 0.3.1. Current behavior and agreed rules remain in [PRODUCT.md](PRODUCT.md), delivery priorities in [ROADMAP.md](ROADMAP.md), and implemented architecture in [ARCHITECTURE.md](ARCHITECTURE.md).
 
+The owner's follow-up [complete game-design draft](V1_GAME_DESIGN_DRAFT.md) adds the visitor → sort → brew/serve → upgrade loop and more specific screens, flavours and venue tiers. It is retained with a reconciliation table for differences from the released rules. The two documents are complementary planning inputs.
+
 ## Part 1 — Living Diorama and connected systems
 
 The proposed compact, portrait, single-screen **Decopu — Living Diorama** is the central hub, with deeper systems reached through contextual surfaces. Stitch cites Genshin Impact, Animal Crossing: Pocket Camp, Neko Atsume and Tsuki's Odyssey as examples of a clean central mobile experience branching into larger systems. These are source references, not a decision to copy their mechanics or visual design.
