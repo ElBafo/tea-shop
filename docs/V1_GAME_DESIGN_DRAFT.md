@@ -118,15 +118,19 @@ The source reports these screens as already created on the Stitch canvas. Their 
 
 No recipe, ingredient, friendship, gift, mastery, tipping or brewing system is implemented by retaining these notes. Steeping time is proposed recipe context; it does not authorize a timed puzzle/failure mechanic or alter unlimited Undo. New currency/serving rewards remain subject to the economy decisions below, and existing local saves are unchanged.
 
+## Latest puzzle-flow follow-up (2026-11-08)
+
+[V1_PUZZLE_FLOW.md](V1_PUZZLE_FLOW.md) records the owner's subsequent step-by-step walkthrough: 4–6 jars, four-slot botanical stacks, the consecutive matching top group, jar lift/tilt/corks, pure-jar ribbon locks, a Serve payoff and Zen tools. Within the v1.0.0 draft, its **free Undo** supersedes the earlier token wording, and the **matching top group** clarifies the earlier ambiguous “top layer.” The original five-section source above remains intact for traceability. Stationary versus moving jars, actual completion locks, extra jars, general hints, order-based wins and serving rewards still require explicit design decisions before changes to released gameplay.
+
 ## Reconciliation with the released game — project notes
 
 The supplied draft adds a direct visitor → sort → brew/serve → upgrade loop and a more specific Japanese/botanical setting. Preserve these ideas for v1.0.0 exploration. The following differences need explicit design decisions before implementation; the source wording above is retained so those decisions remain traceable.
 
 | Topic | Released behavior / existing decision | Draft proposal and unresolved choice |
 | --- | --- | --- |
-| Undo and pressure | Unlimited Undo; no clock or fail state | “Relaxed undo tokens” suggests a resource limit. No token system or restriction is agreed by recording this draft. |
+| Undo and pressure | Unlimited Undo; no clock or fail state | The original “relaxed undo tokens” wording is superseded by the latest puzzle-flow follow-up's free Undo. No token restriction is planned from this draft; current unlimited Undo remains. |
 | Currency and rewards | Earned stars from puzzle completion and best-score improvements, with milestone bonuses and no repeat-win farming | Star Coins, Moon Dew, friendship hearts and serve-triggered rewards are proposed. Decide whether Star Coins rename stars, what Moon Dew does, and how serving relates to existing exactly-once rewards. No new currency or reward trigger is implemented. |
-| Transfers and controls | Drag or tap moves the entire consecutive matching top group, which must fit | “Top layer” is ambiguous about single-piece versus whole-group transfers, and the draft only explains tapping. Preserve drag, tap and keyboard controls and the whole-group rule until a change is explicitly agreed. |
+| Transfers and controls | Drag or tap moves the entire consecutive matching top group, which must fit | The latest puzzle-flow follow-up clarifies the consecutive matching top group. Whole-group capacity, drag and keyboard support remain authoritative; the tap walkthrough does not remove them. |
 | Board shape and completion | Authored boards have varying jar counts and four- or five-slot capacity; every non-empty jar must be full and monochrome, while empty jars are allowed | The draft describes 4–5 jars, four-slot capacity and “each jar” full. Clarify whether this describes an introductory sample or a proposed rules/content change. Existing board identities and saved puzzles remain unchanged. |
 | Pieces and flavours | 3D paper sachets and existing authored tea/treat identities | Dried-leaf segments, Sencha, Hojicha, Sakura and Genmai are proposed art/content directions; no replacement catalogue is approved or implemented here. |
 | Guests and brewing | Ambient guests, no functional guest-order/serving/friendship/recipe economy | Animal and human patrons, Master Kenzo, cravings, Brew & Infuse, friendship and recipe unlocks are new proposed systems. Define how play works when no guest/order is available and how completed batches are handled. |

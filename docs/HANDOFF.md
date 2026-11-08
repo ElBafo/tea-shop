@@ -24,9 +24,11 @@ Next device check: reopen the installed shortcut and record the displayed versio
 
 Future v1.0.0 design input: the owner supplied a Stitch Living Diorama/game-systems map and asked to keep it in the notes. Read [V1_STITCH_PRODUCT_MAP.md](V1_STITCH_PRODUCT_MAP.md) and the corresponding [roadmap entry](ROADMAP.md). Its navigation, new gameplay/community systems and four AI context layers are recorded proposals; no implementation or live redesign was requested by that note-taking task.
 
-The follow-up [V1_GAME_DESIGN_DRAFT.md](V1_GAME_DESIGN_DRAFT.md) preserves the supplied five-section GDD, with the visitor/sort/brew/upgrade loop, screens and venue tiers. Read its reconciliation table before implementation: Undo tokens, new currencies/serving rewards, single-layer transfers and four-slot/all-jars-full wording are not settled replacements for current rules.
+The follow-up [V1_GAME_DESIGN_DRAFT.md](V1_GAME_DESIGN_DRAFT.md) preserves the supplied five-section GDD, with the visitor/sort/brew/upgrade loop, screens and venue tiers. Read its reconciliation table before implementation: new currencies/serving rewards and four-slot/all-jars-full wording are not settled replacements for current rules. The later puzzle-flow notes clarify free Undo and matching top groups.
 
 The same draft includes the Tea Book follow-up: recipe compendium, guest scrapbook/mailbox, workshop linkage and supplied Stitch screen IDs `SCREEN_44` / `SCREEN_19` / `SCREEN_24`. No actual Stitch exports were inspected. Recipe counts, mastery/tip rewards, gifts and brewing conditions are draft design inputs, not implemented or final economy values.
+
+The latest [V1_PUZZLE_FLOW.md](V1_PUZZLE_FLOW.md) clarifies free Undo (superseding the earlier token wording) and consecutive matching top groups. It also proposes moving/tilting jars, completed-jar locks, extra canisters, general hints and serving rewards. Those mechanics are not implemented or approved replacements for current rules; read its reconciliation table before making changes.
 
 1. Resolve any remaining device-specific startup failure before further feature expansion.
 2. Observe an uncoached first session; use PLAYTEST.md. Human pacing/retention evidence remains pending. Do not change boards or star targets based only on solver minima.
