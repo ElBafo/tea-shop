@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Puzzle presentation — 0.3.0-preview.7
+
+`ui/items.ts` supplies shared sachet markup for ordinary jars, tap flights, drag clones and the comparison's Current view. The edition gate preserves classic tins. Inline SVG motifs add no asset requests; `ui/tea-pieces.css` scopes paper, label, glass and capacity treatments to the second edition. Hidden markup contains no flavour class, style, text or motif. `ui/app.ts` adds a separate `aria-describedby` contents string while preserving existing jar labels; it substitutes “hidden” below the sealed top piece. Sealed-jar selection marks only that visible top slot as held. No puzzle engine, level definition, storage schema or rendering lifecycle changes.
+
 ## Editor composition — 0.3.0-preview.6
 
 `editor.css` scopes the new catalogue/detail layout to second-edition Edit mode. The existing `screen.ts` draft, purchase, goal and placement paths remain authoritative. A selected unowned item exposes style buttons and secondary draft controls inside the scrollable middle, while purchase status, Cancel and Buy remain outside it in the footer. Collection tabs appear while browsing; a selected item retains the plain Browse control and uses the freed space for styles. The same detail-container event delegation handles these actions. Repainting a style or arrangement action restores focus by its action/item/style identity; Browse cancels the draft and restores the collection scroll position. Owned/unowned filtering remains unchanged.

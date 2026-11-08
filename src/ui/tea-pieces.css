@@ -1,0 +1,39 @@
+/* Folded tea sachets share their markup with tap flights and drag ghosts. */
+.edition-two .sachet { --paper-label:#fff5db; }
+.edition-two .sachet-paper {
+  position:absolute; inset:2% 4% 4%; display:grid; place-items:center;
+  clip-path:polygon(12% 0,88% 0,100% 18%,100% 85%,94% 100%,6% 100%,0 85%,0 18%);
+  border-radius:5px;
+  background:linear-gradient(110deg,#ffffff5c,transparent 38% 76%,#00000012),linear-gradient(var(--fill),var(--deep));
+  box-shadow:inset 0 2px 0 #fff9,inset 2px 0 1px #ffffff55,inset -2px -2px 0 #0002;
+}
+.edition-two .sachet-paper::before,.edition-two .sachet-paper::after {
+  content:''; position:absolute; left:8%; right:8%; height:1px; border-top:1px dashed #fff9; pointer-events:none;
+}
+.edition-two .sachet-paper::before { top:11%; }
+.edition-two .sachet-paper::after { bottom:8%; }
+.edition-two .sachet-seam { position:absolute; inset:0 0 auto; height:19%; background:linear-gradient(#ffffff36,#ffffff08); border-bottom:1px solid #00000010; }
+.edition-two .sachet-label { display:flex; align-items:center; justify-content:center; gap:3px; width:65%; height:56%; margin-top:3%; border-radius:4px; background:var(--paper-label); color:var(--ink); box-shadow:0 1px 1px #493b3026,inset 0 1px 0 #fff; }
+.edition-two .sachet-label svg { width:42%; height:80%; max-width:18px; fill:currentColor; flex-shrink:1; }
+.edition-two .sachet-letter { font:700 12px/1 Georgia,serif; flex-shrink:0; }
+.edition-two .play .sachet { filter:drop-shadow(0 2px 1px #66513a23); }
+.edition-two .play .slot.empty::after { content:''; display:block; width:68%; height:0; border-bottom:1px dashed #879d9259; pointer-events:none; }
+.edition-two .sachet-mystery .fog {
+  width:86%; height:90%; border-radius:5px; border:1px solid #a8b1a5;
+  clip-path:polygon(12% 0,88% 0,100% 18%,100% 85%,94% 100%,6% 100%,0 85%,0 18%);
+  background:repeating-linear-gradient(45deg,#e4e6dc 0 4px,#edf0e7 4px 8px); color:#4f6255;
+  box-shadow:inset 0 2px 0 #fff8,inset 0 -2px 0 #879d9240;
+}
+.edition-two .sachet-mystery .fog::after { font-size:13px; opacity:1; }
+.edition-two .play .slot .lid { display:none; }
+.edition-two .play .jar-glass { border-color:#8ca69b; background:linear-gradient(90deg,#fff9,transparent 17% 80%,#fff9),linear-gradient(#fffdf680,#f0f5e633); }
+.edition-two .play .jar-capacity { font:600 12px/16px system-ui,sans-serif; }
+@media (max-height:690px) {
+  .edition-two .sachet-label { gap:2px; width:70%; height:62%; }
+  .edition-two .sachet-letter { font-size:10px; }
+  .edition-two .sachet-mystery .fog::after { font-size:11px; }
+}
+@media (max-height:690px) and (orientation:portrait) {
+  .edition-two .play .shelves[data-capacity="5"] .sachet-label { width:76%; height:70%; border-radius:2px; gap:1px; }
+  .edition-two .play .shelves[data-capacity="5"] .sachet-letter { font-size:10px; }
+}

@@ -1,3 +1,4 @@
+import { ITEMS } from "../game/items";
 import { isSecondEdition } from "../game/mode";
 import { nextReward } from "../game/journey";
 import { rewardCard } from "./reward";
@@ -494,7 +495,7 @@ function playMarkup(
           continue;
         }
         const hidden = hiddenStart >= 0 && slot < hiddenStart;
-        const held = Boolean(run && slot >= tube.length - run.count);
+        const held = Boolean(run && slot >= tube.length - (board.sealed[index] ? 1 : run.count));
         const justLanded = Boolean(
           landed &&
             landed.jar === index &&
@@ -504,6 +505,7 @@ function playMarkup(
           `<div class="slot ${held ? "held" : ""} ${justLanded ? "landed" : ""}">${treatMarkup(item, hidden)}${board.sealed[index] && slot === tube.length - 2 ? '<span class="lid" aria-hidden="true"></span>' : ""}</div>`,
         );
       }
+      const contents = tube.length ? tube.map((item,slot) => hiddenStart >= 0 && slot < hiddenStart ? 'hidden' : ITEMS[item].label).join(', ') : 'Empty';
       const done = isCompleteTube(tube, board.capacity);
       const celebrate = pendingComplete.includes(index) || play.celebrating;
       const validTarget = selected !== null && selected !== index && canPour(board, selected, index) > 0;
@@ -511,7 +513,8 @@ function playMarkup(
         ? `<span class="puff" aria-hidden="true">${sparkles()}</span>`
         : "";
       return `
-        <button class="jar ${lifted ? "selected" : ""} ${done ? "done" : ""} ${validTarget ? "valid-target" : ""} ${celebrate ? "just-completed" : ""} ${guideStage() === 'puzzle' && !play.busy && suggestedJar(board, selected) === index ? 'guide-target' : ''}" style="--jar-order:${index}" data-jar="${index}" type="button" aria-pressed="${lifted}" aria-label="Jar ${index + 1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}">
+        <button class="jar ${lifted ? "selected" : ""} ${done ? "done" : ""} ${validTarget ? "valid-target" : ""} ${celebrate ? "just-completed" : ""} ${guideStage() === 'puzzle' && !play.busy && suggestedJar(board, selected) === index ? 'guide-target' : ''}" style="--jar-order:${index}" data-jar="${index}" type="button" aria-pressed="${lifted}" aria-label="Jar ${index + 1}, ${tube.length} of ${board.capacity}${done ? ', complete' : ''}" ${isSecondEdition ? `aria-describedby="jar-contents-${index}"` : ''}>
+          ${isSecondEdition ? `<span class="visually-hidden" id="jar-contents-${index}">Bottom to top: ${contents}</span>` : ''}
           <span class="jar-neck"></span>
           <span class="jar-glass">
             <span class="stack" style="--slots:${board.capacity}">${slots.join("")}</span>

@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Puzzle readability — 0.3.0-preview.7
+
+Ordinary second-edition puzzles use folded paper sachets for tea flavours, with a distinct motif and letter in addition to colour. Concealed pieces stay neutral and centered; empty slots show subtle capacity guides. Jar descriptions announce contents from bottom to top, replacing concealed flavours with “hidden”. Selection lifts only the visible top piece in a sealed jar. Existing full-jar completion, whole-group movement, star targets, onboarding and progress remain authoritative. Cups and macarons keep their shapes. This is the regular HTML/CSS renderer; adoption of the separate Babylon comparison still needs device review.
+
 ## Decoration editor — 0.3.0-preview.6
 
 Make the full browse → choose a style → preview in room → buy and place flow clear on a phone. Prices and unlock/affordability states must be visible before selection. Keep one persistent Browse route, an explicit temporary preview state and Cancel, and separate unowned/owned collections. Style variants are included, free to change; ownership is granted only by the existing star purchase. Owned furniture remains movable immediately in the same editing session.

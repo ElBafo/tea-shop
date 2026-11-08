@@ -2,7 +2,11 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.3.0-preview.6
+## Current priority — 0.3.0-preview.7
+
+Continue the ordered roadmap with puzzle readability in ordinary gameplay. Six tea flavours become folded sachets with distinct motifs and letters, empty slots show capacity marks, and concealed pieces use a centered neutral sachet. Add accessible bottom-to-top descriptions without revealing concealed flavours. Selecting a sealed jar must lift only its visible top piece. Preserve rules, rewards, dragging, guide and saves; the Babylon comparison remains a separate experiment. Required verification and production build pass. Compiled-browser checks cover four puzzle samples at four viewport sizes; all pieces and hidden markers remain centered, controls fit and hidden descriptions disclose no flavour. Sixteen real drag regression groups and eleven guided-tour groups pass with zero runtime exceptions. Existing touch/tap/keyboard controls, whole-group moves, Undo, save/reload, first purchase and exact rewards are preserved. Physical iPhone review remains pending. Evidence: `work/puzzle-readability.json`, `work/puzzle7-drag.log`, `work/puzzle7-guide.log`, `work/puzzle-readability-verify.log`, `work/puzzle-readability-build.log`; before/after images in `docs/screenshots/puzzle-readability/`. Publish to the stable preview for phone review, with main unchanged.
+
+### Previous editor preview — 0.3.0-preview.6
 
 The owner said “Let’s go” for the next roadmap milestone, the decoration editor. Redesign the ordinary preview's browsing and selected-item tray: visually distinct item images, readable price/availability states, a persistent plain Browse route, three named style previews with a checkmarked selection, explicit unpurchased state, a pinned Buy & place action and Cancel, and clear free owned-style/Rotate/Store/Place controls. Preserve the separate unowned and owned collections, free previews, goal style handoff, immediate room movement, unlock boundaries, optional-item refund confirmation and all saved scores/layouts. Main stays unchanged; use the stable preview URL for review.
 
@@ -17,8 +21,8 @@ Acceptance: a visible before/after at phone size; fresh, resumed, completed and 
 ### Ordered follow-through
 
 1. **Home redesign (preview.5, hosted):** distinct room-first composition and clear play/decorate navigation. Owner phone review remains the approval step.
-2. **Editor design follow-up (current preview.6):** review browsing, style preview, purchase and placement as a complete flow; build on the existing owned/unowned separation and direct movement. Preview and phone review before main.
-3. **Puzzle readability and art direction:** review normal gameplay at actual phone size, then decide whether to carry the Babylon prototype into the full game. The separate 3D sample is not a completed full-game conversion.
+2. **Editor design follow-up (preview.6, hosted):** review browsing, style preview, purchase and placement as a complete flow; build on the existing owned/unowned separation and direct movement. Preview and phone review before main.
+3. **Puzzle readability and art direction (current preview.7):** regular-game sachet artwork and hidden/capacity readability are implemented and locally verified; review on phone, then decide whether to carry the Babylon prototype into the full game. The separate 3D sample is not a completed full-game conversion.
 4. **Human puzzle pacing and first-session review:** observe an uncoached tester through first solve, reward and first decoration; evaluate later boards before changing authored levels or star targets.
 5. **Remaining art and reliability backlog:** readable keeper/material cohesion, phone performance and accessibility checks. Bigger rooms, Bakery, cloud saves and monetisation retain their later-roadmap status.
 

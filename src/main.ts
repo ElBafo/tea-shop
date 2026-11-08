@@ -8,6 +8,7 @@ import "./ui/edition-puzzle.css";
 import "./ui/design.css";
 import "./ui/home.css";
 import "./ui/editor.css";
+import "./ui/tea-pieces.css";
 document.body.classList.toggle("edition-two", isSecondEdition);
 const versionLabel = document.createElement("small");
 versionLabel.className = "launch-version";
