@@ -1,0 +1,13 @@
+.normal-puzzle-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0; z-index:0; }
+.normal-puzzle-3d { isolation:isolate; }
+.normal-puzzle-3d .normal-puzzle-canvas { opacity:1; }
+.edition-two .normal-puzzle-3d .jar { background:transparent; box-shadow:none; border-color:transparent; }
+.edition-two .normal-puzzle-3d .jar-neck,
+.edition-two .normal-puzzle-3d .jar-glass,
+.edition-two .normal-puzzle-3d .jar-check { opacity:0; }
+.edition-two .normal-puzzle-3d .slot.held { transform:none !important; filter:none !important; }
+.edition-two .normal-puzzle-3d .jar:focus-visible { outline:3px solid #416a54; outline-offset:3px; }
+.edition-two .normal-puzzle-3d .jar.drag-valid { outline:2px solid #648e7e; outline-offset:2px; }
+.edition-two .normal-puzzle-3d .jar.drag-over { outline:3px solid #a49349; outline-offset:3px; }
+.puzzle-drag-ghost.is-3d { opacity:0; }
+.renderer-recovery { position:absolute; bottom:3px; left:8px; right:8px; text-align:center; font-size:.7rem; color:#344e47; pointer-events:none; }

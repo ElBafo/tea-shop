@@ -10,6 +10,7 @@ import { audioToggle, updateAudioToggle } from "./toggles";
 import { animatePour, pourOrigins, reducedMotion } from "./motion";
 import { bindPuzzleDrag } from './puzzle-drag';
 import { mountPuzzleGuide } from './puzzle-guide';
+import { normalPuzzle3D } from './normal-puzzle-3d';
 import {
   playClick,
   playComplete,
@@ -70,6 +71,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
   let stopMotion = () => {};
   let cancelDrag = () => {};
   let stopPuzzleGuide = () => {};
+  const puzzle3D = normalPuzzle3D(root);
 
   window.addEventListener('decopu-save-failed',()=>{
     if(document.querySelector('.save-warning'))return;
@@ -103,6 +105,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
     stopMotion();
     stopMotion = () => {};
     const focusedJar = (document.activeElement as HTMLElement | null)?.dataset.jar;
+    if (screen !== 'play') puzzle3D.dispose();
     if (screen === "shop") {
       if (shop) {
         shop.refresh();
@@ -161,6 +164,7 @@ export function mountApp(root: HTMLElement): Promise<void> {
       root.innerHTML = levelsMarkup(progress);
     } else if (play) {
       root.innerHTML = playMarkup(play, progress, pendingComplete, landed);
+      if (isSecondEdition) puzzle3D.sync(play.board, play.selected);
     }
     if (screen === 'levels' && guideStage() === 'decorate') root.querySelector('.level-grid')?.insertAdjacentHTML('beforebegin', guideCard('Your stars are ready', 'Try your first decoration, or keep playing to save up.', '<button type="button" data-go="shop" data-edit>Decorate shop →</button>'));
     bind(root);
@@ -379,7 +383,9 @@ export function mountApp(root: HTMLElement): Promise<void> {
     const present = () => {
       if (play !== activePlay || screen !== "play") return;
       render();
-      const motion = animatePour(root, index, move.item, origins, Boolean(draggedOrigins));
+      const motion = puzzle3D.active
+        ? { finished: puzzle3D.settle(from, index), cancel: () => {} }
+        : animatePour(root, index, move.item, origins, Boolean(draggedOrigins));
       stopMotion = motion.cancel;
       void motion.finished.then(() => {
         if (play !== activePlay || screen !== "play") return;
@@ -434,10 +440,13 @@ export function mountApp(root: HTMLElement): Promise<void> {
   const drag = bindPuzzleDrag(root, {
     board: () => screen === 'play' && play && !play.busy && !play.won ? play.board : null,
     lift: () => { playClick(progress.muted); navigator.vibrate?.(12); },
+    move: (from, point) => puzzle3D.move(from, point),
+    release: () => puzzle3D.release(),
     drop: transfer,
     reject: rejectMove,
   });
   cancelDrag = drag.cancel;
+  window.addEventListener('pagehide', event => { if (!event.persisted) puzzle3D.dispose(); });
   render();
   const initialShop = shop as ShopScreen | null;
   return initialShop ? initialShop.ready() : Promise.resolve();

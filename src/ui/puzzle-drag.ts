@@ -6,6 +6,8 @@ import './puzzle-drag.css';
 interface DragOptions {
   board(): Board | null;
   lift(): void;
+  move?(from: number, point: {x: number; y: number}): void;
+  release?(): void;
   reject?(from: number, to: number): void;
   drop(from: number, to: number, origins: DOMRect[]): void;
 }
@@ -47,6 +49,7 @@ export function bindPuzzleDrag(root: HTMLElement, options: DragOptions) {
     if (pointers.has(g.pointer) && g.capture.hasPointerCapture(g.pointer)) g.capture.releasePointerCapture(g.pointer);
     root.classList.remove('puzzle-dragging');
     g.jars.forEach(jar => jar.classList.remove('drag-source', 'drag-valid', 'drag-over'));
+    options.release?.();
   }
 
   function removeGhost(g: Gesture) {
@@ -91,6 +94,7 @@ export function bindPuzzleDrag(root: HTMLElement, options: DragOptions) {
     const left = Math.max(4, Math.min(window.innerWidth - width - 4, x - width / 2));
     const top = Math.max(4, y - height - (g.touch ? 24 : 12));
     g.ghost.style.transform = `translate3d(${left}px,${top}px,0)`;
+    options.move?.(g.from, {x, y});
     // A destination follows the finger, not the raised piece. Jar bounds are
     // stable throughout the gesture; don't infer a target from swipe velocity.
     g.target = null;
@@ -115,6 +119,7 @@ export function bindPuzzleDrag(root: HTMLElement, options: DragOptions) {
     const step = size.height * .44;
     const ghost = document.createElement('div');
     ghost.className = 'puzzle-drag-ghost';
+    ghost.classList.toggle('is-3d', root.classList.contains('puzzle-in-3d'));
     ghost.setAttribute('aria-hidden', 'true');
     ghost.style.width = `${size.width}px`;
     ghost.style.height = `${size.height + (g.sources.length - 1) * step}px`;

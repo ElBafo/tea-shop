@@ -1,13 +1,13 @@
 # Decopu — new chat handoff
 
-The owner requested merging the accumulated preview work into main and continuing in a new chat. This release is 0.3.0. Read ROADMAP.md, PRODUCT.md, ARCHITECTURE.md and AGENTS.md before further work.
+The owner requested merging the accumulated preview work into main and continuing in a new chat. The next release is 0.3.1, adding normal 3D puzzles at the owner’s explicit request. Read ROADMAP.md, PRODUCT.md, ARCHITECTURE.md and AGENTS.md before further work.
 
 ## Links and workflow
 
 - Main game: https://elbafo.github.io/tea-shop/
 - Phone preview: https://elbafo.github.io/tea-shop/preview/
-- The stable preview source is `preview/shop-polish`. Keep future work reviewable there before a main merge; the owner explicitly authorized this consolidation only.
-- Plain preview opens the current edition. The isolated Babylon puzzle comparison is preview-only at `?edition=2&puzzle3d=1`; it is not the normal puzzle renderer.
+- The stable preview source is `preview/shop-polish`. Keep future work reviewable there before a main merge. The owner explicitly authorized the 0.3.1 normal-3D-puzzle integration on both preview and main while continuing UI exploration in Stitch.
+- Plain preview opens the current edition. Normal second-edition puzzles now use the Babylon renderer with native accessible controls and an automatic native-art fallback for rendering failure. The isolated comparison remains preview-only at `?edition=2&puzzle3d=1` and has no progression rewards.
 - Main and preview have separate progress and appearance namespaces. Preserve both. Do not clear, migrate or copy saves without an explicit request.
 
 ## Consolidated work
@@ -25,7 +25,7 @@ Next device check: reopen the installed shortcut and record the displayed versio
 1. Resolve any remaining device-specific startup failure before further feature expansion.
 2. Observe an uncoached first session; use PLAYTEST.md. Human pacing/retention evidence remains pending. Do not change boards or star targets based only on solver minima.
 3. Broader material cohesion, physical-phone performance and remaining accessibility review. The latest material pass was bounded to representative furniture and shared cup details.
-4. Decide normal 3D puzzle rendering only after real-device comparison; the experiment alone is not adoption approval.
+4. The owner selected normal 3D puzzle rendering and requested deployment to main and preview. Continue physical-device performance/accessibility review and preserve native-art recovery.
 5. Larger rooms/zoom progression, more distinctive rare decorations, later Bakery/room progression, cloud saves and monetisation remain backlog. Bakery is a placeholder.
 
 ## Repository caution

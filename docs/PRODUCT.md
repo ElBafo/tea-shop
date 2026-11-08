@@ -1,7 +1,11 @@
 # Decopu: product direction
 
-**Release baseline: Decopu 0.3.0.** Consolidates the reviewed preview work. See [HANDOFF.md](HANDOFF.md) for the new-chat context and the unresolved physical-iPhone startup investigation. Merged through [PR #29](https://github.com/ElBafo/tea-shop/pull/29) as `702fe1599da885d381bab83088f608ebe35bc777` and hosted successfully in [Pages run 42494900818](https://github.com/ElBafo/tea-shop/actions/runs/42494900818). Main and preview serve 0.3.0.
+**Release baseline: Decopu 0.3.1.** Adds normal 3D puzzles to the consolidated 0.3.0 release. See [HANDOFF.md](HANDOFF.md) for continuation and the unresolved physical-iPhone startup investigation. Validation and deployment status are recorded in [RELEASES.md](RELEASES.md).
 
+
+## Normal 3D puzzle direction — 0.3.1
+
+The owner requested 3D puzzles in the ordinary preview and main game, authorizing this renderer integration and deployment while independently exploring UI screens in Stitch. Normal second-edition puzzles use the existing Babylon glass jars and paper sachets with native accessible jar controls. Existing boards, whole-group drag/tap rules, rewards, unlimited Undo, onboarding and saved progress remain authoritative. A failed or stalled renderer falls back to the native puzzle presentation with the same state. The comparison remains separate tooling, not the normal progression path. This supersedes historical statements below that production 3D adoption remains undecided. Physical-iPhone startup/performance and human first-session validation remain pending.
 
 ## Room/puzzle material cohesion — 0.3.0-preview.11
 
