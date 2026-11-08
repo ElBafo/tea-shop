@@ -2,7 +2,11 @@
 
 Record every agreed product decision here in the same work session. Distinguish current behavior, agreed plans and open decisions. Product direction lives in [PRODUCT.md](PRODUCT.md); detailed art criteria live in [POLISH_PLAN.md](POLISH_PLAN.md).
 
-## Current priority — 0.3.0-preview.10
+## Current priority — 0.3.0-preview.11
+
+Owner authorized continuation after the reviewed editor reliability pass. Take the next bounded material-cohesion slice: subtle joinery grain on counter/table/shelves, softer porcelain highlights and readable cup rims, and small folded tea packets echoing the puzzle sachets. Review mixed styles together, day/night and zoomed detail. Retain the reviewed UI, keeper pose, paid ownership, placement, puzzle rules and saves. Regenerate affected catalogue thumbnails from runtime models. Required verification and preview build pass. Browser checks cover day/night, four viewport sizes, mixed-style and zoomed captures, preview/cancel/purchase/reload, counter rotations, reduced motion and three scene cycles with textured furniture present. Each disposed scene releases all meshes/materials/textures/lights; rebuilt scenes retain 267 meshes, 74 materials, 8 textures, 51 transforms and 5 lights. Zero runtime exceptions. Physical-phone performance and aesthetic review remain pending. Evidence and screenshots are linked in [RELEASES.md](RELEASES.md). Preview publication pending; main remains 0.2.1.
+
+### Previous editor reliability preview — 0.3.0-preview.10
 
 The owner reviewed preview.10 positively (“Looks good”). The editor focus/dialog slice is reviewed; this feedback does not request a main merge or start another implementation slice. The prior home/editor layouts are retained. Broader room/puzzle material cohesion, physical-phone performance and the uncoached first-session review remain pending.
 

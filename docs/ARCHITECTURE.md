@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Furniture materials — 0.3.0-preview.11
+
+`editionJoineryTexture` creates a deterministic neutral 128px grain map per counter/table/shelf wood material, multiplied by the existing tint. `ownedVisual` disposes each material and its texture with the item's root. No shared mutable texture cache is introduced. The existing cup helper adds a porcelain lip; folded packet geometry stays under its paid item's root and inherits upgrade picking metadata. Packet and shelf colours read `game/items.ts`. No lights, render loops, placement rules or save keys change. Catalogue thumbnails for counter/table/shelves and the trolley/cabinet tea sets are regenerated from runtime geometry.
+
 ## Editor focus and modal lifecycle — 0.3.0-preview.10
 
 `shop/screen.ts` restores focus to visible successors after controls are replaced. Card selection and purchase also restore at the end of their action, because preview/scene callbacks can render intermediate states. `paintChrome` restores matching style/action controls and Store/Place counterparts. Browse remembers the prior item and returns to its card when available.

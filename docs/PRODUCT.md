@@ -2,6 +2,10 @@
 
 **Released: [Decopu 0.2.1](https://elbafo.github.io/tea-shop/).** [PR #17](https://github.com/ElBafo/tea-shop/pull/17) merged as `2df365fd0921835cd2d647c3277d026b682f821b`; [Pages run 42128359597](https://github.com/ElBafo/tea-shop/actions/runs/42128359597) passed. Drag controls, refined puzzle artwork and the visual first-puzzle guide are live. Existing production progress is preserved; there is no new reset or storage namespace.
 
+## Room/puzzle material cohesion — 0.3.0-preview.11
+
+Start with the paid counter, table and shelves: subtle warm joinery grain, soft porcelain highlights and clearer cup rims. Small folded tea packets echo the puzzle sachets; shelf glazes use the same rose, matcha and jasmine colours. Retain wood, cream and painted options so mixed styles remain compatible. These are included details of existing paid decorations. The reviewed UI, keeper pose, prices, progression and saved layouts remain authoritative. This bounded slice does not claim a complete catalogue rework or measured physical-phone performance.
+
 ## Editor focus — 0.3.0-preview.10
 
 Keyboard users should stay oriented as editor controls change: card → selected style, Buy → owned style, Store ↔ Place, and Cancel/Browse → the relevant card. A shop-completion dialog should isolate the room controls, keep Tab navigation inside, offer Escape and return focus to a usable editor action. This pass preserves the compact touch layout and gameplay. Physical iPhone VoiceOver review remains pending; browser keyboard checks are separate evidence.
